@@ -14,7 +14,6 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   static const Duration _navigateDelay = Duration(seconds: 3);
-  static const Duration _logoDelay = Duration(milliseconds: 500);
 
   @override
   void initState() {
@@ -39,9 +38,8 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Background(
         child: Center(
-          child: AnimatedOpacity(
-            duration: _logoDelay,
-            opacity: 1,
+          child: Hero(
+            tag: Keys.textLogoHero,
             child: SvgPicture.asset(
               Resources.text_logo,
               fit: BoxFit.fitWidth,

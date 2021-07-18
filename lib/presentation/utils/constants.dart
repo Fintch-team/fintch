@@ -20,7 +20,8 @@ class Resources {
 }
 
 class Keys {
-  static const isLoggedIn = 'isLoggedIn';
+  static const String isLoggedIn = 'isLoggedIn';
+  static const String textLogoHero = 'textLogoHero';
 }
 
 class FormatDate {

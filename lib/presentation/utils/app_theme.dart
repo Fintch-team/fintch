@@ -13,48 +13,56 @@ class AppTheme {
   static Color purpleOpacity = Color(0xFFB570F7).withOpacity(0.3);
   static Color whiteOpacity = Color(0xFFFFFFFF).withOpacity(0.6);
 
+  ///font size: 36, color: black, fontWeight: bold
   static const TextStyle headline1 = TextStyle(
     fontWeight: FontWeight.bold,
     color: black,
     fontSize: 36,
   );
 
+  ///font size: 24, color: black, fontWeight: bold
   static const TextStyle headline2 = TextStyle(
     fontWeight: FontWeight.bold,
     color: black,
     fontSize: 24,
   );
 
+  ///font size: 20, color: black, fontWeight: bold
   static const TextStyle headline3 = TextStyle(
     fontWeight: FontWeight.bold,
     color: black,
     fontSize: 20,
   );
 
+  ///font size: 16, color: black, fontWeight: normal
   static const TextStyle text1 = TextStyle(
     fontWeight: FontWeight.w500,
     color: black,
     fontSize: 16,
   );
 
+  ///font size: 14, color: black, fontWeight: normal
   static const TextStyle text2 = TextStyle(
     fontWeight: FontWeight.w500,
     color: black,
     fontSize: 14,
   );
 
+  ///font size: 12, color: black, fontWeight: normal
   static const TextStyle text3 = TextStyle(
     fontWeight: FontWeight.w500,
     color: black,
     fontSize: 12,
   );
 
+  ///font size: 10, color: black, fontWeight: normal
   static const TextStyle subText1 = TextStyle(
     fontWeight: FontWeight.w500,
     color: black,
     fontSize: 10,
   );
 
+  ///font size: 8, color: black, fontWeight: normal
   static const TextStyle subText2 = TextStyle(
     fontWeight: FontWeight.w500,
     color: black,
@@ -62,23 +70,23 @@ class AppTheme {
   );
 
   static OutlineInputBorder enabledBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: BorderRadius.circular(12),
     borderSide: BorderSide(color: white),
   );
 
   static OutlineInputBorder focusedBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: BorderRadius.circular(12),
     borderSide:
     BorderSide(color: yellow),
   );
 
   static OutlineInputBorder errorBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: BorderRadius.circular(12),
     borderSide: BorderSide(color: red),
   );
 
   static OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: BorderRadius.circular(12),
     borderSide: BorderSide(color: red),
   );
 }

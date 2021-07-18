@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           errorBorder: AppTheme.errorBorder,
           focusedErrorBorder: AppTheme.focusedErrorBorder,
           isDense: true,
-          hintStyle: AppTheme.text1,
+          hintStyle: AppTheme.text3.whiteOpacity,
         ),
       ),
       onGenerateRoute: _router.getRoute,
