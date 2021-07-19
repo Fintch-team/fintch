@@ -17,7 +17,7 @@ class AppTheme {
   static const TextStyle headline1 = TextStyle(
     fontWeight: FontWeight.bold,
     color: black,
-    fontSize: 36,
+    fontSize: 28,
   );
 
   ///font size: 24, color: black, fontWeight: bold

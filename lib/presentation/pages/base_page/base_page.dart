@@ -1,3 +1,4 @@
+import 'package:fintch/presentation/pages/pages.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:fintch/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,11 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 1,
       length: 3,
       child: Scaffold(
         body: Background(
@@ -42,12 +45,13 @@ class _BasePageState extends State<BasePage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20),
                   Expanded(
                     child: TabBarView(
                       children: [
-                        Center(child: Text('Rank')),
-                        Center(child: Text('Home')),
-                        Center(child: Text('History')),
+                        RankPage(),
+                        HomePage(),
+                        HistoryPage(),
                       ],
                     ),
                   ),
