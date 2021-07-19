@@ -16,7 +16,7 @@ class Background extends StatelessWidget {
       children: [
         Positioned.fill(
           child: SvgPicture.asset(
-            Resources.bg_pattern,
+            Resources.bgPattern,
             fit: BoxFit.cover,
           ),
         ),
