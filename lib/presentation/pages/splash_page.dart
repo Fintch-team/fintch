@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
           child: Hero(
             tag: Keys.textLogoHero,
             child: SvgPicture.asset(
-              Resources.text_logo,
+              Resources.textLogo,
               fit: BoxFit.fitWidth,
               width: MediaQuery.of(context).size.width * 0.4,
             ),
