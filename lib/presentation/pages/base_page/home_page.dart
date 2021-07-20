@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -175,6 +176,9 @@ class HomePage extends StatelessWidget {
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(),
+                  SizedBox(height: Helper.normalPadding),
+                  _articleList(context),
+                  _transactionList(),
                 ],
               ),
             ),
@@ -261,6 +265,211 @@ class HomePage extends StatelessWidget {
             name,
             style: AppTheme.text2.black.bold,
             textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _articleList(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Artikel untukmu', style: AppTheme.headline3),
+                SvgPicture.asset(Resources.next, height: 16),
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+            child: Row(
+              children: List.generate(5, (index) {
+                return _articleItem(context, index);
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _articleItem(BuildContext context, int index) {
+    return Container(
+      height: MediaQuery.of(context).size.width * 0.4,
+      decoration: BoxDecoration(
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      margin: index == 0
+          ? EdgeInsets.only(left: 20, right: 10)
+          : index == 5
+              ? EdgeInsets.only(left: 10, right: 20)
+              : EdgeInsets.symmetric(horizontal: 10),
+      child: AspectRatio(
+        aspectRatio: 16 / 11,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  fadeInCurve: Curves.easeInCubic,
+                  fadeInDuration: Duration(milliseconds: 500),
+                  fadeOutCurve: Curves.easeOutCubic,
+                  fadeOutDuration: Duration(milliseconds: 500),
+                  progressIndicatorBuilder: (context, url, downloadProgress) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        backgroundColor: AppTheme.purple,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppTheme.yellow,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) => Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                '5 Tips untuk menabung bagi para siswa',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTheme.text3.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionList() {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Transaksi terakhir', style: AppTheme.headline3),
+                SvgPicture.asset(Resources.next, height: 16),
+              ],
+            ),
+          ),
+          ListView.builder(
+            itemCount: 10,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) => TransactionItem(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TransactionItem extends StatelessWidget {
+  const TransactionItem({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '#1234053934',
+                  style: AppTheme.subText1.purpleOpacity,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Dari Adithya untuk PT. Dunia Akhirat',
+                  style: AppTheme.text2.black,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '15 Jul 2021 16:13',
+                  style: AppTheme.subText2.black.bold,
+                ),
+              ],
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SvgPicture.asset(
+                    Resources.icFintchPoint,
+                    height: 20,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '-20,000',
+                    style: AppTheme.text1.red.bold,
+                  ),
+                ],
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    Resources.icFintchWallet,
+                    height: 16,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '156,000',
+                    style: AppTheme.text2,
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

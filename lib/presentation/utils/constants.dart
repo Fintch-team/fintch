@@ -23,6 +23,8 @@ class Resources {
   static const String icReceive = '$_baseSvg/receive.svg';
   static const String icBarrierCash = '$_baseSvg/barrier_cash.svg';
   static const String icSaving = '$_baseSvg/saving.svg';
+  static const String next = '$_baseSvg/next.svg';
+  static const String icFintchPoint = '$_baseSvg/ic_fintch_point.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';
