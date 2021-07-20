@@ -19,8 +19,13 @@ class Resources {
   static const String homeIllustration = '$_baseSvg/home_illustration.svg';
   static const String icExp = '$_baseSvg/ic_exp.svg';
   static const String icFintchWallet = '$_baseSvg/ic_fintch_wallet.svg';
+  static const String icPay = '$_baseSvg/pay.svg';
+  static const String icReceive = '$_baseSvg/receive.svg';
+  static const String icBarrierCash = '$_baseSvg/barrier_cash.svg';
+  static const String icSaving = '$_baseSvg/saving.svg';
 
   // IMAGE ASSETS
+  static const String bgPatternPng = '$_baseImg/bg_pattern.png';
 
   // JSON ASSETS
 

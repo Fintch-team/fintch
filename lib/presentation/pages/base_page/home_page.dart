@@ -166,16 +166,103 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppTheme.scaffold,
             ),
-            child: ListView.builder(
+            child: SingleChildScrollView(
               controller: scrollController,
               physics: BouncingScrollPhysics(),
-              itemCount: 25,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(title: Text('Item $index'));
-              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _bottomSheetLine(context),
+                  SizedBox(height: Helper.normalPadding),
+                  _listFeature(),
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _bottomSheetLine(BuildContext context) {
+    return Container(
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.purpleOpacity,
+      ),
+      margin: EdgeInsets.only(top: Helper.smallPadding),
+      width: MediaQuery.of(context).size.width * 0.15,
+      height: 4,
+    );
+  }
+
+  Widget _listFeature() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _featureItem(
+            name: 'Bayar',
+            assetName: Resources.icPay,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Terima',
+            assetName: Resources.icReceive,
+            isOpacity: true,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Barrier Cash',
+            assetName: Resources.icBarrierCash,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Tabungan',
+            assetName: Resources.icSaving,
+            isOpacity: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _featureItem({
+    bool isOpacity: false,
+    required String name,
+    required String assetName,
+  }) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: isOpacity ? AppTheme.purpleOpacity : AppTheme.purple,
+                image: DecorationImage(
+                  image: AssetImage(Resources.bgPatternPng),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: Helper.getShadow(),
+              ),
+              padding: EdgeInsets.all(20),
+              child: SvgPicture.asset(assetName),
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            name,
+            style: AppTheme.text2.black.bold,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
