@@ -13,53 +13,64 @@ class BasePage extends StatefulWidget {
 
 class _BasePageState extends State<BasePage> {
 
+  final int _tabBarLength = 3;
+  final int _initialIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
-      length: 3,
+      initialIndex: _initialIndex,
+      length: _tabBarLength,
       child: Scaffold(
         body: Background(
           child: SafeArea(
             child: Container(
               child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  ShiftingTabBar(
-                    bgColor: Colors.transparent,
-                    tabs: <ShiftingTab>[
-                      ShiftingTab(
-                        icon: SvgPicture.asset(Resources.rank),
-                        inactiveIcon: SvgPicture.asset(Resources.rankInactive),
-                        text: 'Rank',
-                      ),
-                      ShiftingTab(
-                        icon: SvgPicture.asset(Resources.home),
-                        inactiveIcon: SvgPicture.asset(Resources.homeInactive),
-                        text: 'Home',
-                      ),
-                      ShiftingTab(
-                        icon: SvgPicture.asset(Resources.history),
-                        inactiveIcon: SvgPicture.asset(Resources.historyInactive),
-                        text: 'History',
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        RankPage(),
-                        HomePage(),
-                        HistoryPage(),
-                      ],
-                    ),
-                  ),
+                  SizedBox(height: Helper.normalPadding),
+                  _tabBar(),
+                  SizedBox(height: Helper.normalPadding),
+                  _tabBarView(),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _tabBar() {
+    return ShiftingTabBar(
+      bgColor: Colors.transparent,
+      tabs: <ShiftingTab>[
+        ShiftingTab(
+          icon: SvgPicture.asset(Resources.rank),
+          inactiveIcon: SvgPicture.asset(Resources.rankInactive),
+          text: 'Rank',
+        ),
+        ShiftingTab(
+          icon: SvgPicture.asset(Resources.home),
+          inactiveIcon: SvgPicture.asset(Resources.homeInactive),
+          text: 'Home',
+        ),
+        ShiftingTab(
+          icon: SvgPicture.asset(Resources.history),
+          inactiveIcon: SvgPicture.asset(Resources.historyInactive),
+          text: 'History',
+        ),
+      ],
+    );
+  }
+
+  Widget _tabBarView() {
+    return Expanded(
+      child: TabBarView(
+        children: [
+          RankPage(),
+          HomePage(),
+          HistoryPage(),
+        ],
       ),
     );
   }
