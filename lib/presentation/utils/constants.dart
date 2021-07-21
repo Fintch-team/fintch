@@ -19,8 +19,15 @@ class Resources {
   static const String homeIllustration = '$_baseSvg/home_illustration.svg';
   static const String icExp = '$_baseSvg/ic_exp.svg';
   static const String icFintchWallet = '$_baseSvg/ic_fintch_wallet.svg';
+  static const String icPay = '$_baseSvg/pay.svg';
+  static const String icReceive = '$_baseSvg/receive.svg';
+  static const String icBarrierCash = '$_baseSvg/barrier_cash.svg';
+  static const String icSaving = '$_baseSvg/saving.svg';
+  static const String next = '$_baseSvg/next.svg';
+  static const String icFintchPoint = '$_baseSvg/ic_fintch_point.svg';
 
   // IMAGE ASSETS
+  static const String bgPatternPng = '$_baseImg/bg_pattern.png';
 
   // JSON ASSETS
 
@@ -37,4 +44,5 @@ class FormatDate {
 
 class Dummy {
   static const String profileImg = 'https://wallpapercave.com/wp/wp8941645.jpg';
+  static const String articleImg = 'https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg';
 }

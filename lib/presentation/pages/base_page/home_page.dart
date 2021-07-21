@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,8 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _userInfo(),
-                      SizedBox(height: 16),
+                      _userInfo(context),
+                      SizedBox(height: Helper.normalPadding),
                       _levelBar(),
                     ],
                   ),
@@ -58,13 +59,49 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _userInfo() {
+  Widget _userInfo(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundImage: NetworkImage(Dummy.profileImg),
+        Flexible(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(64),
+            child: CachedNetworkImage(
+              imageUrl:
+              Dummy.profileImg,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width * 0.16,
+              height: MediaQuery.of(context).size.width * 0.16,
+              fadeInCurve: Curves.easeInCubic,
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeOutCurve: Curves.easeOutCubic,
+              fadeOutDuration: Duration(milliseconds: 500),
+              progressIndicatorBuilder: (context, url, downloadProgress) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    backgroundColor: AppTheme.purple,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppTheme.yellow,
+                    ),
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) => Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.grey,
+                child: Icon(
+                  Icons.error,
+                  color: AppTheme.black,
+                ),
+              ),
+            ),
+          ),
         ),
+        // CircleAvatar(
+        //   radius: 32,
+        //   backgroundImage: NetworkImage(Dummy.profileImg),
+        // ),
         SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -166,16 +203,313 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppTheme.scaffold,
             ),
-            child: ListView.builder(
+            child: SingleChildScrollView(
               controller: scrollController,
               physics: BouncingScrollPhysics(),
-              itemCount: 25,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(title: Text('Item $index'));
-              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _bottomSheetLine(context),
+                  SizedBox(height: Helper.normalPadding),
+                  _listFeature(),
+                  SizedBox(height: Helper.normalPadding),
+                  _articleList(context),
+                  _transactionList(),
+                ],
+              ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _bottomSheetLine(BuildContext context) {
+    return Container(
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.purpleOpacity,
+      ),
+      margin: EdgeInsets.only(top: Helper.smallPadding),
+      width: MediaQuery.of(context).size.width * 0.15,
+      height: 4,
+    );
+  }
+
+  Widget _listFeature() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _featureItem(
+            name: 'Bayar',
+            assetName: Resources.icPay,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Terima',
+            assetName: Resources.icReceive,
+            isOpacity: true,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Barrier Cash',
+            assetName: Resources.icBarrierCash,
+          ),
+          SizedBox(width: 20),
+          _featureItem(
+            name: 'Tabungan',
+            assetName: Resources.icSaving,
+            isOpacity: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _featureItem({
+    bool isOpacity: false,
+    required String name,
+    required String assetName,
+  }) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: isOpacity ? AppTheme.purpleOpacity : AppTheme.purple,
+                image: DecorationImage(
+                  image: AssetImage(Resources.bgPatternPng),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: Helper.getShadow(),
+              ),
+              padding: EdgeInsets.all(20),
+              child: SvgPicture.asset(assetName),
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            name,
+            style: AppTheme.text2.black.bold,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _articleList(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Artikel untukmu', style: AppTheme.headline3),
+                SvgPicture.asset(Resources.next, height: 16),
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+            child: Row(
+              children: List.generate(5, (index) {
+                return _articleItem(context, index);
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _articleItem(BuildContext context, int index) {
+    return Container(
+      height: MediaQuery.of(context).size.width * 0.4,
+      decoration: BoxDecoration(
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      margin: index == 0
+          ? EdgeInsets.only(left: 20, right: 10)
+          : index == 4
+              ? EdgeInsets.only(left: 10, right: 20)
+              : EdgeInsets.symmetric(horizontal: 10),
+      child: AspectRatio(
+        aspectRatio: 16 / 11,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                child: CachedNetworkImage(
+                  imageUrl: Dummy.articleImg,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  fadeInCurve: Curves.easeInCubic,
+                  fadeInDuration: Duration(milliseconds: 500),
+                  fadeOutCurve: Curves.easeOutCubic,
+                  fadeOutDuration: Duration(milliseconds: 500),
+                  progressIndicatorBuilder: (context, url, downloadProgress) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        backgroundColor: AppTheme.purple,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppTheme.yellow,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) => Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.grey,
+                    child: Icon(
+                      Icons.error,
+                      color: AppTheme.black,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                '5 Tips untuk menabung bagi para siswa',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTheme.text3.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionList() {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Transaksi terakhir', style: AppTheme.headline3),
+                SvgPicture.asset(Resources.next, height: 16),
+              ],
+            ),
+          ),
+          ListView.builder(
+            itemCount: 10,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) => TransactionItem(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TransactionItem extends StatelessWidget {
+  const TransactionItem({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '#1234053934',
+                  style: AppTheme.subText1.purpleOpacity,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Dari Adithya untuk PT. Dunia Akhirat',
+                  style: AppTheme.text2.black,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '15 Jul 2021 16:13',
+                  style: AppTheme.subText2.black.bold,
+                ),
+              ],
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SvgPicture.asset(
+                    Resources.icFintchPoint,
+                    height: 20,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '-20,000',
+                    style: AppTheme.text1.red.bold,
+                  ),
+                ],
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    Resources.icFintchWallet,
+                    height: 16,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '156,000',
+                    style: AppTheme.text2,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
