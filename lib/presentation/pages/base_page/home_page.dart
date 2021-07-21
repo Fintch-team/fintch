@@ -41,8 +41,8 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _userInfo(),
-                      SizedBox(height: 16),
+                      _userInfo(context),
+                      SizedBox(height: Helper.normalPadding),
                       _levelBar(),
                     ],
                   ),
@@ -59,13 +59,49 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _userInfo() {
+  Widget _userInfo(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundImage: NetworkImage(Dummy.profileImg),
+        Flexible(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(64),
+            child: CachedNetworkImage(
+              imageUrl:
+              Dummy.profileImg,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width * 0.16,
+              height: MediaQuery.of(context).size.width * 0.16,
+              fadeInCurve: Curves.easeInCubic,
+              fadeInDuration: Duration(milliseconds: 500),
+              fadeOutCurve: Curves.easeOutCubic,
+              fadeOutDuration: Duration(milliseconds: 500),
+              progressIndicatorBuilder: (context, url, downloadProgress) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    backgroundColor: AppTheme.purple,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppTheme.yellow,
+                    ),
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) => Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.grey,
+                child: Icon(
+                  Icons.error,
+                  color: AppTheme.black,
+                ),
+              ),
+            ),
+          ),
         ),
+        // CircleAvatar(
+        //   radius: 32,
+        //   backgroundImage: NetworkImage(Dummy.profileImg),
+        // ),
         SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -271,7 +307,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-
   Widget _articleList(BuildContext context) {
     return Container(
       child: Column(
@@ -312,7 +347,7 @@ class HomePage extends StatelessWidget {
       ),
       margin: index == 0
           ? EdgeInsets.only(left: 20, right: 10)
-          : index == 5
+          : index == 4
               ? EdgeInsets.only(left: 10, right: 20)
               : EdgeInsets.symmetric(horizontal: 10),
       child: AspectRatio(
@@ -324,8 +359,7 @@ class HomePage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      "https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg",
+                  imageUrl: Dummy.articleImg,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   fadeInCurve: Curves.easeInCubic,
@@ -347,6 +381,10 @@ class HomePage extends StatelessWidget {
                     height: double.infinity,
                     width: double.infinity,
                     color: Colors.grey,
+                    child: Icon(
+                      Icons.error,
+                      color: AppTheme.black,
+                    ),
                   ),
                 ),
               ),

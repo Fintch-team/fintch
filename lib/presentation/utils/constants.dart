@@ -44,4 +44,5 @@ class FormatDate {
 
 class Dummy {
   static const String profileImg = 'https://wallpapercave.com/wp/wp8941645.jpg';
+  static const String articleImg = 'https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg';
 }

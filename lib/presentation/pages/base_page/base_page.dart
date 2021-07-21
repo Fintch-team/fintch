@@ -47,7 +47,7 @@ class _BasePageState extends State<BasePage> {
         ShiftingTab(
           icon: SvgPicture.asset(Resources.rank),
           inactiveIcon: SvgPicture.asset(Resources.rankInactive),
-          text: 'Rank',
+          text: 'Leaderboard',
         ),
         ShiftingTab(
           icon: SvgPicture.asset(Resources.home),
@@ -67,7 +67,7 @@ class _BasePageState extends State<BasePage> {
     return Expanded(
       child: TabBarView(
         children: [
-          RankPage(),
+          LeaderboardPage(),
           HomePage(),
           HistoryPage(),
         ],
