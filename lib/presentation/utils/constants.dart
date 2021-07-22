@@ -26,6 +26,10 @@ class Resources {
   static const String next = '$_baseSvg/next.svg';
   static const String back = '$_baseSvg/back.svg';
   static const String icFintchPoint = '$_baseSvg/ic_fintch_point.svg';
+  static const String icSchool = '$_baseSvg/ic_school.svg';
+  static const String icFirst = '$_baseSvg/first.svg';
+  static const String icSecond = '$_baseSvg/second.svg';
+  static const String icThird = '$_baseSvg/third.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';

@@ -32,6 +32,7 @@ class HomePage extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,10 +100,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        // CircleAvatar(
-        //   radius: 32,
-        //   backgroundImage: NetworkImage(Dummy.profileImg),
-        // ),
         SizedBox(width: 16),
         Expanded(
           child: Column(
