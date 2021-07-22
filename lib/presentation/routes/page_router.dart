@@ -17,6 +17,8 @@ class PageRouter {
         return _buildRoute(settings, LoginPage());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
+      case PagePath.receive:
+        return _buildRoute(settings, ReceivePage());
       default:
         return _errorRoute();
     }

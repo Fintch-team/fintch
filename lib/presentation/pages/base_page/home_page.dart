@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fintch/presentation/routes/routes.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +212,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  _listFeature(),
+                  _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
                   _articleList(context),
                   _transactionList(),
@@ -237,7 +238,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _listFeature() {
+  Widget _listFeature(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
       child: Row(
@@ -247,22 +248,26 @@ class HomePage extends StatelessWidget {
           _featureItem(
             name: 'Bayar',
             assetName: Resources.icPay,
+            onTap: (){},
           ),
           SizedBox(width: 20),
           _featureItem(
             name: 'Terima',
             assetName: Resources.icReceive,
+            onTap: () => Navigator.pushNamed(context, PagePath.receive),
             isOpacity: true,
           ),
           SizedBox(width: 20),
           _featureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
+            onTap: (){},
           ),
           SizedBox(width: 20),
           _featureItem(
             name: 'Tabungan',
             assetName: Resources.icSaving,
+            onTap: (){},
             isOpacity: true,
           ),
         ],
@@ -274,35 +279,39 @@ class HomePage extends StatelessWidget {
     bool isOpacity: false,
     required String name,
     required String assetName,
+    required VoidCallback onTap,
   }) {
     return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: isOpacity ? AppTheme.purpleOpacity : AppTheme.purple,
-                image: DecorationImage(
-                  image: AssetImage(Resources.bgPatternPng),
-                  fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isOpacity ? AppTheme.purpleOpacity : AppTheme.purple,
+                  image: DecorationImage(
+                    image: AssetImage(Resources.bgPatternPng),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: Helper.getShadow(),
                 ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: Helper.getShadow(),
+                padding: EdgeInsets.all(20),
+                child: SvgPicture.asset(assetName),
               ),
-              padding: EdgeInsets.all(20),
-              child: SvgPicture.asset(assetName),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            name,
-            style: AppTheme.text2.black.bold,
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(height: 8),
+            Text(
+              name,
+              style: AppTheme.text2.black.bold,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
