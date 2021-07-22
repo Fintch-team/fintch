@@ -207,13 +207,13 @@ class _ShiftingTabWidget extends AnimatedWidget {
     final Tween<double> tween =
     Tween<double>(begin: 1.0, end: 1.0 + labelFlex!);
 
-    return Expanded(
+    return Flexible(
       flex: (tween.animate(animation).value * 1000).round(),
       child: InkWell(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         onTap: onTap as void Function()?,
-        child: Center(child: _buildTab(animation, color, margin, context)),
+        child: _buildTab(animation, color, margin, context),
       ),
     );
   }
@@ -227,7 +227,7 @@ class _ShiftingTabWidget extends AnimatedWidget {
     final TextDirection dir = Directionality.of(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         _buildWidget(margin, dir),
         _buildText(
@@ -246,9 +246,6 @@ class _ShiftingTabWidget extends AnimatedWidget {
 
   Widget _buildWidget(double? margin, TextDirection dir) {
     return Container(
-      margin: dir == TextDirection.ltr
-          ? EdgeInsets.only(left: margin!)
-          : EdgeInsets.only(right: margin!),
       child: icon,
     );
   }
@@ -263,16 +260,11 @@ class _ShiftingTabWidget extends AnimatedWidget {
       opacity: animation,
       child: SizeTransition(
         child: Container(
-          margin: dir == TextDirection.ltr
-              ? const EdgeInsets.only(left: 12)
-              : const EdgeInsets.only(right: 12),
+          margin: EdgeInsets.only(left: 12),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                DefaultTextStyle(
-                  style: labelStyle,
-                  child: Text(text!),
-                )
+                Text(text!, style: labelStyle,)
               ]),
         ),
         axis: Axis.horizontal,
