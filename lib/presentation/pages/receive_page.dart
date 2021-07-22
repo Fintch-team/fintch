@@ -20,112 +20,117 @@ class ReceivePage extends StatelessWidget {
               children: [
                 _appBar(context),
                 SizedBox(height: 20),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: Helper.getShadowBold(),
-                                  borderRadius: BorderRadius.circular(32),
-                                  color: AppTheme.scaffold,
-                                ),
-                                padding: EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: MediaQuery.of(context).size.width * 0.12,
-                                    ),
-                                    Text('Adithya Firmansyah Putra', style: AppTheme.headline3),
-                                    SizedBox(height: 8),
-                                    Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
-                                    SizedBox(height: 8),
-                                    Text('19042138210', style: AppTheme.text3.purple),
-                                    SizedBox(height: 20),
-                                    Expanded(
-                                      child: Center(
-                                        child: PrettyQr(
-                                          image: AssetImage(Resources.icFintchPointPng),
-                                          size: MediaQuery.of(context).size.height * 0.3,
-                                          data: '19042138210-1420193',
-                                          errorCorrectLevel: QrErrorCorrectLevel.M,
-                                          roundEdges: true,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                _userCard(context),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded _userCard(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: Helper.getShadowBold(),
+                      borderRadius: BorderRadius.circular(32),
+                      color: AppTheme.scaffold,
+                    ),
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.12,
+                        ),
+                        Text('Adithya Firmansyah Putra',
+                            style: AppTheme.headline3),
+                        SizedBox(height: 8),
+                        Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
+                        SizedBox(height: 8),
+                        Text('19042138210', style: AppTheme.text3.purple),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: Center(
+                            child: PrettyQr(
+                              image: AssetImage(Resources.icFintchPointPng),
+                              size: MediaQuery.of(context).size.height * 0.3,
+                              data: '19042138210-1420193',
+                              errorCorrectLevel: QrErrorCorrectLevel.M,
+                              roundEdges: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -MediaQuery.of(context).size.width * 0.12,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.24,
+                    height: MediaQuery.of(context).size.width * 0.24,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(64),
+                      boxShadow: Helper.getShadow(),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(64),
+                      child: CachedNetworkImage(
+                        imageUrl: Dummy.profileImg,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.width * 0.3,
+                        fadeInCurve: Curves.easeInCubic,
+                        fadeInDuration: Duration(milliseconds: 500),
+                        fadeOutCurve: Curves.easeOutCubic,
+                        fadeOutDuration: Duration(milliseconds: 500),
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              backgroundColor: AppTheme.purple,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppTheme.yellow,
                               ),
                             ),
-                            Positioned(
-                              top: -MediaQuery.of(context).size.width * 0.12,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.24,
-                                height: MediaQuery.of(context).size.width * 0.24,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(64),
-                                  boxShadow: Helper.getShadow(),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(64),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                    Dummy.profileImg,
-                                    fit: BoxFit.cover,
-                                    width: MediaQuery.of(context).size.width * 0.3,
-                                    height: MediaQuery.of(context).size.width * 0.3,
-                                    fadeInCurve: Curves.easeInCubic,
-                                    fadeInDuration: Duration(milliseconds: 500),
-                                    fadeOutCurve: Curves.easeOutCubic,
-                                    fadeOutDuration: Duration(milliseconds: 500),
-                                    progressIndicatorBuilder: (context, url, downloadProgress) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          backgroundColor: AppTheme.purple,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            AppTheme.yellow,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (context, url, error) => Container(
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      color: Colors.grey,
-                                      child: Icon(
-                                        Icons.error,
-                                        color: AppTheme.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          );
+                        },
+                        errorWidget: (context, url, error) => Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          color: Colors.grey,
+                          child: Icon(
+                            Icons.error,
+                            color: AppTheme.black,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 40),
-                      CustomButton(
-                        text: 'Scan QR Code',
-                        onTap: () {},
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
+          SizedBox(height: 40),
+          CustomButton(
+            text: 'Scan QR Code',
+            onTap: () {},
+          ),
+        ],
       ),
     );
   }
