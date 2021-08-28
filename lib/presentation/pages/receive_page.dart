@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:fintch/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class ReceivePage extends StatelessWidget {
@@ -18,7 +16,9 @@ class ReceivePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _appBar(context),
+                CustomAppBar(
+                  title: 'QR Code Saya',
+                ),
                 SizedBox(height: 20),
                 _userCard(context),
               ],
@@ -61,7 +61,7 @@ class ReceivePage extends StatelessWidget {
                         Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
                         SizedBox(height: 8),
                         Text('19042138210', style: AppTheme.text3.purple),
-                        SizedBox(height: 20),
+                        SizedBox(height: Helper.normalPadding),
                         Expanded(
                           child: Center(
                             child: PrettyQr(
@@ -80,8 +80,6 @@ class ReceivePage extends StatelessWidget {
                 Positioned(
                   top: -MediaQuery.of(context).size.width * 0.12,
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.24,
-                    height: MediaQuery.of(context).size.width * 0.24,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(64),
                       boxShadow: Helper.getShadow(),
@@ -89,8 +87,8 @@ class ReceivePage extends StatelessWidget {
                     child: CustomNetworkImage(
                       imgUrl: Dummy.profileImg,
                       borderRadius: 64,
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.width * 0.3,
+                      width: MediaQuery.of(context).size.width * 0.24,
+                      height: MediaQuery.of(context).size.width * 0.24,
                     ),
                   ),
                 ),
@@ -104,19 +102,6 @@ class ReceivePage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _appBar(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: SvgPicture.asset(Resources.back),
-        ),
-        SizedBox(width: 20),
-        Text('QR Code Saya', style: AppTheme.text1.white.bold),
-      ],
     );
   }
 }

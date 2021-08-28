@@ -5,3 +5,4 @@ export 'base_page/history_page.dart';
 export 'base_page/home_page.dart';
 export 'base_page/leaderboard_page.dart';
 export 'receive_page.dart';
+export 'profile_page.dart';

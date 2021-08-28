@@ -38,15 +38,18 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _userInfo(context),
-                      SizedBox(height: Helper.normalPadding),
-                      _levelBar(),
-                    ],
+                  child: GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, PagePath.profile),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _userInfo(context),
+                        SizedBox(height: Helper.normalPadding),
+                        _levelBar(),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: Helper.normalPadding),

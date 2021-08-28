@@ -19,6 +19,8 @@ class PageRouter {
         return _buildRoute(settings, BasePage());
       case PagePath.receive:
         return _buildRoute(settings, ReceivePage());
+      case PagePath.profile:
+        return _buildRoute(settings, ProfilePage());
       default:
         return _errorRoute();
     }
