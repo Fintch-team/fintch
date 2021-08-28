@@ -1,4 +1,6 @@
 import 'package:fintch/presentation/utils/utils.dart';
+import 'package:fintch/presentation/widgets/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,44 +27,39 @@ class LeaderboardPage extends StatelessWidget {
       right: 0,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.35,
-        padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Fintch\nLeaderboard',
-                        style: AppTheme.headline1.white,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SvgPicture.asset(Resources.icSchool),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'SMK Negeri 1 Majalengka',
-                              style: AppTheme.text3.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: Helper.normalPadding),
-                _homeIllustration(context),
-              ],
+            _rankItem(
+              context,
+              width: MediaQuery.of(context).size.width * 0.28,
+              paddingTop: MediaQuery.of(context).size.width * 0.1,
+              imgUrl: Dummy.profileImg,
+              name: 'Galuh Najla Fatimah Alfajri',
+              level: 34,
+              color: AppTheme.colorRank2,
+              medalAsset: Resources.icSecond,
+            ),
+            _rankItem(
+              context,
+              width: MediaQuery.of(context).size.width * 0.36,
+              paddingTop: MediaQuery.of(context).size.width * 0.05,
+              imgUrl: Dummy.profileImg,
+              name: 'Daliun Sastrodijoyo Umar Alfajri',
+              level: 35,
+              color: AppTheme.colorRank1,
+              medalAsset: Resources.icFirst,
+            ),
+            _rankItem(
+              context,
+              width: MediaQuery.of(context).size.width * 0.28,
+              paddingTop: MediaQuery.of(context).size.width * 0.15,
+              imgUrl: Dummy.profileImg,
+              name: 'Keisha Nareswari Atika Alfajri',
+              level: 33,
+              color: AppTheme.colorRank3,
+              medalAsset: Resources.icThird,
             ),
           ],
         ),
@@ -70,11 +67,76 @@ class LeaderboardPage extends StatelessWidget {
     );
   }
 
-  Widget _homeIllustration(BuildContext context) {
-    return SvgPicture.asset(
-      Resources.homeIllustration,
-      width: MediaQuery.of(context).size.width * 0.3,
-      fit: BoxFit.fitWidth,
+  Widget _rankItem(
+    BuildContext context, {
+    required double width,
+    required double paddingTop,
+    required String imgUrl,
+    required String name,
+    required int level,
+    required Color color,
+    required String medalAsset,
+  }) {
+    return Container(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: paddingTop,
+          ),
+          Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomNetworkImage(
+                  imgUrl: imgUrl,
+                  borderRadius: 64,
+                  width: MediaQuery.of(context).size.width * 0.16,
+                  height: MediaQuery.of(context).size.width * 0.16,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  name,
+                  style: AppTheme.text3.bold.white,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(Resources.icExp),
+                    SizedBox(width: 4),
+                    Text(
+                      'Level $level',
+                      style: AppTheme.text3.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: FittedBox(
+                child: Center(
+                  child: SvgPicture.asset(
+                    medalAsset,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -99,43 +161,6 @@ class LeaderboardPage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  _topUserItem(
-                    medalAsset: Resources.icFirst,
-                    name: 'Adithya Firmansyah Putra',
-                    nisn: '912038123213',
-                    level: 35,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 8),
-                  _topUserItem(
-                    medalAsset: Resources.icSecond,
-                    name: 'Gema Akbar',
-                    nisn: '21948021812',
-                    level: 32,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 8),
-                  _topUserItem(
-                    medalAsset: Resources.icThird,
-                    name: 'Putri Shafa Nurani',
-                    nisn: '02142193812',
-                    level: 31,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 12),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppTheme.purpleOpacity,
-                    ),
-                    margin: EdgeInsets.only(top: Helper.smallPadding),
-                    height: 4,
-                  ),
-                  SizedBox(height: 12),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
@@ -144,7 +169,7 @@ class LeaderboardPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: _topUserItem(
                           position: index + 4,
-                          name: 'Anjayani Nurani',
+                          name: 'Alora Tribuana Aisyah Alfajri',
                           nisn: '192470129312',
                           level: 20,
                           startExp: 300,
@@ -178,7 +203,10 @@ class LeaderboardPage extends StatelessWidget {
           flex: 1,
           child: Container(
             child: medalAsset != null
-                ? SvgPicture.asset(medalAsset, width: 28,)
+                ? SvgPicture.asset(
+                    medalAsset,
+                    width: 28,
+                  )
                 : position != null
                     ? Container(
                         child: Center(
@@ -194,45 +222,24 @@ class LeaderboardPage extends StatelessWidget {
         SizedBox(width: 8),
         Expanded(
           flex: 6,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: AppTheme.text2.bold,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 8),
-              Text(
-                nisn,
-                style: AppTheme.text3.purple,
-              ),
-            ],
+          child: Text(
+            name,
+            style: AppTheme.text2.bold,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         SizedBox(height: 8),
         Expanded(
           flex: 3,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SvgPicture.asset(Resources.icExp),
               SizedBox(width: 4),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Level $level',
-                    style: AppTheme.text3,
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '$startExp/$endExp EXP',
-                    style: AppTheme.subText1.purpleOpacity,
-                  ),
-                ],
+              Text(
+                'Level $level',
+                style: AppTheme.text3,
               ),
             ],
           ),

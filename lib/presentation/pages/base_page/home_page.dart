@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fintch/presentation/routes/routes.dart';
 import 'package:fintch/presentation/utils/utils.dart';
+import 'package:fintch/presentation/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,39 +65,11 @@ class HomePage extends StatelessWidget {
     return Row(
       children: [
         Flexible(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(64),
-            child: CachedNetworkImage(
-              imageUrl:
-              Dummy.profileImg,
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width * 0.16,
-              height: MediaQuery.of(context).size.width * 0.16,
-              fadeInCurve: Curves.easeInCubic,
-              fadeInDuration: Duration(milliseconds: 500),
-              fadeOutCurve: Curves.easeOutCubic,
-              fadeOutDuration: Duration(milliseconds: 500),
-              progressIndicatorBuilder: (context, url, downloadProgress) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    backgroundColor: AppTheme.purple,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      AppTheme.yellow,
-                    ),
-                  ),
-                );
-              },
-              errorWidget: (context, url, error) => Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.grey,
-                child: Icon(
-                  Icons.error,
-                  color: AppTheme.black,
-                ),
-              ),
-            ),
+          child: CustomNetworkImage(
+            imgUrl: Dummy.profileImg,
+            borderRadius: 64,
+            width: MediaQuery.of(context).size.width * 0.16,
+            height: MediaQuery.of(context).size.width * 0.16,
           ),
         ),
         SizedBox(width: 16),
@@ -245,7 +217,7 @@ class HomePage extends StatelessWidget {
           _featureItem(
             name: 'Bayar',
             assetName: Resources.icPay,
-            onTap: (){},
+            onTap: () {},
           ),
           SizedBox(width: 20),
           _featureItem(
@@ -258,13 +230,13 @@ class HomePage extends StatelessWidget {
           _featureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
-            onTap: (){},
+            onTap: () {},
           ),
           SizedBox(width: 20),
           _featureItem(
             name: 'Tabungan',
             assetName: Resources.icSaving,
-            onTap: (){},
+            onTap: () {},
             isOpacity: true,
           ),
         ],
@@ -362,37 +334,10 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                child: CachedNetworkImage(
-                  imageUrl: Dummy.articleImg,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  fadeInCurve: Curves.easeInCubic,
-                  fadeInDuration: Duration(milliseconds: 500),
-                  fadeOutCurve: Curves.easeOutCubic,
-                  fadeOutDuration: Duration(milliseconds: 500),
-                  progressIndicatorBuilder: (context, url, downloadProgress) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                        backgroundColor: AppTheme.purple,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppTheme.yellow,
-                        ),
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) => Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    color: Colors.grey,
-                    child: Icon(
-                      Icons.error,
-                      color: AppTheme.black,
-                    ),
-                  ),
-                ),
+              child: CustomNetworkImage(
+                imgUrl: Dummy.articleImg,
+                borderRadius: 20,
+                width: double.infinity,
               ),
             ),
             Padding(

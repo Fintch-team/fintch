@@ -10,6 +10,9 @@ class AppTheme {
   static const Color black = Color(0xFF000000);
   static const Color white = Color(0xFFFFFFFF);
   static const Color darkYellow = Color(0xFFBDA300);
+  static const Color colorRank1 = Color(0xFFFFD94F);
+  static const Color colorRank2 = Color(0xFFFBFBFB);
+  static const Color colorRank3 = Color(0xFFFFB957);
   static Color purpleOpacity = Color(0xFFB570F7).withOpacity(0.3);
   static Color whiteOpacity = Color(0xFFFFFFFF).withOpacity(0.6);
 

@@ -6,10 +6,12 @@ class Helper {
     WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
   }
 
+  ///padding 20
   static double get normalPadding {
     return 20;
   }
 
+  ///padding 12
   static double get smallPadding {
     return 12;
   }
