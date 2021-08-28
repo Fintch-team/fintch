@@ -86,39 +86,11 @@ class ReceivePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(64),
                       boxShadow: Helper.getShadow(),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(64),
-                      child: CachedNetworkImage(
-                        imageUrl: Dummy.profileImg,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.width * 0.3,
-                        fadeInCurve: Curves.easeInCubic,
-                        fadeInDuration: Duration(milliseconds: 500),
-                        fadeOutCurve: Curves.easeOutCubic,
-                        fadeOutDuration: Duration(milliseconds: 500),
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                              backgroundColor: AppTheme.purple,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                AppTheme.yellow,
-                              ),
-                            ),
-                          );
-                        },
-                        errorWidget: (context, url, error) => Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          color: Colors.grey,
-                          child: Icon(
-                            Icons.error,
-                            color: AppTheme.black,
-                          ),
-                        ),
-                      ),
+                    child: CustomNetworkImage(
+                      imgUrl: Dummy.profileImg,
+                      borderRadius: 64,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.width * 0.3,
                     ),
                   ),
                 ),

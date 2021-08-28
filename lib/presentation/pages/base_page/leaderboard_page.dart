@@ -26,43 +26,11 @@ class LeaderboardPage extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.35,
         padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Fintch\nLeaderboard',
-                        style: AppTheme.headline1.white,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SvgPicture.asset(Resources.icSchool),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'SMK Negeri 1 Majalengka',
-                              style: AppTheme.text3.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: Helper.normalPadding),
-                _homeIllustration(context),
-              ],
+            Column(
+              
             ),
           ],
         ),
@@ -99,43 +67,43 @@ class LeaderboardPage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  _topUserItem(
-                    medalAsset: Resources.icFirst,
-                    name: 'Adithya Firmansyah Putra',
-                    nisn: '912038123213',
-                    level: 35,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 8),
-                  _topUserItem(
-                    medalAsset: Resources.icSecond,
-                    name: 'Gema Akbar',
-                    nisn: '21948021812',
-                    level: 32,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 8),
-                  _topUserItem(
-                    medalAsset: Resources.icThird,
-                    name: 'Putri Shafa Nurani',
-                    nisn: '02142193812',
-                    level: 31,
-                    startExp: 300,
-                    endExp: 400,
-                  ),
-                  SizedBox(height: 12),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppTheme.purpleOpacity,
-                    ),
-                    margin: EdgeInsets.only(top: Helper.smallPadding),
-                    height: 4,
-                  ),
-                  SizedBox(height: 12),
+                  // _topUserItem(
+                  //   medalAsset: Resources.icFirst,
+                  //   name: 'Adithya Firmansyah Putra',
+                  //   nisn: '912038123213',
+                  //   level: 35,
+                  //   startExp: 300,
+                  //   endExp: 400,
+                  // ),
+                  // SizedBox(height: 8),
+                  // _topUserItem(
+                  //   medalAsset: Resources.icSecond,
+                  //   name: 'Gema Akbar',
+                  //   nisn: '21948021812',
+                  //   level: 32,
+                  //   startExp: 300,
+                  //   endExp: 400,
+                  // ),
+                  // SizedBox(height: 8),
+                  // _topUserItem(
+                  //   medalAsset: Resources.icThird,
+                  //   name: 'Putri Shafa Nurani',
+                  //   nisn: '02142193812',
+                  //   level: 31,
+                  //   startExp: 300,
+                  //   endExp: 400,
+                  // ),
+                  // SizedBox(height: 12),
+                  // Container(
+                  //   alignment: Alignment.topCenter,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(8),
+                  //     color: AppTheme.purpleOpacity,
+                  //   ),
+                  //   margin: EdgeInsets.only(top: Helper.smallPadding),
+                  //   height: 4,
+                  // ),
+                  // SizedBox(height: 12),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
@@ -194,45 +162,24 @@ class LeaderboardPage extends StatelessWidget {
         SizedBox(width: 8),
         Expanded(
           flex: 6,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: AppTheme.text2.bold,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 8),
-              Text(
-                nisn,
-                style: AppTheme.text3.purple,
-              ),
-            ],
+          child: Text(
+            name,
+            style: AppTheme.text2.bold,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         SizedBox(height: 8),
         Expanded(
           flex: 3,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SvgPicture.asset(Resources.icExp),
               SizedBox(width: 4),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Level $level',
-                    style: AppTheme.text3,
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '$startExp/$endExp EXP',
-                    style: AppTheme.subText1.purpleOpacity,
-                  ),
-                ],
+              Text(
+                'Level $level',
+                style: AppTheme.text3,
               ),
             ],
           ),
