@@ -1,4 +1,3 @@
-
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +5,14 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final bool isEnable;
+  final bool isOutline;
 
   const CustomButton({
     Key? key,
     required this.onTap,
     required this.text,
     this.isEnable: true,
+    this.isOutline: false,
   }) : super(key: key);
 
   @override
@@ -22,7 +23,8 @@ class CustomButton extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: isEnable ? AppTheme.yellow : AppTheme.darkYellow,
+          color: isOutline ? Colors.transparent: isEnable ? AppTheme.yellow : AppTheme.darkYellow,
+          border: isOutline ? Border.all(color: AppTheme.black, width: 1) : null,
         ),
         padding: EdgeInsets.symmetric(
           horizontal: 24,
