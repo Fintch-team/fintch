@@ -140,14 +140,6 @@ class LeaderboardPage extends StatelessWidget {
     );
   }
 
-  Widget _homeIllustration(BuildContext context) {
-    return SvgPicture.asset(
-      Resources.homeIllustration,
-      width: MediaQuery.of(context).size.width * 0.3,
-      fit: BoxFit.fitWidth,
-    );
-  }
-
   Widget _leaderboardScrollableSheet() {
     return Positioned.fill(
       child: DraggableScrollableSheet(
@@ -169,43 +161,6 @@ class LeaderboardPage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  // _topUserItem(
-                  //   medalAsset: Resources.icFirst,
-                  //   name: 'Adithya Firmansyah Putra',
-                  //   nisn: '912038123213',
-                  //   level: 35,
-                  //   startExp: 300,
-                  //   endExp: 400,
-                  // ),
-                  // SizedBox(height: 8),
-                  // _topUserItem(
-                  //   medalAsset: Resources.icSecond,
-                  //   name: 'Gema Akbar',
-                  //   nisn: '21948021812',
-                  //   level: 32,
-                  //   startExp: 300,
-                  //   endExp: 400,
-                  // ),
-                  // SizedBox(height: 8),
-                  // _topUserItem(
-                  //   medalAsset: Resources.icThird,
-                  //   name: 'Putri Shafa Nurani',
-                  //   nisn: '02142193812',
-                  //   level: 31,
-                  //   startExp: 300,
-                  //   endExp: 400,
-                  // ),
-                  // SizedBox(height: 12),
-                  // Container(
-                  //   alignment: Alignment.topCenter,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(8),
-                  //     color: AppTheme.purpleOpacity,
-                  //   ),
-                  //   margin: EdgeInsets.only(top: Helper.smallPadding),
-                  //   height: 4,
-                  // ),
-                  // SizedBox(height: 12),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
