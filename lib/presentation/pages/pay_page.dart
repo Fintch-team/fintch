@@ -18,6 +18,17 @@ class PayPage extends StatefulWidget {
 class _PayPageState extends State<PayPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
+  bool isFlashOn = false;
+
+  @override
+  void initState() {
+    _getFlashStatus();
+    super.initState();
+  }
+
+  void _getFlashStatus() async {
+    isFlashOn = await controller!.getFlashStatus() ?? false;
+  }
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -43,7 +54,30 @@ class _PayPageState extends State<PayPage> {
                 bottom: false,
                 child: Padding(
                   padding: EdgeInsets.all(Helper.normalPadding),
-                  child: CustomAppBar(title: 'Scan QR Code'),
+                  child: Row(
+                    children: [
+                      Expanded(child: CustomAppBar(title: 'Scan QR Code')),
+                      SizedBox(width: Helper.normalPadding),
+                      GestureDetector(
+                        onTap: () {},
+                        child: SvgPicture.asset(Resources.icAddImage),
+                      ),
+                      SizedBox(width: Helper.normalPadding),
+                      StatefulBuilder(builder: (context, flashSetState) {
+                        return GestureDetector(
+                          onTap: () async {
+                            await controller!.toggleFlash();
+                            flashSetState(() {
+                              isFlashOn = !isFlashOn;
+                            });
+                          },
+                          child: SvgPicture.asset(isFlashOn
+                              ? Resources.icFlashOff
+                              : Resources.icFlashOn),
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
               _payScrollableSheet(),

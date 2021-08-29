@@ -31,6 +31,9 @@ class Resources {
   static const String icFirst = '$_baseSvg/first.svg';
   static const String icSecond = '$_baseSvg/second.svg';
   static const String icThird = '$_baseSvg/third.svg';
+  static const String icAddImage = '$_baseSvg/ic_add_image.svg';
+  static const String icFlashOn = '$_baseSvg/ic_flash_on.svg';
+  static const String icFlashOff = '$_baseSvg/ic_flash_off.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';
