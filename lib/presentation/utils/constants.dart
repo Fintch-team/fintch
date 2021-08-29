@@ -34,6 +34,7 @@ class Resources {
   static const String icAddImage = '$_baseSvg/ic_add_image.svg';
   static const String icFlashOn = '$_baseSvg/ic_flash_on.svg';
   static const String icFlashOff = '$_baseSvg/ic_flash_off.svg';
+  static const String icClose = '$_baseSvg/ic_close.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';

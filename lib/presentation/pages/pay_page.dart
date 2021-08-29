@@ -5,7 +5,9 @@ import 'package:fintch/presentation/utils/utils.dart';
 import 'package:fintch/presentation/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class PayPage extends StatefulWidget {
@@ -18,16 +20,19 @@ class PayPage extends StatefulWidget {
 class _PayPageState extends State<PayPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
+  bool isShowSheet = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
   void reassemble() async {
     super.reassemble();
-    if (Platform.isAndroid) {
-      await controller!.pauseCamera();
+    if(!isShowSheet){
+      if (Platform.isAndroid) {
+        await controller!.pauseCamera();
+      }
+      controller!.resumeCamera();
     }
-    controller!.resumeCamera();
   }
 
   @override
@@ -270,55 +275,180 @@ class _PayPageState extends State<PayPage> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      showDialog(
-        context: context,
-        builder: (context) => _logoutDialog(context),
-      );
+      if (!isShowSheet) {
+        isShowSheet = true;
+        this.controller!.pauseCamera();
+        showCupertinoModalBottomSheet(
+          expand: false,
+          context: context,
+          enableDrag: false,
+          isDismissible: false,
+          topRadius: Radius.circular(20),
+          backgroundColor: AppTheme.white,
+          barrierColor: AppTheme.black.withOpacity(0.2),
+          builder: (context) => PaymentSheet(
+            onClose: () {
+              Navigator.pop(context);
+              isShowSheet = false;
+              controller.resumeCamera();
+            },
+          ),
+        );
+      }
     });
   }
 
-  Widget _logoutDialog(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      elevation: 2,
-      insetPadding: EdgeInsets.all(20),
-      backgroundColor: Colors.transparent,
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+}
+
+class PaymentSheet extends StatefulWidget {
+  final VoidCallback onClose;
+
+  const PaymentSheet({Key? key, required this.onClose}) : super(key: key);
+
+  @override
+  _PaymentSheetState createState() => _PaymentSheetState();
+}
+
+class _PaymentSheetState extends State<PaymentSheet> {
+  double value = 5000;
+  double sliderValue = 5000;
+  final _formKey = GlobalKey<FormState>();
+  final textFieldController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
       child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            color: AppTheme.scaffold,
+          ),
+          padding: EdgeInsets.all(20),
+          child: Stack(
             children: [
-              Text('Keluar dari Fintch', style: AppTheme.headline3),
-              SizedBox(height: 16.0),
-              Text('Apakah kamu ingin keluar?', style: AppTheme.text3),
-              SizedBox(height: 16.0),
-              Row(
-                children: [
-                  Flexible(
-                    child: CustomButton(
-                      onTap: () => Navigator.pop(context),
-                      text: 'Tidak',
-                      isOutline: true,
+              SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(64),
+                        boxShadow: Helper.getShadow(),
+                      ),
+                      child: CustomNetworkImage(
+                        imgUrl: Dummy.profileImg,
+                        borderRadius: 64,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.width * 0.3,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Flexible(
-                    child: CustomButton(
-                      onTap: () => Navigator.pushNamedAndRemoveUntil(
-                          context, PagePath.login, (route) => false),
-                      text: 'Keluar',
+                    SizedBox(height: Helper.normalPadding),
+                    Text('Adithya Firmansyah Putra', style: AppTheme.headline3),
+                    SizedBox(height: 8),
+                    Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
+                    SizedBox(height: 8),
+                    Text('19042138210', style: AppTheme.text3.purple),
+                    SizedBox(height: Helper.bigPadding),
+                    SizedBox(height: Helper.normalPadding),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child:
+                          Text('Mau Bayar Berapa?', style: AppTheme.headline3),
                     ),
-                  ),
-                ],
+                    SizedBox(height: Helper.normalPadding),
+                    _slider(),
+                    SizedBox(height: Helper.normalPadding),
+                    SizedBox(height: Helper.normalPadding),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Jumlah Lainnya', style: AppTheme.text3.purple.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: textFieldController,
+                        style: AppTheme.text3.purple,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Harap masukan jumlah bayar';
+                          }
+                          final n = num.tryParse(value);
+                          if (n == null) {
+                            return '"$value" bukan bilangan!';
+                          } else if (double.parse(value) < 500) {
+                            return 'Input harus lebih dari 500';
+                          }
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: InputDecoration(
+                          hintStyle: AppTheme.text3.purpleOpacity,
+                          hintText:
+                              'Masukin jumlah Fintch Point yang mau kamu transfer',
+                          focusedBorder: AppTheme.focusedBorder.copyWith(
+                            borderSide: BorderSide(color: AppTheme.purple),
+                          ),
+                          enabledBorder: AppTheme.enabledBorder.copyWith(
+                            borderSide:
+                                BorderSide(color: AppTheme.purpleOpacity),
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (String text) {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              value = double.parse(text);
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: Helper.bigPadding),
+                    SizedBox(height: Helper.bigPadding),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text('Total', style: AppTheme.text1),
+                        ),
+                        SizedBox(width: Helper.normalPadding),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              Resources.icFintchPoint,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              value.toStringAsFixed(0).parseCurrency(),
+                              style: AppTheme.text1,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Helper.bigPadding),
+                    CustomButton(onTap: () {}, text: 'Bayar'),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: GestureDetector(
+                  onTap: widget.onClose,
+                  child: SvgPicture.asset(Resources.icClose),
+                ),
               ),
             ],
           ),
@@ -327,9 +457,72 @@ class _PayPageState extends State<PayPage> {
     );
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
+  Widget _slider() {
+    return FlutterSlider(
+      values: [sliderValue],
+      max: 20000,
+      min: 500,
+      maximumDistance: 20000,
+      minimumDistance: 500,
+      handlerAnimation: FlutterSliderHandlerAnimation(
+          curve: Curves.elasticOut,
+          reverseCurve: null,
+          duration: Duration(milliseconds: 700),
+          scale: 1.2),
+      step: FlutterSliderStep(step: 500),
+      decoration: BoxDecoration(
+        color: AppTheme.purple,
+        borderRadius: BorderRadius.circular(64),
+      ),
+      selectByTap: false,
+      handler: FlutterSliderHandler(
+        child: Container(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(Resources.icFintchPoint, height: 24),
+              SizedBox(width: Helper.smallPadding),
+              Text(
+                (sliderValue / 1000).toStringAsFixed(1) + 'K',
+                style: AppTheme.text1,
+              ),
+            ],
+          ),
+        ),
+      ),
+      handlerWidth: 100,
+      handlerHeight: 40,
+      trackBar: FlutterSliderTrackBar(
+        activeDisabledTrackBarColor: AppTheme.white,
+        inactiveDisabledTrackBarColor: AppTheme.white,
+        activeTrackBar: BoxDecoration(
+          color: AppTheme.yellow,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        inactiveTrackBar: BoxDecoration(
+          color: AppTheme.darkYellow,
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+      tooltip: FlutterSliderTooltip(
+        textStyle: AppTheme.headline3,
+        boxStyle: FlutterSliderTooltipBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: Helper.getShadow(),
+            color: AppTheme.white,
+          ),
+        ),
+        positionOffset: FlutterSliderTooltipPositionOffset(top: -8),
+        direction: FlutterSliderTooltipDirection.top,
+      ),
+      onDragging: (handlerIndex, lowerValue, upperValue) {
+        setState(() {
+          sliderValue = lowerValue;
+          value = sliderValue;
+          textFieldController.text = value.toStringAsFixed(0);
+        });
+      },
+    );
   }
 }

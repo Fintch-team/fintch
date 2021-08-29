@@ -6,3 +6,4 @@ export 'custom_app_bar.dart';
 export 'feature_item.dart';
 export 'transaction_item.dart';
 export 'merchant_item.dart';
+export 'custom_slider.dart';

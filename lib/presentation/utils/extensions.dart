@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'app_theme.dart';
 
 extension StyleText on TextStyle {
@@ -16,4 +16,12 @@ extension StyleText on TextStyle {
   TextStyle get darkYellow => this.copyWith(color: AppTheme.darkYellow);
   TextStyle get purpleOpacity => this.copyWith(color: AppTheme.purpleOpacity);
   TextStyle get whiteOpacity => this.copyWith(color: AppTheme.whiteOpacity);
+}
+
+extension StringInsert on String {
+  String parseCurrency() {
+    final currency = NumberFormat("#,##0", "id_ID");
+    double? currDouble = double.tryParse(this);
+    return currDouble != null ? currency.format(currDouble) : '-';
+  }
 }
