@@ -20,16 +20,6 @@ class _PayPageState extends State<PayPage> {
   QRViewController? controller;
   bool isFlashOn = false;
 
-  @override
-  void initState() {
-    _getFlashStatus();
-    super.initState();
-  }
-
-  void _getFlashStatus() async {
-    isFlashOn = await controller!.getFlashStatus() ?? false;
-  }
-
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
@@ -96,7 +86,7 @@ class _PayPageState extends State<PayPage> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.64,
         child:
-            /*QRView(
+            QRView(
           key: qrKey,
           onQRViewCreated: _onQRViewCreated,
           overlay: QrScannerOverlayShape(
@@ -105,9 +95,10 @@ class _PayPageState extends State<PayPage> {
             borderLength: 20,
             borderWidth: 12,
             cutOutSize: MediaQuery.of(context).size.height * 0.3,
+            cutOutBottomOffset: -MediaQuery.of(context).padding.top + MediaQuery.of(context).size.height * 0.04
           ),
-        )*/
-            Container(),
+        )
+           /* Container()*/,
       ),
     );
   }
@@ -273,12 +264,17 @@ class _PayPageState extends State<PayPage> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
+    _getFlashStatus();
     controller.scannedDataStream.listen((scanData) {
       showDialog(
         context: context,
         builder: (context) => _logoutDialog(context),
       );
     });
+  }
+
+  void _getFlashStatus() async {
+    isFlashOn = await controller!.getFlashStatus() ?? false;
   }
 
   Widget _logoutDialog(BuildContext context) {
