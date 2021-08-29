@@ -4,4 +4,5 @@ class PagePath{
   static const String base = '/base';
   static const String receive = '/receive';
   static const String profile = '/profile';
+  static const String pay = '/pay';
 }
