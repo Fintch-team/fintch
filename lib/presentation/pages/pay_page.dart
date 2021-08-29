@@ -18,7 +18,6 @@ class PayPage extends StatefulWidget {
 class _PayPageState extends State<PayPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
-  bool isFlashOn = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -53,19 +52,24 @@ class _PayPageState extends State<PayPage> {
                         child: SvgPicture.asset(Resources.icAddImage),
                       ),
                       SizedBox(width: Helper.normalPadding),
-                      StatefulBuilder(builder: (context, flashSetState) {
-                        return GestureDetector(
-                          onTap: () async {
-                            await controller!.toggleFlash();
-                            flashSetState(() {
-                              isFlashOn = !isFlashOn;
-                            });
-                          },
-                          child: SvgPicture.asset(isFlashOn
-                              ? Resources.icFlashOff
-                              : Resources.icFlashOn),
-                        );
-                      }),
+                      FutureBuilder<bool?>(
+                          future: controller?.getFlashStatus(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData || snapshot.data != null) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  await controller!.toggleFlash();
+                                  setState(() {});
+                                },
+                                child: SvgPicture.asset(
+                                  snapshot.data!
+                                      ? Resources.icFlashOff
+                                      : Resources.icFlashOn,
+                                ),
+                              );
+                            }
+                            return Container();
+                          }),
                     ],
                   ),
                 ),
@@ -85,20 +89,19 @@ class _PayPageState extends State<PayPage> {
       right: 0,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.64,
-        child:
-            QRView(
+        child: QRView(
           key: qrKey,
           onQRViewCreated: _onQRViewCreated,
           overlay: QrScannerOverlayShape(
-            borderColor: AppTheme.yellow,
-            borderRadius: 12,
-            borderLength: 20,
-            borderWidth: 12,
-            cutOutSize: MediaQuery.of(context).size.height * 0.3,
-            cutOutBottomOffset: -MediaQuery.of(context).padding.top + MediaQuery.of(context).size.height * 0.04
-          ),
+              borderColor: AppTheme.yellow,
+              borderRadius: 12,
+              borderLength: 20,
+              borderWidth: 12,
+              cutOutSize: MediaQuery.of(context).size.height * 0.3,
+              cutOutBottomOffset: -MediaQuery.of(context).padding.top +
+                  MediaQuery.of(context).size.height * 0.04),
         )
-           /* Container()*/,
+        /* Container()*/,
       ),
     );
   }
@@ -263,18 +266,15 @@ class _PayPageState extends State<PayPage> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    _getFlashStatus();
+    setState(() {
+      this.controller = controller;
+    });
     controller.scannedDataStream.listen((scanData) {
       showDialog(
         context: context,
         builder: (context) => _logoutDialog(context),
       );
     });
-  }
-
-  void _getFlashStatus() async {
-    isFlashOn = await controller!.getFlashStatus() ?? false;
   }
 
   Widget _logoutDialog(BuildContext context) {
