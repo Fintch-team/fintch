@@ -67,7 +67,7 @@ class ReceivePage extends StatelessWidget {
                             child: PrettyQr(
                               image: AssetImage(Resources.icFintchPointPng),
                               size: MediaQuery.of(context).size.height * 0.3,
-                              data: '19042138210-1420193',
+                              data: '19042138210',
                               errorCorrectLevel: QrErrorCorrectLevel.M,
                               roundEdges: true,
                             ),

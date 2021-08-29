@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
@@ -293,6 +294,7 @@ class _PayPageState extends State<PayPage> {
               isShowSheet = false;
               controller.resumeCamera();
             },
+            id: scanData.code,
           ),
         );
       }
@@ -307,9 +309,11 @@ class _PayPageState extends State<PayPage> {
 }
 
 class PaymentSheet extends StatefulWidget {
+  final String id;
   final VoidCallback onClose;
 
-  const PaymentSheet({Key? key, required this.onClose}) : super(key: key);
+  const PaymentSheet({Key? key, required this.onClose, required this.id})
+      : super(key: key);
 
   @override
   _PaymentSheetState createState() => _PaymentSheetState();
@@ -352,11 +356,11 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       ),
                     ),
                     SizedBox(height: Helper.normalPadding),
-                    Text('Adithya Firmansyah Putra', style: AppTheme.headline3),
+                    Text('Chatime', style: AppTheme.headline3),
                     SizedBox(height: 8),
                     Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
                     SizedBox(height: 8),
-                    Text('19042138210', style: AppTheme.text3.purple),
+                    Text(widget.id, style: AppTheme.text3.purple),
                     SizedBox(height: Helper.bigPadding),
                     SizedBox(height: Helper.normalPadding),
                     Align(
@@ -378,7 +382,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                     SizedBox(height: Helper.bigPadding),
                     SizedBox(height: Helper.bigPadding),
                     _totalAmount(),
-                    SizedBox(height: Helper.bigPadding),
+                    SizedBox(height: Helper.normalPadding),
                     ConfirmationSlider(
                       text: 'Geser Untuk Bayar',
                       textStyle: AppTheme.text1.bold,
@@ -386,13 +390,18 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       backgroundColor: AppTheme.yellow,
                       foregroundShape: BorderRadius.circular(12),
                       foregroundColor: AppTheme.purple,
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width - 40,
                       height: 56,
                       shadow: Helper.getShadow()[0],
                       onConfirmation: () {
-
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => SuccessPaymentDialog(),
+                        );
                       },
-                    )
+                    ),
+                    SizedBox(height: Helper.normalPadding),
                   ],
                 ),
               ),
@@ -492,6 +501,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
       decoration: BoxDecoration(
         color: AppTheme.purple,
         borderRadius: BorderRadius.circular(64),
+        boxShadow: Helper.getShadow(),
       ),
       selectByTap: false,
       handler: FlutterSliderHandler(
@@ -542,6 +552,114 @@ class _PaymentSheetState extends State<PaymentSheet> {
           textFieldController.text = value.toStringAsFixed(0);
         });
       },
+    );
+  }
+}
+
+class SuccessPaymentDialog extends StatefulWidget {
+  const SuccessPaymentDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _SuccessPaymentDialogState createState() => _SuccessPaymentDialogState();
+}
+
+class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
+
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 6000)).then((_) {
+      Navigator.of(context).pushNamedAndRemoveUntil(PagePath.base, (route) => false);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      elevation: 2,
+      insetPadding: EdgeInsets.all(Helper.normalPadding),
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Pembayaran Berhasil!!',
+                style: AppTheme.headline3,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Helper.normalPadding),
+              LottieBuilder.asset(Resources.paymentSuccessful,
+                  height: MediaQuery.of(context).size.height * 0.3),
+              SizedBox(height: Helper.normalPadding),
+              Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          Resources.icFintchPoint,
+                          height: 32,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '- 8,000',
+                          style: AppTheme.headline3.red,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          Resources.icFintchWallet,
+                          height: 32,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '56,000',
+                          style: AppTheme.headline3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: Helper.smallPadding),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    Resources.icExp,
+                    height: 32,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    '+ 20',
+                    style: AppTheme.headline3.green,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

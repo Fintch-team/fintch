@@ -41,7 +41,7 @@ class Resources {
   static const String icFintchPointPng = '$_baseImg/fintch_point.png';
 
   // JSON ASSETS
-
+  static const String paymentSuccessful = '$_baseJson/payment_successful.json';
 }
 
 class Keys {
