@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class PayPage extends StatefulWidget {
   const PayPage({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _PayPageState extends State<PayPage> {
   @override
   void reassemble() async {
     super.reassemble();
-    if(!isShowSheet){
+    if (!isShowSheet) {
       if (Platform.isAndroid) {
         await controller!.pauseCamera();
       }
@@ -369,76 +370,29 @@ class _PaymentSheetState extends State<PaymentSheet> {
                     SizedBox(height: Helper.normalPadding),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Jumlah Lainnya', style: AppTheme.text3.purple.bold),
+                      child: Text('Jumlah Lainnya',
+                          style: AppTheme.text3.purple.bold),
                     ),
                     SizedBox(height: 8),
-                    Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        controller: textFieldController,
-                        style: AppTheme.text3.purple,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Harap masukan jumlah bayar';
-                          }
-                          final n = num.tryParse(value);
-                          if (n == null) {
-                            return '"$value" bukan bilangan!';
-                          } else if (double.parse(value) < 500) {
-                            return 'Input harus lebih dari 500';
-                          }
-                          return null;
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                          hintStyle: AppTheme.text3.purpleOpacity,
-                          hintText:
-                              'Masukin jumlah Fintch Point yang mau kamu transfer',
-                          focusedBorder: AppTheme.focusedBorder.copyWith(
-                            borderSide: BorderSide(color: AppTheme.purple),
-                          ),
-                          enabledBorder: AppTheme.enabledBorder.copyWith(
-                            borderSide:
-                                BorderSide(color: AppTheme.purpleOpacity),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (String text) {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              value = double.parse(text);
-                            });
-                          }
-                        },
-                      ),
-                    ),
+                    _otherAmount(),
                     SizedBox(height: Helper.bigPadding),
                     SizedBox(height: Helper.bigPadding),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text('Total', style: AppTheme.text1),
-                        ),
-                        SizedBox(width: Helper.normalPadding),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              Resources.icFintchPoint,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              value.toStringAsFixed(0).parseCurrency(),
-                              style: AppTheme.text1,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    _totalAmount(),
                     SizedBox(height: Helper.bigPadding),
-                    CustomButton(onTap: () {}, text: 'Bayar'),
+                    ConfirmationSlider(
+                      text: 'Geser Untuk Bayar',
+                      textStyle: AppTheme.text1.bold,
+                      backgroundShape: BorderRadius.circular(12),
+                      backgroundColor: AppTheme.yellow,
+                      foregroundShape: BorderRadius.circular(12),
+                      foregroundColor: AppTheme.purple,
+                      width: MediaQuery.of(context).size.width,
+                      height: 56,
+                      shadow: Helper.getShadow()[0],
+                      onConfirmation: () {
+
+                      },
+                    )
                   ],
                 ),
               ),
@@ -453,6 +407,71 @@ class _PaymentSheetState extends State<PaymentSheet> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _totalAmount() {
+    return Row(
+      children: [
+        Expanded(
+          child: Text('Total', style: AppTheme.text1),
+        ),
+        SizedBox(width: Helper.normalPadding),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              Resources.icFintchPoint,
+            ),
+            SizedBox(width: 8),
+            Text(
+              value.toStringAsFixed(0).parseCurrency(),
+              style: AppTheme.text1,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _otherAmount() {
+    return Form(
+      key: _formKey,
+      child: TextFormField(
+        controller: textFieldController,
+        style: AppTheme.text3.purple,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Harap masukan jumlah bayar';
+          }
+          final n = num.tryParse(value);
+          if (n == null) {
+            return '"$value" bukan bilangan!';
+          } else if (double.parse(value) < 500) {
+            return 'Input harus lebih dari 500';
+          }
+          return null;
+        },
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        decoration: InputDecoration(
+          hintStyle: AppTheme.text3.purpleOpacity,
+          hintText: 'Masukin jumlah Fintch Point yang mau kamu transfer',
+          focusedBorder: AppTheme.focusedBorder.copyWith(
+            borderSide: BorderSide(color: AppTheme.purple),
+          ),
+          enabledBorder: AppTheme.enabledBorder.copyWith(
+            borderSide: BorderSide(color: AppTheme.purpleOpacity),
+          ),
+        ),
+        keyboardType: TextInputType.number,
+        onChanged: (String text) {
+          if (_formKey.currentState!.validate()) {
+            setState(() {
+              value = double.parse(text);
+            });
+          }
+        },
       ),
     );
   }
