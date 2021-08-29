@@ -150,7 +150,16 @@ class _PayPageState extends State<PayPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
                       20,
-                      (index) => MerchantItem(),
+                      (index) => MerchantItem(
+                        onMerchantTap: () => _showPaymentBottomSheet(
+                          onClose: () {
+                            Navigator.pop(context);
+                            isShowSheet = false;
+                            controller!.resumeCamera();
+                          },
+                          id: '01401921312',
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -280,31 +289,32 @@ class _PayPageState extends State<PayPage> {
       if (!isShowSheet) {
         isShowSheet = true;
         this.controller!.pauseCamera();
-        showCupertinoModalBottomSheet(
-          expand: false,
-          context: context,
-          enableDrag: false,
-          isDismissible: false,
-          topRadius: Radius.circular(20),
-          backgroundColor: AppTheme.white,
-          barrierColor: AppTheme.black.withOpacity(0.2),
-          builder: (context) => PaymentSheet(
-            onClose: () {
-              Navigator.pop(context);
-              isShowSheet = false;
-              controller.resumeCamera();
-            },
-            id: scanData.code,
-          ),
+        _showPaymentBottomSheet(
+          onClose: () {
+            Navigator.pop(context);
+            isShowSheet = false;
+            controller.resumeCamera();
+          },
+          id: scanData.code,
         );
       }
     });
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
+  _showPaymentBottomSheet({required VoidCallback onClose, required String id}) {
+    showCupertinoModalBottomSheet(
+      expand: false,
+      context: context,
+      enableDrag: false,
+      isDismissible: false,
+      topRadius: Radius.circular(20),
+      backgroundColor: AppTheme.white,
+      barrierColor: AppTheme.black.withOpacity(0.2),
+      builder: (context) => PaymentSheet(
+        onClose: onClose,
+        id: id,
+      ),
+    );
   }
 }
 
@@ -566,11 +576,11 @@ class SuccessPaymentDialog extends StatefulWidget {
 }
 
 class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
-
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 6000)).then((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(PagePath.base, (route) => false);
+    Future.delayed(Duration(milliseconds: 4000)).then((_) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(PagePath.base, (route) => false);
     });
     super.initState();
   }
