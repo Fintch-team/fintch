@@ -83,6 +83,7 @@ class _PayPageState extends State<PayPage> {
       child: DraggableScrollableSheet(
         initialChildSize: 0.4,
         minChildSize: 0.4,
+        maxChildSize: 0.84,
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
