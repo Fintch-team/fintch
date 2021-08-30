@@ -21,48 +21,49 @@ class LeaderboardPage extends StatelessWidget {
   }
 
   Widget _headerContent(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _rankItem(
-              context,
-              width: MediaQuery.of(context).size.width * 0.28,
-              paddingTop: MediaQuery.of(context).size.width * 0.1,
-              imgUrl: Dummy.profileImg,
-              name: 'Galuh Najla Fatimah Alfajri',
-              level: 34,
-              color: AppTheme.colorRank2,
-              medalAsset: Resources.icSecond,
+    return Positioned.fill(
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.38,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _rankItem(
+                  context,
+                  width: MediaQuery.of(context).size.width * 0.28,
+                  paddingTop: MediaQuery.of(context).size.width * 0.1,
+                  imgUrl: Dummy.profileImg,
+                  name: 'Galuh Najla Fatimah Alfajri',
+                  level: 34,
+                  color: AppTheme.colorRank2,
+                  medalAsset: Resources.icSecond,
+                ),
+                _rankItem(
+                  context,
+                  width: MediaQuery.of(context).size.width * 0.36,
+                  paddingTop: MediaQuery.of(context).size.width * 0.05,
+                  imgUrl: Dummy.profileImg,
+                  name: 'Daliun Sastrodijoyo Umar Alfajri',
+                  level: 35,
+                  color: AppTheme.colorRank1,
+                  medalAsset: Resources.icFirst,
+                ),
+                _rankItem(
+                  context,
+                  width: MediaQuery.of(context).size.width * 0.28,
+                  paddingTop: MediaQuery.of(context).size.width * 0.15,
+                  imgUrl: Dummy.profileImg,
+                  name: 'Keisha Nareswari Atika Alfajri',
+                  level: 33,
+                  color: AppTheme.colorRank3,
+                  medalAsset: Resources.icThird,
+                ),
+              ],
             ),
-            _rankItem(
-              context,
-              width: MediaQuery.of(context).size.width * 0.36,
-              paddingTop: MediaQuery.of(context).size.width * 0.05,
-              imgUrl: Dummy.profileImg,
-              name: 'Daliun Sastrodijoyo Umar Alfajri',
-              level: 35,
-              color: AppTheme.colorRank1,
-              medalAsset: Resources.icFirst,
-            ),
-            _rankItem(
-              context,
-              width: MediaQuery.of(context).size.width * 0.28,
-              paddingTop: MediaQuery.of(context).size.width * 0.15,
-              imgUrl: Dummy.profileImg,
-              name: 'Keisha Nareswari Atika Alfajri',
-              level: 33,
-              color: AppTheme.colorRank3,
-              medalAsset: Resources.icThird,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -126,11 +127,10 @@ class LeaderboardPage extends StatelessWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               padding: EdgeInsets.all(Helper.normalPadding),
-              child: FittedBox(
-                child: Center(
-                  child: SvgPicture.asset(
-                    medalAsset,
-                  ),
+              child: Center(
+                child: SvgPicture.asset(
+                  medalAsset,
+                  height: 56,
                 ),
               ),
             ),

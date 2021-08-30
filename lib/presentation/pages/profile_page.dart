@@ -220,7 +220,6 @@ class ProfilePage extends StatelessWidget {
                     child: CustomButton(
                       onTap: () => Navigator.pop(context),
                       text: 'Tidak',
-                      isOutline: true,
                     ),
                   ),
                   SizedBox(width: 20),
@@ -229,6 +228,7 @@ class ProfilePage extends StatelessWidget {
                       onTap: () => Navigator.pushNamedAndRemoveUntil(
                           context, PagePath.login, (route) => false),
                       text: 'Keluar',
+                      isOutline: true,
                     ),
                   ),
                 ],

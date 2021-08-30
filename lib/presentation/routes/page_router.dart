@@ -21,6 +21,8 @@ class PageRouter {
         return _buildRoute(settings, ReceivePage());
       case PagePath.profile:
         return _buildRoute(settings, ProfilePage());
+      case PagePath.pay:
+        return _buildRoute(settings, PayPage());
       default:
         return _errorRoute();
     }
