@@ -90,12 +90,12 @@ class LoginPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('NISN', style: AppTheme.text3.white.bold),
+          Text('Username', style: AppTheme.text3.white.bold),
           SizedBox(height: 8),
           TextField(
             style: AppTheme.text3.white,
             decoration: InputDecoration(
-              hintText: 'NISN Kamu',
+              hintText: 'Username kamu',
             ),
             keyboardType: TextInputType.number,
           ),
@@ -105,7 +105,7 @@ class LoginPage extends StatelessWidget {
           TextField(
             style: AppTheme.text3.white,
             decoration: InputDecoration(
-              hintText: 'Masukan kata sandi kamu',
+              hintText: 'Masukin kata sandi kamu',
               suffixIcon: Icon(
                 Icons.visibility_off,
                 color: AppTheme.white,
@@ -126,7 +126,7 @@ class LoginPage extends StatelessWidget {
           ),
           SizedBox(height: 24),
           CustomButton(
-            onTap: () => Navigator.pushReplacementNamed(context, PagePath.base),
+            onTap: () => Navigator.pushReplacementNamed(context, PagePath.setPassword),
             text: 'Masuk',
           ),
         ],
