@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'utils.dart';
 
 class Helper {
   static void unfocus() {
@@ -40,4 +43,25 @@ class Helper {
       ),
     ];
   }
+
+  static void setLightAppBar() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
+  }
+
+  static void setDarkAppBar() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
+  }
+
 }

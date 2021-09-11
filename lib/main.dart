@@ -11,6 +11,7 @@ import 'package:logging/logging.dart';
 void main() async {
   await GetStorage.init();
   Bloc.observer = SimpleBlocObserver();
+  Helper.setLightAppBar();
   runApp(MyApp());
 }
 
@@ -28,7 +29,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         scaffoldBackgroundColor: AppTheme.scaffold,
-        fontFamily: 'Gotham',
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: AppTheme.enabledBorder,
           focusedBorder: AppTheme.focusedBorder,

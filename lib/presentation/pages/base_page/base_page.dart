@@ -23,16 +23,13 @@ class _BasePageState extends State<BasePage> {
       length: _tabBarLength,
       child: Scaffold(
         body: Background(
-          child: SafeArea(
-            child: Container(
-              child: Column(
-                children: [
-                  SizedBox(height: Helper.normalPadding),
-                  _tabBar(),
-                  SizedBox(height: Helper.normalPadding),
-                  _tabBarView(),
-                ],
-              ),
+          child: Container(
+            child: Column(
+              children: [
+                _tabBar(),
+                SizedBox(height: Helper.normalPadding),
+                _tabBarView(),
+              ],
             ),
           ),
         ),
@@ -42,7 +39,7 @@ class _BasePageState extends State<BasePage> {
 
   Widget _tabBar() {
     return ShiftingTabBar(
-      bgColor: Colors.transparent,
+      bgColor: AppTheme.darkPurple,
       labelFlex: 2,
       labelStyle: AppTheme.text1.bold.white.copyWith(letterSpacing: 2),
       tabs: <ShiftingTab>[

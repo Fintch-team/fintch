@@ -111,11 +111,15 @@ class _ShiftingTabBarState extends State<ShiftingTabBar> {
   Widget build(BuildContext context) {
     return Container(
       color: _color,
-      child: SafeArea(
-        top: true,
-        child: Row(
-          children: _buildTabWidgets(),
-        ),
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: MediaQuery.of(context).padding.top),
+          Row(
+            children: _buildTabWidgets(),
+          ),
+        ],
       ),
     );
   }
