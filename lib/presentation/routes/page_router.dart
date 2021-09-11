@@ -17,6 +17,8 @@ class PageRouter {
         return _buildRoute(settings, LoginPage());
       case PagePath.setPassword:
         return _buildRoute(settings, SetPasswordPage());
+      case PagePath.setPin:
+        return _buildRoute(settings, SetPinPage());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.receive:

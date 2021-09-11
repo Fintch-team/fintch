@@ -106,7 +106,7 @@ class SetPasswordPage extends StatelessWidget {
 
   Widget _nextButton(BuildContext context){
     return CustomButton(
-      onTap: () => Navigator.pushReplacementNamed(context, PagePath.base),
+      onTap: () => Navigator.pushReplacementNamed(context, PagePath.setPin),
       text: 'Lanjut',
     );
   }
