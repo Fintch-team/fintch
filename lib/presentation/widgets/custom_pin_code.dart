@@ -12,6 +12,7 @@ class CustomPinCode extends StatelessWidget {
   final void Function(String) onChanged;
   final bool isDialog;
   final bool isObscure;
+  final bool isAutoFocus;
 
   const CustomPinCode({
     Key? key,
@@ -22,6 +23,7 @@ class CustomPinCode extends StatelessWidget {
     this.focusNode,
     this.isDialog = false,
     this.isObscure = false,
+    this.isAutoFocus = false,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class CustomPinCode extends StatelessWidget {
       obscureText: isObscure,
       animationType: AnimationType.fade,
       showCursor: false,
-      autoFocus: true,
+      autoFocus: isAutoFocus,
       textStyle: isObscure ? AppTheme.headline1.purple : AppTheme.headline1,
       animationDuration: Duration(milliseconds: 300),
       enableActiveFill: true,

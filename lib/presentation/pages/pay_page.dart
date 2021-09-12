@@ -619,7 +619,7 @@ class InputPinDialog extends StatefulWidget {
 class _InputPinDialogState extends State<InputPinDialog> {
   TextEditingController inputPinController = TextEditingController();
   StreamController<ErrorAnimationType>? errorController;
-  late FocusNode inputFocusNode;
+  FocusNode? inputFocusNode;
 
   @override
   void initState() {
@@ -631,7 +631,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
   @override
   void dispose() {
     errorController?.close();
-    inputFocusNode.dispose();
+    inputFocusNode!.dispose();
     super.dispose();
   }
 
@@ -645,11 +645,12 @@ class _InputPinDialogState extends State<InputPinDialog> {
         focusNode: inputFocusNode,
         isDialog: true,
         isObscure: true,
+        isAutoFocus: true,
         onChanged: (value) {},
         onCompleted: (value) {
           if (inputPinController.text.length < 6) {
             errorController!.add(ErrorAnimationType.shake);
-            inputFocusNode.requestFocus();
+            inputFocusNode?.requestFocus();
             Helper.snackBar(
               context,
               message: 'PIN harus 6 Digit!',
@@ -657,7 +658,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
             return;
           } else if (inputPinController.text != '111111') {
             inputPinController.clear();
-            inputFocusNode.requestFocus();
+            inputFocusNode?.requestFocus();
             errorController!.add(ErrorAnimationType.shake);
             Helper.snackBar(
               context,
