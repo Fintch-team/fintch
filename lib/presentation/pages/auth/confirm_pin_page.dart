@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fintch/presentation/routes/routes.dart';
 import 'package:fintch/presentation/utils/utils.dart';
 import 'package:fintch/presentation/widgets/widgets.dart';
@@ -16,11 +18,24 @@ class ConfirmPinPage extends StatefulWidget {
 class _ConfirmPinPageState extends State<ConfirmPinPage> {
   late String setPin = widget.bundle!.extras[Keys.setPin];
   TextEditingController confirmPinController = TextEditingController();
+  StreamController<ErrorAnimationType>? errorController;
 
   _onKeyboardTap(String value) {
     if (confirmPinController.text.length < 6) {
       confirmPinController.text += value;
     }
+  }
+
+  @override
+  void initState() {
+    errorController = StreamController<ErrorAnimationType>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    errorController?.close();
+    super.dispose();
   }
 
   @override
@@ -56,41 +71,11 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
           SizedBox(height: Helper.bigPadding),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: PinCodeTextField(
-              appContext: context,
-              pastedTextStyle: AppTheme.headline1,
-              length: 6,
-              obscureText: false,
-              animationType: AnimationType.fade,
-              showCursor: false,
-              autoFocus: true,
-              textStyle: AppTheme.headline1,
-              animationDuration: Duration(milliseconds: 300),
-              enableActiveFill: true,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.circle,
-                activeColor: AppTheme.yellow,
-                inactiveColor: AppTheme.whiteOpacity,
-                activeFillColor: AppTheme.yellow,
-                inactiveFillColor: AppTheme.whiteOpacity,
-                selectedFillColor: AppTheme.whiteOpacity,
-                selectedColor: AppTheme.whiteOpacity,
-              ),
-              controller: confirmPinController,
-              keyboardType: TextInputType.number,
-              boxShadows: [
-                BoxShadow(
-                  offset: Offset(0, 1),
-                  color: Colors.black12,
-                  blurRadius: 10,
-                )
-              ],
-              onCompleted: (v) {
-                print("Completed");
-              },
-              onChanged: (value) {
-                print(value);
-              },
+            child: CustomPinCode(
+              pinController: confirmPinController,
+              errorController: errorController,
+              onChanged: (value) {},
+              onCompleted: (value) {},
             ),
           ),
         ],
@@ -115,6 +100,7 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
         ),
         leftButtonFn: () {
           if (confirmPinController.text.length < 6) {
+            errorController!.add(ErrorAnimationType.shake);
             Helper.snackBar(
               context,
               message: 'PIN harus 6 Digit!',
@@ -122,6 +108,7 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
             return;
           } else if (confirmPinController.text != setPin) {
             confirmPinController.clear();
+            errorController!.add(ErrorAnimationType.shake);
             Helper.snackBar(
               context,
               message: 'PIN harus sama dengan sebelumnya!',
