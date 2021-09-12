@@ -46,12 +46,20 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
           child: Container(
             padding: EdgeInsets.all(Helper.normalPadding),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _headerPinCode(),
-                _keypad(),
+                CustomAppBar(title: ''),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _headerPinCode(),
+                      _keypad(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
