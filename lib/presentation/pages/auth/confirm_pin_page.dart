@@ -4,18 +4,23 @@ import 'package:fintch/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class SetPinPage extends StatefulWidget {
-  const SetPinPage({Key? key}) : super(key: key);
+class ConfirmPinPage extends StatefulWidget {
+  final ArgumentBundle? bundle;
+
+  const ConfirmPinPage({Key? key, this.bundle}) : super(key: key);
 
   @override
-  _SetPinPageState createState() => _SetPinPageState();
+  _ConfirmPinPageState createState() => _ConfirmPinPageState();
 }
 
-class _SetPinPageState extends State<SetPinPage> {
-  TextEditingController setPinController = TextEditingController();
+class _ConfirmPinPageState extends State<ConfirmPinPage> {
+  late String setPin = widget.bundle!.extras[Keys.setPin];
+  TextEditingController confirmPinController = TextEditingController();
 
   _onKeyboardTap(String value) {
-      setPinController.text += value;
+    if (confirmPinController.text.length < 6) {
+      confirmPinController.text += value;
+    }
   }
 
   @override
@@ -47,7 +52,7 @@ class _SetPinPageState extends State<SetPinPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: Helper.bigPadding),
-          Text('Atur PIN Kamu', style: AppTheme.headline1.white),
+          Text('Konfirmasi PIN Kamu', style: AppTheme.headline1.white),
           SizedBox(height: Helper.bigPadding),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -71,7 +76,7 @@ class _SetPinPageState extends State<SetPinPage> {
                 selectedFillColor: AppTheme.whiteOpacity,
                 selectedColor: AppTheme.whiteOpacity,
               ),
-              controller: setPinController,
+              controller: confirmPinController,
               keyboardType: TextInputType.number,
               boxShadows: [
                 BoxShadow(
@@ -98,9 +103,9 @@ class _SetPinPageState extends State<SetPinPage> {
         onKeyboardTap: _onKeyboardTap,
         rightButtonFn: () {
           setState(() {
-            if (setPinController.text.isNotEmpty) {
-              setPinController.text = setPinController.text
-                  .substring(0, setPinController.text.length - 1);
+            if (confirmPinController.text.isNotEmpty) {
+              confirmPinController.text = confirmPinController.text
+                  .substring(0, confirmPinController.text.length - 1);
             }
           });
         },
@@ -109,21 +114,20 @@ class _SetPinPageState extends State<SetPinPage> {
           color: Colors.white,
         ),
         leftButtonFn: () {
-          if (setPinController.text.length < 6) {
+          if (confirmPinController.text.length < 6) {
             Helper.snackBar(
               context,
               message: 'PIN harus 6 Digit!',
             );
             return;
+          } else if (confirmPinController.text != setPin) {
+            Helper.snackBar(
+              context,
+              message: 'PIN harus sama dengan sebelumnya!',
+            );
+            return;
           }
-          Navigator.of(context).pushNamed(
-            PagePath.confirmPin,
-            arguments: ArgumentBundle(
-              extras: {
-                Keys.setPin: setPinController.text,
-              },
-            ),
-          );
+          Navigator.of(context).pushNamed(PagePath.base);
         },
         leftIcon: Icon(
           Icons.check,

@@ -7,4 +7,5 @@ class PagePath{
   static const String pay = '/pay';
   static const String setPassword = '/set_password';
   static const String setPin = '/set_pin';
+  static const String confirmPin = '/confirm_pin';
 }

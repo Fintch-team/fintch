@@ -25,6 +25,8 @@ class NumericKeyboard extends StatefulWidget {
   /// Main axis alignment [default = MainAxisAlignment.spaceEvenly]
   final MainAxisAlignment mainAxisAlignment;
 
+  final EdgeInsets padding;
+
   NumericKeyboard(
       {Key? key,
         required this.onKeyboardTap,
@@ -33,7 +35,9 @@ class NumericKeyboard extends StatefulWidget {
         this.rightIcon,
         this.leftButtonFn,
         this.leftIcon,
-        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
+        this.mainAxisAlignment = MainAxisAlignment.spaceEvenly,
+        this.padding = const EdgeInsets.only(left: 32, right: 32, top: 20),
+      })
       : super(key: key);
 
   @override
@@ -46,7 +50,7 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 32, right: 32, top: 20),
+      padding: widget.padding,
       alignment: Alignment.center,
       child: Column(
         children: <Widget>[

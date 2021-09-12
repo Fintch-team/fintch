@@ -64,4 +64,19 @@ class Helper {
     ));
   }
 
+
+  static void snackBar(BuildContext context, {String? message}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message!, style: AppTheme.text1),
+        backgroundColor: AppTheme.yellow,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
 }
