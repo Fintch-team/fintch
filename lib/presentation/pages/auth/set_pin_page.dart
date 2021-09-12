@@ -15,7 +15,9 @@ class _SetPinPageState extends State<SetPinPage> {
   TextEditingController setPinController = TextEditingController();
 
   _onKeyboardTap(String value) {
+    if(setPinController.text.length < 6){
       setPinController.text += value;
+    }
   }
 
   @override

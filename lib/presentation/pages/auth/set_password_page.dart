@@ -52,7 +52,13 @@ class SetPasswordPage extends StatelessWidget {
                   style: AppTheme.headline1.white),
             ),
             SizedBox(width: Helper.normalPadding),
-            SvgPicture.asset(Resources.icHelp),
+            GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => _helpDialog(context),
+              ),
+              child: SvgPicture.asset(Resources.icHelp),
+            ),
           ],
         ),
         SizedBox(height: Helper.normalPadding),
@@ -104,10 +110,22 @@ class SetPasswordPage extends StatelessWidget {
     );
   }
 
-  Widget _nextButton(BuildContext context){
+  Widget _nextButton(BuildContext context) {
     return CustomButton(
       onTap: () => Navigator.pushReplacementNamed(context, PagePath.setPin),
       text: 'Lanjut',
+    );
+  }
+
+  Widget _helpDialog(BuildContext context) {
+    return CustomDialog(
+      title: 'Kenapa harus ganti Sandi?',
+      content:
+          'Karena sandi kalian yang sebelumya bukan sandi tetap, jadi kalian harus masukin sandi yang baru.\n\nBiar lebih aman!! >_<',
+      buttons: CustomButton(
+        onTap: () => Navigator.of(context).pop(),
+        text: 'Oke Mengerti',
+      ),
     );
   }
 }

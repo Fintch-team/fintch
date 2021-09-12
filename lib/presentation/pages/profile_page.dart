@@ -191,51 +191,27 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _logoutDialog(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      elevation: 2,
-      insetPadding: EdgeInsets.all(20),
-      backgroundColor: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Keluar dari Fintch', style: AppTheme.headline3),
-              SizedBox(height: 16.0),
-              Text('Apakah kamu ingin keluar?', style: AppTheme.text3),
-              SizedBox(height: 16.0),
-              Row(
-                children: [
-                  Flexible(
-                    child: CustomButton(
-                      onTap: () => Navigator.pop(context),
-                      text: 'Tidak',
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Flexible(
-                    child: CustomButton(
-                      onTap: () => Navigator.pushNamedAndRemoveUntil(
-                          context, PagePath.login, (route) => false),
-                      text: 'Keluar',
-                      isOutline: true,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    return CustomDialog(
+      title: 'Keluar dari Fintch',
+      content: 'Yakin mau keluar?',
+      buttons: Row(
+        children: [
+          Flexible(
+            child: CustomButton(
+              onTap: () => Navigator.pop(context),
+              text: 'Tidak',
+            ),
           ),
-        ),
+          SizedBox(width: 20),
+          Flexible(
+            child: CustomButton(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, PagePath.login, (route) => false),
+              text: 'Keluar',
+              isOutline: true,
+            ),
+          ),
+        ],
       ),
     );
   }

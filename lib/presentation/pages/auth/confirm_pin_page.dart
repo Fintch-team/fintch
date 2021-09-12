@@ -121,6 +121,7 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
             );
             return;
           } else if (confirmPinController.text != setPin) {
+            confirmPinController.clear();
             Helper.snackBar(
               context,
               message: 'PIN harus sama dengan sebelumnya!',
