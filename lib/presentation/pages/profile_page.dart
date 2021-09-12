@@ -193,7 +193,7 @@ class ProfilePage extends StatelessWidget {
   Widget _logoutDialog(BuildContext context) {
     return CustomDialog(
       title: 'Keluar dari Fintch',
-      content: 'Yakin mau keluar?',
+      content: Text('Yakin mau keluar?', style: AppTheme.text3),
       buttons: Row(
         children: [
           Flexible(

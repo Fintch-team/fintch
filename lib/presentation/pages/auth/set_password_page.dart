@@ -120,8 +120,7 @@ class SetPasswordPage extends StatelessWidget {
   Widget _helpDialog(BuildContext context) {
     return CustomDialog(
       title: 'Kenapa harus ganti Sandi?',
-      content:
-          'Karena sandi kalian yang sebelumya bukan sandi tetap, jadi kalian harus masukin sandi yang baru.\n\nBiar lebih aman!! >_<',
+      content: Text('Karena sandi kalian yang sebelumya bukan sandi tetap, jadi kalian harus masukin sandi yang baru.\n\nBiar lebih aman!! >_<', style: AppTheme.text3),
       buttons: CustomButton(
         onTap: () => Navigator.of(context).pop(),
         text: 'Oke Mengerti',

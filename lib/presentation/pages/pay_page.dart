@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:fintch/presentation/routes/routes.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
@@ -28,7 +30,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    getCameraPermission();
+    // getCameraPermission();
     super.initState();
   }
 
@@ -130,27 +132,29 @@ class _PayPageState extends State<PayPage> {
   }
 
   Widget _headerContent(BuildContext context) {
-    return canShowQRScanner ? Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.64,
-        child: QRView(
-          key: qrKey,
-          onQRViewCreated: _onQRViewCreated,
-          overlay: QrScannerOverlayShape(
-              borderColor: AppTheme.yellow,
-              borderRadius: 12,
-              borderLength: 20,
-              borderWidth: 12,
-              cutOutSize: MediaQuery.of(context).size.height * 0.3,
-              cutOutBottomOffset: -MediaQuery.of(context).padding.top +
-                  MediaQuery.of(context).size.height * 0.04),
-        )
-        /* Container()*/,
-      ),
-    ) : Container();
+    return canShowQRScanner
+        ? Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.64,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+                overlay: QrScannerOverlayShape(
+                    borderColor: AppTheme.yellow,
+                    borderRadius: 12,
+                    borderLength: 20,
+                    borderWidth: 12,
+                    cutOutSize: MediaQuery.of(context).size.height * 0.3,
+                    cutOutBottomOffset: -MediaQuery.of(context).padding.top +
+                        MediaQuery.of(context).size.height * 0.04),
+              )
+              /* Container()*/,
+            ),
+          )
+        : Container();
   }
 
   Widget _payScrollableSheet() {
@@ -446,8 +450,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       onConfirmation: () {
                         showDialog(
                           context: context,
-                          barrierDismissible: false,
-                          builder: (context) => SuccessPaymentDialog(),
+                          builder: (context) => InputPinDialog(),
                         );
                       },
                     ),
@@ -602,6 +605,75 @@ class _PaymentSheetState extends State<PaymentSheet> {
           textFieldController.text = value.toStringAsFixed(0);
         });
       },
+    );
+  }
+}
+
+class InputPinDialog extends StatefulWidget {
+  const InputPinDialog({Key? key}) : super(key: key);
+
+  @override
+  _InputPinDialogState createState() => _InputPinDialogState();
+}
+
+class _InputPinDialogState extends State<InputPinDialog> {
+  TextEditingController inputPinController = TextEditingController();
+  StreamController<ErrorAnimationType>? errorController;
+  late FocusNode inputFocusNode;
+
+  @override
+  void initState() {
+    errorController = StreamController<ErrorAnimationType>();
+    inputFocusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    errorController?.close();
+    inputFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      title: 'Masukin PIN Kamu',
+      content: CustomPinCode(
+        pinController: inputPinController,
+        errorController: errorController,
+        focusNode: inputFocusNode,
+        isDialog: true,
+        isObscure: true,
+        onChanged: (value) {},
+        onCompleted: (value) {
+          if (inputPinController.text.length < 6) {
+            errorController!.add(ErrorAnimationType.shake);
+            inputFocusNode.requestFocus();
+            Helper.snackBar(
+              context,
+              message: 'PIN harus 6 Digit!',
+            );
+            return;
+          } else if (inputPinController.text != '111111') {
+            inputPinController.clear();
+            inputFocusNode.requestFocus();
+            errorController!.add(ErrorAnimationType.shake);
+            Helper.snackBar(
+              context,
+              message: 'PIN tidak cocok!',
+            );
+            return;
+          }
+          Helper.unfocus();
+          Navigator.of(context).pop();
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => SuccessPaymentDialog(),
+          );
+        },
+      ),
     );
   }
 }

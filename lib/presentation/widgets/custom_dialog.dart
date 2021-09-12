@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
   final String title;
-  final String content;
-  final Widget buttons;
+  final Widget content;
+  final Widget? buttons;
 
-  const CustomDialog({Key? key, required this.title, required this.content, required this.buttons})
+  const CustomDialog({Key? key, required this.title, required this.content, this.buttons})
       : super(key: key);
 
   @override
@@ -32,9 +32,14 @@ class CustomDialog extends StatelessWidget {
             children: [
               Text(title, style: AppTheme.headline3),
               SizedBox(height: 16.0),
-              Text(content, style: AppTheme.text3),
-              SizedBox(height: 16.0),
-              buttons,
+              content,
+              buttons != null ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 16.0),
+                  buttons!,
+                ],
+              ): Container(),
             ],
           ),
         ),

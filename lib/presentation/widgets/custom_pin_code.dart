@@ -7,31 +7,45 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class CustomPinCode extends StatelessWidget {
   final TextEditingController pinController;
   final StreamController<ErrorAnimationType>? errorController;
+  final FocusNode? focusNode;
   final void Function(String)? onCompleted;
   final void Function(String) onChanged;
-  const CustomPinCode({Key? key, required this.pinController, this.errorController, this.onCompleted, required this.onChanged}) : super(key: key);
+  final bool isDialog;
+  final bool isObscure;
+
+  const CustomPinCode({
+    Key? key,
+    required this.pinController,
+    this.errorController,
+    this.onCompleted,
+    required this.onChanged,
+    this.focusNode,
+    this.isDialog = false,
+    this.isObscure = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PinCodeTextField(
       appContext: context,
-      pastedTextStyle: AppTheme.headline1,
+      pastedTextStyle: isObscure ? AppTheme.headline1.purple : AppTheme.headline1,
       length: 6,
-      obscureText: false,
+      obscureText: isObscure,
       animationType: AnimationType.fade,
       showCursor: false,
       autoFocus: true,
-      textStyle: AppTheme.headline1,
+      textStyle: isObscure ? AppTheme.headline1.purple : AppTheme.headline1,
       animationDuration: Duration(milliseconds: 300),
       enableActiveFill: true,
+      focusNode: focusNode,
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.circle,
-        activeColor: AppTheme.yellow,
-        inactiveColor: AppTheme.whiteOpacity,
-        activeFillColor: AppTheme.yellow,
-        inactiveFillColor: AppTheme.whiteOpacity,
-        selectedFillColor: AppTheme.whiteOpacity,
-        selectedColor: AppTheme.whiteOpacity,
+        activeColor: isDialog ? AppTheme.purple : AppTheme.yellow,
+        activeFillColor: isDialog ? AppTheme.purple : AppTheme.yellow,
+        inactiveColor: isDialog ? AppTheme.yellow : AppTheme.whiteOpacity,
+        inactiveFillColor: isDialog ? AppTheme.yellow : AppTheme.whiteOpacity,
+        selectedFillColor: isDialog ? AppTheme.yellow : AppTheme.whiteOpacity,
+        selectedColor: isDialog ? AppTheme.yellow : AppTheme.whiteOpacity,
       ),
       controller: pinController,
       errorAnimationController: errorController,
