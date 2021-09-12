@@ -48,6 +48,7 @@ class Resources {
 class Keys {
   static const String isLoggedIn = 'isLoggedIn';
   static const String textLogoHero = 'textLogoHero';
+  static const String setPin = 'setPin';
 }
 
 class FormatDate {

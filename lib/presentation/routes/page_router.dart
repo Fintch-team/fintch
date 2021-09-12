@@ -2,7 +2,6 @@ import 'package:fintch/presentation/pages/pages.dart';
 import 'package:fintch/presentation/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-
 class PageRouter {
   final RouteObserver<PageRoute> routeObserver;
 
@@ -17,6 +16,11 @@ class PageRouter {
         return _buildRoute(settings, LoginPage());
       case PagePath.setPassword:
         return _buildRoute(settings, SetPasswordPage());
+      case PagePath.setPin:
+        return _buildRoute(settings, SetPinPage());
+      case PagePath.confirmPin:
+        return _buildRoute(
+            settings, ConfirmPinPage(bundle: args as ArgumentBundle?));
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.receive:

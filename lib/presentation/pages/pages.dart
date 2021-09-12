@@ -5,6 +5,8 @@ export 'base/history_page.dart';
 export 'base/home_page.dart';
 export 'base/leaderboard_page.dart';
 export 'auth/set_password_page.dart';
+export 'auth/set_pin_page.dart';
+export 'auth/confirm_pin_page.dart';
 export 'receive_page.dart';
 export 'profile_page.dart';
 export 'pay_page.dart';
