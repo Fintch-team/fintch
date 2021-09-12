@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
@@ -23,9 +24,14 @@ class _PayPageState extends State<PayPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   bool isShowSheet = false;
+  bool canShowQRScanner = false;
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
+  @override
+  void initState() {
+    getCameraPermission();
+    super.initState();
+  }
+
   @override
   void reassemble() async {
     super.reassemble();
@@ -34,6 +40,30 @@ class _PayPageState extends State<PayPage> {
         await controller!.pauseCamera();
       }
       controller!.resumeCamera();
+    }
+  }
+
+  void getCameraPermission() async {
+    print(await Permission.camera.status);
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      final result = await Permission.camera.request();
+      if (result.isGranted) {
+        setState(() {
+          canShowQRScanner = true;
+        });
+      } else {
+        Helper.snackBar(
+          context,
+          message:
+              'Tolong izinin kami untuk akses kamera kamu agar bisa menggunakan fitur ini yaa :)',
+        );
+        Navigator.of(context).pop();
+      }
+    } else {
+      setState(() {
+        canShowQRScanner = true;
+      });
     }
   }
 
@@ -90,7 +120,7 @@ class _PayPageState extends State<PayPage> {
   }
 
   Widget _headerContent(BuildContext context) {
-    return Positioned(
+    return canShowQRScanner ? Positioned(
       top: 0,
       left: 0,
       right: 0,
@@ -110,7 +140,7 @@ class _PayPageState extends State<PayPage> {
         )
         /* Container()*/,
       ),
-    );
+    ) : Container();
   }
 
   Widget _payScrollableSheet() {

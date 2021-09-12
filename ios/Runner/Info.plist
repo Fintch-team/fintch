@@ -43,7 +43,9 @@
 	<false/>
     <key>io.flutter.embedded_views_preview</key>
     <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App needs access to photo lib for get QR Code Image</string>
     <key>NSCameraUsageDescription</key>
-    <string>This app needs camera access to scan QR codes</string>
+    <string>To scan QR Code please grant camera access</string>
 </dict>
 </plist>
