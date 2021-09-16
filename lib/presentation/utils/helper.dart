@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'utils.dart';
+import 'package:fintch/gen_export.dart';
+
 
 class Helper {
   static void unfocus() {

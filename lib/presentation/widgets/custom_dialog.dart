@@ -1,5 +1,6 @@
 
-import 'package:fintch/presentation/utils/utils.dart';
+import 'package:fintch/gen_export.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {

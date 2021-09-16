@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:fintch/presentation/utils/utils.dart';
+import 'package:fintch/gen_export.dart';
+
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 

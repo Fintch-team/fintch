@@ -1,5 +1,5 @@
-import 'package:fintch/presentation/pages/pages.dart';
-import 'package:fintch/presentation/routes/routes.dart';
+import 'package:fintch/gen_export.dart';
+
 import 'package:flutter/material.dart';
 
 class PageRouter {
