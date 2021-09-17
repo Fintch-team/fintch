@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "127226419613",
+    "project_id": "fintch-dc16f",
+    "storage_bucket": "fintch-dc16f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127226419613:android:3364a3da747deb997a7774",
+        "android_client_info": {
+          "package_name": "com.fintch.project.fintch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127226419613-jp1n9dbtkehf4flv9dbpc3k5pr1g3l8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOIW3Z-Zb0CUFGmmqmOzWwRZdEYXxnp_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127226419613-jp1n9dbtkehf4flv9dbpc3k5pr1g3l8t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127226419613-b1der1klib4jof87i36sfjst69j74mk1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fintch.project.fintch"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
