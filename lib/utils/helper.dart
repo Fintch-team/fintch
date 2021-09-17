@@ -50,8 +50,6 @@ class Helper {
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
       statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
     ));
   }
 
@@ -60,8 +58,6 @@ class Helper {
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
     ));
   }
 

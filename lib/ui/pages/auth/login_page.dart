@@ -96,7 +96,6 @@ class LoginPage extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Username kamu',
             ),
-            keyboardType: TextInputType.number,
           ),
           SizedBox(height: 16),
           Text('Kata Sandi', style: AppTheme.text3.white.bold),
