@@ -5,8 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+   test();
+  }
+
+  void test() async {
+     final UserService userService = Service.find();
+
+    TokenModel token = await userService.signWithNickname(user: 'user', pass: 'user');
+    
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context) {
