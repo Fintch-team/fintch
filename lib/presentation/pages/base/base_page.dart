@@ -1,6 +1,5 @@
-import 'package:fintch/presentation/pages/pages.dart';
-import 'package:fintch/presentation/utils/utils.dart';
-import 'package:fintch/presentation/widgets/widgets.dart';
+import 'package:fintch/gen_export.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

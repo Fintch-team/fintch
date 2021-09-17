@@ -9,9 +9,11 @@
 * * Now, God only knows "Karl Weierstrass"
 * */
 
-import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:fintch/presentation/utils/utils.dart';
+
+import 'package:flutter/material.dart';
+import 'package:fintch/gen_export.dart';
+
 
 class FlutterSlider extends StatefulWidget {
   final Key? key;

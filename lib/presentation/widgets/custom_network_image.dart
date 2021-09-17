@@ -1,6 +1,7 @@
 
+import 'package:fintch/gen_export.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fintch/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
