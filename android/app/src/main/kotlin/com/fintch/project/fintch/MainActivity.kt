@@ -1,4 +1,4 @@
-package com.neuxe.fintch
+package com.fintch.project.fintch
 
 import io.flutter.embedding.android.FlutterActivity
 
