@@ -4,8 +4,12 @@
 // flutter pub run bin/gen_export
 library gen_export;
 
+export 'core/core.exports.dart';
 export 'data/data.exports.dart';
 export 'flavor.dart';
 export 'logic/logic.exports.dart';
 export 'main.dart';
-export 'presentation/presentation.exports.dart';
+export 'routes/routes.exports.dart';
+export 'service/service.exports.dart';
+export 'ui/ui.exports.dart';
+export 'utils/utils.exports.dart';

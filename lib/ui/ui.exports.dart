@@ -2,9 +2,7 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library presentation;
+library ui;
 
 export 'pages/pages.exports.dart';
-export 'routes/routes.exports.dart';
-export 'utils/utils.exports.dart';
 export 'widgets/widgets.exports.dart';
