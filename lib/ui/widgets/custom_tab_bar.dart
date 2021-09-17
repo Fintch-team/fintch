@@ -1,6 +1,6 @@
 library shifting_tabbar;
 
-import 'package:fintch/presentation/utils/app_theme.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 
 extension ExtendedIterable<E> on Iterable<E> {
@@ -49,8 +49,7 @@ class ShiftingTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.labelFlex,
     this.labelStyle,
     this.forceUpperCase = true,
-  })  : assert(tabs != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// Typically a list of two or more [ShiftingTab] widgets.
   ///

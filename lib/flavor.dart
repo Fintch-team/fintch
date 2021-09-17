@@ -5,4 +5,4 @@
 //      flutter pub run bin/flavor production
 const isProduction = false;
 
-const String kProductUrl = 'http://localhost:8000';
+const String kUrl = 'http://localhost:8000';

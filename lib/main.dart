@@ -7,8 +7,6 @@ import 'package:logging/logging.dart';
 
 import 'gen_export.dart';
 
-
-
 void main() async {
   await GetStorage.init();
   Bloc.observer = SimpleBlocObserver();
@@ -16,11 +14,31 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
+class MyApp extends StatefulWidget {
   late final PageRouter _router;
 
-  MyApp() : _router = PageRouter() {
-    initLogger();
+   MyApp() : _router = PageRouter() {
+  }
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+  @override
+  void initState() {
+    super.initState();
+
+    registerServices(services: [
+      // Remote Service
+      ServiceInjector(create: () => UserService()),
+
+      // Local Service
+      ServiceInjector.value(value: LocalAuthService()),
+    ]);
   }
 
   @override
@@ -39,19 +57,8 @@ class MyApp extends StatelessWidget {
           hintStyle: AppTheme.text3.whiteOpacity,
         ),
       ),
-      onGenerateRoute: _router.getRoute,
-      navigatorObservers: [_router.routeObserver],
+      onGenerateRoute: widget._router.getRoute,
+      navigatorObservers: [widget._router.routeObserver],
     );
-  }
-
-  void initLogger() {
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      dynamic e = record.error;
-      String m = e is APIException ? e.message : e.toString();
-      print(
-          '${record.loggerName}: ${record.level.name}: ${record.message} ${m != 'null' ? m : ''}');
-    });
-    Logger.root.info("Logger initialized.");
   }
 }
