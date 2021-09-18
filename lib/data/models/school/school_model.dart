@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:fintch/gen_export.dart';
 
 SchoolModel schoolModelFromJson(String str) =>
     SchoolModel.fromJson(json.decode(str));

@@ -1,21 +1,21 @@
 // To parse this JSON data, do
 //
-//     final moneyManageitemModel = moneyManageitemModelFromJson(jsonString);
+//     final moneyManageItemModel = moneyManageItemModelFromJson(jsonString);
 
 import 'dart:convert';
 
-MoneyManageitemModel moneyManageitemModelFromJson(String str) => MoneyManageitemModel.fromJson(json.decode(str));
+MoneyManageItemModel moneyManageItemModelFromJson(String str) => MoneyManageItemModel.fromJson(json.decode(str));
 
-String moneyManageitemModelToJson(MoneyManageitemModel data) => json.encode(data.toJson());
+String moneyManageItemModelToJson(MoneyManageItemModel data) => json.encode(data.toJson());
 
-class MoneyManageitemModel {
-    MoneyManageitemModel({
+class MoneyManageItemModel {
+    MoneyManageItemModel({
         required this.data,
     });
 
     MoneyManageItemData data;
 
-    factory MoneyManageitemModel.fromJson(Map<String, dynamic> json) => MoneyManageitemModel(
+    factory MoneyManageItemModel.fromJson(Map<String, dynamic> json) => MoneyManageItemModel(
         data: MoneyManageItemData.fromJson(json["data"]),
     );
 

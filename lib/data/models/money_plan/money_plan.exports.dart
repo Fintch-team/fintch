@@ -2,7 +2,7 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library school;
+library money_plan;
 
-export 'list_school_model.dart';
-export 'school_model.dart';
+export 'list_money_plan_model.dart';
+export 'money_plan_model.dart';

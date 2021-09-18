@@ -1,9 +1,7 @@
-import 'package:fintch/data/exceptions/api_exception.dart';
 import 'package:fintch/logic/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:logging/logging.dart';
 
 import 'gen_export.dart';
 
@@ -19,8 +17,7 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 class MyApp extends StatefulWidget {
   late final PageRouter _router;
 
-   MyApp() : _router = PageRouter() {
-  }
+   MyApp() : _router = PageRouter();
 
   @override
   State<MyApp> createState() => _MyAppState();

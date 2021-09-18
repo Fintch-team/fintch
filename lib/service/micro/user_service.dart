@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
-import 'package:flutter/foundation.dart';
 
 class UserService extends ApiService {
   UserService() : super('$kUrl/');
@@ -77,8 +75,8 @@ class UserService extends ApiService {
     required String nickname,
     required String password,
     required String name,
-    required String id_school,
-    required String id_wallet,
+    required String idSchool,
+    required String idWallet,
     required String level,
     required String pin,
   }) async {
@@ -88,8 +86,8 @@ class UserService extends ApiService {
         'nickname': nickname,
         'password': password,
         'name': name,
-        'id_school': id_school,
-        'id_wallet': id_wallet,
+        'id_school': idSchool,
+        'id_wallet': idWallet,
         'level': level,
         'pin': pin,
       },
@@ -104,8 +102,8 @@ class UserService extends ApiService {
     required String nickname,
     required String password,
     required String name,
-    required String id_school,
-    required String id_wallet,
+    required String idSchool,
+    required String idWallet,
     required String level,
     required String pin,
   }) async {
@@ -115,8 +113,8 @@ class UserService extends ApiService {
         'nickname': nickname,
         'password': password,
         'name': name,
-        'id_school': id_school,
-        'id_wallet': id_wallet,
+        'id_school': idSchool,
+        'id_wallet': idWallet,
         'level': level,
         'pin': pin,
       },
