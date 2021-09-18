@@ -2,6 +2,7 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library errors;
+library global;
 
 export 'error_model.dart';
+export 'pagination_model.dart';

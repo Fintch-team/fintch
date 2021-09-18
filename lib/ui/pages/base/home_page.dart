@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   void test() async {
      final UserService userService = Service.find();
 
-    TokenModel token = await userService.signWithNickname(user: 'user', pass: 'user');
+    TokenModel token = await userService.authWithNickname(user: 'user', pass: 'user1');
     
     print(token);
   }

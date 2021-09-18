@@ -5,5 +5,5 @@
 library models;
 
 export 'auth/auth.exports.dart';
-export 'errors/errors.exports.dart';
+export 'global/global.exports.dart';
 export 'user/user.exports.dart';
