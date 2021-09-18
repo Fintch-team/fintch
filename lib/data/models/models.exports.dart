@@ -5,5 +5,10 @@
 library models;
 
 export 'auth/auth.exports.dart';
-export 'errors/errors.exports.dart';
+export 'global/global.exports.dart';
+export 'history/history.exports.dart';
+export 'money_manage/money_manage.exports.dart';
+export 'money_plan/money_plan.exports.dart';
+export 'school/school.exports.dart';
 export 'user/user.exports.dart';
+export 'wallet/wallet.exports.dart';

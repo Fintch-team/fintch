@@ -1,9 +1,7 @@
-import 'package:fintch/data/exceptions/api_exception.dart';
 import 'package:fintch/logic/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:logging/logging.dart';
 
 import 'gen_export.dart';
 
@@ -19,15 +17,13 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 class MyApp extends StatefulWidget {
   late final PageRouter _router;
 
-   MyApp() : _router = PageRouter() {
-  }
+  MyApp() : _router = PageRouter();
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   void initState() {
     super.initState();
@@ -35,6 +31,11 @@ class _MyAppState extends State<MyApp> {
     registerServices(services: [
       // Remote Service
       ServiceInjector(create: () => UserService()),
+      ServiceInjector(create: () => HistoryService()),
+      ServiceInjector(create: () => WalletService()),
+      ServiceInjector(create: () => TransactionService()),
+      ServiceInjector(create: () => MoneyPlanService()),
+      ServiceInjector(create: () => MoneyManageService()),
 
       // Local Service
       ServiceInjector.value(value: LocalAuthService()),
