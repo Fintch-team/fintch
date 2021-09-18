@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 
 class MoneyManageService extends ApiService {

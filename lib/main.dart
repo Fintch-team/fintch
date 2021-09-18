@@ -17,14 +17,13 @@ final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 class MyApp extends StatefulWidget {
   late final PageRouter _router;
 
-   MyApp() : _router = PageRouter();
+  MyApp() : _router = PageRouter();
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   void initState() {
     super.initState();
@@ -32,6 +31,11 @@ class _MyAppState extends State<MyApp> {
     registerServices(services: [
       // Remote Service
       ServiceInjector(create: () => UserService()),
+      ServiceInjector(create: () => HistoryService()),
+      ServiceInjector(create: () => WalletService()),
+      ServiceInjector(create: () => TransactionService()),
+      ServiceInjector(create: () => MoneyPlanService()),
+      ServiceInjector(create: () => MoneyManageService()),
 
       // Local Service
       ServiceInjector.value(value: LocalAuthService()),
