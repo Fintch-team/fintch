@@ -36,14 +36,14 @@ class WalletData {
     int id;
     int walletAmount;
     int barrierAmount;
-    DateTime barrierExpired;
+    DateTime? barrierExpired;
     int payAmount;
 
     factory WalletData.fromJson(Map<String, dynamic> json) => WalletData(
         id: json["id"],
         walletAmount: json["wallet_amount"],
         barrierAmount: json["barrier_amount"],
-        barrierExpired: DateTime.parse(json["barrier_expired"]),
+        barrierExpired: json["barrier_expired"] != null ? DateTime.parse(json["barrier_expired"]) : null,
         payAmount: json["pay_amount"],
     );
 
@@ -51,7 +51,7 @@ class WalletData {
         "id": id,
         "wallet_amount": walletAmount,
         "barrier_amount": barrierAmount,
-        "barrier_expired": "${barrierExpired.year.toString().padLeft(4, '0')}-${barrierExpired.month.toString().padLeft(2, '0')}-${barrierExpired.day.toString().padLeft(2, '0')}",
+        "barrier_expired": "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",
         "pay_amount": payAmount,
     };
 }

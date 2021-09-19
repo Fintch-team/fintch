@@ -1,12 +1,12 @@
 import 'package:fintch/logic/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_storage/get_storage.dart';
 
 import 'gen_export.dart';
 
 void main() async {
-  await GetStorage.init();
+  await initializeGetStorage();
+
   Bloc.observer = SimpleBlocObserver();
   Helper.setLightAppBar();
   runApp(MyApp());

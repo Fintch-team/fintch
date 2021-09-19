@@ -38,17 +38,17 @@ class MoneyPlanData {
   });
 
   int id;
-  DateTime deadline;
+  DateTime? deadline;
   String note;
-  DateTime created;
+  DateTime? created;
   User user;
   int totalAmount;
 
   factory MoneyPlanData.fromJson(Map<String, dynamic> json) => MoneyPlanData(
         id: json["id"],
-        deadline: DateTime.parse(json["deadline"]),
+        deadline:  json["deadline"] != null ? DateTime.parse(json["deadline"]) : null,
         note: json["note"],
-        created: DateTime.parse(json["created"]),
+        created:  json["created"] != null ? DateTime.parse(json["created"]) : null,
         user: User.fromJson(json["user"]),
         totalAmount: json["total_amount"],
       );
@@ -56,10 +56,10 @@ class MoneyPlanData {
   Map<String, dynamic> toJson() => {
         "id": id,
         "deadline":
-            "${deadline.year.toString().padLeft(4, '0')}-${deadline.month.toString().padLeft(2, '0')}-${deadline.day.toString().padLeft(2, '0')}",
+            "${deadline!.year.toString().padLeft(4, '0')}-${deadline!.month.toString().padLeft(2, '0')}-${deadline!.day.toString().padLeft(2, '0')}",
         "note": note,
         "created":
-            "${created.year.toString().padLeft(4, '0')}-${created.month.toString().padLeft(2, '0')}-${created.day.toString().padLeft(2, '0')}",
+            "${created!.year.toString().padLeft(4, '0')}-${created!.month.toString().padLeft(2, '0')}-${created!.day.toString().padLeft(2, '0')}",
         "user": user.toJson(),
         "total_amount": totalAmount,
       };

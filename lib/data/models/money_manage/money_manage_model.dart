@@ -70,16 +70,16 @@ class Item {
     String name;
     int percent;
     int amount;
-    DateTime createdAt;
-    DateTime updatedAt;
+    DateTime? createdAt;
+    DateTime? updatedAt;
 
     factory Item.fromJson(Map<String, dynamic> json) => Item(
         id: json["id"],
         name: json["name"],
         percent: json["percent"],
         amount: json["amount"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
     );
 
     Map<String, dynamic> toJson() => {
@@ -87,7 +87,7 @@ class Item {
         "name": name,
         "percent": percent,
         "amount": amount,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
     };
 }

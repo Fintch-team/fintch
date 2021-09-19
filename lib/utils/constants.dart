@@ -2,6 +2,11 @@ class Strings {
 
 }
 
+class KeyStorage {
+  static const String kToken = 'token';
+  static const String kExpired = 'expired';
+}
+
 class Resources {
   static const String _baseImg = 'assets/img';
   static const String _baseSvg = 'assets/svg';

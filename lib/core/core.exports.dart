@@ -5,3 +5,4 @@
 library core;
 
 export 'interceptor.dart';
+export 'get_storage.dart';
