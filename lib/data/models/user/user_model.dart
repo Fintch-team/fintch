@@ -85,16 +85,16 @@ class MoneyPlanning {
   DateTime deadline;
   int idUser;
   int totalAmount;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory MoneyPlanning.fromJson(Map<String, dynamic> json) => MoneyPlanning(
         id: json["id"],
         deadline: DateTime.parse(json["deadline"]),
         idUser: json["id_user"],
         totalAmount: json["total_amount"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,8 +103,8 @@ class MoneyPlanning {
             "${deadline.year.toString().padLeft(4, '0')}-${deadline.month.toString().padLeft(2, '0')}-${deadline.day.toString().padLeft(2, '0')}",
         "id_user": idUser,
         "total_amount": totalAmount,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
       };
 }
 
@@ -118,24 +118,24 @@ class School {
   });
 
   int id;
-  String amount;
-  DateTime createdAt;
-  DateTime updatedAt;
-  String name;
+  String? amount;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? name;
 
   factory School.fromJson(Map<String, dynamic> json) => School(
         id: json["id"],
         amount: json["amount"] == null ? null : json["amount"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
         name: json["name"] == null ? null : json["name"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "amount": amount,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
         "name": name,
       };
 }
@@ -155,18 +155,18 @@ class Wallet {
   int walletAmount;
   int barrierAmount;
   int payAmount;
-  DateTime barrierExpired;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? barrierExpired;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory Wallet.fromJson(Map<String, dynamic> json) => Wallet(
         id: json["id"],
         walletAmount: json["wallet_amount"],
         barrierAmount: json["barrier_amount"],
         payAmount: json["pay_amount"],
-        barrierExpired: DateTime.parse(json["barrier_expired"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        barrierExpired: json["barrier_expired"] != null ? DateTime.parse(json["barrier_expired"]) : null,
+        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -175,8 +175,8 @@ class Wallet {
         "barrier_amount": barrierAmount,
         "pay_amount": payAmount,
         "barrier_expired":
-            "${barrierExpired.year.toString().padLeft(4, '0')}-${barrierExpired.month.toString().padLeft(2, '0')}-${barrierExpired.day.toString().padLeft(2, '0')}",
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+            "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
       };
 }

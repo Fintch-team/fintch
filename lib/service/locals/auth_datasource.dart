@@ -1,6 +1,7 @@
 
 import 'package:fintch/gen_export.dart';
 import 'package:fintch/service/micro/user_service.dart';
+import 'package:fintch/utils/utils.exports.dart';
 
 class LocalAuthService extends Service {
   static LocalAuthService? _instance;
@@ -13,25 +14,10 @@ class LocalAuthService extends Service {
   final userService = UserService();
   LocalAuthService._();
 
-  // bool get isSkipped {
-  //   final val = (sharedPreferences.getBool('is_skipped') ?? false);
-  //   final x = !isHasLoggedIn;
-  //   return val && x;
-  // }
-
-  // void skipAuth() async {
-  //   await sharedPreferences.setBool('is_skipped', true);
-  // }
-
-  // Future<void> saveUserSession(SignInResponse value) async {
-  //   await sharedPreferences.setString(kTokenAccess, value.tokens!.access!);
-  //   await sharedPreferences.setString(
-  //       kTokenAccessExp, value.tokens!.accessExp!);
-  //   await sharedPreferences.setString(kTokenRefresh, value.tokens!.refresh!);
-  //   await sharedPreferences.setString(
-  //       kTokenRefreshExp, value.tokens!.refreshExp!);
-  //   await updateUserInformation(value.user!);
-  // }
+  Future<void> saveUserSession(TokenModel value) async {
+    getStorage.write(KeyStorage.kToken, value.data.accessToken);
+    getStorage.write(KeyStorage.kExpired, value.data.expiresIn);
+  }
 
   // Future<void> updateUserInformation(User user) async {
   //   await sharedPreferences.setString(
@@ -43,14 +29,10 @@ class LocalAuthService extends Service {
   //       kUserInformation, json.encode(value.toJson()));
   // }
 
-  // Future<void> clear() async {
-  //   await sharedPreferences.remove('is_skipped');
-  //   await sharedPreferences.remove(kTokenAccess);
-  //   await sharedPreferences.remove(kTokenAccessExp);
-  //   await sharedPreferences.remove(kTokenRefresh);
-  //   await sharedPreferences.remove(kTokenRefreshExp);
-  //   await sharedPreferences.remove(kUserInformation);
-  // }
+  Future<void> clear() async {
+    getStorage.remove(KeyStorage.kToken);
+    getStorage.remove(KeyStorage.kExpired);
+  }
 
   // User? get currentUser {
   //   final String? userJson = sharedPreferences.getString(kUserInformation);
@@ -61,7 +43,7 @@ class LocalAuthService extends Service {
   //   return null;
   // }
 
-  // String? get accessToken => sharedPreferences.getString(kTokenAccess);
+  String? get token => getStorage.read(KeyStorage.kToken);
   // bool get isAccessTokenExpired =>
   //     accessTokenExpired == null ||
   //     accessTokenExpired != null &&

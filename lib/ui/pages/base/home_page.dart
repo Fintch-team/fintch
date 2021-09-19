@@ -17,15 +17,24 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-   test();
+    test();
   }
 
   void test() async {
-     final UserService userService = Service.find();
+    final UserService userService = Service.find();
 
-    TokenModel token = await userService.authWithNickname(user: 'user', pass: 'user');
-    
-    print(token);
+    TokenModel token =
+        await userService.authWithNickname(user: 'user', pass: 'user');
+
+    final LocalAuthService localAuthService = Service.find();
+
+    await localAuthService.saveUserSession(token);
+
+    print(localAuthService.token);
+
+    UserModel user = await userService.getUserId(id: "1");
+
+    print("user $user");
   }
 
   @override

@@ -34,8 +34,8 @@ class FintchInterceptor extends Interceptor {
     }
 
     dio.lock();
-    // final authDataSource = LocalAuthService();
-    // String? accessToken = authDataSource.accessToken;
+    final authDataSource = LocalAuthService();
+    String? accessToken = authDataSource.token;
     // if (accessToken != null && authDataSource.isAccessTokenExpired) {
     //   if (authDataSource.isRefreshTokenExpired) {
     //     accessToken = null;
@@ -46,20 +46,9 @@ class FintchInterceptor extends Interceptor {
     // }
     dio.unlock();
 
-    // if (accessToken != null) {
-    //   options.headers['Authorization'] = 'Bearer $accessToken';
-    // }
-
-    // final LocalConfigService configService = Service.find();
-    // if (!options.headers.containsKey('locale')) {
-    //   final locale = configService.languageCode;
-    //   options.headers['locale'] = locale;
-    // }
-
-    // if (!options.headers.containsKey('currency')) {
-    //   final currency = configService.currency;
-    //   options.headers['currency'] = currency;
-    // }
+    if (accessToken != null) {
+      options.headers['Authorization'] = 'Bearer $accessToken';
+    }
 
     handler.next(options);
   }
