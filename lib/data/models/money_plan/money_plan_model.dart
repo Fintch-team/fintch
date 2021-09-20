@@ -14,15 +14,19 @@ String moneyPlanModelToJson(MoneyPlanModel data) => json.encode(data.toJson());
 class MoneyPlanModel {
   MoneyPlanModel({
     required this.data,
+    required this.response,
   });
 
+  ResponseGlobal? response;
   MoneyPlanData data;
 
   factory MoneyPlanModel.fromJson(Map<String, dynamic> json) => MoneyPlanModel(
+        response: ResponseGlobal.fromJson(json["response"]),
         data: MoneyPlanData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "response": response!.toJson(),
         "data": data.toJson(),
       };
 }
@@ -46,9 +50,11 @@ class MoneyPlanData {
 
   factory MoneyPlanData.fromJson(Map<String, dynamic> json) => MoneyPlanData(
         id: json["id"],
-        deadline:  json["deadline"] != null ? DateTime.parse(json["deadline"]) : null,
+        deadline:
+            json["deadline"] != null ? DateTime.parse(json["deadline"]) : null,
         note: json["note"],
-        created:  json["created"] != null ? DateTime.parse(json["created"]) : null,
+        created:
+            json["created"] != null ? DateTime.parse(json["created"]) : null,
         user: User.fromJson(json["user"]),
         totalAmount: json["total_amount"],
       );
@@ -64,4 +70,3 @@ class MoneyPlanData {
         "total_amount": totalAmount,
       };
 }
-

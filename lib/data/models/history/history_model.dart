@@ -14,15 +14,19 @@ String historyModelToJson(HistoryModel data) => json.encode(data.toJson());
 class HistoryModel {
   HistoryModel({
     required this.data,
+    required this.response,
   });
 
+  ResponseGlobal? response;
   HistoryData data;
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) => HistoryModel(
+        response: ResponseGlobal.fromJson(json["response"]),
         data: HistoryData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "response": response!.toJson(),
         "data": data.toJson(),
       };
 }
@@ -54,5 +58,3 @@ class HistoryData {
         "receive": receive.toJson(),
       };
 }
-
-
