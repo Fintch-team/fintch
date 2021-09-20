@@ -7,5 +7,5 @@ library global;
 export 'error.dart';
 export 'pagination.dart';
 export 'pay.dart';
-export 'user.dart';
 export 'response.dart';
+export 'user.dart';

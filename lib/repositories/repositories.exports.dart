@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library repositories;
 
+export 'mapper/mapper.exports.dart';
 export 'user_repository.dart';
-export 'data_mapper.dart';

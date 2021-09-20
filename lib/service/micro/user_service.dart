@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 
@@ -22,6 +21,8 @@ class UserService extends ApiService {
     //   message: result.meta?.message ?? '',
     // );
     // }
+
+    print(res.statusCode);
 
     TokenModel result = TokenModel.fromJson(res.data);
 
@@ -123,9 +124,8 @@ class UserService extends ApiService {
     return res.statusCode == 200;
   }
 
-   Future<bool> deleteUser({
+  Future<bool> deleteUser({
     required String idUser,
-
   }) async {
     final res = await dio.delete(
       'users/$idUser',

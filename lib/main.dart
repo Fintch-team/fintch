@@ -1,5 +1,4 @@
-import 'package:fintch/logic/blocs/blocs.dart';
-import 'package:fintch/repositories/repositories.exports.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => UserRepository(
             userService: Service.find(),
+            localAuthService: Service.find(),
           ),
         )
       ],
