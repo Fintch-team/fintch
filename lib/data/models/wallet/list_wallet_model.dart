@@ -6,26 +6,34 @@ import 'dart:convert';
 
 import 'package:fintch/gen_export.dart';
 
-ListWalletModel listWalletModelFromJson(String str) => ListWalletModel.fromJson(json.decode(str));
+ListWalletModel listWalletModelFromJson(String str) =>
+    ListWalletModel.fromJson(json.decode(str));
 
-String listWalletModelToJson(ListWalletModel data) => json.encode(data.toJson());
+String listWalletModelToJson(ListWalletModel data) =>
+    json.encode(data.toJson());
 
 class ListWalletModel {
-    ListWalletModel({
-        required this.data,
-        required this.meta,
-    });
+  ListWalletModel({
+    required this.data,
+    required this.meta,
+    required this.response,
+  });
 
-    List<WalletData> data;
-    Meta meta;
+  ResponseGlobal? response;
+  List<WalletData> data;
+  Meta meta;
 
-    factory ListWalletModel.fromJson(Map<String, dynamic> json) => ListWalletModel(
-        data: List<WalletData>.from(json["data"].map((x) => WalletData.fromJson(x))),
+  factory ListWalletModel.fromJson(Map<String, dynamic> json) =>
+      ListWalletModel(
+        response: ResponseGlobal.fromJson(json["response"]),
+        data: List<WalletData>.from(
+            json["data"].map((x) => WalletData.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
+        "response": response!.toJson(),
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "meta": meta.toJson(),
-    };
+      };
 }

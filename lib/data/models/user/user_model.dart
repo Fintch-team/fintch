@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:fintch/gen_export.dart';
+
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
@@ -11,15 +13,19 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 class UserModel {
   UserModel({
     required this.data,
+    required this.response,
   });
 
+  ResponseGlobal? response;
   DataUser data;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        response: ResponseGlobal.fromJson(json["response"]),
         data: DataUser.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "response": response!.toJson(),
         "data": data.toJson(),
       };
 }
@@ -93,8 +99,12 @@ class MoneyPlanning {
         deadline: DateTime.parse(json["deadline"]),
         idUser: json["id_user"],
         totalAmount: json["total_amount"],
-        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
-        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"])
+            : null,
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -126,8 +136,12 @@ class School {
   factory School.fromJson(Map<String, dynamic> json) => School(
         id: json["id"],
         amount: json["amount"] == null ? null : json["amount"],
-        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
-        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"])
+            : null,
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"])
+            : null,
         name: json["name"] == null ? null : json["name"],
       );
 
@@ -164,9 +178,15 @@ class Wallet {
         walletAmount: json["wallet_amount"],
         barrierAmount: json["barrier_amount"],
         payAmount: json["pay_amount"],
-        barrierExpired: json["barrier_expired"] != null ? DateTime.parse(json["barrier_expired"]) : null,
-        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
-        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
+        barrierExpired: json["barrier_expired"] != null
+            ? DateTime.parse(json["barrier_expired"])
+            : null,
+        createdAt: json["created_at"] != null
+            ? DateTime.parse(json["created_at"])
+            : null,
+        updatedAt: json["updated_at"] != null
+            ? DateTime.parse(json["updated_at"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
