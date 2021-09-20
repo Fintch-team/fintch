@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library user;
 
-export 'user_model.dart';
 export 'list_user_model.dart';
+export 'user_model.dart';

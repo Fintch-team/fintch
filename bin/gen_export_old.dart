@@ -16,7 +16,7 @@ Future<void> main(List<String> args) async {
 
   generateExport(
     libDir,
-    fileName: 'xetia_shop',
+    fileName: 'gen_export',
     ext: '',
   );
 }
@@ -87,7 +87,7 @@ bool generateExport(
 void fixImport(File file) {
   print('[GEN] Fix Imports: ${file.path}');
   final xcontent = file.readAsStringSync();
-  if (xcontent.contains('package:xetia_shop/xetia_shop.dart')) {
+  if (xcontent.contains('package:fintch/gen_export.dart')) {
     return;
   }
 
@@ -96,7 +96,7 @@ void fixImport(File file) {
   bool hasImport = false;
 
   for (final line in lines) {
-    if (!line.trim().startsWith('//') && line.contains('package:xetia_shop')) {
+    if (!line.trim().startsWith('//') && line.contains('package:fintch')) {
       hasImport = true;
     } else {
       content += line + '\n';
@@ -104,7 +104,7 @@ void fixImport(File file) {
   }
 
   if (hasImport) {
-    content = "import 'package:xetia_shop/xetia_shop.dart';\n$content";
+    content = "import 'package:fintch/gen_export.dart';\n$content";
   }
 
   file.writeAsStringSync(content, flush: true);

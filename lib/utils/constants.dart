@@ -1,10 +1,9 @@
-class Strings {
-
-}
+class Strings {}
 
 class KeyStorage {
   static const String kToken = 'token';
   static const String kExpired = 'expired';
+  static const String kUserInformation = 'userInformation';
 }
 
 class Resources {
@@ -56,11 +55,10 @@ class Keys {
   static const String setPin = 'setPin';
 }
 
-class FormatDate {
-
-}
+class FormatDate {}
 
 class Dummy {
   static const String profileImg = 'https://wallpapercave.com/wp/wp8941645.jpg';
-  static const String articleImg = 'https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg';
+  static const String articleImg =
+      'https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?size=626&ext=jpg';
 }

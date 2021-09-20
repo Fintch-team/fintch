@@ -45,8 +45,8 @@ class DataUser {
   int id;
   String name;
   String nickname;
-  Wallet wallet;
-  School school;
+  Wallet? wallet;
+  School? school;
   List<School> pay;
   List<School> receive;
   List<MoneyPlanning> moneyPlanning;
@@ -68,8 +68,8 @@ class DataUser {
         "id": id,
         "name": name,
         "nickname": nickname,
-        "wallet": wallet.toJson(),
-        "school": school.toJson(),
+        "wallet": wallet!.toJson(),
+        "school": school!.toJson(),
         "pay": List<dynamic>.from(pay.map((x) => x.toJson())),
         "receive": List<dynamic>.from(receive.map((x) => x.toJson())),
         "money_planning":
@@ -148,8 +148,8 @@ class School {
   Map<String, dynamic> toJson() => {
         "id": id,
         "amount": amount,
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
+        "created_at": createdAt != null ? createdAt!.toIso8601String() : null,
+        "updated_at": updatedAt != null ? updatedAt!.toIso8601String() : null,
         "name": name,
       };
 }
@@ -196,7 +196,7 @@ class Wallet {
         "pay_amount": payAmount,
         "barrier_expired":
             "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
+        "created_at": createdAt != null ? createdAt!.toIso8601String() : null,
+        "updated_at": updatedAt != null ? updatedAt!.toIso8601String() : null,
       };
 }

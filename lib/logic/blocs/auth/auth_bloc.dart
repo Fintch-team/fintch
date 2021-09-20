@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-// import 'package:fintch/gen_export.dart';
-import 'package:fintch/xetia_shop.dart';
+import 'package:fintch/gen_export.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -16,17 +15,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(
     AuthEvent event,
   ) async* {
-    if(event is PostAuth){
+    if (event is PostAuth) {
       yield* _mapPostAuthToState(event);
     }
   }
 
   Stream<AuthState> _mapPostAuthToState(PostAuth event) async* {
     yield AuthLoading();
-    try{
-      AuthEntity entity = await userRepository.authWithNickname(authPostEntity: event.entity);
+    try {
+      AuthEntity entity =
+          await userRepository.authWithNickname(authPostEntity: event.entity);
+
       yield AuthSuccess(entity: entity);
-    }catch(e, stacktrace){
+    } catch (e, stacktrace) {
       yield AuthFailure(message: 'unable to login: ${stacktrace.toString()}');
     }
   }

@@ -9,6 +9,7 @@ export 'data/data.exports.dart';
 export 'flavor.dart';
 export 'logic/logic.exports.dart';
 export 'main.dart';
+export 'repositories/repositories.exports.dart';
 export 'routes/routes.exports.dart';
 export 'service/service.exports.dart';
 export 'ui/ui.exports.dart';

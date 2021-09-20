@@ -88,7 +88,7 @@ bool generateExport(
 void fixImport(File file) {
   print('[GEN] Fix Imports: ${file.path}');
   final xcontent = file.readAsStringSync();
-  if (xcontent.contains('package:learn_bin_project/learn_bin_project.dart')) {
+  if (xcontent.contains('package:fintch/gen_export.dart')) {
     return;
   }
 
@@ -97,8 +97,7 @@ void fixImport(File file) {
   bool hasImport = false;
 
   for (final line in lines) {
-    if (!line.trim().startsWith('//') &&
-        line.contains('package:learn_bin_project')) {
+    if (!line.trim().startsWith('//') && line.contains('package:fintch')) {
       hasImport = true;
     } else {
       content += line + '\n';
@@ -106,8 +105,7 @@ void fixImport(File file) {
   }
 
   if (hasImport) {
-    content =
-        "import 'package:learn_bin_project/learn_bin_project.dart';\n$content";
+    content = "import 'package:fintch/gen_export.dart';\n$content";
   }
 
   file.writeAsStringSync(content, flush: true);

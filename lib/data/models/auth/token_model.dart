@@ -21,7 +21,9 @@ class TokenModel {
   Data data;
 
   factory TokenModel.fromJson(Map<String, dynamic> json) => TokenModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        response: json["response"] != null
+            ? ResponseGlobal.fromJson(json["response"])
+            : null,
         data: Data.fromJson(json["data"]),
       );
 
@@ -36,16 +38,19 @@ class Data {
     required this.accessToken,
     required this.tokenType,
     required this.expiresIn,
+    required this.user,
   });
 
+  DataUser user;
   String accessToken;
   String tokenType;
-  int expiresIn;
+  DateTime expiresIn;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+        user: DataUser.fromJson(json["user"]),
         accessToken: json["access_token"],
         tokenType: json["token_type"],
-        expiresIn: json["expires_in"],
+        expiresIn: DateTime.parse(json["expires_in"]),
       );
 
   Map<String, dynamic> toJson() => {

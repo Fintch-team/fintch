@@ -1,5 +1,3 @@
-
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
@@ -10,8 +8,6 @@ import 'package:flutter/material.dart';
 class FintchInterceptor extends Interceptor {
   final Dio dio;
   FintchInterceptor(this.dio);
-
-  static String csvContentType = 'text/csv; charset=utf-8';
 
   @override
   void onRequest(
@@ -64,11 +60,6 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 200) {
-      if (response.headers.value('content-type') == csvContentType) {
-        handler.next(response);
-        return;
-      }
-
       if (response.data['meta'] != null) {
         // final ResponseMeta meta = ResponseMeta.fromJson(response.data['meta']);
 
@@ -166,4 +157,3 @@ class FintchInterceptor extends Interceptor {
     handler.next(err);
   }
 }
-

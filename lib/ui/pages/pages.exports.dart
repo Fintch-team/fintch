@@ -5,8 +5,8 @@
 library pages;
 
 export 'auth/auth.exports.dart';
-export 'splash_page.dart';
-export 'receive_page.dart';
-export 'pay_page.dart';
 export 'base/base.exports.dart';
+export 'pay_page.dart';
 export 'profile_page.dart';
+export 'receive_page.dart';
+export 'splash_page.dart';

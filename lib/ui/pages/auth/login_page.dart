@@ -1,14 +1,6 @@
-import 'package:fintch/logic/blocs/auth/auth_bloc.dart';
-import 'package:fintch/logic/entities/auth/auth_entity.dart';
-import 'package:fintch/routes/page_path.dart';
-import 'package:fintch/ui/widgets/background.dart';
-import 'package:fintch/ui/widgets/custom_button.dart';
-import 'package:fintch/utils/app_theme.dart';
-import 'package:fintch/utils/constants.dart';
-import 'package:fintch/utils/helper.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fintch/utils/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
@@ -140,7 +132,7 @@ class LoginPage extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () => {},
               child: Text(
                 'Lupa Kata Sandi?',
                 style: AppTheme.subText1.white,

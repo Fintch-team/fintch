@@ -2,8 +2,6 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library routes;
+library mapper;
 
-export 'argument_bundle.dart';
-export 'page_path.dart';
-export 'page_router.dart';
+export 'data_mapper.dart';

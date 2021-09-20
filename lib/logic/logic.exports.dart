@@ -5,4 +5,3 @@
 library logic;
 
 export 'blocs/blocs.exports.dart';
-export 'entities/entities.exports.dart';
