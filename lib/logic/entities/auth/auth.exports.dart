@@ -2,7 +2,6 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library user;
+library auth;
 
-export 'user_model.dart';
-export 'list_user_model.dart';
+export 'auth_entity.dart';

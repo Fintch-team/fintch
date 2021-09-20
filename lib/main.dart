@@ -1,8 +1,10 @@
 import 'package:fintch/logic/blocs/blocs.dart';
+import 'package:fintch/repositories/repositories.exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'gen_export.dart';
+import 'logic/blocs/auth/auth_bloc.dart';
 
 void main() async {
   await initializeGetStorage();
@@ -44,22 +46,40 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fintch',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        scaffoldBackgroundColor: AppTheme.scaffold,
-        inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: AppTheme.enabledBorder,
-          focusedBorder: AppTheme.focusedBorder,
-          errorBorder: AppTheme.errorBorder,
-          focusedErrorBorder: AppTheme.focusedErrorBorder,
-          isDense: true,
-          hintStyle: AppTheme.text3.whiteOpacity,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => UserRepository(
+            userService: Service.find(),
+          ),
+        )
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          )
+        ],
+        child: MaterialApp(
+          title: 'Fintch',
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+            scaffoldBackgroundColor: AppTheme.scaffold,
+            inputDecorationTheme: InputDecorationTheme(
+              enabledBorder: AppTheme.enabledBorder,
+              focusedBorder: AppTheme.focusedBorder,
+              errorBorder: AppTheme.errorBorder,
+              focusedErrorBorder: AppTheme.focusedErrorBorder,
+              isDense: true,
+              hintStyle: AppTheme.text3.whiteOpacity,
+            ),
+          ),
+          onGenerateRoute: widget._router.getRoute,
+          navigatorObservers: [widget._router.routeObserver],
         ),
       ),
-      onGenerateRoute: widget._router.getRoute,
-      navigatorObservers: [widget._router.routeObserver],
     );
   }
 }

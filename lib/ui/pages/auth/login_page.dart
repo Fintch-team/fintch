@@ -1,6 +1,14 @@
-import 'package:fintch/gen_export.dart';
-
+import 'package:fintch/logic/blocs/auth/auth_bloc.dart';
+import 'package:fintch/logic/entities/auth/auth_entity.dart';
+import 'package:fintch/routes/page_path.dart';
+import 'package:fintch/ui/widgets/background.dart';
+import 'package:fintch/ui/widgets/custom_button.dart';
+import 'package:fintch/utils/app_theme.dart';
+import 'package:fintch/utils/constants.dart';
+import 'package:fintch/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fintch/utils/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
@@ -21,14 +29,31 @@ class LoginPage extends StatelessWidget {
                     (MediaQuery.of(context).padding.top +
                         MediaQuery.of(context).padding.bottom) -
                     40,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _changeLanguage(),
-                    SizedBox(height: 32),
-                    _loginContent(context),
-                  ],
+                child: BlocConsumer<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthSuccess) {
+                      Navigator.pushReplacementNamed(
+                          context, PagePath.setPassword);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is AuthLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is AuthSuccess) {
+                      return Container();
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _changeLanguage(),
+                        SizedBox(height: 32),
+                        _loginContent(context),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -124,7 +149,11 @@ class LoginPage extends StatelessWidget {
           ),
           SizedBox(height: 24),
           CustomButton(
-            onTap: () => Navigator.pushReplacementNamed(context, PagePath.setPassword),
+            onTap: () => context.read<AuthBloc>().add(
+                  PostAuth(
+                    entity: AuthPostEntity(nickname: 'user', password: 'user'),
+                  ),
+                ),
             text: 'Masuk',
           ),
         ],
