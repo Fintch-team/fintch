@@ -40,14 +40,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is AuthSuccess) {
+                      Helper.snackBar(context, message: 'Masuk berhasil!');
                       Navigator.pushReplacementNamed(
                           context, PagePath.setPassword);
                     } else if(state is AuthLoading) {
                       Helper.snackBar(context, message: 'Coba masuk...');
                     } else if(state is AuthFailure) {
                       Helper.snackBar(context, message: 'Masuk gagal', isFailure: true);
-                    } else if(state is AuthSuccess) {
-                      Helper.snackBar(context, message: 'Masuk berhasil!');
                     }
                   },
                   child: Column(
@@ -167,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () => context.read<AuthBloc>().add(
                   PostAuth(
                     entity: AuthPostEntity(
-                      nickname: usernameController.text,
+                      nickname: usernameController.text.trim(),
                       password: passwordController.text,
                     ),
                   ),
