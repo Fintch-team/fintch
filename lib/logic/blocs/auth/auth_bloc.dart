@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       yield AuthSuccess(entity: entity);
     } catch (e, stacktrace) {
-      yield AuthFailure(message: 'unable to login: ${stacktrace.toString()}');
+      yield AuthFailure(message: 'unable to login: $e ${stacktrace.toString()}');
     }
   }
 }

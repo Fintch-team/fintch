@@ -3,8 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late TextEditingController usernameController;
+  late TextEditingController passwordController;
+  bool isObscurePassword = true;
+
+  @override
+  void initState() {
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,31 +37,27 @@ class LoginPage extends StatelessWidget {
                     (MediaQuery.of(context).padding.top +
                         MediaQuery.of(context).padding.bottom) -
                     40,
-                child: BlocConsumer<AuthBloc, AuthState>(
+                child: BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is AuthSuccess) {
+                      Helper.snackBar(context, message: 'Masuk berhasil!');
                       Navigator.pushReplacementNamed(
                           context, PagePath.setPassword);
+                    } else if(state is AuthLoading) {
+                      Helper.snackBar(context, message: 'Coba masuk...');
+                    } else if(state is AuthFailure) {
+                      Helper.snackBar(context, message: 'Masuk gagal', isFailure: true);
                     }
                   },
-                  builder: (context, state) {
-                    if (state is AuthLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is AuthSuccess) {
-                      return Container();
-                    }
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _changeLanguage(),
-                        SizedBox(height: 32),
-                        _loginContent(context),
-                      ],
-                    );
-                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _changeLanguage(),
+                      SizedBox(height: 32),
+                      _loginContent(context),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -109,6 +121,7 @@ class LoginPage extends StatelessWidget {
           Text('Username', style: AppTheme.text3.white.bold),
           SizedBox(height: 8),
           TextField(
+            controller: usernameController,
             style: AppTheme.text3.white,
             decoration: InputDecoration(
               hintText: 'Username kamu',
@@ -117,17 +130,26 @@ class LoginPage extends StatelessWidget {
           SizedBox(height: 16),
           Text('Kata Sandi', style: AppTheme.text3.white.bold),
           SizedBox(height: 8),
-          TextField(
-            style: AppTheme.text3.white,
-            decoration: InputDecoration(
-              hintText: 'Masukin kata sandi kamu',
-              suffixIcon: Icon(
-                Icons.visibility_off,
-                color: AppTheme.white,
+          StatefulBuilder(builder: (context, passwordSetState) {
+            return TextField(
+              controller: passwordController,
+              style: AppTheme.text3.white,
+              obscureText: isObscurePassword,
+              decoration: InputDecoration(
+                hintText: 'Masukin kata sandi kamu',
+                suffixIcon: GestureDetector(
+                  onTap: () => passwordSetState(() {
+                    isObscurePassword = !isObscurePassword;
+                  }),
+                  child: Icon(
+                    isObscurePassword ? Icons.visibility : Icons.visibility_off,
+                    color: AppTheme.white,
+                  ),
+                ),
               ),
-            ),
-            keyboardType: TextInputType.visiblePassword,
-          ),
+              keyboardType: TextInputType.visiblePassword,
+            );
+          }),
           SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
@@ -143,7 +165,10 @@ class LoginPage extends StatelessWidget {
           CustomButton(
             onTap: () => context.read<AuthBloc>().add(
                   PostAuth(
-                    entity: AuthPostEntity(nickname: 'user', password: 'user'),
+                    entity: AuthPostEntity(
+                      nickname: usernameController.text.trim(),
+                      password: passwordController.text,
+                    ),
                   ),
                 ),
             text: 'Masuk',
