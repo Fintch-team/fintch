@@ -62,12 +62,12 @@ class Helper {
   }
 
 
-  static void snackBar(BuildContext context, {required String message}) {
+  static void snackBar(BuildContext context, {required String message, bool isFailure: false}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: AppTheme.text1),
-        backgroundColor: AppTheme.yellow,
+        backgroundColor: isFailure ? AppTheme.red : AppTheme.yellow,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
