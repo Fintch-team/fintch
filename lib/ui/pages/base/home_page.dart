@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
     print(localAuthService.token);
 
-    UserModel user = await userService.getUserId(id: "1");
+    bool user = await userService.logoutAuth();
 
     print("user $user");
   }

@@ -46,9 +46,9 @@ class DataUser {
   String name;
   String nickname;
   Wallet? wallet;
-  School? school;
-  List<School> pay;
-  List<School> receive;
+  Datum? school;
+  List<Datum> pay;
+  List<Datum> receive;
   List<MoneyPlanning> moneyPlanning;
 
   factory DataUser.fromJson(Map<String, dynamic> json) => DataUser(
@@ -56,10 +56,10 @@ class DataUser {
         name: json["name"],
         nickname: json["nickname"],
         wallet: Wallet.fromJson(json["wallet"]),
-        school: School.fromJson(json["school"]),
-        pay: List<School>.from(json["pay"].map((x) => School.fromJson(x))),
+        school: Datum.fromJson(json["school"]),
+        pay: List<Datum>.from(json["pay"].map((x) => Datum.fromJson(x))),
         receive:
-            List<School>.from(json["receive"].map((x) => School.fromJson(x))),
+            List<Datum>.from(json["receive"].map((x) => Datum.fromJson(x))),
         moneyPlanning: List<MoneyPlanning>.from(
             json["money_planning"].map((x) => MoneyPlanning.fromJson(x))),
       );
@@ -118,8 +118,8 @@ class MoneyPlanning {
       };
 }
 
-class School {
-  School({
+class Datum {
+  Datum({
     required this.id,
     required this.amount,
     required this.createdAt,
@@ -133,7 +133,7 @@ class School {
   DateTime? updatedAt;
   String? name;
 
-  factory School.fromJson(Map<String, dynamic> json) => School(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         amount: json["amount"] == null ? null : json["amount"],
         createdAt: json["created_at"] != null
