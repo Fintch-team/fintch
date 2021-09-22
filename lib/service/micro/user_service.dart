@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 
 class UserService extends ApiService {
@@ -36,22 +35,22 @@ class UserService extends ApiService {
     return res.statusCode == 200;
   }
 
-  Future<bool> logoutAuth({
-    required String token,
-  }) async {
-    final res = await dio.delete('auth-pin',
-        options: Options(headers: {'Authorization': 'Bearer $token'}));
+  Future<bool> logoutAuth() async {
+    final res = await dio.delete('auth');
 
     return res.statusCode == 204;
   }
 
-  Future<TokenModel> refreshToken({
-    required String token,
-  }) async {
-    final res = await dio.put('auth',
-        options: Options(headers: {'Authorization': 'Bearer $token'}));
+  Future<TokenModel> refreshToken() async {
+    final res = await dio.put('auth');
 
     return TokenModel.fromJson(res.data);
+  }
+
+  Future<UserModel> authGet() async {
+    final res = await dio.get('auth');
+
+    return UserModel.fromJson(res.data);
   }
 
   Future<UserModel> getUserId({

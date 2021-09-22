@@ -4,5 +4,11 @@
 // flutter pub run bin/gen_export
 library entities;
 
-export 'auth/auth.exports.dart';
 export 'base_entity.dart';
+export 'history_entity.dart';
+export 'money_manage_entity.dart';
+export 'money_plann_entity.dart';
+export 'school_entity.dart';
+export 'transaction_entity.dart';
+export 'user_entity.dart';
+export 'wallet_entity.dart';
