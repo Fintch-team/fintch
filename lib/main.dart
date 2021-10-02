@@ -56,11 +56,24 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               userRepository: context.read<UserRepository>(),
+              localAuthService: Service.find(),
             ),
-          )
+          ),
+          BlocProvider<PinBloc>(
+            create: (context) => AuthBloc(
+              userRepository: context.read<UserRepository>(),
+              localAuthService: Service.find(),
+            ),
+          ),
+          BlocProvider<PasswordBloc>(
+            create: (context) => AuthBloc(
+              userRepository: context.read<UserRepository>(),
+              localAuthService: Service.find(),
+            ),
+          ),
         ],
         child: MaterialApp(
           title: 'Fintch',

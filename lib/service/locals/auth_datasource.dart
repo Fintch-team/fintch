@@ -16,11 +16,11 @@ class LocalAuthService extends Service {
   LocalAuthService._();
 
   Future<void> saveUserSession(TokenModel value) async {
-    getStorage.write(KeyStorage.kToken, value.data.accessToken);
+    getStorage.write(KeyStorage.kToken, value.data!.accessToken);
     getStorage.write(
-        KeyStorage.kExpired, value.data.expiresIn.toIso8601String());
+        KeyStorage.kExpired, value.data!.expiresIn.toIso8601String());
 
-    updateUserInformation(value.data.user);
+    updateUserInformation(value.data!.user);
   }
 
   Future<void> updateUserInformation(DataUser user) async {

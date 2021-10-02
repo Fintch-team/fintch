@@ -13,19 +13,19 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 class UserModel {
   UserModel({
     required this.data,
-    required this.response,
+    required this.message,
   });
 
-  ResponseGlobal? response;
+  String? message;
   DataUser data;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        message: json["message"],
         data: DataUser.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
+        "message": message,
         "data": data.toJson(),
       };
 }
@@ -35,6 +35,7 @@ class DataUser {
     required this.id,
     required this.name,
     required this.nickname,
+    required this.isFirst,
     required this.wallet,
     required this.school,
     required this.pay,
@@ -45,6 +46,7 @@ class DataUser {
   int id;
   String name;
   String nickname;
+  bool isFirst;
   Wallet? wallet;
   Datum? school;
   List<Datum> pay;
@@ -56,6 +58,7 @@ class DataUser {
         name: json["name"],
         nickname: json["nickname"],
         wallet: Wallet.fromJson(json["wallet"]),
+        isFirst: json["is_first"],
         school: Datum.fromJson(json["school"]),
         pay: List<Datum>.from(json["pay"].map((x) => Datum.fromJson(x))),
         receive:
@@ -69,6 +72,7 @@ class DataUser {
         "name": name,
         "nickname": nickname,
         "wallet": wallet!.toJson(),
+        "is_first": isFirst,
         "school": school!.toJson(),
         "pay": List<dynamic>.from(pay.map((x) => x.toJson())),
         "receive": List<dynamic>.from(receive.map((x) => x.toJson())),
@@ -194,8 +198,8 @@ class Wallet {
         "wallet_amount": walletAmount,
         "barrier_amount": barrierAmount,
         "pay_amount": payAmount,
-        "barrier_expired":
-            "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",
+        "barrier_expired": barrierExpired != null ?
+            "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}" : null,
         "created_at": createdAt != null ? createdAt!.toIso8601String() : null,
         "updated_at": updatedAt != null ? updatedAt!.toIso8601String() : null,
       };

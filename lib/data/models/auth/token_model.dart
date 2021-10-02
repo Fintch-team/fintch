@@ -14,22 +14,20 @@ String tokenModelToJson(TokenModel data) => json.encode(data.toJson());
 class TokenModel {
   TokenModel({
     required this.data,
-    required this.response,
+    required this.message,
   });
 
-  ResponseGlobal? response;
-  Data data;
+  String? message;
+  Data? data;
 
   factory TokenModel.fromJson(Map<String, dynamic> json) => TokenModel(
-        response: json["response"] != null
-            ? ResponseGlobal.fromJson(json["response"])
-            : null,
-        data: Data.fromJson(json["data"]),
+    message: json["message"],
+    data: Data.fromJson(json["data"][0]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
-        "data": data.toJson(),
+    "message": message,
+    "data": data!.toJson(),
       };
 }
 

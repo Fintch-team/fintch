@@ -1,4 +1,5 @@
-part of 'auth_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fintch/gen_export.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -28,3 +29,14 @@ class AuthFailure extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+class AuthIsLoggedIn extends AuthState {
+  final bool isLoggedIn;
+
+  AuthIsLoggedIn({required this.isLoggedIn});
+
+  @override
+  List<Object> get props => [isLoggedIn];
+}
+
+class ChangeSuccess extends AuthState {}

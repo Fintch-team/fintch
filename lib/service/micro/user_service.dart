@@ -21,9 +21,33 @@ class UserService extends ApiService {
     // );
     // }
 
+    print(res.data);
+
     print(res.statusCode);
 
     TokenModel result = TokenModel.fromJson(res.data);
+
+    return result;
+  }
+
+  Future<UserModel> changePassword(PostChangePassword postChangePassword) async {
+    final res = await dio.post('/users/change-pass', data: postChangePassword.toJson());
+
+    print(res.data);
+
+    print(res.statusCode);
+
+    UserModel result = UserModel.fromJson(res.data);
+
+    return result;
+  }
+
+  Future<UserModel> changePin(PostChangePin postChangePin) async {
+    final res = await dio.post('change-pin', data: postChangePin.toJson());
+
+    print(res.statusCode);
+
+    UserModel result = UserModel.fromJson(res.data);
 
     return result;
   }

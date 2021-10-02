@@ -15,7 +15,7 @@ class PageRouter {
       case PagePath.login:
         return _buildRoute(settings, LoginPage());
       case PagePath.setPassword:
-        return _buildRoute(settings, SetPasswordPage());
+        return _buildRoute(settings, SetPasswordPage(bundle: args as ArgumentBundle?,));
       case PagePath.setPin:
         return _buildRoute(settings, SetPinPage());
       case PagePath.confirmPin:

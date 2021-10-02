@@ -2,6 +2,7 @@ import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,39 +25,54 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Helper.unfocus(),
-      child: Scaffold(
-        body: Background(
-          child: SafeArea(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Container(
-                padding: EdgeInsets.all(Helper.normalPadding),
-                height: MediaQuery.of(context).size.height -
-                    (MediaQuery.of(context).padding.top +
-                        MediaQuery.of(context).padding.bottom) -
-                    40,
-                child: BlocListener<AuthBloc, AuthState>(
-                  listener: (context, state) {
-                    if (state is AuthSuccess) {
-                      Helper.snackBar(context, message: 'Masuk berhasil!');
-                      Navigator.pushReplacementNamed(
-                          context, PagePath.setPassword);
-                    } else if(state is AuthLoading) {
-                      Helper.snackBar(context, message: 'Coba masuk...');
-                    } else if(state is AuthFailure) {
-                      Helper.snackBar(context, message: 'Masuk gagal', isFailure: true);
-                    }
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _changeLanguage(),
-                      SizedBox(height: 32),
-                      _loginContent(context),
-                    ],
+    return LoadingOverlay(
+      child: GestureDetector(
+        onTap: () => Helper.unfocus(),
+        child: Scaffold(
+          body: Background(
+            child: SafeArea(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Container(
+                  padding: EdgeInsets.all(Helper.normalPadding),
+                  height: MediaQuery.of(context).size.height -
+                      (MediaQuery.of(context).padding.top +
+                          MediaQuery.of(context).padding.bottom) -
+                      40,
+                  child: BlocListener<AuthBloc, AuthState>(
+                    listener: (context, state) {
+                      if (state is AuthSuccess) {
+                        context.loaderOverlay.hide();
+                        Helper.snackBar(context, message: 'Masuk berhasil!');
+                        if (state.entity.isFirst) {
+                          Navigator.pushReplacementNamed(
+                              context, PagePath.setPassword,
+                              arguments: ArgumentBundle(extras: {
+                                'username': usernameController.text,
+                                'password': passwordController.text
+                              }));
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, PagePath.base, (route) => false);
+                        }
+                      } else if (state is AuthLoading) {
+                        context.loaderOverlay.show();
+                        Helper.snackBar(context, message: 'Coba masuk...');
+                      } else if (state is AuthFailure) {
+                        context.loaderOverlay.hide();
+                        Helper.snackBar(context,
+                            message: 'Masuk gagal', isFailure: true);
+                      }
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _changeLanguage(),
+                        SizedBox(height: 32),
+                        _loginContent(context),
+                      ],
+                    ),
                   ),
                 ),
               ),

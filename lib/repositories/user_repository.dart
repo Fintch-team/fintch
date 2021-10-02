@@ -16,6 +16,28 @@ class UserRepository {
     return DataMapper.authMapper(tokenModel);
   }
 
+  Future<void> changePassword(
+      {required PostChangePasswordEntity postChangePasswordEntity}) async {
+    final PostChangePassword postChangePassword = PostChangePassword(
+      nickname: postChangePasswordEntity.nickname,
+      password: postChangePasswordEntity.password,
+      passwordOld: postChangePasswordEntity.passwordOld,
+    );
+    await userService.changePassword(postChangePassword);
+    return;
+  }
+
+  Future<void> changePin(
+      {required PostChangePinEntity postChangePinEntity}) async {
+    final PostChangePin postChangePin = PostChangePin(
+      nickname: postChangePinEntity.nickname,
+      pin: postChangePinEntity.pin,
+      password: postChangePinEntity.password,
+    );
+    await userService.changePin(postChangePin);
+    return;
+  }
+
   Future<bool> authWithPin({required AuthPinPostEntity authPostEntity}) async {
     bool authPin = await userService.authWithPin(
       user: authPostEntity.nickname,

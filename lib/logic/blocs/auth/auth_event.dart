@@ -1,4 +1,5 @@
-part of 'auth_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fintch/gen_export.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -11,6 +12,26 @@ class PostAuth extends AuthEvent {
   final AuthPostEntity entity;
 
   PostAuth({required this.entity});
+
+  @override
+  List<Object?> get props => [entity];
+}
+
+class GetIsLoggedIn extends AuthEvent {}
+
+class ChangePin extends AuthEvent {
+  final PostChangePinEntity entity;
+
+  ChangePin({required this.entity});
+
+  @override
+  List<Object?> get props => [entity];
+}
+
+class ChangePassword extends AuthEvent {
+  final PostChangePasswordEntity entity;
+
+  ChangePassword({required this.entity});
 
   @override
   List<Object?> get props => [entity];

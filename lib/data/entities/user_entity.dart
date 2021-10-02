@@ -7,14 +7,33 @@ class AuthPostEntity extends BaseEntity {
   AuthPostEntity({required this.nickname, required this.password});
 }
 
+class PostChangePasswordEntity extends BaseEntity {
+  final String nickname;
+  final String password;
+  final String passwordOld;
+
+  PostChangePasswordEntity({required this.nickname, required this.password, required this.passwordOld});
+}
+
+class PostChangePinEntity extends BaseEntity {
+  final String nickname;
+  final String pin;
+  final String password;
+
+  PostChangePinEntity({required this.nickname, required this.password, required this.pin});
+}
+
+
 class AuthEntity extends BaseEntity {
   final String accessToken;
   final String tokenType;
   final DateTime expiresIn;
+  final bool isFirst;
 
   AuthEntity(
       {required this.accessToken,
       required this.tokenType,
+      required this.isFirst,
       required this.expiresIn});
 }
 
