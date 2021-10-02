@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class SetPinPage extends StatefulWidget {
-  const SetPinPage({Key? key}) : super(key: key);
+  final ArgumentBundle? bundle;
+  const SetPinPage({Key? key, required this.bundle}) : super(key: key);
 
   @override
   _SetPinPageState createState() => _SetPinPageState();
@@ -15,6 +16,8 @@ class SetPinPage extends StatefulWidget {
 class _SetPinPageState extends State<SetPinPage> {
   TextEditingController setPinController = TextEditingController();
   StreamController<ErrorAnimationType>? errorController;
+  String username = '';
+  String password = '';
 
   _onKeyboardTap(String value) {
     if (setPinController.text.length < 6) {
@@ -24,6 +27,10 @@ class _SetPinPageState extends State<SetPinPage> {
 
   @override
   void initState() {
+    if(widget.bundle != null){
+      username = widget.bundle!.extras['username'];
+      password = widget.bundle!.extras['password'];
+    }
     errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }
@@ -108,6 +115,8 @@ class _SetPinPageState extends State<SetPinPage> {
             arguments: ArgumentBundle(
               extras: {
                 Keys.setPin: setPinController.text,
+                'username': username,
+                'password': password,
               },
             ),
           );

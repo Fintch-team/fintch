@@ -48,7 +48,11 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                     context.loaderOverlay.hide();
                     Helper.snackBar(context,
                         message: 'Ganti Password Berhasil!');
-                    Navigator.pushReplacementNamed(context, PagePath.setPin);
+                    Navigator.pushReplacementNamed(context, PagePath.setPin,
+                        arguments: ArgumentBundle(extras: {
+                          'username': username,
+                          'password': _passwordConfirmationController.text,
+                        }));
                   } else if (state is AuthLoading) {
                     context.loaderOverlay.show();
                     Helper.snackBar(context, message: 'Mengganti Password...');

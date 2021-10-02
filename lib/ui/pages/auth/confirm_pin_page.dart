@@ -1,10 +1,11 @@
 import 'dart:async';
 
-
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class ConfirmPinPage extends StatefulWidget {
   final ArgumentBundle? bundle;
@@ -17,6 +18,8 @@ class ConfirmPinPage extends StatefulWidget {
 
 class _ConfirmPinPageState extends State<ConfirmPinPage> {
   late String setPin = widget.bundle!.extras[Keys.setPin];
+  late String username = widget.bundle!.extras['username'];
+  late String password = widget.bundle!.extras['password'];
   TextEditingController confirmPinController = TextEditingController();
   StreamController<ErrorAnimationType>? errorController;
 
@@ -43,24 +46,41 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
     return Scaffold(
       body: Background(
         child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomAppBar(title: ''),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _headerPinCode(),
-                      _keypad(),
-                    ],
+          child: BlocListener<PinBloc, AuthState>(
+            listener: (context, state) {
+              if (state is ChangeSuccess) {
+                context.loaderOverlay.hide();
+                Helper.snackBar(context, message: 'Ganti Pin Berhasil!');
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(PagePath.base, (route) => false);
+              } else if (state is AuthLoading) {
+                context.loaderOverlay.show();
+                Helper.snackBar(context, message: 'Mengganti Pin...');
+              } else if (state is AuthFailure) {
+                context.loaderOverlay.hide();
+                Helper.snackBar(context,
+                    message: 'Ganti Pin gagal', isFailure: true);
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CustomAppBar(title: ''),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _headerPinCode(),
+                        _keypad(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -123,7 +143,13 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
             );
             return;
           }
-          Navigator.of(context).pushNamed(PagePath.base);
+          context.read<PinBloc>().add(ChangePin(
+                entity: PostChangePinEntity(
+                  nickname: username,
+                  password: password,
+                  pin: confirmPinController.text,
+                ),
+              ));
         },
         leftIcon: Icon(
           Icons.check,

@@ -43,7 +43,9 @@ class UserService extends ApiService {
   }
 
   Future<UserModel> changePin(PostChangePin postChangePin) async {
-    final res = await dio.post('change-pin', data: postChangePin.toJson());
+    final res = await dio.post('/users/change-pin', data: postChangePin.toJson());
+
+    print(res.data);
 
     print(res.statusCode);
 
