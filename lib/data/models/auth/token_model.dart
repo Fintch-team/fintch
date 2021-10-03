@@ -21,13 +21,13 @@ class TokenModel {
   Data? data;
 
   factory TokenModel.fromJson(Map<String, dynamic> json) => TokenModel(
-    message: json["message"],
-    data: Data.fromJson(json["data"][0]),
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": data!.toJson(),
+        "message": message,
+        "data": data!.toJson(),
       };
 }
 

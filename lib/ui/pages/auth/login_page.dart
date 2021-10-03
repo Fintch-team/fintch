@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else if (state is AuthFailure) {
                         context.loaderOverlay.hide();
                         Helper.snackBar(context,
-                            message: 'Masuk gagal', isFailure: true);
+                            message: state.message, isFailure: true);
                       }
                     },
                     child: Column(

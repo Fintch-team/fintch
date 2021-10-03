@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +9,9 @@ mixin PasswordBloc on Bloc<AuthEvent, AuthState> {}
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> with PinBloc, PasswordBloc {
   final UserRepository userRepository;
-  final LocalAuthService localAuthService;
 
   AuthBloc({
     required this.userRepository,
-    required this.localAuthService,
   }) : super(AuthInitial()) {
     on<PostAuth>((event, emit) async {
       emit(AuthLoading());
@@ -20,33 +19,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with PinBloc, PasswordBloc {
         AuthEntity entity =
             await userRepository.authWithNickname(authPostEntity: event.entity);
         emit(AuthSuccess(entity: entity));
+      } on FailedException catch (e) {
+        FailedException fail = e.error;
+        emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(AuthFailure(
-            message: 'unable to login: $e'));
+        emit(AuthFailure(message: 'unable to login: $e'));
       }
     });
 
     on<GetIsLoggedIn>((event, emit) async {
       emit(AuthLoading());
       try {
-        emit(AuthIsLoggedIn(isLoggedIn: localAuthService.isHasLoggedIn));
+        emit(AuthIsLoggedIn(isLoggedIn: userRepository.isHasLoggedIn));
+      } on FailedException catch (e) {
+        FailedException fail = e.error;
+        emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(AuthFailure(
-            message: 'unable to login: $e'));
+        emit(AuthFailure(message: 'unable to login: $e'));
       }
     });
 
     on<ChangePassword>((event, emit) async {
       emit(AuthLoading());
       try {
-        await userRepository.changePassword(postChangePasswordEntity: event.entity);
+        await userRepository.changePassword(
+            postChangePasswordEntity: event.entity);
         emit(ChangeSuccess());
+      } on FailedException catch (e) {
+        FailedException fail = e.error;
+        emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(AuthFailure(
-            message: 'unable to change: $e'));
+        emit(AuthFailure(message: 'unable to change: $e'));
       }
     });
 
@@ -55,10 +61,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with PinBloc, PasswordBloc {
       try {
         await userRepository.changePin(postChangePinEntity: event.entity);
         emit(ChangeSuccess());
+      } on FailedException catch (e) {
+        FailedException fail = e.error;
+        emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(AuthFailure(
-            message: 'unable to change: $e'));
+        emit(AuthFailure(message: 'unable to change: $e'));
       }
     });
   }

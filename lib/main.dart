@@ -52,26 +52,43 @@ class _MyAppState extends State<MyApp> {
             userService: Service.find(),
             localAuthService: Service.find(),
           ),
-        )
+        ),
+        RepositoryProvider(
+          create: (context) => SchoolRepository(
+            schoolService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => WalletRepository(
+            walletService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => HistoryRepository(
+            historyService: Service.find(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               userRepository: context.read<UserRepository>(),
-              localAuthService: Service.find(),
             ),
           ),
           BlocProvider<PinBloc>(
             create: (context) => AuthBloc(
               userRepository: context.read<UserRepository>(),
-              localAuthService: Service.find(),
             ),
           ),
           BlocProvider<PasswordBloc>(
             create: (context) => AuthBloc(
               userRepository: context.read<UserRepository>(),
-              localAuthService: Service.find(),
+            ),
+          ),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(
+              userRepository: context.read<UserRepository>(),
             ),
           ),
         ],

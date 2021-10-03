@@ -35,6 +35,7 @@ class DataUser {
     required this.id,
     required this.name,
     required this.nickname,
+    required this.img,
     required this.isFirst,
     required this.wallet,
     required this.school,
@@ -46,6 +47,7 @@ class DataUser {
   int id;
   String name;
   String nickname;
+  String img;
   bool isFirst;
   Wallet? wallet;
   Datum? school;
@@ -57,6 +59,7 @@ class DataUser {
         id: json["id"],
         name: json["name"],
         nickname: json["nickname"],
+        img: json["img"],
         wallet: Wallet.fromJson(json["wallet"]),
         isFirst: json["is_first"],
         school: Datum.fromJson(json["school"]),
@@ -71,6 +74,7 @@ class DataUser {
         "id": id,
         "name": name,
         "nickname": nickname,
+        "img": img,
         "wallet": wallet!.toJson(),
         "is_first": isFirst,
         "school": school!.toJson(),
@@ -198,8 +202,9 @@ class Wallet {
         "wallet_amount": walletAmount,
         "barrier_amount": barrierAmount,
         "pay_amount": payAmount,
-        "barrier_expired": barrierExpired != null ?
-            "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}" : null,
+        "barrier_expired": barrierExpired != null
+            ? "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}"
+            : null,
         "created_at": createdAt != null ? createdAt!.toIso8601String() : null,
         "updated_at": updatedAt != null ? updatedAt!.toIso8601String() : null,
       };

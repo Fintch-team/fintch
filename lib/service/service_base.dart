@@ -133,7 +133,7 @@ class HttpService extends DioForNative {
           [
             DioErrorType.connectTimeout,
             DioErrorType.receiveTimeout,
-            DioErrorType.sendTimeout
+            DioErrorType.sendTimeout,
           ].contains(e.type),
     ).then(
       (value) {

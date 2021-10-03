@@ -23,3 +23,19 @@ class UnauthorizedException extends HttpException {
 class ConnectionErrorException extends HttpException {
   ConnectionErrorException([error]) : super(error);
 }
+
+class AuthErrorException extends HttpException {
+  AuthErrorException([error]) : super(error);
+}
+
+class ValidationErrorException extends HttpException {
+  final dynamic validate;
+
+  ValidationErrorException(this.validate, [error]) : super(error);
+}
+
+class FailedException extends HttpException {
+  final String message;
+
+  FailedException(this.message, [error]) : super(error);
+}

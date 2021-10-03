@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 
 class UserService extends ApiService {
@@ -7,86 +8,107 @@ class UserService extends ApiService {
     required String user,
     required String pass,
   }) async {
-    final res =
-        await dio.post('auth', data: {'nickname': user, 'password': pass});
+    try {
+      final res =
+          await dio.post('auth', data: {'nickname': user, 'password': pass});
+      // print(res.data['data']['user']);
 
-    // TODO:issue untuk exception auth errorType
+      TokenModel result = TokenModel.fromJson(res.data);
 
-    // print(res.data);
-    //  if (res.data == null) {
-    //   print("error");
-    // throw AuthError(
-    //   errorType: AuthErrorType.invalid,
-    //   message: result.meta?.message ?? '',
-    // );
-    // }
-
-    print(res.data);
-
-    print(res.statusCode);
-
-    TokenModel result = TokenModel.fromJson(res.data);
-
-    return result;
+      return result;
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
-  Future<UserModel> changePassword(PostChangePassword postChangePassword) async {
-    final res = await dio.post('/users/change-pass', data: postChangePassword.toJson());
+  Future<UserModel> changePassword(
+      PostChangePassword postChangePassword) async {
+    try {
+      final res = await dio.post('/users/change-pass',
+          data: postChangePassword.toJson());
 
-    print(res.data);
+      UserModel result = UserModel.fromJson(res.data);
 
-    print(res.statusCode);
-
-    UserModel result = UserModel.fromJson(res.data);
-
-    return result;
+      return result;
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<UserModel> changePin(PostChangePin postChangePin) async {
-    final res = await dio.post('/users/change-pin', data: postChangePin.toJson());
+    try {
+      final res =
+          await dio.post('/users/change-pin', data: postChangePin.toJson());
 
-    print(res.data);
+      UserModel result = UserModel.fromJson(res.data);
 
-    print(res.statusCode);
-
-    UserModel result = UserModel.fromJson(res.data);
-
-    return result;
+      return result;
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<bool> authWithPin({required String user, required String pin}) async {
-    final res =
-        await dio.post('auth-pin', data: {'nickname': user, 'pin': pin});
+    try {
+      final res =
+          await dio.post('auth-pin', data: {'nickname': user, 'pin': pin});
 
-    return res.statusCode == 200;
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<bool> logoutAuth() async {
-    final res = await dio.delete('auth');
+    try {
+      final res = await dio.delete('auth');
 
-    return res.statusCode == 204;
+      return res.statusCode == 204;
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<TokenModel> refreshToken() async {
-    final res = await dio.put('auth');
+    try {
+      final res = await dio.put('auth');
 
-    return TokenModel.fromJson(res.data);
+      return TokenModel.fromJson(res.data);
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<UserModel> authGet() async {
-    final res = await dio.get('auth');
+    try {
+      final res = await dio.get('auth');
 
-    return UserModel.fromJson(res.data);
+      return UserModel.fromJson(res.data);
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<UserModel> getUserId({
     required String id,
   }) async {
-    final res = await dio.get(
-      'users/$id',
-    );
+    try {
+      final res = await dio.get(
+        'users/$id',
+      );
 
-    return UserModel.fromJson(res.data);
+      return UserModel.fromJson(res.data);
+    } on DioError catch (e) {
+      // print("error $e");
+      throw e.type;
+    }
   }
 
   Future<ListUserModel> getUserAll() async {
