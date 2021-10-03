@@ -11,7 +11,6 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
-
   final int _tabBarLength = 3;
   final int _initialIndex = 1;
 

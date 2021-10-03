@@ -1,11 +1,13 @@
-
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionItem extends StatelessWidget {
+  final Datum item;
+
   const TransactionItem({
+    required this.item,
     Key? key,
   }) : super(key: key);
 
@@ -26,19 +28,19 @@ class TransactionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '#1234053934',
+                  '#${item.id}',
                   style: AppTheme.subText1.purpleOpacity,
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Dari Adithya untuk PT. Dunia Akhirat',
+                  'Dari ${item.name}',
                   style: AppTheme.text2.black,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '15 Jul 2021 16:13',
+                  '${item.createdAt}',
                   style: AppTheme.subText2.black.bold,
                 ),
               ],
@@ -59,7 +61,7 @@ class TransactionItem extends StatelessWidget {
                   ),
                   SizedBox(width: 4),
                   Text(
-                    '-20,000',
+                    '-${item.amount} ',
                     style: AppTheme.text1.red.bold,
                   ),
                 ],
@@ -74,7 +76,7 @@ class TransactionItem extends StatelessWidget {
                   ),
                   SizedBox(width: 4),
                   Text(
-                    '156,000',
+                    '${item.amount} ',
                     style: AppTheme.text2,
                   ),
                 ],

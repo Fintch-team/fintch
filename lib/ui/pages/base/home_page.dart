@@ -2,8 +2,11 @@ import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/src/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,40 +20,56 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    // test();
+    _initHome();
   }
 
-  void test() async {
-    final UserService userService = Service.find();
-
-    TokenModel token =
-        await userService.authWithNickname(user: 'user', pass: 'user');
-
-    final LocalAuthService localAuthService = Service.find();
-
-    await localAuthService.saveUserSession(token);
-
-    print(localAuthService.token);
-
-    bool user = await userService.logoutAuth();
-
-    print("user $user");
+  void _initHome() async {
+    context.read<HomeBloc>().add(GetUser());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          _headerContent(context),
-          _homeScrollableSheet(),
-        ],
-      ),
+    return BlocConsumer<HomeBloc, HomeState>(
+      listener: (context, state) {
+        if (state is HomeLoading) {
+          // TODO: tidak muncul
+          // context.loaderOverlay.show();
+        } else if (state is HomeFailure) {
+          // TODO: tidak muncul
+          // context.loaderOverlay.hide();
+          // Helper.snackBar(context,
+          //     message: state.message, isFailure: true);
+        }
+      },
+      builder: (context, state) {
+        if (state is HomeSuccess) {
+          return Container(
+            color: Colors.transparent,
+            child: Stack(
+              children: [
+                _headerContent(context, user: state.entity),
+                _homeScrollableSheet(user: state.entity),
+              ],
+            ),
+          );
+        }
+
+        return Container(
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              _headerContent(
+                context,
+              ),
+              _homeScrollableSheet(),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _headerContent(BuildContext context) {
+  Widget _headerContent(BuildContext context, {UserEntity? user}) {
     return Positioned(
       top: 0,
       left: 0,
@@ -73,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _userInfo(context),
+                        _userInfo(context, user: user),
                         SizedBox(height: Helper.normalPadding),
                         _levelBar(),
                       ],
@@ -85,14 +104,14 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: Helper.normalPadding),
-            _fintchWallet(),
+            _fintchWallet(user: user),
           ],
         ),
       ),
     );
   }
 
-  Widget _userInfo(BuildContext context) {
+  Widget _userInfo(BuildContext context, {UserEntity? user}) {
     return Row(
       children: [
         Container(
@@ -101,7 +120,7 @@ class _HomePageState extends State<HomePage> {
             boxShadow: Helper.getShadow(),
           ),
           child: CustomNetworkImage(
-            imgUrl: Dummy.profileImg,
+            imgUrl: user != null ? user.img : Dummy.profileImg,
             borderRadius: 64,
             width: MediaQuery.of(context).size.width * 0.16,
             height: MediaQuery.of(context).size.width * 0.16,
@@ -113,7 +132,8 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Halo\nAdithya!', style: AppTheme.headline2.white),
+              Text(user != null ? 'Halo\n ${user.name}!' : ' ',
+                  style: AppTheme.headline2.white),
               SizedBox(height: 8),
               Text('Edit Profil >', style: AppTheme.text2.white),
             ],
@@ -163,7 +183,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fintchWallet() {
+  Widget _fintchWallet({UserEntity? user}) {
     return Expanded(
       child: Center(
         child: Column(
@@ -185,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  '156,000',
+                  user != null ? user.wallet.walletAmount.toString() : '0',
                   style: AppTheme.headline1.white,
                 ),
               ],
@@ -196,7 +216,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _homeScrollableSheet() {
+  Widget _homeScrollableSheet({UserEntity? user}) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
         initialChildSize: 0.6,
@@ -219,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
                   _articleList(context),
-                  _transactionList(),
+                  _transactionList(user: user),
                 ],
               ),
             ),
@@ -349,7 +369,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _transactionList() {
+  Widget _transactionList({UserEntity? user}) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -365,11 +385,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ListView.builder(
-            itemCount: 10,
+            itemCount: user != null ? user.pay.length : 0,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: 10),
-            itemBuilder: (context, index) => TransactionItem(),
+            itemBuilder: (context, index) => TransactionItem(
+              item: user!.pay[index],
+            ),
           ),
         ],
       ),

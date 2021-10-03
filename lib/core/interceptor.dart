@@ -18,7 +18,7 @@ class FintchInterceptor extends Interceptor {
     if (connectivityResult == ConnectivityResult.none) {
       final error = DioError(
         requestOptions: options,
-        error: ConnectionErrorException(),
+        error: FailedException('Connection Error'),
       );
       handler.reject(error);
       return;
@@ -59,24 +59,6 @@ class FintchInterceptor extends Interceptor {
       return;
     }
 
-    if (response.statusCode == 200) {
-      if (response.data['meta'] != null) {
-        // final ResponseMeta meta = ResponseMeta.fromJson(response.data['meta']);
-
-        // if (meta.code != 200) {
-        //   handler.reject(
-        //     DioError(
-        //       response: response,
-        //       requestOptions: response.requestOptions,
-        //       error: meta.message,
-        //       type: DioErrorType.response,
-        //     ),
-        //   );
-        //   return;
-        // }
-      }
-    }
-
     if (response.statusCode == 307 || response.statusCode == 404) {
       debugPrint(response.requestOptions.uri.toString());
       handler.reject(
@@ -90,19 +72,38 @@ class FintchInterceptor extends Interceptor {
       return;
     }
 
-    if (response.statusCode != 200) {
-      if (response.data['detail'] != null) {
-        final msg = response.data['detail'];
+    if (response.statusCode == 422) {
+      if (response.data['details'] != null) {
+        final msg = response.data['details'];
         handler.reject(
           DioError(
             response: response,
             requestOptions: response.requestOptions,
-            error: msg,
+            // error: ValidationErrorException(msg),
+            error: FailedException(response.data['message']),
           ),
           true,
         );
         return;
       }
+    }
+
+    if (response.statusCode == 401) {
+      final error = DioError(
+        requestOptions: response.requestOptions,
+        error: FailedException(response.data['message']),
+      );
+      handler.reject(error);
+      return;
+    }
+
+    if (response.statusCode == 406) {
+      final error = DioError(
+        requestOptions: response.requestOptions,
+        error: FailedException(response.data['message']),
+      );
+      handler.reject(error);
+      return;
     }
 
     handler.next(response);
@@ -125,31 +126,44 @@ class FintchInterceptor extends Interceptor {
     if (!isProduction) {
       scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
-          content: Builder(
-            builder: (context) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'ERROR',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                  Text(
-                    err.message,
-                    style: const TextStyle(
-                      fontSize: 11.0,
-                    ),
-                  ),
-                ],
-              );
-            },
+          content: Column(
+            children: [
+              const Text(
+                'ERROR',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                ),
+              ),
+              Text(err.message, style: AppTheme.text1),
+            ],
           ),
-          backgroundColor: Colors.red.shade700,
+          backgroundColor: AppTheme.red,
           behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Column(
+            children: [
+              const Text(
+                'ERROR',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                ),
+              ),
+              Text(err.message, style: AppTheme.text1),
+            ],
+          ),
+          backgroundColor: AppTheme.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
     }

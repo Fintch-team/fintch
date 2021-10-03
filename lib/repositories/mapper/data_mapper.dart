@@ -17,6 +17,19 @@ class DataMapper {
         moneyPlanning: userModel.data.moneyPlanning,
         receive: userModel.data.receive,
         pay: userModel.data.pay,
+        img: userModel.data.img,
+      );
+
+  static UserEntity localUserMapper(DataUser userModel) => UserEntity(
+        id: userModel.id,
+        name: userModel.name,
+        nickname: userModel.nickname,
+        wallet: userModel.wallet!,
+        school: userModel.school!,
+        moneyPlanning: userModel.moneyPlanning,
+        receive: userModel.receive,
+        pay: userModel.pay,
+        img: userModel.img,
       );
 
   static HistoryEntity historyMapper(ListHistoryModel historyModel) =>

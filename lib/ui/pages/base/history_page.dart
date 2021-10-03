@@ -90,13 +90,14 @@ class HistoryPage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(
-                      20,
-                      (index) => TransactionItem(),
-                    ),
-                  ),
+                  // TODO: komentar sementara
+                  // Column(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: List.generate(
+                  //     20,
+                  //     (index) => TransactionItem(),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

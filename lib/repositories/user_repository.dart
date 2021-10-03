@@ -64,6 +64,14 @@ class UserRepository {
   Future<UserEntity> authGet() async {
     UserModel userModel = await userService.authGet();
 
+    await localAuthService.updateUserInformation(userModel.data);
+
     return DataMapper.userMapper(userModel);
   }
+
+  UserEntity currentUser() {
+    return DataMapper.localUserMapper(localAuthService.currentUser!);
+  }
+
+  bool get isHasLoggedIn => localAuthService.isHasLoggedIn;
 }

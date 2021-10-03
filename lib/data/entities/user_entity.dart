@@ -12,7 +12,10 @@ class PostChangePasswordEntity extends BaseEntity {
   final String password;
   final String passwordOld;
 
-  PostChangePasswordEntity({required this.nickname, required this.password, required this.passwordOld});
+  PostChangePasswordEntity(
+      {required this.nickname,
+      required this.password,
+      required this.passwordOld});
 }
 
 class PostChangePinEntity extends BaseEntity {
@@ -20,9 +23,9 @@ class PostChangePinEntity extends BaseEntity {
   final String pin;
   final String password;
 
-  PostChangePinEntity({required this.nickname, required this.password, required this.pin});
+  PostChangePinEntity(
+      {required this.nickname, required this.password, required this.pin});
 }
-
 
 class AuthEntity extends BaseEntity {
   final String accessToken;
@@ -48,6 +51,7 @@ class UserEntity extends BaseEntity {
   final int id;
   final String name;
   final String nickname;
+  final String img;
   final Wallet wallet;
   final Datum school;
   final List<MoneyPlanning> moneyPlanning;
@@ -58,6 +62,7 @@ class UserEntity extends BaseEntity {
       {required this.id,
       required this.name,
       required this.nickname,
+      required this.img,
       required this.wallet,
       required this.school,
       required this.moneyPlanning,

@@ -6,3 +6,4 @@ library blocs;
 
 export 'auth/auth.exports.dart';
 export 'blocs.dart';
+export 'home/home.exports.dart';
