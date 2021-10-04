@@ -16,12 +16,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    super.initState();
-
     _initHome();
+    super.initState();
   }
 
-  void _initHome() async {
+  void _initHome() {
     context.read<HomeBloc>().add(GetUser());
   }
 
@@ -91,7 +90,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: Helper.smallPadding),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, PagePath.profile),
+                  onTap: () => Navigator.pushNamed(context, PagePath.profile)
+                      .then((value) => Helper.setLightAppBar()),
                   child: Icon(
                     Icons.settings_rounded,
                     color: AppTheme.white,
@@ -105,7 +105,8 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, PagePath.profile),
+                      onTap: () =>
+                          Navigator.pushNamed(context, PagePath.profile),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,11 +186,13 @@ class _HomePageState extends State<HomePage> {
               height: 32,
             ),
             SizedBox(width: 8),
-            Text(
-              user != null
-                  ? user.wallet.walletAmount.toString().parseCurrency()
-                  : '0',
-              style: AppTheme.headline1.white,
+            Expanded(
+              child: Text(
+                user != null
+                    ? user.wallet.walletAmount.toString().parseCurrency()
+                    : '0',
+                style: AppTheme.headline1.white,
+              ),
             ),
           ],
         ),
