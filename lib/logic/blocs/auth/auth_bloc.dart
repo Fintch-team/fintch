@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 

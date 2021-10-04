@@ -14,8 +14,8 @@ class Resources {
   // SVG ASSETS
   static const String bgPattern = '$_baseSvg/bg_pattern.svg';
   static const String textLogo = '$_baseSvg/text_logo.svg';
-  static const String rank = '$_baseSvg/rank.svg';
-  static const String rankInactive = '$_baseSvg/rank_inactive.svg';
+  static const String fWallet = '$_baseSvg/f_wallet.svg';
+  static const String fWalletInactive = '$_baseSvg/f_wallet_inactive.svg';
   static const String home = '$_baseSvg/home.svg';
   static const String homeInactive = '$_baseSvg/home_inactive.svg';
   static const String history = '$_baseSvg/history.svg';

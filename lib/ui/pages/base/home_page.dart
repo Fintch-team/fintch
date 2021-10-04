@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:provider/src/provider.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
