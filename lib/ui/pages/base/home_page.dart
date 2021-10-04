@@ -74,31 +74,55 @@ class _HomePageState extends State<HomePage> {
       right: 0,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.24,
-        padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, PagePath.profile),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _userInfo(context, user: user),
-                        SizedBox(height: Helper.normalPadding),
-                        _fintchWallet(user: user),
-                      ],
-                    ),
+                Icon(
+                  Icons.payments_rounded,
+                  color: AppTheme.white,
+                ),
+                SizedBox(width: Helper.smallPadding),
+                Icon(
+                  Icons.notifications_rounded,
+                  color: AppTheme.white,
+                ),
+                SizedBox(width: Helper.smallPadding),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, PagePath.profile),
+                  child: Icon(
+                    Icons.settings_rounded,
+                    color: AppTheme.white,
                   ),
                 ),
-                SizedBox(width: Helper.normalPadding),
-                _homeIllustration(context),
               ],
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, PagePath.profile),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _userInfo(context, user: user),
+                          SizedBox(height: Helper.normalPadding),
+                          _fintchWallet(user: user),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: Helper.normalPadding),
+                  _homeIllustration(context),
+                ],
+              ),
             ),
           ],
         ),
