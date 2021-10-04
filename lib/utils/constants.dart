@@ -26,7 +26,7 @@ class Resources {
   static const String icPay = '$_baseSvg/pay.svg';
   static const String icReceive = '$_baseSvg/receive.svg';
   static const String icBarrierCash = '$_baseSvg/barrier_cash.svg';
-  static const String icSaving = '$_baseSvg/saving.svg';
+  static const String icFGoals = '$_baseSvg/f_goals.svg';
   static const String next = '$_baseSvg/next.svg';
   static const String back = '$_baseSvg/back.svg';
   static const String backBlack = '$_baseSvg/back_black.svg';

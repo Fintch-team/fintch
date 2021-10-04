@@ -253,13 +253,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeatureItem(
-            name: 'Bayar',
+            name: 'Pay',
             assetName: Resources.icPay,
             onTap: () => Navigator.pushNamed(context, PagePath.pay),
           ),
           SizedBox(width: 20),
           FeatureItem(
-            name: 'Terima',
+            name: 'Receive',
             assetName: Resources.icReceive,
             onTap: () => Navigator.pushNamed(context, PagePath.receive),
             isOpacity: true,
@@ -272,8 +272,8 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(width: 20),
           FeatureItem(
-            name: 'Tabungan',
-            assetName: Resources.icSaving,
+            name: 'F-Goals',
+            assetName: Resources.icFGoals,
             onTap: () {},
             isOpacity: true,
           ),
