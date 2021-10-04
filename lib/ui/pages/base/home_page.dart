@@ -36,9 +36,8 @@ class _HomePageState extends State<HomePage> {
             context.loaderOverlay.show();
           } else if (state is HomeFailure) {
             context.loaderOverlay.hide();
-            Helper.snackBar(context,
-                message: state.message, isFailure: true);
-          } else if (state is HomeSuccess){
+            Helper.snackBar(context, message: state.message, isFailure: true);
+          } else if (state is HomeSuccess) {
             context.loaderOverlay.hide();
           }
         },
@@ -54,14 +53,11 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-
           return Container(
             color: Colors.transparent,
             child: Stack(
               children: [
-                _headerContent(
-                  context,
-                ),
+                _headerContent(context),
                 _homeScrollableSheet(),
               ],
             ),
@@ -77,7 +73,7 @@ class _HomePageState extends State<HomePage> {
       left: 0,
       right: 0,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
+        height: MediaQuery.of(context).size.height * 0.24,
         padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,12 +87,11 @@ class _HomePageState extends State<HomePage> {
                     onTap: () => Navigator.pushNamed(context, PagePath.profile),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _userInfo(context, user: user),
                         SizedBox(height: Helper.normalPadding),
-                        _levelBar(),
+                        _fintchWallet(user: user),
                       ],
                     ),
                   ),
@@ -105,8 +100,6 @@ class _HomePageState extends State<HomePage> {
                 _homeIllustration(context),
               ],
             ),
-            SizedBox(height: Helper.normalPadding),
-            _fintchWallet(user: user),
           ],
         ),
       ),
@@ -124,8 +117,8 @@ class _HomePageState extends State<HomePage> {
           child: CustomNetworkImage(
             imgUrl: user != null ? user.img : Dummy.profileImg,
             borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.16,
-            height: MediaQuery.of(context).size.width * 0.16,
+            width: MediaQuery.of(context).size.width * 0.2,
+            height: MediaQuery.of(context).size.width * 0.2,
           ),
         ),
         SizedBox(width: 16),
@@ -134,41 +127,11 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(user != null ? 'Halo\n ${user.name}!' : ' ',
-                  style: AppTheme.headline2.white),
-              SizedBox(height: 8),
-              Text('Edit Profil >', style: AppTheme.text2.white),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _levelBar() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(Resources.icExp),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text('Level 1', style: AppTheme.text3.white),
-              ),
-              SizedBox(height: 4),
-              LinearPercentIndicator(
-                percent: 0.3,
-                progressColor: AppTheme.white,
-                backgroundColor: AppTheme.whiteOpacity,
-                animationDuration: 500,
-                animation: true,
-                lineHeight: 10,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                center: Text('34/144', style: AppTheme.subText2.black),
+              Text(
+                user != null ? 'Halo\n${user.name}!' : ' ',
+                style: AppTheme.headline1.white,
+                maxLines: 3,
+                overflow: TextOverflow.visible,
               ),
             ],
           ),
@@ -186,43 +149,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _fintchWallet({UserEntity? user}) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('Isi Fintch Point kamu', style: AppTheme.text2.white),
+        SizedBox(height: 4),
+        Row(
           children: [
-            Center(
-              child: Text('Isi Fintch Wallet kamu',
-                  style: AppTheme.text2.white.light),
+            SvgPicture.asset(
+              Resources.icFintchWallet,
+              height: 32,
             ),
-            SizedBox(height: 4),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(
-                  Resources.icFintchWallet,
-                  height: 32,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  user != null ? user.wallet.walletAmount.toString().parseCurrency() : '0',
-                  style: AppTheme.headline1.white,
-                ),
-              ],
+            SizedBox(width: 8),
+            Text(
+              user != null
+                  ? user.wallet.walletAmount.toString().parseCurrency()
+                  : '0',
+              style: AppTheme.headline1.white,
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 
   Widget _homeScrollableSheet({UserEntity? user}) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
+        initialChildSize: 0.68,
+        minChildSize: 0.68,
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
