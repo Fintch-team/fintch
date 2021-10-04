@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:fintch/gen_export.dart';
-
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());

@@ -5,9 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionItem extends StatelessWidget {
   final Datum item;
+  final bool isPay;
 
   const TransactionItem({
     required this.item,
+    this.isPay: true,
     Key? key,
   }) : super(key: key);
 
@@ -28,58 +30,33 @@ class TransactionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '#${item.id}',
-                  style: AppTheme.subText1.purpleOpacity,
+                  item.createdAt != null ? item.createdAt!.parseHourDateAndMonth() : '-',
+                  style: AppTheme.text3,
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Dari ${item.name}',
-                  style: AppTheme.text2.black,
-                  maxLines: 2,
+                  'Dari Adithya untuk PT. Dunia Akhirat',
+                  style: AppTheme.text1,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  '${item.createdAt}',
-                  style: AppTheme.subText2.black.bold,
                 ),
               ],
             ),
           ),
-          Column(
+          SizedBox(width: Helper.normalPadding),
+          Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SvgPicture.asset(
-                    Resources.icFintchPoint,
-                    height: 20,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '-${item.amount} ',
-                    style: AppTheme.text1.red.bold,
-                  ),
-                ],
+              Text(item.amount != null
+                    ? (isPay ? '-' : '') + item.amount!.parseCurrency()
+                    : '0',
+                style: isPay? AppTheme.headline2.red.bold : AppTheme.headline2.green.bold,
               ),
-              SizedBox(height: 4),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(
-                    Resources.icFintchWallet,
-                    height: 16,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '${item.amount} ',
-                    style: AppTheme.text2,
-                  ),
-                ],
+              SizedBox(width: 8),
+              SvgPicture.asset(
+                Resources.icFintchPoint,
+                height: 24,
               ),
             ],
           ),

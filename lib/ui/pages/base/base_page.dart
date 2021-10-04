@@ -42,9 +42,9 @@ class _BasePageState extends State<BasePage> {
       labelStyle: AppTheme.text1.bold.white.copyWith(letterSpacing: 2),
       tabs: <ShiftingTab>[
         ShiftingTab(
-          icon: SvgPicture.asset(Resources.rank),
-          inactiveIcon: SvgPicture.asset(Resources.rankInactive),
-          text: 'Leaderboard',
+          icon: SvgPicture.asset(Resources.fWallet),
+          inactiveIcon: SvgPicture.asset(Resources.fWalletInactive),
+          text: 'F-Wallet',
         ),
         ShiftingTab(
           icon: SvgPicture.asset(Resources.home),

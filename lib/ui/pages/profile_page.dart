@@ -8,6 +8,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Helper.setDarkAppBar();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,6 +98,7 @@ class _MyAppState extends State<MyApp> {
           title: 'Fintch',
           theme: ThemeData(
             primarySwatch: Colors.deepPurple,
+            fontFamily: !Platform.isIOS ? 'Gotham' : null,
             scaffoldBackgroundColor: AppTheme.scaffold,
             inputDecorationTheme: InputDecorationTheme(
               enabledBorder: AppTheme.enabledBorder,

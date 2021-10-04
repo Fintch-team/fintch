@@ -14,8 +14,8 @@ class Resources {
   // SVG ASSETS
   static const String bgPattern = '$_baseSvg/bg_pattern.svg';
   static const String textLogo = '$_baseSvg/text_logo.svg';
-  static const String rank = '$_baseSvg/rank.svg';
-  static const String rankInactive = '$_baseSvg/rank_inactive.svg';
+  static const String fWallet = '$_baseSvg/f_wallet.svg';
+  static const String fWalletInactive = '$_baseSvg/f_wallet_inactive.svg';
   static const String home = '$_baseSvg/home.svg';
   static const String homeInactive = '$_baseSvg/home_inactive.svg';
   static const String history = '$_baseSvg/history.svg';
@@ -26,7 +26,7 @@ class Resources {
   static const String icPay = '$_baseSvg/pay.svg';
   static const String icReceive = '$_baseSvg/receive.svg';
   static const String icBarrierCash = '$_baseSvg/barrier_cash.svg';
-  static const String icSaving = '$_baseSvg/saving.svg';
+  static const String icFGoals = '$_baseSvg/f_goals.svg';
   static const String next = '$_baseSvg/next.svg';
   static const String back = '$_baseSvg/back.svg';
   static const String backBlack = '$_baseSvg/back_black.svg';
@@ -40,6 +40,7 @@ class Resources {
   static const String icFlashOff = '$_baseSvg/ic_flash_off.svg';
   static const String icClose = '$_baseSvg/ic_close.svg';
   static const String icHelp = '$_baseSvg/ic_help.svg';
+  static const String icTime = '$_baseSvg/time.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';
@@ -55,7 +56,14 @@ class Keys {
   static const String setPin = 'setPin';
 }
 
-class FormatDate {}
+class FormatDate {
+  static const String dayDayMonthYear = 'EEE, dd LLL yyyy';
+  static const String dayMonth = 'dd LLL';
+  static const String dayMonthYear = 'dd LLLL yyyy';
+  static const String dayMonthTextYear = 'dd LLL yyyy';
+  static const String fullDateTime = 'EEE, dd LLL yyy | HH:mm';
+  static const String yearMonthDay = 'yyyy-MM-dd';
+}
 
 class Dummy {
   static const String profileImg = 'https://wallpapercave.com/wp/wp8941645.jpg';

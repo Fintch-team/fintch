@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:provider/src/provider.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,12 +17,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    super.initState();
-
     _initHome();
+    super.initState();
   }
 
-  void _initHome() async {
+  void _initHome() {
     context.read<HomeBloc>().add(GetUser());
   }
 
@@ -36,9 +34,8 @@ class _HomePageState extends State<HomePage> {
             context.loaderOverlay.show();
           } else if (state is HomeFailure) {
             context.loaderOverlay.hide();
-            Helper.snackBar(context,
-                message: state.message, isFailure: true);
-          } else if (state is HomeSuccess){
+            Helper.snackBar(context, message: state.message, isFailure: true);
+          } else if (state is HomeSuccess) {
             context.loaderOverlay.hide();
           }
         },
@@ -54,14 +51,11 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-
           return Container(
             color: Colors.transparent,
             child: Stack(
               children: [
-                _headerContent(
-                  context,
-                ),
+                _headerContent(context),
                 _homeScrollableSheet(),
               ],
             ),
@@ -77,36 +71,59 @@ class _HomePageState extends State<HomePage> {
       left: 0,
       right: 0,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
-        padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
+        height: MediaQuery.of(context).size.height * 0.24,
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, PagePath.profile),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _userInfo(context, user: user),
-                        SizedBox(height: Helper.normalPadding),
-                        _levelBar(),
-                      ],
-                    ),
+                Icon(
+                  Icons.payments_rounded,
+                  color: AppTheme.white,
+                ),
+                SizedBox(width: Helper.smallPadding),
+                Icon(
+                  Icons.notifications_rounded,
+                  color: AppTheme.white,
+                ),
+                SizedBox(width: Helper.smallPadding),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, PagePath.profile)
+                      .then((value) => Helper.setLightAppBar()),
+                  child: Icon(
+                    Icons.settings_rounded,
+                    color: AppTheme.white,
                   ),
                 ),
-                SizedBox(width: Helper.normalPadding),
-                _homeIllustration(context),
               ],
             ),
-            SizedBox(height: Helper.normalPadding),
-            _fintchWallet(user: user),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () =>
+                          Navigator.pushNamed(context, PagePath.profile),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _userInfo(context, user: user),
+                          SizedBox(height: Helper.normalPadding),
+                          _fintchWallet(user: user),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: Helper.normalPadding),
+                  _homeIllustration(context),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -124,8 +141,8 @@ class _HomePageState extends State<HomePage> {
           child: CustomNetworkImage(
             imgUrl: user != null ? user.img : Dummy.profileImg,
             borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.16,
-            height: MediaQuery.of(context).size.width * 0.16,
+            width: MediaQuery.of(context).size.width * 0.2,
+            height: MediaQuery.of(context).size.width * 0.2,
           ),
         ),
         SizedBox(width: 16),
@@ -134,41 +151,11 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(user != null ? 'Halo\n ${user.name}!' : ' ',
-                  style: AppTheme.headline2.white),
-              SizedBox(height: 8),
-              Text('Edit Profil >', style: AppTheme.text2.white),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _levelBar() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(Resources.icExp),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text('Level 1', style: AppTheme.text3.white),
-              ),
-              SizedBox(height: 4),
-              LinearPercentIndicator(
-                percent: 0.3,
-                progressColor: AppTheme.white,
-                backgroundColor: AppTheme.whiteOpacity,
-                animationDuration: 500,
-                animation: true,
-                lineHeight: 10,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                center: Text('34/144', style: AppTheme.subText2.black),
+              Text(
+                user != null ? 'Halo\n${user.name}!' : ' ',
+                style: AppTheme.headline1.white,
+                maxLines: 3,
+                overflow: TextOverflow.visible,
               ),
             ],
           ),
@@ -186,43 +173,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _fintchWallet({UserEntity? user}) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('Isi Fintch Point kamu', style: AppTheme.text2.white),
+        SizedBox(height: 4),
+        Row(
           children: [
-            Center(
-              child: Text('Isi Fintch Wallet kamu',
-                  style: AppTheme.text2.white.light),
+            SvgPicture.asset(
+              Resources.icFintchWallet,
+              height: 32,
             ),
-            SizedBox(height: 4),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(
-                  Resources.icFintchWallet,
-                  height: 32,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  user != null ? user.wallet.walletAmount.toString().parseCurrency() : '0',
-                  style: AppTheme.headline1.white,
-                ),
-              ],
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                user != null
+                    ? user.wallet.walletAmount.toString().parseCurrency()
+                    : '0',
+                style: AppTheme.headline1.white,
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 
   Widget _homeScrollableSheet({UserEntity? user}) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
+        initialChildSize: 0.68,
+        minChildSize: 0.68,
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
@@ -240,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _articleList(context),
+                  _fGoalList(context),
                   _transactionList(user: user),
                 ],
               ),
@@ -272,13 +255,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeatureItem(
-            name: 'Bayar',
+            name: 'Pay',
             assetName: Resources.icPay,
             onTap: () => Navigator.pushNamed(context, PagePath.pay),
           ),
           SizedBox(width: 20),
           FeatureItem(
-            name: 'Terima',
+            name: 'Receive',
             assetName: Resources.icReceive,
             onTap: () => Navigator.pushNamed(context, PagePath.receive),
             isOpacity: true,
@@ -291,8 +274,8 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(width: 20),
           FeatureItem(
-            name: 'Tabungan',
-            assetName: Resources.icSaving,
+            name: 'F-Goals',
+            assetName: Resources.icFGoals,
             onTap: () {},
             isOpacity: true,
           ),
@@ -301,7 +284,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _articleList(BuildContext context) {
+  Widget _fGoalList(BuildContext context) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -311,7 +294,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Artikel untukmu', style: AppTheme.headline3),
+                Text('F Goals Mendekati', style: AppTheme.headline3),
                 SvgPicture.asset(Resources.next, height: 16),
               ],
             ),
@@ -322,7 +305,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
             child: Row(
               children: List.generate(5, (index) {
-                return _articleItem(context, index);
+                return _fGoalItem(context, index);
               }),
             ),
           ),
@@ -331,7 +314,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _articleItem(BuildContext context, int index) {
+  Widget _fGoalItem(BuildContext context, int index) {
     return Container(
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
@@ -339,31 +322,63 @@ class _HomePageState extends State<HomePage> {
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(20),
       ),
+      padding: EdgeInsets.all(20),
       margin: index == 0
           ? EdgeInsets.only(left: 20, right: 10)
           : index == 4
               ? EdgeInsets.only(left: 10, right: 20)
               : EdgeInsets.symmetric(horizontal: 10),
       child: AspectRatio(
-        aspectRatio: 16 / 11,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        aspectRatio: 15 / 7,
+        child: Row(
           children: [
             Expanded(
-              child: CustomNetworkImage(
-                imgUrl: Dummy.articleImg,
-                borderRadius: 20,
-                width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Beli Laptop Asus',
+                        style: AppTheme.headline2,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(Resources.icTime, height: 12),
+                          SizedBox(width: 4),
+                          Text('30 September 2021', style: AppTheme.subText1),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text('Rp. 17.000.000', style: AppTheme.text1.bold),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                '5 Tips untuk menabung bagi para siswa',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTheme.text3.black,
-              ),
+            SizedBox(width: Helper.smallPadding),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularPercentIndicator(
+                  radius: 88.0,
+                  lineWidth: 16.0,
+                  animation: true,
+                  percent: 0.7,
+                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: AppTheme.purple,
+                  backgroundColor: AppTheme.purpleOpacity,
+                ),
+                SizedBox(height: Helper.smallPadding),
+                Text('Rp. 17.000.000', style: AppTheme.text3.green),
+              ],
             ),
           ],
         ),
@@ -386,6 +401,12 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          SizedBox(height: Helper.normalPadding),
+          HistoryTab(
+            payCallback: () {},
+            receiveCallback: () {},
+          ),
+          SizedBox(height: Helper.smallPadding),
           ListView.builder(
             itemCount: user != null ? user.pay.length : 0,
             shrinkWrap: true,
@@ -393,6 +414,84 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(vertical: 10),
             itemBuilder: (context, index) => TransactionItem(
               item: user!.pay[index],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HistoryTab extends StatefulWidget {
+  final Function payCallback;
+  final Function receiveCallback;
+
+  const HistoryTab(
+      {Key? key, required this.payCallback, required this.receiveCallback})
+      : super(key: key);
+
+  @override
+  State<HistoryTab> createState() => _HistoryTabState();
+}
+
+class _HistoryTabState extends State<HistoryTab> {
+  bool isPay = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.grey,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: Helper.getShadow(),
+      ),
+      width: MediaQuery.of(context).size.width * 0.6,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isPay = true;
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isPay ? AppTheme.yellow : AppTheme.grey,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: EdgeInsets.all(12),
+                child: Center(
+                  child: Text(
+                    'Pay',
+                    style: isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isPay = false;
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: !isPay ? AppTheme.yellow : AppTheme.grey,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: EdgeInsets.all(12),
+                child: Center(
+                  child: Text(
+                    'Receive',
+                    style:
+                        !isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

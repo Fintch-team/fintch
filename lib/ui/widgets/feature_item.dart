@@ -47,7 +47,7 @@ class FeatureItem extends StatelessWidget {
             SizedBox(height: showTitle ? 8 : 0),
             showTitle ? Text(
               name,
-              style: AppTheme.text2.black.bold,
+              style: AppTheme.text3.black.bold,
               textAlign: TextAlign.center,
             ) : Container(),
           ],
