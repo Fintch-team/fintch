@@ -31,12 +31,14 @@ class AuthEntity extends BaseEntity {
   final String accessToken;
   final String tokenType;
   final DateTime expiresIn;
-  final bool isFirst;
+  final bool isSetPass;
+  final bool isSetPin;
 
   AuthEntity(
       {required this.accessToken,
       required this.tokenType,
-      required this.isFirst,
+      required this.isSetPass,
+      required this.isSetPin,
       required this.expiresIn});
 }
 

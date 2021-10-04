@@ -20,8 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with PinBloc, PasswordBloc {
             await userRepository.authWithNickname(authPostEntity: event.entity);
         emit(AuthSuccess(entity: entity));
       } on FailedException catch (e) {
-        FailedException fail = e.error;
-        emit(AuthFailure(message: fail.message));
+        emit(AuthFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
         emit(AuthFailure(message: 'unable to login: $e'));

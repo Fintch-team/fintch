@@ -5,7 +5,8 @@ class DataMapper {
         accessToken: tokenModel.data!.accessToken,
         tokenType: tokenModel.data!.tokenType,
         expiresIn: tokenModel.data!.expiresIn,
-        isFirst: tokenModel.data!.user.isFirst,
+        isSetPass: tokenModel.data!.user.isSetPass,
+        isSetPin: tokenModel.data!.user.isSetPin,
       );
 
   static UserEntity userMapper(UserModel userModel) => UserEntity(

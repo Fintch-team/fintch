@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (state is AuthSuccess) {
                         context.loaderOverlay.hide();
                         Helper.snackBar(context, message: 'Masuk berhasil!');
-                        if (state.entity.isFirst) {
+                        if (!state.entity.isSetPass) {
                           Navigator.pushReplacementNamed(
                               context, PagePath.setPassword,
                               arguments: ArgumentBundle(extras: {

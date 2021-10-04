@@ -13,8 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         UserEntity entity = userRepository.currentUser();
         emit(HomeSuccess(entity: entity));
       } on FailedException catch (e) {
-        FailedException fail = e.error;
-        emit(HomeFailure(message: fail.message));
+        emit(HomeFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
         emit(HomeFailure(message: 'unable to get user: $e'));

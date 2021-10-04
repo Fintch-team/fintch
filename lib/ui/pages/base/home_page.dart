@@ -29,43 +29,45 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeBloc, HomeState>(
-      listener: (context, state) {
-        if (state is HomeLoading) {
-          // TODO: tidak muncul
-          // context.loaderOverlay.show();
-        } else if (state is HomeFailure) {
-          // TODO: tidak muncul
-          // context.loaderOverlay.hide();
-          // Helper.snackBar(context,
-          //     message: state.message, isFailure: true);
-        }
-      },
-      builder: (context, state) {
-        if (state is HomeSuccess) {
+    return LoadingOverlay(
+      child: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is HomeLoading) {
+            context.loaderOverlay.show();
+          } else if (state is HomeFailure) {
+            context.loaderOverlay.hide();
+            Helper.snackBar(context,
+                message: state.message, isFailure: true);
+          } else if (state is HomeSuccess){
+            context.loaderOverlay.hide();
+          }
+        },
+        builder: (context, state) {
+          if (state is HomeSuccess) {
+            return Container(
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  _headerContent(context, user: state.entity),
+                  _homeScrollableSheet(user: state.entity),
+                ],
+              ),
+            );
+          }
+
           return Container(
             color: Colors.transparent,
             child: Stack(
               children: [
-                _headerContent(context, user: state.entity),
-                _homeScrollableSheet(user: state.entity),
+                _headerContent(
+                  context,
+                ),
+                _homeScrollableSheet(),
               ],
             ),
           );
-        }
-
-        return Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(
-                context,
-              ),
-              _homeScrollableSheet(),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -205,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  user != null ? user.wallet.walletAmount.toString() : '0',
+                  user != null ? user.wallet.walletAmount.toString().parseCurrency() : '0',
                   style: AppTheme.headline1.white,
                 ),
               ],

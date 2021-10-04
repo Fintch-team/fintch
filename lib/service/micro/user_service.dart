@@ -11,14 +11,13 @@ class UserService extends ApiService {
     try {
       final res =
           await dio.post('auth', data: {'nickname': user, 'password': pass});
-      // print(res.data['data']['user']);
-
+      print(res.data.toString());
       TokenModel result = TokenModel.fromJson(res.data);
 
       return result;
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      print("error $e");
+      throw e.error;
     }
   }
 

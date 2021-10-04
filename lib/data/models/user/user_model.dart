@@ -36,7 +36,8 @@ class DataUser {
     required this.name,
     required this.nickname,
     required this.img,
-    required this.isFirst,
+    required this.isSetPass,
+    required this.isSetPin,
     required this.wallet,
     required this.school,
     required this.pay,
@@ -48,7 +49,8 @@ class DataUser {
   String name;
   String nickname;
   String img;
-  bool isFirst;
+  bool isSetPass;
+  bool isSetPin;
   Wallet? wallet;
   Datum? school;
   List<Datum> pay;
@@ -61,7 +63,8 @@ class DataUser {
         nickname: json["nickname"],
         img: json["img"],
         wallet: Wallet.fromJson(json["wallet"]),
-        isFirst: json["is_first"],
+        isSetPass: json["is_set_pass"],
+        isSetPin: json["is_set_pin"],
         school: Datum.fromJson(json["school"]),
         pay: List<Datum>.from(json["pay"].map((x) => Datum.fromJson(x))),
         receive:
@@ -76,7 +79,8 @@ class DataUser {
         "nickname": nickname,
         "img": img,
         "wallet": wallet!.toJson(),
-        "is_first": isFirst,
+        "is_set_pass": isSetPass,
+        "is_set_pin": isSetPin,
         "school": school!.toJson(),
         "pay": List<dynamic>.from(pay.map((x) => x.toJson())),
         "receive": List<dynamic>.from(receive.map((x) => x.toJson())),
