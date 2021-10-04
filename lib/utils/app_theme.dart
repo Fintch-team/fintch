@@ -13,8 +13,10 @@ class AppTheme {
   static const Color colorRank1 = Color(0xFFFFD94F);
   static const Color colorRank2 = Color(0xFFFBFBFB);
   static const Color colorRank3 = Color(0xFFFFB957);
-  static Color purpleOpacity = Color(0xFFB570F7).withOpacity(0.3);
-  static Color whiteOpacity = Color(0xFFFFFFFF).withOpacity(0.6);
+  static const Color grey = Color(0xFFE3E3E3);
+  static Color blackOpacity = black.withOpacity(0.6);
+  static Color purpleOpacity = purple.withOpacity(0.3);
+  static Color whiteOpacity = white.withOpacity(0.6);
   static Color darkPurple = Color(0xFF9024A1).withOpacity(0.5);
 
   ///font size: 36, color: black, fontWeight: bold

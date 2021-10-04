@@ -15,7 +15,9 @@ extension StyleText on TextStyle {
   TextStyle get green => this.copyWith(color: AppTheme.green);
   TextStyle get black => this.copyWith(color: AppTheme.black);
   TextStyle get white => this.copyWith(color: AppTheme.white);
+  TextStyle get grey => this.copyWith(color: AppTheme.grey);
   TextStyle get darkYellow => this.copyWith(color: AppTheme.darkYellow);
+  TextStyle get blackOpacity => this.copyWith(color: AppTheme.blackOpacity);
   TextStyle get purpleOpacity => this.copyWith(color: AppTheme.purpleOpacity);
   TextStyle get whiteOpacity => this.copyWith(color: AppTheme.whiteOpacity);
 }
