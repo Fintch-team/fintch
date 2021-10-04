@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:intl/intl.dart';
 import 'app_theme.dart';
 
@@ -26,3 +27,28 @@ extension StringInsert on String {
     return currDouble != null ? currency.format(currDouble) : '-';
   }
 }
+
+extension DateParsing on DateTime {
+  String parseDate() {
+    return DateFormat(FormatDate.dayDayMonthYear).format(this);
+  }
+
+  String parseDateAndMonth() {
+    var outputFormat = DateFormat(FormatDate.dayMonth);
+    var outputDate = outputFormat.format(this);
+    return outputDate;
+  }
+
+  String parseHourDateAndMonth() {
+    var outputFormat = DateFormat(FormatDate.fullDateTime);
+    var outputDate = outputFormat.format(this);
+    return outputDate;
+  }
+
+  String parseYearMonthDay() {
+    var outputFormat = DateFormat(FormatDate.yearMonthDay);
+    var outputDate = outputFormat.format(this);
+    return outputDate;
+  }
+}
+

@@ -56,7 +56,14 @@ class Keys {
   static const String setPin = 'setPin';
 }
 
-class FormatDate {}
+class FormatDate {
+  static const String dayDayMonthYear = 'EEE, dd LLL yyyy';
+  static const String dayMonth = 'dd LLL';
+  static const String dayMonthYear = 'dd LLLL yyyy';
+  static const String dayMonthTextYear = 'dd LLL yyyy';
+  static const String fullDateTime = 'EEE, dd LLL yyy | HH:mm';
+  static const String yearMonthDay = 'yyyy-MM-dd';
+}
 
 class Dummy {
   static const String profileImg = 'https://wallpapercave.com/wp/wp8941645.jpg';
