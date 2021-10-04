@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -222,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _articleList(context),
+                  _fGoalList(context),
                   _transactionList(user: user),
                 ],
               ),
@@ -283,7 +284,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _articleList(BuildContext context) {
+  Widget _fGoalList(BuildContext context) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -293,7 +294,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Artikel untukmu', style: AppTheme.headline3),
+                Text('F Goals Mendekati', style: AppTheme.headline3),
                 SvgPicture.asset(Resources.next, height: 16),
               ],
             ),
@@ -304,7 +305,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
             child: Row(
               children: List.generate(5, (index) {
-                return _articleItem(context, index);
+                return _fGoalItem(context, index);
               }),
             ),
           ),
@@ -313,7 +314,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _articleItem(BuildContext context, int index) {
+  Widget _fGoalItem(BuildContext context, int index) {
     return Container(
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
@@ -321,31 +322,63 @@ class _HomePageState extends State<HomePage> {
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(20),
       ),
+      padding: EdgeInsets.all(20),
       margin: index == 0
           ? EdgeInsets.only(left: 20, right: 10)
           : index == 4
               ? EdgeInsets.only(left: 10, right: 20)
               : EdgeInsets.symmetric(horizontal: 10),
       child: AspectRatio(
-        aspectRatio: 16 / 11,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        aspectRatio: 15 / 7,
+        child: Row(
           children: [
             Expanded(
-              child: CustomNetworkImage(
-                imgUrl: Dummy.articleImg,
-                borderRadius: 20,
-                width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Beli Laptop Asus',
+                        style: AppTheme.headline2,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(Resources.icTime, height: 12),
+                          SizedBox(width: 4),
+                          Text('30 September 2021', style: AppTheme.subText1),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text('Rp. 17.000.000', style: AppTheme.text1.bold),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                '5 Tips untuk menabung bagi para siswa',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTheme.text3.black,
-              ),
+            SizedBox(width: Helper.smallPadding),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularPercentIndicator(
+                  radius: 88.0,
+                  lineWidth: 16.0,
+                  animation: true,
+                  percent: 0.7,
+                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: AppTheme.purple,
+                  backgroundColor: AppTheme.purpleOpacity,
+                ),
+                SizedBox(height: Helper.smallPadding),
+                Text('Rp. 17.000.000', style: AppTheme.text3.green),
+              ],
             ),
           ],
         ),

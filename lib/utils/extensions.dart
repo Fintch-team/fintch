@@ -8,6 +8,7 @@ extension StyleText on TextStyle {
   TextStyle get light => this.copyWith(fontWeight: FontWeight.w100);
   TextStyle get scaffold => this.copyWith(color: AppTheme.scaffold);
   TextStyle get purple => this.copyWith(color: AppTheme.purple);
+  TextStyle get darkPurple => this.copyWith(color: AppTheme.darkPurple);
   TextStyle get yellow => this.copyWith(color: AppTheme.yellow);
   TextStyle get red => this.copyWith(color: AppTheme.red);
   TextStyle get green => this.copyWith(color: AppTheme.green);
