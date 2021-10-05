@@ -224,91 +224,14 @@ class _FWalletPageState extends State<FWalletPage> {
                   _cashFlows(),
                   SizedBox(height: Helper.normalPadding),
                   _cards(),
+                  _activities(),
                   SizedBox(height: Helper.normalPadding),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(
-                      20,
-                      (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: _topUserItem(
-                          position: index + 4,
-                          name: 'Alora Tribuana Aisyah Alfajri',
-                          nisn: '192470129312',
-                          level: 20,
-                          startExp: 300,
-                          endExp: 400,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
           );
         },
       ),
-    );
-  }
-
-  Widget _topUserItem({
-    String? medalAsset,
-    int? position,
-    required String name,
-    required String nisn,
-    required int level,
-    required int startExp,
-    required endExp,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            child: medalAsset != null
-                ? SvgPicture.asset(
-                    medalAsset,
-                    width: 28,
-                  )
-                : position != null
-                    ? Container(
-                        child: Center(
-                          child: Text(
-                            position.toString(),
-                            style: AppTheme.headline3,
-                          ),
-                        ),
-                      )
-                    : Container(),
-          ),
-        ),
-        SizedBox(width: 8),
-        Expanded(
-          flex: 6,
-          child: Text(
-            name,
-            style: AppTheme.text2.bold,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        SizedBox(height: 8),
-        Expanded(
-          flex: 3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SvgPicture.asset(Resources.icExp),
-              SizedBox(width: 4),
-              Text(
-                'Level $level',
-                style: AppTheme.text3,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
@@ -412,6 +335,7 @@ class _FWalletPageState extends State<FWalletPage> {
   Widget _cards() {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
@@ -434,7 +358,6 @@ class _FWalletPageState extends State<FWalletPage> {
       ),
     );
   }
-
 
   Widget _cardItem(BuildContext context, int index) {
     return Container(
@@ -468,6 +391,89 @@ class _FWalletPageState extends State<FWalletPage> {
               Text('Needs', style: AppTheme.text3),
               SizedBox(height: 4),
               Text('Rp. 17.000.000', style: AppTheme.headline3.darkPurple),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _activities() {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Text('Activities', style: AppTheme.headline3),
+          ),
+          SizedBox(height: 12),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: 5,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 0),
+            itemBuilder: (BuildContext context, int index) {
+              return _activityItem();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _activityItem() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Chatime',
+                  style: AppTheme.headline3,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(1, (index) => Container(
+                    decoration: BoxDecoration(
+                      color: AppTheme.yellow,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.all(4),
+                    child: Text('Wants'),
+                  )).toList(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: Helper.normalPadding),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('-Rp.17,000',
+                style: AppTheme.headline2.red.bold,
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(Resources.icTime, height: 12),
+                  SizedBox(width: 4),
+                  Text('30 September 2021', style: AppTheme.subText1),
+                ],
+              ),
             ],
           ),
         ],
