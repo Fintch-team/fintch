@@ -85,22 +85,13 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(Resources.icExp),
-                SizedBox(width: 4),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Level 35',
-                      style: AppTheme.text1.bold,
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '314/444 EXP',
-                      style: AppTheme.text3.purpleOpacity,
-                    ),
-                  ],
+                SvgPicture.asset(Resources.fWalletPurple,
+                  height: 28,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  '200,000',
+                  style: AppTheme.text1.bold,
                 ),
               ],
             ),
@@ -121,7 +112,7 @@ class ProfilePage extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   Resources.icFintchWallet,
-                  height: 32,
+                  height: 28,
                 ),
                 SizedBox(width: 8),
                 Text(

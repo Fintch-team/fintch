@@ -15,6 +15,7 @@ class Resources {
   static const String bgPattern = '$_baseSvg/bg_pattern.svg';
   static const String textLogo = '$_baseSvg/text_logo.svg';
   static const String fWallet = '$_baseSvg/f_wallet.svg';
+  static const String fWalletPurple = '$_baseSvg/f_wallet_purple.svg';
   static const String fWalletInactive = '$_baseSvg/f_wallet_inactive.svg';
   static const String home = '$_baseSvg/home.svg';
   static const String homeInactive = '$_baseSvg/home_inactive.svg';
