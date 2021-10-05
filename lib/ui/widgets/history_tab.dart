@@ -35,7 +35,7 @@ class HistoryTab extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'Pay',
-                    style: isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
+                    style: isPay ? AppTheme.text1.bold : AppTheme.text1.blackOpacity.bold,
                   ),
                 ),
               ),
@@ -54,7 +54,7 @@ class HistoryTab extends StatelessWidget {
                   child: Text(
                     'Receive',
                     style:
-                    !isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
+                    !isPay ? AppTheme.text1.bold : AppTheme.text1.blackOpacity.bold,
                   ),
                 ),
               ),

@@ -36,20 +36,21 @@ dependencies:
   lottie: ^1.2.1
   modal_bottom_sheet: ^2.0.0
   get_storage: ^2.0.3
-  percent_indicator: ^3.0.1
+  percent_indicator: ^3.4.0
   cached_network_image: ^3.1.0
   pretty_qr_code: ^2.0.2
   auto_size_text: ^3.0.0-nullsafety.0
   shimmer: ^2.0.0
   qr_code_scanner: ^0.5.2
-  permission_handler: ^8.1.6
+  permission_handler: ^8.2.0
   intl: ^0.17.0
   slide_to_confirm: ^1.1.0
   pin_code_fields: ^7.3.0
   dio: ^4.0.0
   retry: ^3.1.0
   loader_overlay: ^2.0.2+1
-  connectivity_plus: ^1.1.0
+  connectivity_plus: ^2.0.0
+  fl_chart: ^0.40.0
 
   # firebase dkk
 #  firebase_auth: ^3.1.1

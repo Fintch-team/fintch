@@ -64,7 +64,7 @@ class _BasePageState extends State<BasePage> {
     return Expanded(
       child: TabBarView(
         children: [
-          LeaderboardPage(),
+          FWalletPage(),
           HomePage(),
           HistoryPage(),
         ],

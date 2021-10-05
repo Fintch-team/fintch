@@ -32,8 +32,8 @@ class _HistoryPageState extends State<HistoryPage> {
       left: 0,
       right: 0,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
-        padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
+        height: MediaQuery.of(context).size.height * 0.24,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,8 +80,8 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget _historyScrollableSheet() {
     return Positioned.fill(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
+        initialChildSize: 0.68,
+        minChildSize: 0.68,
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(

@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
       right: 0,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.24,
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,

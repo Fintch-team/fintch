@@ -6,5 +6,5 @@ library base;
 
 export 'history_page.dart';
 export 'base_page.dart';
-export 'leaderboard_page.dart';
+export 'f_wallet_page.dart';
 export 'home_page.dart';
