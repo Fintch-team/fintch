@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library core;
 
-export 'get_storage.dart';
 export 'interceptor.dart';
+export 'get_storage.dart';

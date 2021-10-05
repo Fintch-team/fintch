@@ -20,6 +20,7 @@ extension StyleText on TextStyle {
   TextStyle get blackOpacity => this.copyWith(color: AppTheme.blackOpacity);
   TextStyle get purpleOpacity => this.copyWith(color: AppTheme.purpleOpacity);
   TextStyle get whiteOpacity => this.copyWith(color: AppTheme.whiteOpacity);
+  TextStyle get darkPurpleOpacity => this.copyWith(color: AppTheme.darkPurpleOpacity);
 }
 
 extension StringInsert on String {

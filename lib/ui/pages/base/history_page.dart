@@ -3,8 +3,15 @@ import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
+
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  bool isPayHistory = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +32,8 @@ class HistoryPage extends StatelessWidget {
       left: 0,
       right: 0,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
-        padding: EdgeInsets.fromLTRB(20, 32, 20, 20),
+        height: MediaQuery.of(context).size.height * 0.24,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -73,8 +80,8 @@ class HistoryPage extends StatelessWidget {
   Widget _historyScrollableSheet() {
     return Positioned.fill(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
+        initialChildSize: 0.68,
+        minChildSize: 0.68,
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
@@ -90,14 +97,36 @@ class HistoryPage extends StatelessWidget {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  // TODO: komentar sementara
-                  // Column(
-                  //   mainAxisSize: MainAxisSize.min,
-                  //   children: List.generate(
-                  //     20,
-                  //     (index) => TransactionItem(),
-                  //   ),
-                  // ),
+                  HistoryTab(
+                    isPay: isPayHistory,
+                    payCallback: () {
+                      setState(() {
+                        isPayHistory = true;
+                      });
+                    },
+                    receiveCallback: () {
+                      setState(() {
+                        isPayHistory = false;
+                      });
+                    },
+                  ),
+                  SizedBox(height: Helper.normalPadding),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                      20,
+                      (index) => TransactionItem(
+                        isPay: isPayHistory,
+                        item: Datum(
+                          id: 1,
+                          amount: '20000',
+                          createdAt: DateTime.now(),
+                          updatedAt: DateTime.now(),
+                          name: 'Dari Adit untuk Galuh',
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

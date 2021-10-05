@@ -6,7 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomAppBar extends StatelessWidget {
   final String title;
   final bool isBlack;
-  const CustomAppBar({Key? key, required this.title, this.isBlack: false}) : super(key: key);
+
+  const CustomAppBar({Key? key, required this.title, this.isBlack: false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +16,19 @@ class CustomAppBar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: SvgPicture.asset(isBlack ? Resources.backBlack : Resources.back),
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: isBlack ? Helper.getShadow() : null,
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+                isBlack ? Resources.backBlack : Resources.back),
+          ),
         ),
         SizedBox(width: 20),
         Expanded(
-          child: Text(title, style: isBlack ? AppTheme.text1.bold : AppTheme.text1.white.bold),
+          child: Text(title,
+              style: isBlack ? AppTheme.text1.bold : AppTheme.text1.white.bold),
         ),
       ],
     );

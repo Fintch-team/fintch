@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library blocs;
 
+export 'home/home.exports.dart';
 export 'auth/auth.exports.dart';
 export 'blocs.dart';
-export 'home/home.exports.dart';
