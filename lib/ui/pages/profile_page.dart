@@ -10,34 +10,37 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Helper.setDarkAppBar();
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              children: [
-                CustomAppBar(
-                  title: 'Profile Saya',
-                  isBlack: true,
-                ),
-                SizedBox(height: Helper.normalPadding),
-                _profileHeader(context),
-                SizedBox(height: Helper.normalPadding),
-                _statusUser(),
-                SizedBox(height: Helper.normalPadding),
-                _settings(),
-                SizedBox(height: Helper.normalPadding),
-                _supports(),
-                SizedBox(height: 56),
-                CustomButton(
-                  text: 'Keluar',
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => _logoutDialog(context),
+      body: Background(
+        isWhite: true,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                children: [
+                  CustomAppBar(
+                    title: 'Profile Saya',
+                    isBlack: true,
                   ),
-                ),
-              ],
+                  SizedBox(height: Helper.normalPadding),
+                  _profileHeader(context),
+                  SizedBox(height: Helper.normalPadding),
+                  _statusUser(),
+                  SizedBox(height: Helper.normalPadding),
+                  _settings(),
+                  SizedBox(height: Helper.normalPadding),
+                  _supports(),
+                  SizedBox(height: 56),
+                  CustomButton(
+                    text: 'Keluar',
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => _logoutDialog(context),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

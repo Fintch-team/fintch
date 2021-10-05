@@ -29,6 +29,8 @@ class PageRouter {
         return _buildRoute(settings, ProfilePage());
       case PagePath.pay:
         return _buildRoute(settings, PayPage());
+      case PagePath.fGoals:
+        return _buildRoute(settings, FGoalsPage());
       default:
         return _errorRoute();
     }

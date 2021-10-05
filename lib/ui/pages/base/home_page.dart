@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
           FeatureItem(
             name: 'F-Goals',
             assetName: Resources.icFGoals,
-            onTap: () {},
+            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
             isOpacity: true,
           ),
         ],

@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
+  final bool isWhite;
 
   const Background({
     Key? key,
     required this.child,
+    this.isWhite: false,
   }) : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class Background extends StatelessWidget {
       children: [
         Positioned.fill(
           child: SvgPicture.asset(
-            Resources.bgPattern,
+            isWhite? Resources.bgPatternWhite : Resources.bgPattern,
             fit: BoxFit.cover,
           ),
         ),

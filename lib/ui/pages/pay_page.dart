@@ -763,21 +763,6 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
                   ),
                 ],
               ),
-              SizedBox(height: Helper.smallPadding),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    Resources.icExp,
-                    height: 32,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    '+ 20',
-                    style: AppTheme.headline3.green,
-                  ),
-                ],
-              ),
             ],
           ),
         ),
