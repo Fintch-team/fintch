@@ -221,6 +221,8 @@ class _FWalletPageState extends State<FWalletPage> {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
+                  _cashFlows(),
+                  SizedBox(height: Helper.normalPadding),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
@@ -318,6 +320,89 @@ class _FWalletPageState extends State<FWalletPage> {
       margin: EdgeInsets.only(top: Helper.smallPadding),
       width: MediaQuery.of(context).size.width * 0.15,
       height: 4,
+    );
+  }
+
+  Widget _cashFlows() {
+    return Container(
+      padding: EdgeInsets.all(Helper.smallPadding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Icon(
+                    Icons.trending_down_rounded,
+                    size: 28,
+                    color: AppTheme.red,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Outcomes', style: AppTheme.text3),
+                      SizedBox(height: 4),
+                      Text(
+                        'Rp.200,000',
+                        style: AppTheme.headline3,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 12),
+          Container(
+            width: 4,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppTheme.purple,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Icon(
+                    Icons.trending_up_rounded,
+                    size: 28,
+                    color: AppTheme.green,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Incomes', style: AppTheme.text3),
+                      SizedBox(height: 4),
+                      Text(
+                        'Rp.156,000',
+                        style: AppTheme.headline3,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
