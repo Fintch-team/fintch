@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class _LineChart extends StatelessWidget {
   @override
@@ -212,7 +213,6 @@ class _FWalletPageState extends State<FWalletPage> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppTheme.scaffold,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
               controller: scrollController,
               physics: BouncingScrollPhysics(),
@@ -222,6 +222,8 @@ class _FWalletPageState extends State<FWalletPage> {
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
                   _cashFlows(),
+                  SizedBox(height: Helper.normalPadding),
+                  _cards(),
                   SizedBox(height: Helper.normalPadding),
                   Column(
                     mainAxisSize: MainAxisSize.min,
@@ -326,6 +328,7 @@ class _FWalletPageState extends State<FWalletPage> {
   Widget _cashFlows() {
     return Container(
       padding: EdgeInsets.all(Helper.smallPadding),
+      margin: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: Helper.getShadow(),
@@ -400,6 +403,72 @@ class _FWalletPageState extends State<FWalletPage> {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _cards() {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Text('Cards', style: AppTheme.headline3),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.28,
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+              itemBuilder: (BuildContext context, int index) {
+                return _cardItem(context, index);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _cardItem(BuildContext context, int index) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.all(12),
+      margin: index == 0
+          ? EdgeInsets.only(left: 20, right: 10)
+          : index == 4
+          ? EdgeInsets.only(left: 10, right: 20)
+          : EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 8,
+            width: 8,
+            decoration: BoxDecoration(
+              color: AppTheme.purple,
+              shape: BoxShape.circle,
+            ),
+          ),
+          SizedBox(width: Helper.smallPadding),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Needs', style: AppTheme.text3),
+              SizedBox(height: 4),
+              Text('Rp. 17.000.000', style: AppTheme.headline3.darkPurple),
+            ],
           ),
         ],
       ),

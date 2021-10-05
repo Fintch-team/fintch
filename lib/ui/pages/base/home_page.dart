@@ -302,14 +302,16 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
-            child: Row(
-              children: List.generate(5, (index) {
+          Container(
+            height: MediaQuery.of(context).size.width * 0.48,
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+              itemBuilder: (BuildContext context, int index) {
                 return _fGoalItem(context, index);
-              }),
+              },
             ),
           ),
         ],
@@ -319,7 +321,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget _fGoalItem(BuildContext context, int index) {
     return Container(
-      height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
         boxShadow: Helper.getShadow(),
         color: AppTheme.white,
