@@ -23,7 +23,6 @@ class Resources {
   static const String history = '$_baseSvg/history.svg';
   static const String historyInactive = '$_baseSvg/history_inactive.svg';
   static const String homeIllustration = '$_baseSvg/home_illustration.svg';
-  static const String icExp = '$_baseSvg/ic_exp.svg';
   static const String icFintchWallet = '$_baseSvg/ic_fintch_wallet.svg';
   static const String icPay = '$_baseSvg/pay.svg';
   static const String icReceive = '$_baseSvg/receive.svg';
@@ -33,10 +32,6 @@ class Resources {
   static const String back = '$_baseSvg/back.svg';
   static const String backBlack = '$_baseSvg/back_black.svg';
   static const String icFintchPoint = '$_baseSvg/ic_fintch_point.svg';
-  static const String icSchool = '$_baseSvg/ic_school.svg';
-  static const String icFirst = '$_baseSvg/first.svg';
-  static const String icSecond = '$_baseSvg/second.svg';
-  static const String icThird = '$_baseSvg/third.svg';
   static const String icAddImage = '$_baseSvg/ic_add_image.svg';
   static const String icFlashOn = '$_baseSvg/ic_flash_on.svg';
   static const String icFlashOff = '$_baseSvg/ic_flash_off.svg';
