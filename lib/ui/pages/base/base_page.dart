@@ -37,7 +37,7 @@ class _BasePageState extends State<BasePage> {
 
   Widget _tabBar() {
     return ShiftingTabBar(
-      bgColor: AppTheme.darkPurple,
+      bgColor: AppTheme.darkPurpleOpacity,
       labelFlex: 2,
       labelStyle: AppTheme.text1.bold.white.copyWith(letterSpacing: 2),
       tabs: <ShiftingTab>[

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class _LineChart extends StatelessWidget {
   @override
@@ -155,14 +154,23 @@ class _FWalletPageState extends State<FWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Stack(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
         children: [
           _headerContent(context),
           _fWalletScrollableSheet(),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.purple,
+        onPressed: () {},
+        child: Icon(
+          Icons.add_rounded,
+          size: 32,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
@@ -178,7 +186,7 @@ class _FWalletPageState extends State<FWalletPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Rp.1,7000,000',
+              'Rp.1,700,000',
               style: AppTheme.headline1.white,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -370,8 +378,8 @@ class _FWalletPageState extends State<FWalletPage> {
       margin: index == 0
           ? EdgeInsets.only(left: 20, right: 10)
           : index == 4
-          ? EdgeInsets.only(left: 10, right: 20)
-          : EdgeInsets.symmetric(horizontal: 10),
+              ? EdgeInsets.only(left: 10, right: 20)
+              : EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -445,14 +453,16 @@ class _FWalletPageState extends State<FWalletPage> {
                 SizedBox(height: 8),
                 Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: List.generate(1, (index) => Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.yellow,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: EdgeInsets.all(4),
-                    child: Text('Wants'),
-                  )).toList(),
+                  children: List.generate(
+                      1,
+                      (index) => Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.yellow,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: EdgeInsets.all(4),
+                            child: Text('Wants'),
+                          )).toList(),
                 ),
               ],
             ),
@@ -462,7 +472,8 @@ class _FWalletPageState extends State<FWalletPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('-Rp.17,000',
+              Text(
+                '-Rp.17,000',
                 style: AppTheme.headline2.red.bold,
               ),
               SizedBox(height: 4),
