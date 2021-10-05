@@ -15,6 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  bool isPayHistory = true;
+
   @override
   void initState() {
     _initHome();
@@ -403,8 +406,17 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: Helper.normalPadding),
           HistoryTab(
-            payCallback: () {},
-            receiveCallback: () {},
+            isPay: isPayHistory,
+            payCallback: () {
+              setState(() {
+                isPayHistory = true;
+              });
+            },
+            receiveCallback: () {
+              setState(() {
+                isPayHistory = false;
+              });
+            },
           ),
           SizedBox(height: Helper.smallPadding),
           ListView.builder(
@@ -414,84 +426,6 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(vertical: 10),
             itemBuilder: (context, index) => TransactionItem(
               item: user!.pay[index],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class HistoryTab extends StatefulWidget {
-  final Function payCallback;
-  final Function receiveCallback;
-
-  const HistoryTab(
-      {Key? key, required this.payCallback, required this.receiveCallback})
-      : super(key: key);
-
-  @override
-  State<HistoryTab> createState() => _HistoryTabState();
-}
-
-class _HistoryTabState extends State<HistoryTab> {
-  bool isPay = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.grey,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: Helper.getShadow(),
-      ),
-      width: MediaQuery.of(context).size.width * 0.6,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isPay = true;
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: isPay ? AppTheme.yellow : AppTheme.grey,
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                padding: EdgeInsets.all(12),
-                child: Center(
-                  child: Text(
-                    'Pay',
-                    style: isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isPay = false;
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: !isPay ? AppTheme.yellow : AppTheme.grey,
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                padding: EdgeInsets.all(12),
-                child: Center(
-                  child: Text(
-                    'Receive',
-                    style:
-                        !isPay ? AppTheme.text1 : AppTheme.text1.blackOpacity,
-                  ),
-                ),
-              ),
             ),
           ),
         ],
