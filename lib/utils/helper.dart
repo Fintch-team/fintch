@@ -12,7 +12,7 @@ class Helper {
 
   ///padding 32
   static double get bigPadding {
-    return 20;
+    return 32;
   }
 
   ///padding 20

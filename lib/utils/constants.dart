@@ -13,6 +13,7 @@ class Resources {
 
   // SVG ASSETS
   static const String bgPattern = '$_baseSvg/bg_pattern.svg';
+  static const String bgPatternWhite = '$_baseSvg/bg_pattern_white.svg';
   static const String textLogo = '$_baseSvg/text_logo.svg';
   static const String fWallet = '$_baseSvg/f_wallet.svg';
   static const String fWalletPurple = '$_baseSvg/f_wallet_purple.svg';
