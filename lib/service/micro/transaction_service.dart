@@ -24,4 +24,22 @@ class TransactionService extends ApiService {
       throw e.error;
     }
   }
+
+  Future<bool> postTransactionBarcode({
+    required String idBarcode,
+  }) async {
+    try {
+      final res = await dio.post(
+        'transaction/barcode',
+        data: {
+          'barcode': idBarcode,
+        },
+      );
+
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
 }

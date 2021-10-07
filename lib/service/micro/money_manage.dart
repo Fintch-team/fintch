@@ -141,26 +141,8 @@ class MoneyManageService extends ApiService {
     }
   }
 
-  Future<bool> postIncomeMoneyManageItem(
+  Future<bool> postMoneyManageItem(
       {required String name, required int amount, required int percent}) async {
-    try {
-      final res = await dio.post(
-        'money-management-item',
-        data: {'name': name, 'amount': amount, 'percent': percent},
-      );
-
-      return res.statusCode == 201;
-    } on DioError catch (e) {
-      debugPrint("error $e");
-      throw e.error;
-    }
-  }
-
-  Future<bool> postOutcomeMoneyManageItem({
-    required String name,
-    required int amount,
-    required int percent,
-  }) async {
     try {
       final res = await dio.post(
         'money-management-item',

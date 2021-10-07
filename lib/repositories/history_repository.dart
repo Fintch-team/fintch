@@ -2,22 +2,22 @@ import 'package:fintch/gen_export.dart';
 
 class HistoryRepository {
   final HistoryService historyService;
+  final LocalAuthService localAuthService;
 
-  HistoryRepository({
-    required this.historyService,
-  });
+  HistoryRepository(
+      {required this.historyService, required this.localAuthService});
 
-  Future<HistoryEntity> getPayHistory({required String id}) async {
+  Future<HistoryEntity> getPayHistory({String id = ''}) async {
     ListHistoryModel historyModel = await historyService.getHistoryAll(
-      idPay: id,
+      idPay: id.isNotEmpty ? id : localAuthService.currentUser!.id.toString(),
     );
 
     return DataMapper.historyMapper(historyModel);
   }
 
-  Future<HistoryEntity> getReceiveHistory({required String id}) async {
+  Future<HistoryEntity> getReceiveHistory({String id = ''}) async {
     ListHistoryModel historyModel = await historyService.getHistoryAll(
-      idReceive: id,
+      idReceive: id.isNotEmpty ? id : localAuthService.currentUser!.id.toString(),
     );
 
     return DataMapper.historyMapper(historyModel);
