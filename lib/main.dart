@@ -71,6 +71,31 @@ class _MyAppState extends State<MyApp> {
             localAuthService: Service.find(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => WalletRepository(
+            walletService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => TransactionRepository(
+            transactionService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => MoneyManageRepository(
+            moneyManageService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => MoneyManageItemRepository(
+            moneyManageItemService: Service.find(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => MoneyPlanRepository(
+            moneyPlanService: Service.find(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -92,6 +117,12 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<HomeBloc>(
             create: (context) => HomeBloc(
               userRepository: context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<HistoryBloc>(
+            create: (context) => HistoryBloc(
+              userRepository: context.read<UserRepository>(),
+              historyRepository: context.read<HistoryRepository>(),
             ),
           ),
         ],
