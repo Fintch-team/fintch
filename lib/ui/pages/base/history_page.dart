@@ -15,13 +15,15 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          _headerContent(context),
-          _historyScrollableSheet(),
-        ],
+    return LoadingOverlay(
+      child: Container(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            _headerContent(context),
+            _historyScrollableSheet(),
+          ],
+        ),
       ),
     );
   }

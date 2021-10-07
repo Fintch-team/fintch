@@ -46,8 +46,36 @@ class DataMapper {
         barrierExpired: walletModel.data.barrierExpired,
       );
 
-  static SchoolEntity schoolMapper(SchoolModel walletModel) => SchoolEntity(
-        id: walletModel.data.id,
-        name: walletModel.data.name,
+  static SchoolEntity schoolMapper(SchoolModel schoolModel) => SchoolEntity(
+        id: schoolModel.data.id,
+        name: schoolModel.data.name,
+      );
+
+  static MoneyManageEntity moneyManageMapper(MoneyManageModel moneyManage) =>
+      MoneyManageEntity(
+        id: moneyManage.data.id,
+        name: moneyManage.data.name,
+        amount: moneyManage.data.amount,
+        isIncome: moneyManage.data.isIncome,
+        item: moneyManage.data.item,
+      );
+
+  static MoneyManageItemEntity moneyManageItemMapper(
+          MoneyManageItemModel moneyManageItem) =>
+      MoneyManageItemEntity(
+        id: moneyManageItem.data.id,
+        name: moneyManageItem.data.name,
+        amount: moneyManageItem.data.amount,
+        percent: moneyManageItem.data.percent,
+      );
+
+  static MoneyPlanEntity moneyPlanMapper(MoneyPlanModel moneyPlan) =>
+      MoneyPlanEntity(
+        id: moneyPlan.data.id,
+        deadline: moneyPlan.data.deadline,
+        user: moneyPlan.data.user,
+        totalAmount: moneyPlan.data.totalAmount,
+        note: moneyPlan.data.note,
+        created: moneyPlan.data.created,
       );
 }

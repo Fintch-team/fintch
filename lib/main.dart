@@ -68,6 +68,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => HistoryRepository(
             historyService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
       ],
