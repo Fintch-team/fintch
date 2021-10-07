@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
+import 'package:flutter/foundation.dart';
 
 class MoneyManageService extends ApiService {
   MoneyManageService() : super('$kUrl/');
@@ -6,34 +8,49 @@ class MoneyManageService extends ApiService {
   Future<MoneyManageModel> getMoneyManageId({
     required String id,
   }) async {
-    final res = await dio.get(
-      'money-management/$id',
-    );
+    try {
+      final res = await dio.get(
+        'money-management/$id',
+      );
 
-    return MoneyManageModel.fromJson(res.data);
+      return MoneyManageModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<ListMoneyManageModel> getMoneyManageAll() async {
-    final res = await dio.get(
-      'money-management',
-    );
+    try {
+      final res = await dio.get(
+        'money-management',
+      );
 
-    return ListMoneyManageModel.fromJson(res.data);
+      return ListMoneyManageModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> postIncomeMoneyManage({
     required String name,
     required int amount,
   }) async {
-    final res = await dio.post(
-      'money-management',
-      data: {
-        'name': name,
-        'amount': amount,
-      },
-    );
+    try {
+      final res = await dio.post(
+        'money-management',
+        data: {
+          'name': name,
+          'amount': amount,
+        },
+      );
 
-    return res.statusCode == 201;
+      return res.statusCode == 201;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> postOutcomeMoneyManage({
@@ -41,16 +58,21 @@ class MoneyManageService extends ApiService {
     required int amount,
     required String idMoneyManageItem,
   }) async {
-    final res = await dio.post(
-      'money-management',
-      data: {
-        'name': name,
-        'amount': amount,
-        'id_money_management_item': idMoneyManageItem
-      },
-    );
+    try {
+      final res = await dio.post(
+        'money-management',
+        data: {
+          'name': name,
+          'amount': amount,
+          'id_money_management_item': idMoneyManageItem
+        },
+      );
 
-    return res.statusCode == 201;
+      return res.statusCode == 201;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> putMoneyManage({
@@ -59,54 +81,79 @@ class MoneyManageService extends ApiService {
     required int amount,
     required String idMoneyManageItem,
   }) async {
-    final res = await dio.put(
-      'money-management/$idMoneyManage',
-      data: {
-        'name': name,
-        'amount': amount,
-        'id_money_management_item': idMoneyManageItem
-      },
-    );
+    try {
+      final res = await dio.put(
+        'money-management/$idMoneyManage',
+        data: {
+          'name': name,
+          'amount': amount,
+          'id_money_management_item': idMoneyManageItem
+        },
+      );
 
-    return res.statusCode == 200;
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> deleteMoneyManage({
     required String idMoneyManage,
   }) async {
-    final res = await dio.delete(
-      'money-management/$idMoneyManage',
-    );
+    try {
+      final res = await dio.delete(
+        'money-management/$idMoneyManage',
+      );
 
-    return res.statusCode == 204;
+      return res.statusCode == 204;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<MoneyManageItemModel> getMoneyManageItemId({
     required String id,
   }) async {
-    final res = await dio.get(
-      'money-management-item/$id',
-    );
+    try {
+      final res = await dio.get(
+        'money-management-item/$id',
+      );
 
-    return MoneyManageItemModel.fromJson(res.data);
+      return MoneyManageItemModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<ListMoneyManageItemModel> getMoneyManageItemAll() async {
-    final res = await dio.get(
-      'money-management-item',
-    );
+    try {
+      final res = await dio.get(
+        'money-management-item',
+      );
 
-    return ListMoneyManageItemModel.fromJson(res.data);
+      return ListMoneyManageItemModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> postIncomeMoneyManageItem(
       {required String name, required int amount, required int percent}) async {
-    final res = await dio.post(
-      'money-management-item',
-      data: {'name': name, 'amount': amount, 'percent': percent},
-    );
+    try {
+      final res = await dio.post(
+        'money-management-item',
+        data: {'name': name, 'amount': amount, 'percent': percent},
+      );
 
-    return res.statusCode == 201;
+      return res.statusCode == 201;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> postOutcomeMoneyManageItem({
@@ -114,12 +161,17 @@ class MoneyManageService extends ApiService {
     required int amount,
     required int percent,
   }) async {
-    final res = await dio.post(
-      'money-management-item',
-      data: {'name': name, 'amount': amount, 'percent': percent},
-    );
+    try {
+      final res = await dio.post(
+        'money-management-item',
+        data: {'name': name, 'amount': amount, 'percent': percent},
+      );
 
-    return res.statusCode == 201;
+      return res.statusCode == 201;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> putMoneyManageItem({
@@ -128,21 +180,31 @@ class MoneyManageService extends ApiService {
     required int amount,
     required int percent,
   }) async {
-    final res = await dio.put(
-      'money-management-item/$idMoneyManageItem',
-      data: {'name': name, 'amount': amount, 'percent': percent},
-    );
+    try {
+      final res = await dio.put(
+        'money-management-item/$idMoneyManageItem',
+        data: {'name': name, 'amount': amount, 'percent': percent},
+      );
 
-    return res.statusCode == 200;
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> deleteMoneyManageItem({
     required String idMoneyManageItem,
   }) async {
-    final res = await dio.delete(
-      'money-management-item/$idMoneyManageItem',
-    );
+    try {
+      final res = await dio.delete(
+        'money-management-item/$idMoneyManageItem',
+      );
 
-    return res.statusCode == 204;
+      return res.statusCode == 204;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 }

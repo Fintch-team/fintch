@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
+import 'package:flutter/cupertino.dart';
 
 class HistoryService extends ApiService {
   HistoryService() : super('$kUrl/');
@@ -6,23 +8,33 @@ class HistoryService extends ApiService {
   Future<HistoryModel> getHistoryId({
     required String id,
   }) async {
-    final res = await dio.get(
-      'history/$id',
-    );
+    try {
+      final res = await dio.get(
+        'history/$id',
+      );
 
-    return HistoryModel.fromJson(res.data);
+      return HistoryModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<ListHistoryModel> getHistoryAll(
       {String idPay = '', String idReceive = ''}) async {
-    Map<String, dynamic> query = {
-      if (idPay.isNotEmpty) 'pay': idPay,
-      if (idReceive.isNotEmpty) 'receive': idReceive,
-    };
+    try {
+      Map<String, dynamic> query = {
+        if (idPay.isNotEmpty) 'pay': idPay,
+        if (idReceive.isNotEmpty) 'receive': idReceive,
+      };
 
-    final res = await dio.get('history', queryParameters: query);
+      final res = await dio.get('history', queryParameters: query);
 
-    return ListHistoryModel.fromJson(res.data);
+      return ListHistoryModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> postHistory({
@@ -30,16 +42,21 @@ class HistoryService extends ApiService {
     required String idReceive,
     required int amount,
   }) async {
-    final res = await dio.post(
-      'history',
-      data: {
-        'id_pay': idPay,
-        'id_receive': idReceive,
-        'amount': amount,
-      },
-    );
+    try {
+      final res = await dio.post(
+        'history',
+        data: {
+          'id_pay': idPay,
+          'id_receive': idReceive,
+          'amount': amount,
+        },
+      );
 
-    return res.statusCode == 201;
+      return res.statusCode == 201;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> putHistory({
@@ -48,25 +65,35 @@ class HistoryService extends ApiService {
     required String idReceive,
     required int amount,
   }) async {
-    final res = await dio.put(
-      'history/$idHistory',
-      data: {
-        'id_pay': idPay,
-        'id_receive': idReceive,
-        'amount': amount,
-      },
-    );
+    try {
+      final res = await dio.put(
+        'history/$idHistory',
+        data: {
+          'id_pay': idPay,
+          'id_receive': idReceive,
+          'amount': amount,
+        },
+      );
 
-    return res.statusCode == 200;
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 
   Future<bool> deleteHistory({
     required String idHistory,
   }) async {
-    final res = await dio.delete(
-      'history/$idHistory',
-    );
+    try {
+      final res = await dio.delete(
+        'history/$idHistory',
+      );
 
-    return res.statusCode == 204;
+      return res.statusCode == 204;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
   }
 }

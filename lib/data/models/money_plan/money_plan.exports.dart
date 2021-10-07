@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library money_plan;
 
-export 'money_plan_model.dart';
 export 'list_money_plan_model.dart';
+export 'money_plan_model.dart';

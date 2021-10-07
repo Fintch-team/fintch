@@ -4,10 +4,10 @@
 // flutter pub run bin/gen_export
 library pages;
 
-export 'f_goals_page.dart';
 export 'auth/auth.exports.dart';
-export 'splash_page.dart';
-export 'receive_page.dart';
-export 'pay_page.dart';
 export 'base/base.exports.dart';
+export 'f_goals_page.dart';
+export 'pay_page.dart';
 export 'profile_page.dart';
+export 'receive_page.dart';
+export 'splash_page.dart';

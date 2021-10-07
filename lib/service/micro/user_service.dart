@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
+import 'package:flutter/foundation.dart';
 
 class UserService extends ApiService {
   UserService() : super('$kUrl/');
@@ -11,12 +12,12 @@ class UserService extends ApiService {
     try {
       final res =
           await dio.post('auth', data: {'nickname': user, 'password': pass});
-      print(res.data.toString());
+      // debugPrint(res.data.toString());
       TokenModel result = TokenModel.fromJson(res.data);
 
       return result;
     } on DioError catch (e) {
-      print("error $e");
+      debugPrint("error $e");
       throw e.error;
     }
   }
@@ -31,8 +32,8 @@ class UserService extends ApiService {
 
       return result;
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -45,8 +46,8 @@ class UserService extends ApiService {
 
       return result;
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -57,8 +58,8 @@ class UserService extends ApiService {
 
       return res.statusCode == 200;
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -68,8 +69,8 @@ class UserService extends ApiService {
 
       return res.statusCode == 204;
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -79,8 +80,8 @@ class UserService extends ApiService {
 
       return TokenModel.fromJson(res.data);
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -90,8 +91,8 @@ class UserService extends ApiService {
 
       return UserModel.fromJson(res.data);
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 
@@ -105,8 +106,8 @@ class UserService extends ApiService {
 
       return UserModel.fromJson(res.data);
     } on DioError catch (e) {
-      // print("error $e");
-      throw e.type;
+      debugPrint("error $e");
+      throw e.error;
     }
   }
 

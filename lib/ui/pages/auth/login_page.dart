@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
   bool isObscurePassword = true;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -130,66 +131,78 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _loginTextField(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Username', style: AppTheme.text3.white.bold),
-          SizedBox(height: 8),
-          TextField(
-            controller: usernameController,
-            style: AppTheme.text3.white,
-            decoration: InputDecoration(
-              hintText: 'Username kamu',
-            ),
-          ),
-          SizedBox(height: 16),
-          Text('Kata Sandi', style: AppTheme.text3.white.bold),
-          SizedBox(height: 8),
-          StatefulBuilder(builder: (context, passwordSetState) {
-            return TextField(
-              controller: passwordController,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // TODO: penggunaan validator
+            Text('Username', style: AppTheme.text3.white.bold),
+            SizedBox(height: 8),
+            TextFormField(
+              controller: usernameController,
               style: AppTheme.text3.white,
-              obscureText: isObscurePassword,
               decoration: InputDecoration(
-                hintText: 'Masukin kata sandi kamu',
-                suffixIcon: GestureDetector(
-                  onTap: () => passwordSetState(() {
-                    isObscurePassword = !isObscurePassword;
-                  }),
-                  child: Icon(
-                    isObscurePassword ? Icons.visibility : Icons.visibility_off,
-                    color: AppTheme.white,
-                  ),
-                ),
+                hintText: 'Username kamu',
               ),
-              keyboardType: TextInputType.visiblePassword,
-            );
-          }),
-          SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () => {},
-              child: Text(
-                'Lupa Kata Sandi?',
-                style: AppTheme.subText1.white,
-              ),
+              validator: Validator.notEmpty,
             ),
-          ),
-          SizedBox(height: 24),
-          CustomButton(
-            onTap: () => context.read<AuthBloc>().add(
-                  PostAuth(
-                    entity: AuthPostEntity(
-                      nickname: usernameController.text.trim(),
-                      password: passwordController.text,
+            SizedBox(height: 16),
+            Text('Kata Sandi', style: AppTheme.text3.white.bold),
+            SizedBox(height: 8),
+            StatefulBuilder(builder: (context, passwordSetState) {
+              return TextFormField(
+                controller: passwordController,
+                style: AppTheme.text3.white,
+                obscureText: isObscurePassword,
+                decoration: InputDecoration(
+                  hintText: 'Masukin kata sandi kamu',
+                  suffixIcon: GestureDetector(
+                    onTap: () => passwordSetState(() {
+                      isObscurePassword = !isObscurePassword;
+                    }),
+                    child: Icon(
+                      isObscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: AppTheme.white,
                     ),
                   ),
                 ),
-            text: 'Masuk',
-          ),
-        ],
+                keyboardType: TextInputType.visiblePassword,
+                validator: Validator.password,
+              );
+            }),
+            SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () => {},
+                child: Text(
+                  'Lupa Kata Sandi?',
+                  style: AppTheme.subText1.white,
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
+            CustomButton(
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<AuthBloc>().add(
+                        PostAuth(
+                          entity: AuthPostEntity(
+                            nickname: usernameController.text.trim(),
+                            password: passwordController.text,
+                          ),
+                        ),
+                      );
+                }
+              },
+              text: 'Masuk',
+            ),
+          ],
+        ),
       ),
     );
   }

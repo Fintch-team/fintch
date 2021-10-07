@@ -6,10 +6,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final UserRepository userRepository;
 
   HomeBloc({required this.userRepository}) : super(HomeInitial()) {
-    on<GetUser>((event, emit) {
+    on<GetUser>((event, emit) async {
       emit(HomeLoading());
       try {
-        UserEntity entity = userRepository.currentUser();
+        UserEntity entity = await userRepository.currentUser();
         emit(HomeSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(HomeFailure(message: e.message));

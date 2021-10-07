@@ -4,6 +4,12 @@
 // flutter pub run bin/gen_export
 library blocs;
 
-export 'home/home.exports.dart';
 export 'auth/auth.exports.dart';
 export 'blocs.dart';
+export 'history/history.exports.dart';
+export 'home/home.exports.dart';
+export 'money_manage/money_manage.exports.dart';
+export 'money_plan/money_plan.exports.dart';
+export 'settings/settings.exports.dart';
+export 'transaction/transaction.exports.dart';
+export 'wallet/wallet.exports.dart';
