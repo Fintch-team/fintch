@@ -1,7 +1,9 @@
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -11,24 +13,54 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  bool isPayHistory = true;
+  int isPayHistory = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initHistory();
+  }
+
+  void _initHistory() {
+    context.read<HistoryBloc>().add(GetHistory());
+  }
 
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
-      child: Container(
-        color: Colors.transparent,
-        child: Stack(
-          children: [
-            _headerContent(context),
-            _historyScrollableSheet(),
-          ],
-        ),
+      child: BlocConsumer<HistoryBloc, HistoryState>(
+        listener: (context, state) {
+          if (state is HistoryLoading) {
+            context.loaderOverlay.show();
+          } else if (state is HistoryFailure) {
+            context.loaderOverlay.hide();
+            Helper.snackBar(context, message: state.message, isFailure: true);
+          } else if (state is HistoryResponseSuccess) {
+            context.loaderOverlay.hide();
+          }
+        },
+        builder: (context, state) {
+          if (state is HistoryResponseSuccess) {
+            return Container(
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  _headerContent(context, state.pay, state.receive),
+                  _historyScrollableSheet(state.pay, state.receive),
+                ],
+              ),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
 
-  Widget _headerContent(BuildContext context) {
+  Widget _headerContent(
+      BuildContext context, HistoryEntity pay, HistoryEntity receive) {
+    int length = pay.data.length + receive.data.length;
     return Positioned(
       top: 0,
       left: 0,
@@ -55,7 +87,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '20x Transaction',
+                        '$length x Transaction',
                         style: AppTheme.text3.white,
                       ),
                     ],
@@ -79,7 +111,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _historyScrollableSheet() {
+  Widget _historyScrollableSheet(HistoryEntity pay, HistoryEntity receive) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
         initialChildSize: 0.68,
@@ -100,34 +132,74 @@ class _HistoryPageState extends State<HistoryPage> {
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
                   HistoryTab(
-                    isPay: isPayHistory,
+                    isPay: isPayHistory == 0 ? true : false,
                     payCallback: () {
                       setState(() {
-                        isPayHistory = true;
+                        isPayHistory = 0;
                       });
                     },
                     receiveCallback: () {
                       setState(() {
-                        isPayHistory = false;
+                        isPayHistory = 1;
                       });
                     },
                   ),
                   SizedBox(height: Helper.normalPadding),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(
-                      20,
-                      (index) => TransactionItem(
-                          isPay: isPayHistory,
-                          item: Datum(
-                            id: 1,
-                            amount: '20000',
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                            name: 'Dari Adit untuk Galuh',
-                          ),
-                          name: "name"),
-                    ),
+                  IndexedStack(
+                    index: isPayHistory,
+                    children: [
+                      // TODO: bentuk response mash salah
+                      if (pay.data.isNotEmpty)
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListView.builder(
+                              itemCount: pay.data.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              itemBuilder: (context, index) {
+                                return TransactionItem(
+                                  item: Datum(
+                                    id: 1,
+                                    amount: '20000',
+                                    createdAt: DateTime.now(),
+                                    updatedAt: DateTime.now(),
+                                    name: 'Dari Adit untuk Galuh',
+                                  ),
+                                  name: "name",
+                                  isPay: isPayHistory == 0 ? true : false,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      if (receive.data.isNotEmpty)
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListView.builder(
+                              itemCount: receive.data.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              itemBuilder: (context, index) {
+                                return TransactionItem(
+                                  item: Datum(
+                                    id: 1,
+                                    amount: '20000',
+                                    createdAt: DateTime.now(),
+                                    updatedAt: DateTime.now(),
+                                    name: 'Dari Adit untuk Galuh',
+                                  ),
+                                  name: "name",
+                                  isPay: isPayHistory == 0 ? true : false,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ],
               ),

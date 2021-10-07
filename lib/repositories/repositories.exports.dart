@@ -7,6 +7,7 @@ library repositories;
 export 'history_repository.dart';
 export 'mapper/mapper.exports.dart';
 export 'money_manage_repository.dart';
+export 'money_manage_item_repository.dart';
 export 'money_plan_repository.dart';
 export 'school_repository.dart';
 export 'transaction_repository.dart';

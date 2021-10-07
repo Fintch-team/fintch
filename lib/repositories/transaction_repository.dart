@@ -1,15 +1,15 @@
 import 'package:fintch/gen_export.dart';
 
 class TransactionRepository {
-  final TransactionService moneyPlanService;
+  final TransactionService transactionService;
 
   TransactionRepository({
-    required this.moneyPlanService,
+    required this.transactionService,
   });
 
   Future<bool> postTransaction(
       {required TransactionPostEntity postEntity}) async {
-    bool res = await moneyPlanService.postTransaction(
+    bool res = await transactionService.postTransaction(
         idUserReceive: postEntity.idReceive,
         idUserPay: postEntity.idPay,
         amount: postEntity.amount);
@@ -19,7 +19,7 @@ class TransactionRepository {
 
   Future<bool> postTransactionBarcode(
       {required TransactionBarcodePostEntity postEntity}) async {
-    bool res = await moneyPlanService.postTransactionBarcode(
+    bool res = await transactionService.postTransactionBarcode(
       idBarcode: postEntity.idBarcode,
     );
 
