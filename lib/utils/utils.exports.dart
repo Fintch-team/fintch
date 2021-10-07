@@ -4,7 +4,8 @@
 // flutter pub run bin/gen_export
 library utils;
 
-export 'helper.dart';
-export 'extensions.dart';
 export 'app_theme.dart';
 export 'constants.dart';
+export 'extensions.dart';
+export 'helper.dart';
+export 'validator.dart';

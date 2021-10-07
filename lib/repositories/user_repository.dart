@@ -69,8 +69,12 @@ class UserRepository {
     return DataMapper.userMapper(userModel);
   }
 
-  UserEntity currentUser() {
-    return DataMapper.localUserMapper(localAuthService.currentUser!);
+  Future<UserEntity> currentUser() async {
+    try {
+      return await authGet();
+    } catch (e) {
+      return DataMapper.localUserMapper(localAuthService.currentUser!);
+    }
   }
 
   bool get isHasLoggedIn => localAuthService.isHasLoggedIn;

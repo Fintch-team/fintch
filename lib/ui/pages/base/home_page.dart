@@ -15,8 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  bool isPayHistory = true;
+  int isPayHistory = 0;
 
   @override
   void initState() {
@@ -54,15 +53,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-          return Container(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                _headerContent(context),
-                _homeScrollableSheet(),
-              ],
-            ),
-          );
+          return SizedBox();
         },
       ),
     );
@@ -187,7 +178,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             SvgPicture.asset(
               Resources.icFintchWallet,
-              height: 32,
+              height: 18,
             ),
             SizedBox(width: 8),
             Expanded(
@@ -195,6 +186,7 @@ class _HomePageState extends State<HomePage> {
                 user != null
                     ? user.wallet.walletAmount.toString().parseCurrency()
                     : '0',
+                maxLines: 1,
                 style: AppTheme.headline1.white,
               ),
             ),
@@ -226,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _fGoalList(context),
+                  _fGoalList(context, user: user),
                   _transactionList(user: user),
                 ],
               ),
@@ -287,7 +279,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fGoalList(BuildContext context) {
+  Widget _fGoalList(BuildContext context, {UserEntity? user}) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -302,24 +294,25 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.width * 0.48,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
-              itemBuilder: (BuildContext context, int index) {
-                return _fGoalItem(context, index);
-              },
+          if (user!.moneyPlanning.isNotEmpty)
+            Container(
+              height: MediaQuery.of(context).size.width * 0.48,
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: user.moneyPlanning.length,
+                padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+                itemBuilder: (BuildContext context, int index) {
+                  return _fGoalItem(context, index, user.moneyPlanning[index]);
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _fGoalItem(BuildContext context, int index) {
+  Widget _fGoalItem(BuildContext context, int index, MoneyPlanning data) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: Helper.getShadow(),
@@ -337,6 +330,7 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Expanded(
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -345,6 +339,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      // TODO: belum ada name
                       Text(
                         'Beli Laptop Asus',
                         style: AppTheme.headline2,
@@ -357,32 +352,46 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
-                          Text('30 September 2021', style: AppTheme.subText1),
+                          // TODO: format mash salah
+                          Text(
+                              data.deadline
+                                  .parseHourDateAndMonth()
+                                  .substring(0, 17),
+                              style: AppTheme.subText1),
                         ],
                       ),
                     ],
                   ),
-                  Text('Rp. 17.000.000', style: AppTheme.text1.bold),
+                  Text(
+                    data.totalAmount.toString().parseCurrency(),
+                    style: AppTheme.text3.bold,
+                  ),
                 ],
               ),
             ),
             SizedBox(width: Helper.smallPadding),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularPercentIndicator(
-                  radius: 88.0,
-                  lineWidth: 16.0,
-                  animation: true,
-                  percent: 0.7,
-                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: AppTheme.purple,
-                  backgroundColor: AppTheme.purpleOpacity,
-                ),
-                SizedBox(height: Helper.smallPadding),
-                Text('Rp. 17.000.000', style: AppTheme.text3.green),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // TODO: belum ada percent
+                  CircularPercentIndicator(
+                    radius: 70.0,
+                    lineWidth: 16.0,
+                    animation: true,
+                    percent: 0.7,
+                    center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    progressColor: AppTheme.purple,
+                    backgroundColor: AppTheme.purpleOpacity,
+                  ),
+                  SizedBox(height: Helper.smallPadding),
+                  Text(
+                    data.totalAmount.toString().parseCurrency(),
+                    style: AppTheme.subText2.green,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -407,27 +416,51 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: Helper.normalPadding),
           HistoryTab(
-            isPay: isPayHistory,
+            isPay: isPayHistory == 0 ? true : false,
             payCallback: () {
               setState(() {
-                isPayHistory = true;
+                isPayHistory = 0;
               });
             },
             receiveCallback: () {
               setState(() {
-                isPayHistory = false;
+                isPayHistory = 1;
               });
             },
           ),
           SizedBox(height: Helper.smallPadding),
-          ListView.builder(
-            itemCount: user != null ? user.pay.length : 0,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(vertical: 10),
-            itemBuilder: (context, index) => TransactionItem(
-              item: user!.pay[index],
-            ),
+          IndexedStack(
+            index: isPayHistory,
+            children: [
+              if (user!.pay.isNotEmpty)
+                ListView.builder(
+                  itemCount: user.pay.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  itemBuilder: (context, index) {
+                    return TransactionItem(
+                      item: user.pay[index],
+                      name: user.name,
+                      isPay: isPayHistory == 0 ? true : false,
+                    );
+                  },
+                ),
+              if (user.receive.isNotEmpty)
+                ListView.builder(
+                  itemCount: user.receive.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  itemBuilder: (context, index) {
+                    return TransactionItem(
+                      item: user.receive[index],
+                      name: user.name,
+                      isPay: isPayHistory == 0 ? true : false,
+                    );
+                  },
+                ),
+            ],
           ),
         ],
       ),

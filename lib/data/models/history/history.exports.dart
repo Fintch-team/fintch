@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library history;
 
-export 'list_history_model.dart';
 export 'history_model.dart';
+export 'list_history_model.dart';

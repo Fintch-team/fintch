@@ -116,15 +116,15 @@ class _HistoryPageState extends State<HistoryPage> {
                     children: List.generate(
                       20,
                       (index) => TransactionItem(
-                        isPay: isPayHistory,
-                        item: Datum(
-                          id: 1,
-                          amount: '20000',
-                          createdAt: DateTime.now(),
-                          updatedAt: DateTime.now(),
-                          name: 'Dari Adit untuk Galuh',
-                        ),
-                      ),
+                          isPay: isPayHistory,
+                          item: Datum(
+                            id: 1,
+                            amount: '20000',
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                            name: 'Dari Adit untuk Galuh',
+                          ),
+                          name: "name"),
                     ),
                   ),
                 ],

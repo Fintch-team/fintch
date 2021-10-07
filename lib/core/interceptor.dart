@@ -74,7 +74,7 @@ class FintchInterceptor extends Interceptor {
 
     if (response.statusCode == 422) {
       if (response.data['details'] != null) {
-        final msg = response.data['details'];
+        // final msg = response.data['details'];
         handler.reject(
           DioError(
             response: response,

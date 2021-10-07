@@ -152,12 +152,13 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                 helperText: 'Minimal harus 8 karakter',
                 helperStyle: AppTheme.subText1.white,
               ),
+              // TODO: penggunaan validator
+
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Harap masukan input!';
-                } else if (value.length < 8) {
-                  return 'Password harus lebih dari 8 karakter!';
-                }
+                // validator untuk required
+                Validator.notEmpty(value);
+                // validator untuk password 8 character
+                Validator.password(value);
                 return null;
               },
               keyboardType: TextInputType.visiblePassword,
@@ -187,9 +188,9 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                 ),
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Harap masukan input!';
-                } else if (_passwordController.text != value) {
+                Validator.notEmpty(value);
+
+                if (_passwordController.text != value) {
                   return 'Password tidak sama dengan sebelumnya!';
                 }
                 return null;
