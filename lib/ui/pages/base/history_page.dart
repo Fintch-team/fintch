@@ -1,9 +1,9 @@
-import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
+
+import 'package:fintch/gen_export.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);

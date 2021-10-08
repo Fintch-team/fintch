@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-import 'package:flutter/widgets.dart';
 
 class MoneyPlanPostEntity extends BaseEntity {
   final int idUser;
