@@ -59,8 +59,8 @@ class UserEntity extends BaseEntity {
   final List<BarcodeData> barcode;
   final List<MoneyPlanData> moneyPlanning;
   final List<MoneyManageData> moneyManage;
-  final List<HistoryReceive> receive;
-  final List<HistoryPay> pay;
+  final List<HistoryData> receive;
+  final List<HistoryData> pay;
 
   UserEntity(
       {required this.id,

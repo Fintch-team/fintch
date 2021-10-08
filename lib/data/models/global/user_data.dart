@@ -25,8 +25,8 @@ class UserData {
   bool isSetPin;
   WalletData wallet;
   SchoolData school;
-  List<HistoryPay> pay;
-  List<HistoryReceive> receive;
+  List<HistoryData> pay;
+  List<HistoryData> receive;
   List<BarcodeData> barcode;
   List<MoneyPlanData> moneyPlanning;
   List<MoneyManageData> moneyManage;
@@ -42,10 +42,10 @@ class UserData {
         school: SchoolData.fromJson(json["school"]),
         barcode: List<BarcodeData>.from(
             json["barcode"].map((x) => BarcodeData.fromJson(x))),
-        pay: List<HistoryPay>.from(
-            json["pay"].map((x) => HistoryPay.fromJson(x))),
-        receive: List<HistoryReceive>.from(
-            json["receive"].map((x) => HistoryReceive.fromJson(x))),
+        pay: List<HistoryData>.from(
+            json["pay"].map((x) => HistoryData.fromJson(x))),
+        receive: List<HistoryData>.from(
+            json["receive"].map((x) => HistoryData.fromJson(x))),
         moneyPlanning: List<MoneyPlanData>.from(
             json["money_planning"].map((x) => MoneyPlanData.fromJson(x))),
         moneyManage: List<MoneyManageData>.from(

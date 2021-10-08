@@ -436,12 +436,12 @@ class _HomePageState extends State<HomePage> {
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(vertical: 10),
                   itemBuilder: (context, index) {
-                    // return TransactionItem(
-                    //   item: user.pay[index],
-                    //   name: user.name,
-                    //   isPay: isPayHistory == 0 ? true : false,
-                    // );
-                    return SizedBox();
+                    return TransactionItem(
+                      item: user.pay[index],
+                      name: user.name,
+                      isPay: isPayHistory == 0 ? true : false,
+                    );
+                    // return SizedBox();
                   },
                 ),
               if (user.receive.isNotEmpty)
@@ -451,13 +451,13 @@ class _HomePageState extends State<HomePage> {
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(vertical: 10),
                   itemBuilder: (context, index) {
-                    // return TransactionItem(
-                    //   item: user.receive[index],
-                    //   name: user.name,
-                    //   isPay: isPayHistory == 0 ? true : false,
-                    // );
+                    return TransactionItem(
+                      item: user.receive[index],
+                      name: user.name,
+                      isPay: isPayHistory == 0 ? true : false,
+                    );
 
-                    return SizedBox();
+                    // return SizedBox();
                   },
                 ),
             ],

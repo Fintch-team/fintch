@@ -11,14 +11,16 @@ class WalletData {
   int walletAmount;
   int barrierAmount;
   int payAmount;
-  DateTime barrierExpired;
+  DateTime? barrierExpired;
 
   factory WalletData.fromJson(Map<String, dynamic> json) => WalletData(
         id: json["id"],
         walletAmount: json["wallet_amount"],
         barrierAmount: json["barrier_amount"],
         payAmount: json["pay_amount"],
-        barrierExpired: DateTime.parse(json["barrier_expired"]),
+        barrierExpired: json["barrier_expired"] == null
+            ? null
+            : DateTime.parse(json["barrier_expired"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,7 +28,8 @@ class WalletData {
         "wallet_amount": walletAmount,
         "barrier_amount": barrierAmount,
         "pay_amount": payAmount,
-        "barrier_expired":
-            "${barrierExpired.year.toString().padLeft(4, '0')}-${barrierExpired.month.toString().padLeft(2, '0')}-${barrierExpired.day.toString().padLeft(2, '0')}",
+        "barrier_expired": barrierExpired == null
+            ? null
+            : "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",
       };
 }
