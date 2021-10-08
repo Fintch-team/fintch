@@ -14,4 +14,3 @@ export 'routes/routes.exports.dart';
 export 'service/service.exports.dart';
 export 'ui/ui.exports.dart';
 export 'utils/utils.exports.dart';
-export 'dependencies.dart';
