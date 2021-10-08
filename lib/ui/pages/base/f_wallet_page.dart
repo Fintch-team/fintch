@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -168,7 +169,7 @@ class _FWalletPageState extends State<FWalletPage> {
           onPressed: () {},
           child: Icon(
             Icons.add_rounded,
-            size: 32,
+            size: MediaQuery.of(context).size.width * 0.1,
           ),
         ),
       ),
@@ -187,7 +188,7 @@ class _FWalletPageState extends State<FWalletPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            AutoSizeText(
               'Rp.1,700,000',
               style: AppTheme.headline1.white,
               maxLines: 1,
@@ -286,11 +287,16 @@ class _FWalletPageState extends State<FWalletPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Outcomes', style: AppTheme.text3),
+                      AutoSizeText(
+                        'Outcomes',
+                        style: AppTheme.text3,
+                        maxLines: 1,
+                      ),
                       SizedBox(height: 4),
-                      Text(
+                      AutoSizeText(
                         'Rp.200,000',
                         style: AppTheme.headline3,
+                        maxLines: 1,
                       ),
                     ],
                   ),
@@ -325,10 +331,15 @@ class _FWalletPageState extends State<FWalletPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Incomes', style: AppTheme.text3),
+                      AutoSizeText(
+                        'Incomes',
+                        style: AppTheme.text3,
+                        maxLines: 1,
+                      ),
                       SizedBox(height: 4),
-                      Text(
+                      AutoSizeText(
                         'Rp.156,000',
+                        maxLines: 1,
                         style: AppTheme.headline3,
                       ),
                     ],
@@ -400,7 +411,11 @@ class _FWalletPageState extends State<FWalletPage> {
             children: [
               Text('Needs', style: AppTheme.text3),
               SizedBox(height: 4),
-              Text('Rp. 17.000.000', style: AppTheme.headline3.darkPurple),
+              AutoSizeText(
+                'Rp. 17.000.000',
+                style: AppTheme.headline3.darkPurple,
+                maxLines: 1,
+              ),
             ],
           ),
         ],
@@ -445,12 +460,16 @@ class _FWalletPageState extends State<FWalletPage> {
       child: Row(
         children: [
           Expanded(
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Chatime',
+                AutoSizeText(
+                  'Chatimefiohisafisahifsaihsfa fjsahfjasjk',
                   style: AppTheme.headline3,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  minFontSize: 16,
                 ),
                 SizedBox(height: 8),
                 Row(
@@ -470,24 +489,35 @@ class _FWalletPageState extends State<FWalletPage> {
             ),
           ),
           SizedBox(width: Helper.normalPadding),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '-Rp.17,000',
-                style: AppTheme.headline2.red.bold,
-              ),
-              SizedBox(height: 4),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(Resources.icTime, height: 12),
-                  SizedBox(width: 4),
-                  Text('30 September 2021', style: AppTheme.subText1),
-                ],
-              ),
-            ],
+          Expanded(
+            flex: 3,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                AutoSizeText(
+                  '-Rp.17,000000000',
+                  style: AppTheme.headline2.red.bold,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 4),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(Resources.icTime, height: 12),
+                    SizedBox(width: 4),
+                    AutoSizeText(
+                      '30 September 2021',
+                      style: AppTheme.subText1,
+                      maxLines: 1,
+                      maxFontSize: 10,
+                      minFontSize: 8,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
