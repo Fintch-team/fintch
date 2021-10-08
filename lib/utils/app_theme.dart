@@ -20,7 +20,7 @@ class AppTheme {
   static Color darkPurple = Color(0xFF9024A1);
   static Color darkPurpleOpacity = Color(0xFF9024A1).withOpacity(0.5);
 
-  ///font size: 36, color: black, fontWeight: bold
+  ///font size: 30, color: black, fontWeight: bold
   static const TextStyle headline1 = TextStyle(
     fontWeight: FontWeight.bold,
     color: black,

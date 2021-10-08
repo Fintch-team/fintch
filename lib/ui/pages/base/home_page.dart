@@ -136,8 +136,8 @@ class _HomePageState extends State<HomePage> {
           child: CustomNetworkImage(
             imgUrl: user != null ? user.img : Dummy.profileImg,
             borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.2,
-            height: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.16,
+            height: MediaQuery.of(context).size.width * 0.16,
           ),
         ),
         SizedBox(width: 16),
@@ -146,10 +146,11 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              AutoSizeText(
                 user != null ? 'Halo\n${user.name}!' : ' ',
                 style: AppTheme.headline1.white,
                 maxLines: 3,
+                minFontSize: 20,
                 overflow: TextOverflow.visible,
               ),
             ],
@@ -173,17 +174,21 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('Isi Fintch Point kamu', style: AppTheme.text2.white),
+        AutoSizeText(
+          'Isi Fintch Point kamu',
+          style: AppTheme.text2.white,
+          minFontSize: 12,
+        ),
         SizedBox(height: 4),
         Row(
           children: [
             SvgPicture.asset(
               Resources.icFintchWallet,
-              height: 18,
+              height: 32,
             ),
             SizedBox(width: 8),
             Expanded(
-              child: Text(
+              child: AutoSizeText(
                 user != null
                     ? user.wallet.walletAmount.toString().parseCurrency()
                     : '0',
