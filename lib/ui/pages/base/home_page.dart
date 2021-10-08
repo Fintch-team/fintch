@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -289,7 +290,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('F Goals Mendekati', style: AppTheme.headline3),
+                Text('F-Goals Mendekati', style: AppTheme.headline3),
                 SvgPicture.asset(Resources.next, height: 16),
               ],
             ),
@@ -330,7 +331,6 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Expanded(
-              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,12 +339,12 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // TODO: belum ada name
-                      Text(
+                      AutoSizeText(
                         'Beli Laptop Asus',
                         style: AppTheme.headline2,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
+                        minFontSize: 16,
                       ),
                       SizedBox(height: 4),
                       Row(
@@ -352,46 +352,47 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
-                          // TODO: format mash salah
-                          Text(
-                              data.deadline
-                                  .parseHourDateAndMonth()
-                                  .substring(0, 17),
-                              style: AppTheme.subText1),
+                          AutoSizeText(
+                            '30 September 2021',
+                            style: AppTheme.subText1,
+                            maxLines: 1,
+                            maxFontSize: 10,
+                            minFontSize: 8,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  Text(
-                    data.totalAmount.toString().parseCurrency(),
-                    style: AppTheme.text3.bold,
+                  AutoSizeText(
+                    'Rp. 17.000.000.000.000',
+                    style: AppTheme.text1.bold,
+                    maxLines: 1,
                   ),
                 ],
               ),
             ),
             SizedBox(width: Helper.smallPadding),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // TODO: belum ada percent
-                  CircularPercentIndicator(
-                    radius: 70.0,
-                    lineWidth: 16.0,
-                    animation: true,
-                    percent: 0.7,
-                    center: Text("70%", style: AppTheme.text2.darkPurple.bold),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    progressColor: AppTheme.purple,
-                    backgroundColor: AppTheme.purpleOpacity,
-                  ),
-                  SizedBox(height: Helper.smallPadding),
-                  Text(
-                    data.totalAmount.toString().parseCurrency(),
-                    style: AppTheme.subText2.green,
-                  ),
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularPercentIndicator(
+                  radius: MediaQuery.of(context).size.width * 0.2,
+                  lineWidth: 16.0,
+                  animation: true,
+                  percent: 0.7,
+                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: AppTheme.purple,
+                  backgroundColor: AppTheme.purpleOpacity,
+                ),
+                SizedBox(height: Helper.smallPadding),
+                AutoSizeText(
+                  'Rp. 17.000.000',
+                  style: AppTheme.text3.green,
+                  maxLines: 1,
+                ),
+              ],
             ),
           ],
         ),
