@@ -162,12 +162,14 @@ class _FWalletPageState extends State<FWalletPage> {
           _fWalletScrollableSheet(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme.purple,
-        onPressed: () {},
-        child: Icon(
-          Icons.add_rounded,
-          size: 32,
+      floatingActionButton: SafeArea(
+        child: FloatingActionButton(
+          backgroundColor: AppTheme.purple,
+          onPressed: () {},
+          child: Icon(
+            Icons.add_rounded,
+            size: 32,
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
