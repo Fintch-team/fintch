@@ -159,17 +159,21 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                return TransactionItem(
-                                  item: Datum(
-                                    id: 1,
-                                    amount: '20000',
-                                    createdAt: DateTime.now(),
-                                    updatedAt: DateTime.now(),
-                                    name: 'Dari Adit untuk Galuh',
-                                  ),
-                                  name: "name",
-                                  isPay: isPayHistory == 0 ? true : false,
-                                );
+                                // TODO: history page
+
+                                // return TransactionItem(
+                                //   item: Datum(
+                                //     id: 1,
+                                //     amount: '20000',
+                                //     createdAt: DateTime.now(),
+                                //     updatedAt: DateTime.now(),
+                                //     name: 'Dari Adit untuk Galuh',
+                                //   ),
+                                //   name: "name",
+                                //   isPay: isPayHistory == 0 ? true : false,
+                                // );
+
+                                return SizedBox();
                               },
                             ),
                           ],
@@ -184,17 +188,20 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                return TransactionItem(
-                                  item: Datum(
-                                    id: 1,
-                                    amount: '20000',
-                                    createdAt: DateTime.now(),
-                                    updatedAt: DateTime.now(),
-                                    name: 'Dari Adit untuk Galuh',
-                                  ),
-                                  name: "name",
-                                  isPay: isPayHistory == 0 ? true : false,
-                                );
+                                // TODO: history page
+
+                                // return TransactionItem(
+                                //   item: Datum(
+                                //     id: 1,
+                                //     amount: '20000',
+                                //     createdAt: DateTime.now(),
+                                //     updatedAt: DateTime.now(),
+                                //     name: 'Dari Adit untuk Galuh',
+                                //   ),
+                                //   name: "name",
+                                //   isPay: isPayHistory == 0 ? true : false,
+                                // );
+                                return SizedBox();
                               },
                             ),
                           ],

@@ -23,7 +23,7 @@ class TransactionBarcodePostEntity extends BaseEntity {
 class TransactionEntity extends BaseEntity {
   final int id;
   final DateTime? deadline;
-  final User user;
+  final UserData user;
   final int totalAmount;
   final String note;
   final DateTime? created;

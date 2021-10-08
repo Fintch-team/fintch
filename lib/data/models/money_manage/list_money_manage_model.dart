@@ -1,38 +1,30 @@
-// To parse this JSON data, do
-//
-//     final listMoneyManageModel = listMoneyManageModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:fintch/gen_export.dart';
-
-ListMoneyManageModel listMoneyManageModelFromJson(String str) =>
-    ListMoneyManageModel.fromJson(json.decode(str));
-
-String listMoneyManageModelToJson(ListMoneyManageModel data) =>
-    json.encode(data.toJson());
 
 class ListMoneyManageModel {
   ListMoneyManageModel({
+    required this.message,
+    required this.details,
     required this.data,
     required this.meta,
-    required this.response,
   });
 
-  ResponseGlobal? response;
+  String message;
+  dynamic details;
   List<MoneyManageData> data;
   Meta meta;
 
   factory ListMoneyManageModel.fromJson(Map<String, dynamic> json) =>
       ListMoneyManageModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        message: json["message"],
+        details: json["details"],
         data: List<MoneyManageData>.from(
             json["data"].map((x) => MoneyManageData.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
+        "message": message,
+        "details": details,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "meta": meta.toJson(),
       };

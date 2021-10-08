@@ -54,11 +54,13 @@ class UserEntity extends BaseEntity {
   final String name;
   final String nickname;
   final String img;
-  final Wallet wallet;
-  final Datum school;
-  final List<MoneyPlanning> moneyPlanning;
-  final List<Datum> receive;
-  final List<Datum> pay;
+  final WalletData wallet;
+  final SchoolData school;
+  final List<BarcodeData> barcode;
+  final List<MoneyPlanData> moneyPlanning;
+  final List<MoneyManageData> moneyManage;
+  final List<HistoryReceive> receive;
+  final List<HistoryPay> pay;
 
   UserEntity(
       {required this.id,
@@ -67,6 +69,8 @@ class UserEntity extends BaseEntity {
       required this.img,
       required this.wallet,
       required this.school,
+      required this.barcode,
+      required this.moneyManage,
       required this.moneyPlanning,
       required this.receive,
       required this.pay});

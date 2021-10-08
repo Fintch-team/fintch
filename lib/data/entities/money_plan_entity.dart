@@ -27,16 +27,20 @@ class MoneyPlanPutEntity extends BaseEntity {
 class MoneyPlanEntity extends BaseEntity {
   final int id;
   final DateTime? deadline;
-  final User user;
   final int totalAmount;
+  final int amount;
   final String note;
+  final String name;
+  final int percent;
   final DateTime? created;
 
   MoneyPlanEntity(
       {required this.id,
       required this.deadline,
-      required this.user,
       required this.totalAmount,
+      required this.amount,
       required this.note,
+      required this.name,
+      required this.percent,
       required this.created});
 }

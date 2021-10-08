@@ -36,7 +36,7 @@ class MoneyManageEntity extends BaseEntity {
   final String name;
   final int amount;
   final bool isIncome;
-  final Item item;
+  final MoneyManageItemData item;
 
   MoneyManageEntity(
       {required this.id,
