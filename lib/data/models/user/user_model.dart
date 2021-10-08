@@ -213,17 +213,21 @@ class Wallet {
 }
 
 // import 'package:json_annotation/json_annotation.dart';
-// part 'user.g.dart';
+// part 'user_model.g.dart';
 
 // @JsonSerializable()
 // class User {
 //   String name, lastName, add;
 //   bool subscription;
 
-//   User({this.name,this.lastName,this.add,this.subscription,});
+//   User({
+//     required this.name,
+//     required this.lastName,
+//     required this.add,
+//     required this.subscription,
+//   });
 
-//   factory User.fromJson(Map<String,dynamic> data) => _$UserFromJson(data);
+//   factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
 
-//   Map<String,dynamic> toJson() => _$UserToJson(this);
-
+//   Map<String, dynamic> toJson() => _$UserToJson(this);
 // }
