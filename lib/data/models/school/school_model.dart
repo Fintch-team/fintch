@@ -1,52 +1,25 @@
-// To parse this JSON data, do
-//
-//     final schoolModel = schoolModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:fintch/gen_export.dart';
-
-SchoolModel schoolModelFromJson(String str) =>
-    SchoolModel.fromJson(json.decode(str));
-
-String schoolModelToJson(SchoolModel data) => json.encode(data.toJson());
 
 class SchoolModel {
   SchoolModel({
+    required this.message,
+    required this.details,
     required this.data,
-    required this.response,
   });
 
-  ResponseGlobal? response;
+  String message;
+  dynamic details;
   SchoolData data;
 
   factory SchoolModel.fromJson(Map<String, dynamic> json) => SchoolModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        message: json["message"],
+        details: json["details"],
         data: SchoolData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
+        "message": message,
+        "details": details,
         "data": data.toJson(),
-      };
-}
-
-class SchoolData {
-  SchoolData({
-    required this.id,
-    required this.name,
-  });
-
-  int id;
-  String name;
-
-  factory SchoolData.fromJson(Map<String, dynamic> json) => SchoolData(
-        id: json["id"],
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
       };
 }

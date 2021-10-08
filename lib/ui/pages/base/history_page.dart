@@ -1,9 +1,9 @@
-import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
+
+import 'package:fintch/gen_export.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -159,17 +159,21 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                return TransactionItem(
-                                  item: Datum(
-                                    id: 1,
-                                    amount: '20000',
-                                    createdAt: DateTime.now(),
-                                    updatedAt: DateTime.now(),
-                                    name: 'Dari Adit untuk Galuh',
-                                  ),
-                                  name: "name",
-                                  isPay: isPayHistory == 0 ? true : false,
-                                );
+                                // TODO: history page
+
+                                // return TransactionItem(
+                                //   item: Datum(
+                                //     id: 1,
+                                //     amount: '20000',
+                                //     createdAt: DateTime.now(),
+                                //     updatedAt: DateTime.now(),
+                                //     name: 'Dari Adit untuk Galuh',
+                                //   ),
+                                //   name: "name",
+                                //   isPay: isPayHistory == 0 ? true : false,
+                                // );
+
+                                return SizedBox();
                               },
                             ),
                           ],
@@ -184,17 +188,20 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                return TransactionItem(
-                                  item: Datum(
-                                    id: 1,
-                                    amount: '20000',
-                                    createdAt: DateTime.now(),
-                                    updatedAt: DateTime.now(),
-                                    name: 'Dari Adit untuk Galuh',
-                                  ),
-                                  name: "name",
-                                  isPay: isPayHistory == 0 ? true : false,
-                                );
+                                // TODO: history page
+
+                                // return TransactionItem(
+                                //   item: Datum(
+                                //     id: 1,
+                                //     amount: '20000',
+                                //     createdAt: DateTime.now(),
+                                //     updatedAt: DateTime.now(),
+                                //     name: 'Dari Adit untuk Galuh',
+                                //   ),
+                                //   name: "name",
+                                //   isPay: isPayHistory == 0 ? true : false,
+                                // );
+                                return SizedBox();
                               },
                             ),
                           ],

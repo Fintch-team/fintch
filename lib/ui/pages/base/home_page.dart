@@ -312,7 +312,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fGoalItem(BuildContext context, int index, MoneyPlanning data) {
+  Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: Helper.getShadow(),
@@ -339,9 +339,8 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // TODO: belum ada name
                       Text(
-                        'Beli Laptop Asus',
+                        data.name,
                         style: AppTheme.headline2,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -352,9 +351,8 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
-                          // TODO: format mash salah
                           Text(
-                              data.deadline
+                              data.deadline!
                                   .parseHourDateAndMonth()
                                   .substring(0, 17),
                               style: AppTheme.subText1),
@@ -374,7 +372,6 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // TODO: belum ada percent
                   CircularPercentIndicator(
                     radius: 70.0,
                     lineWidth: 16.0,
@@ -444,6 +441,7 @@ class _HomePageState extends State<HomePage> {
                       name: user.name,
                       isPay: isPayHistory == 0 ? true : false,
                     );
+                    // return SizedBox();
                   },
                 ),
               if (user.receive.isNotEmpty)
@@ -458,6 +456,8 @@ class _HomePageState extends State<HomePage> {
                       name: user.name,
                       isPay: isPayHistory == 0 ? true : false,
                     );
+
+                    // return SizedBox();
                   },
                 ),
             ],

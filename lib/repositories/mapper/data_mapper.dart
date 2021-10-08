@@ -2,35 +2,39 @@ import 'package:fintch/gen_export.dart';
 
 class DataMapper {
   static AuthEntity authMapper(TokenModel tokenModel) => AuthEntity(
-        accessToken: tokenModel.data!.accessToken,
-        tokenType: tokenModel.data!.tokenType,
-        expiresIn: tokenModel.data!.expiresIn,
-        isSetPass: tokenModel.data!.user.isSetPass,
-        isSetPin: tokenModel.data!.user.isSetPin,
+        accessToken: tokenModel.data.accessToken,
+        tokenType: tokenModel.data.tokenType,
+        expiresIn: tokenModel.data.expiresIn,
+        isSetPass: tokenModel.data.user.isSetPass,
+        isSetPin: tokenModel.data.user.isSetPin,
       );
 
   static UserEntity userMapper(UserModel userModel) => UserEntity(
         id: userModel.data.id,
         name: userModel.data.name,
         nickname: userModel.data.nickname,
-        wallet: userModel.data.wallet!,
-        school: userModel.data.school!,
+        wallet: userModel.data.wallet,
+        school: userModel.data.school,
         moneyPlanning: userModel.data.moneyPlanning,
         receive: userModel.data.receive,
         pay: userModel.data.pay,
         img: userModel.data.img,
+        barcode: userModel.data.barcode,
+        moneyManage: userModel.data.moneyManage,
       );
 
-  static UserEntity localUserMapper(DataUser userModel) => UserEntity(
+  static UserEntity localUserMapper(UserData userModel) => UserEntity(
         id: userModel.id,
         name: userModel.name,
         nickname: userModel.nickname,
-        wallet: userModel.wallet!,
-        school: userModel.school!,
+        wallet: userModel.wallet,
+        school: userModel.school,
         moneyPlanning: userModel.moneyPlanning,
         receive: userModel.receive,
         pay: userModel.pay,
         img: userModel.img,
+        barcode: userModel.barcode,
+        moneyManage: userModel.moneyManage,
       );
 
   static HistoryEntity historyMapper(ListHistoryModel historyModel) =>
@@ -73,9 +77,11 @@ class DataMapper {
       MoneyPlanEntity(
         id: moneyPlan.data.id,
         deadline: moneyPlan.data.deadline,
-        user: moneyPlan.data.user,
         totalAmount: moneyPlan.data.totalAmount,
         note: moneyPlan.data.note,
         created: moneyPlan.data.created,
+        amount: moneyPlan.data.amount,
+        name: moneyPlan.data.name,
+        percent: moneyPlan.data.percent,
       );
 }

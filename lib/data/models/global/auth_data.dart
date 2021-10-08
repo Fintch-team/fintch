@@ -1,31 +1,7 @@
 import 'package:fintch/gen_export.dart';
 
-class TokenModel {
-  TokenModel({
-    required this.message,
-    required this.details,
-    required this.data,
-  });
-
-  String message;
-  dynamic details;
-  Data data;
-
-  factory TokenModel.fromJson(Map<String, dynamic> json) => TokenModel(
-        message: json["message"],
-        details: json["details"],
-        data: Data.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "message": message,
-        "details": details,
-        "data": data.toJson(),
-      };
-}
-
-class Data {
-  Data({
+class AuthData {
+  AuthData({
     required this.user,
     required this.accessToken,
     required this.tokenType,
@@ -37,7 +13,7 @@ class Data {
   String tokenType;
   DateTime expiresIn;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory AuthData.fromJson(Map<String, dynamic> json) => AuthData(
         user: UserData.fromJson(json["user"]),
         accessToken: json["access_token"],
         tokenType: json["token_type"],
