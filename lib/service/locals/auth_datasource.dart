@@ -16,18 +16,18 @@ class LocalAuthService extends Service {
   LocalAuthService._();
 
   Future<void> saveUserSession(TokenModel value) async {
-    getStorage.write(KeyStorage.kToken, value.data!.accessToken);
+    getStorage.write(KeyStorage.kToken, value.data.accessToken);
     getStorage.write(
-        KeyStorage.kExpired, value.data!.expiresIn.toIso8601String());
+        KeyStorage.kExpired, value.data.expiresIn.toIso8601String());
 
-    updateUserInformation(value.data!.user);
+    updateUserInformation(value.data.user);
   }
 
-  Future<void> updateUserInformation(DataUser user) async {
+  Future<void> updateUserInformation(UserData user) async {
     getStorage.write(KeyStorage.kUserInformation, json.encode(user.toJson()));
   }
 
-  Future<void> saveUserInfomation(DataUser value) async {
+  Future<void> saveUserInfomation(UserData value) async {
     getStorage.write(KeyStorage.kUserInformation, json.encode(value.toJson()));
   }
 
@@ -36,10 +36,10 @@ class LocalAuthService extends Service {
     getStorage.remove(KeyStorage.kExpired);
   }
 
-  DataUser? get currentUser {
+  UserData? get currentUser {
     final String? userJson = getStorage.read(KeyStorage.kUserInformation);
     if (userJson != null) {
-      return DataUser.fromJson(json.decode(userJson));
+      return UserData.fromJson(json.decode(userJson));
     }
 
     return null;

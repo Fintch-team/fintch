@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionItem extends StatelessWidget {
-  final Datum item;
+  final HistoryData item;
   final String name;
   final bool isPay;
 
@@ -32,9 +32,7 @@ class TransactionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.createdAt != null
-                      ? item.createdAt!.parseHourDateAndMonth()
-                      : '-',
+                  item.createdAt.parseHourDateAndMonth(),
                   style: AppTheme.text3,
                 ),
                 SizedBox(height: 8),
@@ -53,9 +51,7 @@ class TransactionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                item.amount != null
-                    ? (isPay ? '-' : '') + item.amount!.parseCurrency()
-                    : '0',
+                (isPay ? '-' : '') + item.amount.parseCurrency(),
                 style: isPay
                     ? AppTheme.headline2.red.bold
                     : AppTheme.headline2.green.bold,

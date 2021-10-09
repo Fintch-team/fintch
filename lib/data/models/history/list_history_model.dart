@@ -1,38 +1,30 @@
-// To parse this JSON data, do
-//
-//     final listHistoryModel = listHistoryModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:fintch/gen_export.dart';
-
-ListHistoryModel listHistoryModelFromJson(String str) =>
-    ListHistoryModel.fromJson(json.decode(str));
-
-String listHistoryModelToJson(ListHistoryModel data) =>
-    json.encode(data.toJson());
 
 class ListHistoryModel {
   ListHistoryModel({
+    required this.message,
+    required this.details,
     required this.data,
     required this.meta,
-    required this.response,
   });
 
-  ResponseGlobal? response;
+  String message;
+  dynamic details;
   List<HistoryData> data;
   Meta meta;
 
   factory ListHistoryModel.fromJson(Map<String, dynamic> json) =>
       ListHistoryModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        message: json["message"],
+        details: json["details"],
         data: List<HistoryData>.from(
             json["data"].map((x) => HistoryData.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
+        "message": message,
+        "details": details,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "meta": meta.toJson(),
       };

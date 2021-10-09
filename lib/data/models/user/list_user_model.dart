@@ -1,36 +1,29 @@
-// To parse this JSON data, do
-//
-//     final listUserModel = listUserModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:fintch/gen_export.dart';
-
-ListUserModel listUserModelFromJson(String str) =>
-    ListUserModel.fromJson(json.decode(str));
-
-String listUserModelToJson(ListUserModel data) => json.encode(data.toJson());
 
 class ListUserModel {
   ListUserModel({
+    required this.message,
+    required this.details,
     required this.data,
     required this.meta,
-    required this.response,
   });
 
-  ResponseGlobal? response;
-  List<DataUser> data;
+  String message;
+  dynamic details;
+  List<UserData> data;
   Meta meta;
 
   factory ListUserModel.fromJson(Map<String, dynamic> json) => ListUserModel(
-        response: ResponseGlobal.fromJson(json["response"]),
+        message: json["message"],
+        details: json["details"],
         data:
-            List<DataUser>.from(json["data"].map((x) => DataUser.fromJson(x))),
+            List<UserData>.from(json["data"].map((x) => UserData.fromJson(x))),
         meta: Meta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "response": response!.toJson(),
+        "message": message,
+        "details": details,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "meta": meta.toJson(),
       };
