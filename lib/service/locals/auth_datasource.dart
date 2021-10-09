@@ -38,6 +38,7 @@ class LocalAuthService extends Service {
 
   UserData? get currentUser {
     final String? userJson = getStorage.read(KeyStorage.kUserInformation);
+    print(userJson);
     if (userJson != null) {
       return UserData.fromJson(json.decode(userJson));
     }
