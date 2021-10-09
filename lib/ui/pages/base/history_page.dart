@@ -52,7 +52,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             );
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularLoading());
         },
       ),
     );
@@ -159,21 +159,10 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                // TODO: history page
-
-                                // return TransactionItem(
-                                //   item: Datum(
-                                //     id: 1,
-                                //     amount: '20000',
-                                //     createdAt: DateTime.now(),
-                                //     updatedAt: DateTime.now(),
-                                //     name: 'Dari Adit untuk Galuh',
-                                //   ),
-                                //   name: "name",
-                                //   isPay: isPayHistory == 0 ? true : false,
-                                // );
-
-                                return SizedBox();
+                                return TransactionItem(
+                                  item: pay.data[index],
+                                  isPay: isPayHistory == 0 ? true : false,
+                                );
                               },
                             ),
                           ],
@@ -188,20 +177,10 @@ class _HistoryPageState extends State<HistoryPage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                // TODO: history page
-
-                                // return TransactionItem(
-                                //   item: Datum(
-                                //     id: 1,
-                                //     amount: '20000',
-                                //     createdAt: DateTime.now(),
-                                //     updatedAt: DateTime.now(),
-                                //     name: 'Dari Adit untuk Galuh',
-                                //   ),
-                                //   name: "name",
-                                //   isPay: isPayHistory == 0 ? true : false,
-                                // );
-                                return SizedBox();
+                                return TransactionItem(
+                                  item: receive.data[index],
+                                  isPay: isPayHistory == 0 ? true : false,
+                                );
                               },
                             ),
                           ],

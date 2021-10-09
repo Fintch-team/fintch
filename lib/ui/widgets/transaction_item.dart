@@ -5,12 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionItem extends StatelessWidget {
   final HistoryData item;
-  final String name;
   final bool isPay;
 
   const TransactionItem({
     required this.item,
-    required this.name,
     this.isPay: true,
     Key? key,
   }) : super(key: key);
@@ -37,7 +35,14 @@ class TransactionItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Dari $name',
+                  /*TODO: di history page, array pay sama receive nya masih belum ke split,
+                     masih kegabung, tapi data didalemnya udah bener, ada user pay sama user receive
+                     kalau yang di home page, array pay sama receive nya udah ke split,
+                     tapi data didalemnya baru cuma user pay kalau di array pay, user receive kalau di array receive
+                     kalau bisa dua duanya, untuk di nama soalnya
+                  */
+                  'Dari Adit untuk Galuh',
+                  // 'Dari ${item.pay!.name} untuk ${item.receive!.name}',
                   style: AppTheme.text1,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
