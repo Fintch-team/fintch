@@ -8,4 +8,5 @@ export 'helper.dart';
 export 'extensions.dart';
 export 'validator.dart';
 export 'app_theme.dart';
+export 'decimal_formatter.dart';
 export 'constants.dart';
