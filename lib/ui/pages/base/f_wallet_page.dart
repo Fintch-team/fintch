@@ -195,15 +195,18 @@ class _FWalletPageState extends State<FWalletPage> {
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: Helper.normalPadding),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.24,
+            AspectRatio(
+              aspectRatio: 15/9,
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: AppTheme.whiteOpacity,
+                height: MediaQuery.of(context).size.height * 0.24,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: AppTheme.whiteOpacity,
+                  ),
+                  padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
+                  child: _LineChart(),
                 ),
-                padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
-                child: _LineChart(),
               ),
             ),
           ],
