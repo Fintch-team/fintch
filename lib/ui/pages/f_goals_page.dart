@@ -25,32 +25,56 @@ class FGoalsPage extends StatelessWidget {
                     title: '',
                     isBlack: true,
                   ),
-                  SizedBox(height: Helper.bigPadding),
-                  Text('F-Goals', style: AppTheme.headline1),
-                  SizedBox(height: Helper.bigPadding),
-                  Text(
-                    'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
-                    style: AppTheme.text1,
-                  ),
-                  SizedBox(height: Helper.bigPadding),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                    itemBuilder: (context, index) {
-                      return _fGoalItem(context, index);
-                    },
-                  ),
+                  _headerFGoals(),
+                  _fGoalsList(),
                 ],
               ),
             ),
           ),
         ),
       ),
+      floatingActionButton: SafeArea(
+        child: FloatingActionButton(
+          backgroundColor: AppTheme.purple,
+          onPressed: () {},
+          child: Icon(
+            Icons.add_rounded,
+            size: MediaQuery.of(context).size.width * 0.1,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
+  Widget _headerFGoals() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(height: Helper.bigPadding),
+        Text('F-Goals', style: AppTheme.headline1),
+        SizedBox(height: Helper.bigPadding),
+        Text(
+          'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
+          style: AppTheme.text1,
+        ),
+        SizedBox(height: Helper.bigPadding),
+      ],
+    );
+  }
+
+  Widget _fGoalsList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: 10,
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(vertical: 0),
+      itemBuilder: (context, index) {
+        return _fGoalItem(context, index);
+      },
+    );
+  }
 
   Widget _fGoalItem(BuildContext context, int index) {
     return Container(
