@@ -259,6 +259,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeatureItem(
+            name: 'Top-up',
+            assetName: Resources.icTopUp,
+            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
+            isOpacity: true,
+          ),
+          SizedBox(width: 20),
+          FeatureItem(
             name: 'Pay',
             assetName: Resources.icPay,
             onTap: () => Navigator.pushNamed(context, PagePath.pay),
@@ -276,13 +283,6 @@ class _HomePageState extends State<HomePage> {
             assetName: Resources.icBarrierCash,
             onTap: () {},
           ),
-          SizedBox(width: 20),
-          FeatureItem(
-            name: 'F-Goals',
-            assetName: Resources.icFGoals,
-            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
-            isOpacity: true,
-          ),
         ],
       ),
     );
@@ -295,12 +295,17 @@ class _HomePageState extends State<HomePage> {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('F-Goals Mendekati', style: AppTheme.headline3),
-                SvgPicture.asset(Resources.next, height: 16),
-              ],
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, PagePath.fGoals);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('F-Goals Mendekati', style: AppTheme.headline3),
+                  SvgPicture.asset(Resources.next, height: 16),
+                ],
+              ),
             ),
           ),
           Container(
@@ -318,10 +323,28 @@ class _HomePageState extends State<HomePage> {
                               state.entity.moneyPlanning[index]);
                         },
                       )
-                    : Text(
-                        'F-Goals Kosong!',
-                        style: AppTheme.text1.bold,
-                      )
+                    : Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              'F-Goals Kosong! \nTambah F-Goals',
+                              style: AppTheme.text1.bold,
+                            ),
+                          SizedBox(width: Helper.normalPadding),
+                          FeatureItem(
+                            name: 'F-Goals',
+                            assetName: Resources.icFGoals,
+                            onTap: () {
+                              Navigator.pushNamed(context, PagePath.fGoals);
+                            },
+                            showTitle: false,
+                            isExpand: false,
+                            size: MediaQuery.of(context).size.width * 0.18,
+                          ),
+                        ],
+                      ),
+                    )
                 : state is HomeLoading
                     ? Center(
                         child: CircularLoading(),
@@ -410,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: Helper.smallPadding),
                 AutoSizeText(
-                  data.totalAmount.toString().parseCurrency(),
+                  'Rp. ' + data.totalAmount.toString().parseCurrency(),
                   style: AppTheme.text3.green,
                   maxLines: 1,
                 ),

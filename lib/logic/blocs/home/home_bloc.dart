@@ -8,7 +8,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.userRepository}) : super(HomeInitial()) {
     on<GetUser>((event, emit) async {
       emit(HomeLoading());
-      await Future.delayed(Duration(seconds: 3));
       try {
         UserEntity entity = await userRepository.currentUser();
         emit(HomeSuccess(entity: entity));

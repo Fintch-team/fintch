@@ -11,25 +11,37 @@ class FeatureItem extends StatelessWidget {
   final String assetName;
   final VoidCallback onTap;
   final bool showTitle;
+  final bool isExpand;
+  final double? size;
   const FeatureItem({
     Key? key,
     this.isOpacity: false,
     required this.name,
     required this.assetName,
     required this.onTap,
+    this.isExpand : true,
     this.showTitle: true,
+    this.size,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            AspectRatio(
+    return isExpand ? Expanded(
+      child: _item(),
+    ) : _item();
+  }
+
+  GestureDetector _item() {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: size,
+            width: size,
+            child: AspectRatio(
               aspectRatio: 1,
               child: Container(
                 decoration: BoxDecoration(
@@ -45,15 +57,15 @@ class FeatureItem extends StatelessWidget {
                 child: SvgPicture.asset(assetName),
               ),
             ),
-            SizedBox(height: showTitle ? 8 : 0),
-            showTitle ? AutoSizeText(
-              name,
-              style: AppTheme.text3.black.bold,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-            ) : Container(),
-          ],
-        ),
+          ),
+          SizedBox(height: showTitle ? 8 : 0),
+          showTitle ? AutoSizeText(
+            name,
+            style: AppTheme.text3.black.bold,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ) : Container(),
+        ],
       ),
     );
   }
