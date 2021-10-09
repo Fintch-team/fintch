@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final bool isEnable;
   final bool isOutline;
+  final bool isUpper;
 
   const CustomButton({
     Key? key,
@@ -14,6 +15,7 @@ class CustomButton extends StatelessWidget {
     required this.text,
     this.isEnable: true,
     this.isOutline: false,
+    this.isUpper: true
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class CustomButton extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            text.toUpperCase(),
+            isUpper ? text.toUpperCase() : text,
             style: AppTheme.text2.bold,
           ),
         ),
