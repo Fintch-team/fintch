@@ -65,11 +65,6 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Icon(
-                  Icons.payments_rounded,
-                  color: AppTheme.white,
-                ),
-                SizedBox(width: Helper.smallPadding),
-                Icon(
                   Icons.notifications_rounded,
                   color: AppTheme.white,
                 ),
@@ -261,7 +256,7 @@ class _HomePageState extends State<HomePage> {
           FeatureItem(
             name: 'Top-up',
             assetName: Resources.icTopUp,
-            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
+            onTap: () => Navigator.pushNamed(context, PagePath.topUp),
             isOpacity: true,
           ),
           SizedBox(width: 20),

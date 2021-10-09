@@ -31,6 +31,8 @@ class PageRouter {
         return _buildRoute(settings, PayPage());
       case PagePath.fGoals:
         return _buildRoute(settings, FGoalsPage());
+      case PagePath.topUp:
+        return _buildRoute(settings, TopUpPage());
       default:
         return _errorRoute();
     }

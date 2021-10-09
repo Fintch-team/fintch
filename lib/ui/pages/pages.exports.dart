@@ -5,6 +5,7 @@
 library pages;
 
 export 'f_goals_page.dart';
+export 'top_up_page.dart';
 export 'auth/auth.exports.dart';
 export 'splash_page.dart';
 export 'receive_page.dart';
