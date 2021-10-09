@@ -107,7 +107,15 @@ class _HomePageState extends State<HomePage> {
                             ? Center(
                                 child: CircularLoading(),
                               )
-                            : Container(),
+                            : state is HomeFailure
+                                ? Center(
+                                    child: Text(
+                                      'Data gagal di load',
+                                      style: AppTheme.headline3.white,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                : Container(),
                   ),
                   SizedBox(width: Helper.normalPadding),
                   _homeIllustration(context),
@@ -487,11 +495,11 @@ class _HomePageState extends State<HomePage> {
                 )
               : state is HomeLoading
                   ? Container(
-            height: MediaQuery.of(context).size.width * 0.48,
-                    child: Center(
+                      height: MediaQuery.of(context).size.width * 0.48,
+                      child: Center(
                         child: CircularLoading(),
                       ),
-                  )
+                    )
                   : Container(),
         ],
       ),

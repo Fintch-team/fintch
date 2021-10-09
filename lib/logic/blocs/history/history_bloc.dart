@@ -10,6 +10,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       : super(HistoryInitial()) {
     on<GetHistory>((event, emit) async {
       emit(HistoryLoading());
+      await Future.delayed(Duration(seconds: 3));
       try {
         HistoryEntity pay = await historyRepository.getPayHistory();
         HistoryEntity receive = await historyRepository.getReceiveHistory();
