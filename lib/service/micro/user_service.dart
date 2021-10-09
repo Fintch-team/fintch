@@ -88,7 +88,6 @@ class UserService extends ApiService {
   Future<UserModel> authGet() async {
     try {
       final res = await dio.get('auth');
-
       return UserModel.fromJson(res.data);
     } on DioError catch (e) {
       debugPrint("error $e");

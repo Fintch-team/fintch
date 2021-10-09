@@ -38,6 +38,7 @@ class Resources {
   static const String icClose = '$_baseSvg/ic_close.svg';
   static const String icHelp = '$_baseSvg/ic_help.svg';
   static const String icTime = '$_baseSvg/time.svg';
+  static const String icTopUp = '$_baseSvg/top_up.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';
