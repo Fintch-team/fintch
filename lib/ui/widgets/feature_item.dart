@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/material.dart';
@@ -45,10 +46,11 @@ class FeatureItem extends StatelessWidget {
               ),
             ),
             SizedBox(height: showTitle ? 8 : 0),
-            showTitle ? Text(
+            showTitle ? AutoSizeText(
               name,
               style: AppTheme.text3.black.bold,
               textAlign: TextAlign.center,
+              maxLines: 1,
             ) : Container(),
           ],
         ),

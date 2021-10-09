@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -74,11 +75,12 @@ class FGoalsPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
+                      AutoSizeText(
                         'Beli Laptop Asus',
                         style: AppTheme.headline2,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
+                        minFontSize: 16,
                       ),
                       SizedBox(height: 4),
                       Row(
@@ -86,12 +88,23 @@ class FGoalsPage extends StatelessWidget {
                         children: [
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
-                          Text('30 September 2021', style: AppTheme.subText1),
+                          AutoSizeText(
+                            '30 September 2021',
+                            style: AppTheme.subText1,
+                            maxLines: 1,
+                            maxFontSize: 10,
+                            minFontSize: 8,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  Text('Rp. 17.000.000', style: AppTheme.text1.bold),
+                  AutoSizeText(
+                    'Rp. 17.000.000.000.000',
+                    style: AppTheme.text1.bold,
+                    maxLines: 1,
+                  ),
                 ],
               ),
             ),
@@ -100,7 +113,7 @@ class FGoalsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularPercentIndicator(
-                  radius: 88.0,
+                  radius: MediaQuery.of(context).size.width * 0.2,
                   lineWidth: 16.0,
                   animation: true,
                   percent: 0.7,
@@ -110,7 +123,11 @@ class FGoalsPage extends StatelessWidget {
                   backgroundColor: AppTheme.purpleOpacity,
                 ),
                 SizedBox(height: Helper.smallPadding),
-                Text('Rp. 17.000.000', style: AppTheme.text3.green),
+                AutoSizeText(
+                  'Rp. 17.000.000',
+                  style: AppTheme.text3.green,
+                  maxLines: 1,
+                ),
               ],
             ),
           ],
