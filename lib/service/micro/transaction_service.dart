@@ -8,7 +8,7 @@ class TransactionService extends ApiService {
   Future<bool> postTransaction({
     required String idUserReceive,
     required String idUserPay,
-    required int amount,
+    required String amount,
   }) async {
     try {
       final res = await dio.post('transaction', data: {

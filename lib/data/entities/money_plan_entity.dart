@@ -44,3 +44,11 @@ class MoneyPlanEntity extends BaseEntity {
       required this.percent,
       required this.created});
 }
+
+class ListMoneyPlanEntity extends BaseEntity {
+  final List<MoneyPlanData> data;
+
+  ListMoneyPlanEntity({
+    required this.data,
+  });
+}

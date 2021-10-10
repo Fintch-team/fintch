@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => TransactionRepository(
             transactionService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(
@@ -119,10 +120,46 @@ class _MyAppState extends State<MyApp> {
               userRepository: context.read<UserRepository>(),
             ),
           ),
+          BlocProvider<ReceiveBloc>(
+            create: (context) => HomeBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
           BlocProvider<HistoryBloc>(
             create: (context) => HistoryBloc(
               userRepository: context.read<UserRepository>(),
               historyRepository: context.read<HistoryRepository>(),
+            ),
+          ),
+          BlocProvider<SettingsBloc>(
+            create: (context) => SettingsBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyManageBloc>(
+            create: (context) => MoneyManageBloc(
+              moneyManageRepository: context.read<MoneyManageRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyManageItemBloc>(
+            create: (context) => MoneyManageItemBloc(
+              moneyManageItemRepository:
+                  context.read<MoneyManageItemRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyPlanBloc>(
+            create: (context) => MoneyPlanBloc(
+              moneyPlanRepository: context.read<MoneyPlanRepository>(),
+            ),
+          ),
+          BlocProvider<WalletBloc>(
+            create: (context) => WalletBloc(
+              walletRepository: context.read<WalletRepository>(),
+            ),
+          ),
+          BlocProvider<TransactionBloc>(
+            create: (context) => TransactionBloc(
+              transactionRepository: context.read<TransactionRepository>(),
             ),
           ),
         ],

@@ -12,10 +12,12 @@ class MoneyManageInitial extends MoneyManageState {}
 
 class MoneyManageLoading extends MoneyManageState {}
 
-class MoneyManageSuccess extends MoneyManageState {
-  final UserEntity entity;
+class MoneyManageRequestSuccess extends MoneyManageState {}
 
-  MoneyManageSuccess({required this.entity});
+class MoneyManageResponseSuccess extends MoneyManageState {
+  final ListMoneyManageEntity entity;
+
+  MoneyManageResponseSuccess({required this.entity});
 
   @override
   List<Object> get props => [entity];

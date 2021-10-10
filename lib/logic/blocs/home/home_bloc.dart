@@ -2,11 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+mixin ReceiveBloc on Bloc<HomeEvent, HomeState> {}
+
+class HomeBloc extends Bloc<HomeEvent, HomeState> with ReceiveBloc {
   final UserRepository userRepository;
 
   HomeBloc({required this.userRepository}) : super(HomeInitial()) {
-    on<GetUser>((event, emit) async {
+    on<HomeInit>((event, emit) async {
       emit(HomeLoading());
       try {
         UserEntity entity = await userRepository.currentUser();

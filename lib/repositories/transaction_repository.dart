@@ -2,16 +2,18 @@ import 'package:fintch/gen_export.dart';
 
 class TransactionRepository {
   final TransactionService transactionService;
+  final LocalAuthService localAuthService;
 
   TransactionRepository({
     required this.transactionService,
+    required this.localAuthService,
   });
 
   Future<bool> postTransaction(
       {required TransactionPostEntity postEntity}) async {
     bool res = await transactionService.postTransaction(
         idUserReceive: postEntity.idReceive,
-        idUserPay: postEntity.idPay,
+        idUserPay: localAuthService.userId.toString(),
         amount: postEntity.amount);
 
     return res;

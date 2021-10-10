@@ -42,3 +42,11 @@ class WalletEntity extends BaseEntity {
       required this.walletAmount,
       required this.barrierExpired});
 }
+
+class ListWalletEntity extends BaseEntity {
+  final List<WalletData> data;
+
+  ListWalletEntity({
+    required this.data,
+  });
+}

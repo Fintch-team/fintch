@@ -23,12 +23,14 @@ class HistoryService extends ApiService {
   Future<ListHistoryModel> getHistoryAll(
       {String idPay = '', String idReceive = ''}) async {
     try {
-      Map<String, dynamic> query = {
-        if (idPay.isNotEmpty) 'pay': idPay,
-        if (idReceive.isNotEmpty) 'receive': idReceive,
-      };
+      // Map<String, dynamic> query = {
+      //   if (idPay.isNotEmpty) 'pay': idPay,
+      //   if (idReceive.isNotEmpty) 'receive': idReceive,
+      // };
 
-      final res = await dio.get('history', queryParameters: query);
+      final res = await dio.get(
+        'history',
+      );
 
       return ListHistoryModel.fromJson(res.data);
     } on DioError catch (e) {

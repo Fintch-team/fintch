@@ -26,9 +26,5 @@ class HistoryEntity extends BaseEntity {
   final List<HistoryData> pay;
   final List<HistoryData> receive;
 
-  HistoryEntity({
-    List<HistoryData>? pay,
-    List<HistoryData>? receive,
-  })  : pay = pay ?? List<HistoryData>.empty(),
-        receive = receive ?? List<HistoryData>.empty();
+  HistoryEntity({required this.pay, required this.receive});
 }

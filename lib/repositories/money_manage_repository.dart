@@ -7,14 +7,21 @@ class MoneyManageRepository {
     required this.moneyManageService,
   });
 
-  Future<MoneyManageEntity> getPayMoneyManage({required String id}) async {
+  Future<MoneyManageEntity> getMoneyManageDetail({required String id}) async {
     MoneyManageModel moneyManageModel =
         await moneyManageService.getMoneyManageId(id: id);
 
     return DataMapper.moneyManageMapper(moneyManageModel);
   }
 
-  Future<bool> inComePosttMoneyManage(
+  Future<ListMoneyManageEntity> getMoneyManage() async {
+    ListMoneyManageModel moneyManageModel =
+        await moneyManageService.getMoneyManageAll();
+
+    return DataMapper.listMoneyManageMapper(moneyManageModel);
+  }
+
+  Future<bool> inComePostMoneyManage(
       {required MoneyManageInPostEntity postEntity}) async {
     bool res = await moneyManageService.postIncomeMoneyManage(
       name: postEntity.name,
@@ -24,7 +31,7 @@ class MoneyManageRepository {
     return res;
   }
 
-  Future<bool> outComePosttMoneyManage(
+  Future<bool> outComePostMoneyManage(
       {required MoneyManageOutPostEntity postEntity}) async {
     bool res = await moneyManageService.postOutcomeMoneyManage(
         name: postEntity.name,

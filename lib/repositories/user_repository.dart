@@ -78,4 +78,6 @@ class UserRepository {
   }
 
   bool get isHasLoggedIn => localAuthService.isHasLoggedIn;
+
+  int get userID => localAuthService.userId;
 }

@@ -4,6 +4,9 @@ class KeyStorage {
   static const String kToken = 'token';
   static const String kExpired = 'expired';
   static const String kUserInformation = 'userInformation';
+  static const String kSetPass = 'setPass';
+  static const String kSetPin = 'setPin';
+  static const String kID = 'id';
 }
 
 class Resources {

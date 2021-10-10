@@ -9,7 +9,8 @@ class TransactionItem extends StatelessWidget {
 
   const TransactionItem({
     required this.item,
-    this.isPay: true,
+    required this.isPay,
+
     Key? key,
   }) : super(key: key);
 

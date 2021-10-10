@@ -8,6 +8,8 @@ abstract class WalletEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetWallet extends WalletEvent {}
+
 class PostWallet extends WalletEvent {
   final WalletPostEntity entity;
 

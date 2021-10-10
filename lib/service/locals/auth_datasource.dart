@@ -19,6 +19,9 @@ class LocalAuthService extends Service {
     getStorage.write(KeyStorage.kToken, value.data.accessToken);
     getStorage.write(
         KeyStorage.kExpired, value.data.expiresIn.toIso8601String());
+    getStorage.write(KeyStorage.kSetPass, value.data.user.isSetPass);
+    getStorage.write(KeyStorage.kSetPin, value.data.user.isSetPin);
+    getStorage.write(KeyStorage.kID, value.data.user.id);
 
     updateUserInformation(value.data.user);
   }
@@ -46,6 +49,10 @@ class LocalAuthService extends Service {
     return null;
   }
 
+  bool? get isSetPass => getStorage.read(KeyStorage.kSetPass);
+  bool? get isSetPin => getStorage.read(KeyStorage.kSetPin);
+  int get userId => getStorage.read(KeyStorage.kID);
+
   String? get token => getStorage.read(KeyStorage.kToken);
   bool get isAccessTokenExpired =>
       accessTokenExpired == null ||
@@ -59,5 +66,7 @@ class LocalAuthService extends Service {
   bool get isHasLoggedIn =>
       token != null &&
       accessTokenExpired != null &&
+      isSetPass != null &&
+      isSetPin != null &&
       accessTokenExpired!.isAfter(DateTime.now());
 }
