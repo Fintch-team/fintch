@@ -93,27 +93,43 @@ class _SettingsPageState extends State<SettingsPage> {
               Text(state.entity.nickname, style: AppTheme.text3.purple),
             ],
           );
+        } else if (state is SettingsLoading) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Center(
+              child: CircularLoading(),
+            ),
+          );
+        } else if (state is SettingsFailure) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Center(
+              child: Text(
+                'Data gagal di load',
+                style: AppTheme.headline3.white,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
         }
-
-        // TODO: state yg lain belum di implementasi
-        return SizedBox();
+        return Container();
       },
     );
   }
 
   Widget _statusUser() {
-    return BlocBuilder<WalletBloc, WalletState>(
-      builder: (context, state) {
-        if (state is WalletResponseSuccess) {
-          // TODO: get wallet tidak perlu list
-          return Container(
-            padding: EdgeInsets.all(Helper.smallPadding),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: Helper.getShadow(),
-              color: AppTheme.white,
-            ),
-            child: Row(
+    return Container(
+      padding: EdgeInsets.all(Helper.smallPadding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+      ),
+      child: BlocBuilder<WalletBloc, WalletState>(
+        builder: (context, state) {
+          if (state is WalletResponseSuccess) {
+            // TODO: get wallet tidak perlu list
+            return Row(
               children: [
                 Expanded(
                   child: Row(
@@ -162,13 +178,19 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               ],
-            ),
-          );
-        }
-
-        // TODO: state yg lain belum di implementasi
-        return SizedBox();
-      },
+            );
+          }else if (state is WalletLoading) {
+            return Center(
+              child: CircularLoading(),
+            );
+          } else if (state is WalletFailure) {
+            return Center(
+              child: Text('Gagal Load Data'),
+            );
+          }
+          return Container();
+        },
+      ),
     );
   }
 
