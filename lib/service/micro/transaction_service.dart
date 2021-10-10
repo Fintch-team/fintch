@@ -42,4 +42,24 @@ class TransactionService extends ApiService {
       throw e.error;
     }
   }
+
+  Future<TopUpModel> postTransactionTopUp({
+    required String name,
+    required int amount,
+  }) async {
+    try {
+      final res = await dio.post(
+        'transaction/top-up',
+        data: {
+          'name': name,
+          'total_price': amount,
+        },
+      );
+
+      return TopUpModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
 }

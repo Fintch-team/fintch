@@ -27,4 +27,14 @@ class TransactionRepository {
 
     return res;
   }
+
+  Future<TransactionTopUpEntity> postTransactionTopUp(
+      {required TransactionTopUpPostEntity postEntity}) async {
+    TopUpModel res = await transactionService.postTransactionTopUp(
+      name: postEntity.name,
+      amount: postEntity.amount,
+    );
+
+    return DataMapper.topUpMapper(res);
+  }
 }
