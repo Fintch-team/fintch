@@ -102,6 +102,7 @@ class _FWalletPageState extends State<FWalletPage> {
     );
   }
 
+  //TODO: Refactor DraggableScrollableSheet
   Widget _fWalletScrollableSheet() {
     return Positioned.fill(
       child: DraggableScrollableSheet(
