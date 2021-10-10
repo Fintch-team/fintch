@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library post;
 
-export 'change_pin.dart';
 export 'change_password.dart';
+export 'change_pin.dart';

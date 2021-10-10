@@ -84,7 +84,6 @@ class _FGoalsPageState extends State<FGoalsPage> {
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
-
     return Container(
       decoration: BoxDecoration(
         boxShadow: Helper.getShadow(),
@@ -148,7 +147,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                   radius: MediaQuery.of(context).size.width * 0.2,
                   lineWidth: 16.0,
                   animation: true,
-                  percent: 0.7,
+                  percent: data.percent / 100,
                   center: Text("${data.percent}%",
                       style: AppTheme.text2.darkPurple.bold),
                   circularStrokeCap: CircularStrokeCap.round,

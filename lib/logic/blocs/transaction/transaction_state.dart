@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:fintch/gen_export.dart';
 
 abstract class TransactionState extends Equatable {
   const TransactionState();

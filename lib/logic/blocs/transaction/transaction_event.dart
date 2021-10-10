@@ -1,5 +1,5 @@
+import 'package:fintch/gen_export.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fintch/data/entities/entities.exports.dart';
 
 abstract class TransactionEvent extends Equatable {
   const TransactionEvent();

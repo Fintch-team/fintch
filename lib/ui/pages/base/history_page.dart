@@ -14,7 +14,6 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   int isPayHistory = 0;
-  int historyTotal = 0;
 
   @override
   void initState() {
@@ -32,36 +31,38 @@ class _HistoryPageState extends State<HistoryPage> {
     return LoadingOverlay(
       child: BlocConsumer<HistoryBloc, HistoryState>(
         listener: (context, state) {
-          if (state is HistoryResponseSuccess) {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-              setState(() {
-                historyTotal =
-                    state.history.pay.length + state.history.receive.length;
-              });
-            });
+          if (state is HistoryLoading) {
+            context.loaderOverlay.show();
           } else if (state is HistoryFailure) {
+            context.loaderOverlay.hide();
             Helper.snackBar(context, message: state.message, isFailure: true);
+          } else if (state is HistoryResponseSuccess) {
+            context.loaderOverlay.hide();
           }
         },
         builder: (context, state) {
-          return Container(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                _headerContent(context),
-                _historyScrollableSheet(state),
-              ],
-            ),
-          );
+          if (state is HistoryResponseSuccess) {
+            return Container(
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  _headerContent(
+                      context, state.history.pay, state.history.receive),
+                  _historyScrollableSheet(
+                      state.history.pay, state.history.receive),
+                ],
+              ),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
   }
 
   Widget _headerContent(
-      BuildContext context, HistoryEntity pay, HistoryEntity receive) {
-    int length = pay.pay.length + receive.receive.length;
-
+      BuildContext context, List<HistoryData> pay, List<HistoryData> receive) {
+    int length = pay.length + receive.length;
     return Positioned(
       top: 0,
       left: 0,
@@ -88,14 +89,14 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '$historyTotal x Transaction',
+                        '$length x Transaction',
                         style: AppTheme.text3.white,
                       ),
                     ],
                   ),
                 ),
                 SizedBox(width: Helper.normalPadding),
-                _historyIllustration(context),
+                _homeIllustration(context),
               ],
             ),
           ],
@@ -104,7 +105,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _historyIllustration(BuildContext context) {
+  Widget _homeIllustration(BuildContext context) {
     return SvgPicture.asset(
       Resources.homeIllustration,
       width: MediaQuery.of(context).size.width * 0.3,
@@ -112,7 +113,9 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _historyScrollableSheet(HistoryState state) {
+  Widget _historyScrollableSheet(
+      List<HistoryData> pay, List<HistoryData> receive) {
+    //TODO: sort history data harus latest
     return Positioned.fill(
       child: DraggableScrollableSheet(
         initialChildSize: 0.68,
@@ -150,18 +153,18 @@ class _HistoryPageState extends State<HistoryPage> {
                     index: isPayHistory,
                     children: [
                       // TODO: bentuk response mash salah
-                      if (pay.pay.isNotEmpty)
+                      if (pay.isNotEmpty)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListView.builder(
-                              itemCount: pay.pay.length,
+                              itemCount: pay.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
                                 return TransactionItem(
-                                  item: pay.pay[index],
+                                  item: pay[index],
                                   isPay: true,
                                 );
 
@@ -170,18 +173,18 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           ],
                         ),
-                      if (receive.receive.isNotEmpty)
+                      if (receive.isNotEmpty)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListView.builder(
-                              itemCount: receive.receive.length,
+                              itemCount: receive.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
                                 return TransactionItem(
-                                  item: receive.receive[index],
+                                  item: receive[index],
                                   isPay: false,
                                 );
                                 // return SizedBox();

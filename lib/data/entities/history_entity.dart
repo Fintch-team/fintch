@@ -27,5 +27,4 @@ class HistoryEntity extends BaseEntity {
   final List<HistoryData> receive;
 
   HistoryEntity({required this.pay, required this.receive});
-
 }
