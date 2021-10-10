@@ -109,11 +109,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _headerLeft(HomeState state){
-    if(state is HomeSuccess){
+  Widget _headerLeft(HomeState state) {
+    if (state is HomeSuccess) {
       return GestureDetector(
-        onTap: () =>
-            Navigator.pushNamed(context, PagePath.profile),
+        onTap: () => Navigator.pushNamed(context, PagePath.profile),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -124,11 +123,11 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       );
-    } else if(state is HomeLoading){
+    } else if (state is HomeLoading) {
       return Center(
         child: CircularLoading(),
       );
-    } else if(state is HomeFailure){
+    } else if (state is HomeFailure) {
       return Center(
         child: Text(
           'Data gagal di load',
@@ -239,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _fGoalList(context, state),
+                  _fGoals(context, state),
                   _transactionList(state),
                 ],
               ),
@@ -300,7 +299,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fGoalList(BuildContext context, HomeState state) {
+  Widget _fGoals(BuildContext context, HomeState state) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -321,51 +320,64 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.width * 0.48,
-            child: state is HomeSuccess
-                ? state.entity.moneyPlanning.isNotEmpty
-                    ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.entity.moneyPlanning.length,
-                        padding: EdgeInsets.symmetric(
-                            vertical: Helper.normalPadding),
-                        itemBuilder: (BuildContext context, int index) {
-                          return _fGoalItem(context, index,
-                              state.entity.moneyPlanning[index]);
-                        },
-                      )
-                    : Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'F-Goals Kosong! \nTambah F-Goals',
-                              style: AppTheme.text1.bold,
-                            ),
-                            SizedBox(width: Helper.normalPadding),
-                            FeatureItem(
-                              name: 'F-Goals',
-                              assetName: Resources.icFGoals,
-                              onTap: () {
-                                Navigator.pushNamed(context, PagePath.fGoals);
-                              },
-                              showTitle: false,
-                              isExpand: false,
-                              size: MediaQuery.of(context).size.width * 0.18,
-                            ),
-                          ],
-                        ),
-                      )
-                : state is HomeLoading
-                    ? Center(
-                        child: CircularLoading(),
-                      )
-                    : Container(),
-          ),
+              height: MediaQuery.of(context).size.width * 0.48,
+              child: _fGoalList(state)),
         ],
       ),
     );
+  }
+
+  Widget _fGoalList(HomeState state) {
+    if (state is HomeSuccess) {
+      if (state.entity.moneyPlanning.isNotEmpty) {
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: state.entity.moneyPlanning.length,
+          padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
+          itemBuilder: (BuildContext context, int index) {
+            return _fGoalItem(
+                context, index, state.entity.moneyPlanning[index]);
+          },
+        );
+      } else {
+        return Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'F-Goals Kosong! \nTambah F-Goals',
+                style: AppTheme.text1.bold,
+              ),
+              SizedBox(width: Helper.normalPadding),
+              FeatureItem(
+                name: 'F-Goals',
+                assetName: Resources.icFGoals,
+                onTap: () {
+                  Navigator.pushNamed(context, PagePath.fGoals);
+                },
+                showTitle: false,
+                isExpand: false,
+                size: MediaQuery.of(context).size.width * 0.18,
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (state is HomeLoading) {
+      return Center(
+        child: CircularLoading(),
+      );
+    } else if (state is HomeFailure) {
+      return Center(
+        child: Text(
+          'Data gagal di load',
+          style: AppTheme.headline3.white,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    return Container();
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
@@ -530,7 +542,7 @@ class _HomePageState extends State<HomePage> {
           child: CircularLoading(),
         ),
       );
-    } else if(state is HomeFailure) {
+    } else if (state is HomeFailure) {
       return Center(
         child: Text(
           'Data gagal di load',
