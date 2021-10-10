@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +46,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   _toasterJavascriptChannel(context),
                 },
                 navigationDelegate: (NavigationRequest request) {
+                  print(request.url);
                   if (request.url.startsWith('http://fintch.id/payment')) {
                     print('blocking navigation to }');
                     int count = 0;
@@ -91,8 +91,7 @@ class _PaymentPageState extends State<PaymentPage> {
 }
 
 class NavigationControls extends StatelessWidget {
-  const NavigationControls(this._webViewControllerFuture)
-      : assert(_webViewControllerFuture != null);
+  const NavigationControls(this._webViewControllerFuture);
 
   final Future<WebViewController> _webViewControllerFuture;
 
