@@ -9,6 +9,13 @@ class DataMapper {
         isSetPin: tokenModel.data.user.isSetPin,
       );
 
+  static TransactionTopUpEntity topUpMapper(TopUpModel topUp) =>
+      TransactionTopUpEntity(
+        token: topUp.data.token,
+        webUrl: topUp.data.webUrl,
+        user: topUp.data.user,
+      );
+
   static UserEntity userMapper(UserModel userModel) => UserEntity(
         id: userModel.data.id,
         name: userModel.data.name,

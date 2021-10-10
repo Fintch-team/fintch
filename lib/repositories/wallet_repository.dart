@@ -2,13 +2,16 @@ import 'package:fintch/gen_export.dart';
 
 class WalletRepository {
   final WalletService walletService;
+  final LocalAuthService localAuthService;
 
   WalletRepository({
     required this.walletService,
+    required this.localAuthService,
   });
 
-  Future<WalletEntity> getWalletDetail({required String id}) async {
-    WalletModel walletModel = await walletService.getWalletId(id: id);
+  Future<WalletEntity> getWalletDetail({String id = ""}) async {
+    WalletModel walletModel = await walletService.getWalletId(
+        id: id.isNotEmpty ? id : localAuthService.userId.toString());
 
     return DataMapper.walletMapper(walletModel);
   }

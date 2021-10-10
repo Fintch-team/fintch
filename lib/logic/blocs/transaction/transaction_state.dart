@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fintch/gen_export.dart';
 
 abstract class TransactionState extends Equatable {
   const TransactionState();
@@ -15,6 +16,15 @@ class TransactionSuccess extends TransactionState {
   final bool entity;
 
   TransactionSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class TransactionTopUpSuccess extends TransactionState {
+  final TransactionTopUpEntity entity;
+
+  TransactionTopUpSuccess({required this.entity});
 
   @override
   List<Object> get props => [entity];

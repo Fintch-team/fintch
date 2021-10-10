@@ -65,7 +65,7 @@ class FintchInterceptor extends Interceptor {
         DioError(
           response: response,
           requestOptions: response.requestOptions,
-          error: response.statusMessage,
+          error: FailedException(response.data['message']),
         ),
         true,
       );

@@ -19,3 +19,25 @@ class TransactionBarcodePostEntity extends BaseEntity {
     required this.idBarcode,
   });
 }
+
+class TransactionTopUpPostEntity extends BaseEntity {
+  final String name;
+  final String amount;
+
+  TransactionTopUpPostEntity({
+    required this.name,
+    required this.amount,
+  });
+}
+
+class TransactionTopUpEntity extends BaseEntity {
+  final String token;
+  final String webUrl;
+  final UserData user;
+
+  TransactionTopUpEntity({
+    required this.token,
+    required this.webUrl,
+    required this.user,
+  });
+}
