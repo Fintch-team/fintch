@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,37 +29,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingOverlay(
-      child: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is HomeLoading) {
-            context.loaderOverlay.show();
-          } else if (state is HomeFailure) {
-            context.loaderOverlay.hide();
-            Helper.snackBar(context, message: state.message, isFailure: true);
-          } else if (state is HomeSuccess) {
-            context.loaderOverlay.hide();
-          }
-        },
-        builder: (context, state) {
-          if (state is HomeSuccess) {
-            return Container(
-              color: Colors.transparent,
-              child: Stack(
-                children: [
-                  _headerContent(context, state.entity),
-                  _homeScrollableSheet(state.entity),
-                ],
-              ),
-            );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+    return BlocConsumer<HomeBloc, HomeState>(
+      listener: (context, state) {
+        if (state is HomeFailure) {
+          Helper.snackBar(context, message: state.message, isFailure: true);
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              _headerContent(context, state),
+              _homeScrollableSheet(state),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _headerContent(BuildContext context, UserEntity user) {
+  Widget _headerContent(BuildContext context, HomeState state) {
     return Positioned(
       top: 0,
       left: 0,
@@ -75,11 +64,6 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.payments_rounded,
-                  color: AppTheme.white,
-                ),
-                SizedBox(width: Helper.smallPadding),
                 Icon(
                   Icons.notifications_rounded,
                   color: AppTheme.white,
@@ -100,19 +84,33 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: GestureDetector(
+                    child: state is HomeSuccess
+                        ? GestureDetector(
                       onTap: () =>
                           Navigator.pushNamed(context, PagePath.profile),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _userInfo(context, user),
+                          _userInfo(context, user: state.entity),
                           SizedBox(height: Helper.normalPadding),
-                          _fintchWallet(user),
+                          _fintchWallet(user: state.entity),
                         ],
                       ),
-                    ),
+                    )
+                        : state is HomeLoading
+                        ? Center(
+                      child: CircularLoading(),
+                    )
+                        : state is HomeFailure
+                        ? Center(
+                      child: Text(
+                        'Data gagal di load',
+                        style: AppTheme.headline3.white,
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                        : Container(),
                   ),
                   SizedBox(width: Helper.normalPadding),
                   _homeIllustration(context),
@@ -125,7 +123,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _userInfo(BuildContext context, UserEntity user) {
+  Widget _userInfo(BuildContext context, {UserEntity? user}) {
     return Row(
       children: [
         Container(
@@ -134,7 +132,7 @@ class _HomePageState extends State<HomePage> {
             boxShadow: Helper.getShadow(),
           ),
           child: CustomNetworkImage(
-            imgUrl: user.img,
+            imgUrl: user != null ? user.img : Dummy.profileImg,
             borderRadius: 64,
             width: MediaQuery.of(context).size.width * 0.16,
             height: MediaQuery.of(context).size.width * 0.16,
@@ -147,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
-                'Halo\n${user.name}!',
+                user != null ? 'Halo\n${user.name}!' : ' ',
                 style: AppTheme.headline1.white,
                 maxLines: 3,
                 minFontSize: 20,
@@ -168,7 +166,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fintchWallet(UserEntity user) {
+  Widget _fintchWallet({UserEntity? user}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -189,7 +187,9 @@ class _HomePageState extends State<HomePage> {
             SizedBox(width: 8),
             Expanded(
               child: AutoSizeText(
-                user.wallet.walletAmount.toString().parseCurrency(),
+                user != null
+                    ? user.wallet.walletAmount.toString().parseCurrency()
+                    : '0',
                 maxLines: 1,
                 style: AppTheme.headline1.white,
               ),
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _homeScrollableSheet(UserEntity user) {
+  Widget _homeScrollableSheet(HomeState state) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
         initialChildSize: 0.68,
@@ -222,8 +222,8 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _fGoalList(context, user),
-                  _transactionList(user),
+                  _fGoalList(context, state),
+                  _transactionList(state),
                 ],
               ),
             ),
@@ -254,6 +254,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeatureItem(
+            name: 'Top-up',
+            assetName: Resources.icTopUp,
+            onTap: () => Navigator.pushNamed(context, PagePath.topUp),
+            isOpacity: true,
+          ),
+          SizedBox(width: 20),
+          FeatureItem(
             name: 'Pay',
             assetName: Resources.icPay,
             onTap: () => Navigator.pushNamed(context, PagePath.pay),
@@ -271,46 +278,74 @@ class _HomePageState extends State<HomePage> {
             assetName: Resources.icBarrierCash,
             onTap: () {},
           ),
-          SizedBox(width: 20),
-          FeatureItem(
-            name: 'F-Goals',
-            assetName: Resources.icFGoals,
-            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
-            isOpacity: true,
-          ),
         ],
       ),
     );
   }
 
-  Widget _fGoalList(BuildContext context, UserEntity user) {
+  Widget _fGoalList(BuildContext context, HomeState state) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('F-Goals Mendekati', style: AppTheme.headline3),
-                SvgPicture.asset(Resources.next, height: 16),
-              ],
-            ),
-          ),
-          if (user.moneyPlanning.isNotEmpty)
-            Container(
-              height: MediaQuery.of(context).size.width * 0.48,
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: user.moneyPlanning.length,
-                padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
-                itemBuilder: (BuildContext context, int index) {
-                  return _fGoalItem(context, index, user.moneyPlanning[index]);
-                },
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, PagePath.fGoals);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('F-Goals Mendekati', style: AppTheme.headline3),
+                  SvgPicture.asset(Resources.next, height: 16),
+                ],
               ),
             ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.48,
+            child: state is HomeSuccess
+                ? state.entity.moneyPlanning.isNotEmpty
+                ? ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: state.entity.moneyPlanning.length,
+              padding: EdgeInsets.symmetric(
+                  vertical: Helper.normalPadding),
+              itemBuilder: (BuildContext context, int index) {
+                return _fGoalItem(context, index,
+                    state.entity.moneyPlanning[index]);
+              },
+            )
+                : Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'F-Goals Kosong! \nTambah F-Goals',
+                    style: AppTheme.text1.bold,
+                  ),
+                  SizedBox(width: Helper.normalPadding),
+                  FeatureItem(
+                    name: 'F-Goals',
+                    assetName: Resources.icFGoals,
+                    onTap: () {
+                      Navigator.pushNamed(context, PagePath.fGoals);
+                    },
+                    showTitle: false,
+                    isExpand: false,
+                    size: MediaQuery.of(context).size.width * 0.18,
+                  ),
+                ],
+              ),
+            )
+                : state is HomeLoading
+                ? Center(
+              child: CircularLoading(),
+            )
+                : Container(),
+          ),
         ],
       ),
     );
@@ -327,11 +362,10 @@ class _HomePageState extends State<HomePage> {
       margin: index == 0
           ? EdgeInsets.only(left: 20, right: 10)
           : index == 4
-              ? EdgeInsets.only(left: 10, right: 20)
-              : EdgeInsets.symmetric(horizontal: 10),
-      width: MediaQuery.of(context).size.width * 0.8,
+          ? EdgeInsets.only(left: 10, right: 20)
+          : EdgeInsets.symmetric(horizontal: 10),
       child: AspectRatio(
-        aspectRatio: 15 / 6,
+        aspectRatio: 15 / 7,
         child: Row(
           children: [
             Expanded(
@@ -357,7 +391,9 @@ class _HomePageState extends State<HomePage> {
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
                           AutoSizeText(
-                            data.deadline!.parseHourDateAndMonth(),
+                            data.deadline!
+                                .parseHourDateAndMonth()
+                                .substring(0, 17),
                             style: AppTheme.subText1,
                             maxLines: 1,
                             maxFontSize: 10,
@@ -369,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   AutoSizeText(
-                    'Rp. ${data.totalAmount.toString().parseCurrency()}',
+                    'Rp. 17.000.000.000.000',
                     style: AppTheme.text1.bold,
                     maxLines: 1,
                   ),
@@ -378,21 +414,21 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(width: Helper.smallPadding),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularPercentIndicator(
                   radius: MediaQuery.of(context).size.width * 0.2,
                   lineWidth: 16.0,
                   animation: true,
-                  percent: data.percent / 100,
-                  center: Text("${data.percent}%",
-                      style: AppTheme.text2.darkPurple.bold),
+                  percent: 0.7,
+                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
                   circularStrokeCap: CircularStrokeCap.round,
                   progressColor: AppTheme.purple,
                   backgroundColor: AppTheme.purpleOpacity,
                 ),
+                SizedBox(height: Helper.smallPadding),
                 AutoSizeText(
-                  'Rp. ${data.amount.toString().parseCurrency()}',
+                  'Rp. ' + data.totalAmount.toString().parseCurrency(),
                   style: AppTheme.text3.green,
                   maxLines: 1,
                 ),
@@ -404,7 +440,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _transactionList(UserEntity user) {
+  Widget _transactionList(HomeState state) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -434,40 +470,55 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           SizedBox(height: Helper.smallPadding),
-          IndexedStack(
+          state is HomeSuccess
+              ? IndexedStack(
             index: isPayHistory,
             children: [
-              if (user.pay.isNotEmpty)
-                ListView.builder(
-                  itemCount: user.pay.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  itemBuilder: (context, index) {
-                    return TransactionItem(
-                      item: user.pay[index],
-                      isPay: true,
-                    );
-                    // return SizedBox();
-                  },
-                ),
-              if (user.receive.isNotEmpty)
-                ListView.builder(
-                  itemCount: user.receive.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  itemBuilder: (context, index) {
-                    return TransactionItem(
-                      item: user.receive[index],
-                      isPay: false,
-                    );
-
-                    // return SizedBox();
-                  },
-                ),
+              state.entity.pay.isNotEmpty
+                  ? ListView.builder(
+                itemCount: state.entity.pay.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                itemBuilder: (context, index) {
+                  return TransactionItem(
+                    item: state.entity.pay[index],
+                    isPay: isPayHistory == 0 ? true : false,
+                  );
+                  // return SizedBox();
+                },
+              )
+                  : Text(
+                'History Pay Kosong!',
+                style: AppTheme.text1.bold,
+              ),
+              state.entity.receive.isNotEmpty
+                  ? ListView.builder(
+                itemCount: state.entity.receive.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                itemBuilder: (context, index) {
+                  return TransactionItem(
+                    item: state.entity.receive[index],
+                    isPay: isPayHistory == 0 ? true : false,
+                  );
+                },
+              )
+                  : Text(
+                'History Receive Kosong!',
+                style: AppTheme.text1.bold,
+              ),
             ],
-          ),
+          )
+              : state is HomeLoading
+              ? Container(
+            height: MediaQuery.of(context).size.width * 0.48,
+            child: Center(
+              child: CircularLoading(),
+            ),
+          )
+              : Container(),
         ],
       ),
     );
