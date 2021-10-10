@@ -35,5 +35,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
       }
     });
+
+    on<PostTopUpTransaction>((event, emit) async {
+      emit(TransactionLoading());
+      try {
+        TransactionTopUpEntity res = await transactionRepository
+            .postTransactionTopUp(postEntity: event.entity);
+        emit(TransactionTopUpSuccess(entity: res));
+      } on FailedException catch (e) {
+        emit(TransactionFailure(message: e.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+      }
+    });
   }
 }

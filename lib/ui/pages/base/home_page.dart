@@ -394,6 +394,7 @@ class _HomePageState extends State<HomePage> {
           : index == 4
               ? EdgeInsets.only(left: 10, right: 20)
               : EdgeInsets.symmetric(horizontal: 10),
+      // width: MediaQuery.of(context).size.width * 0.8,
       child: AspectRatio(
         aspectRatio: 15 / 7,
         child: Row(
@@ -435,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   AutoSizeText(
-                    'Rp. 17.000.000.000.000',
+                    'Rp. ' + data.totalAmount.toString().parseCurrency(),
                     style: AppTheme.text1.bold,
                     maxLines: 1,
                   ),
@@ -444,21 +445,22 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(width: Helper.smallPadding),
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CircularPercentIndicator(
                   radius: MediaQuery.of(context).size.width * 0.2,
                   lineWidth: 16.0,
                   animation: true,
-                  percent: 0.7,
-                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                  percent: data.percent / 100,
+                  center: Text("${data.percent} %",
+                      style: AppTheme.text2.darkPurple.bold),
                   circularStrokeCap: CircularStrokeCap.round,
                   progressColor: AppTheme.purple,
                   backgroundColor: AppTheme.purpleOpacity,
                 ),
-                SizedBox(height: Helper.smallPadding),
+                // SizedBox(height: Helper.smallPadding),
                 AutoSizeText(
-                  'Rp. ' + data.totalAmount.toString().parseCurrency(),
+                  'Rp. ' + data.amount.toString().parseCurrency(),
                   style: AppTheme.text3.green,
                   maxLines: 1,
                 ),

@@ -141,9 +141,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        state.entity.data.first.walletAmount
-                            .toString()
-                            .parseCurrency(),
+                        state.entity.walletAmount.toString().parseCurrency(),
                         style: AppTheme.text1.bold,
                       ),
                     ],
@@ -169,9 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        state.entity.data.first.barrierAmount
-                            .toString()
-                            .parseCurrency(),
+                        state.entity.barrierAmount.toString().parseCurrency(),
                         style: AppTheme.text1.bold,
                       ),
                     ],
@@ -179,7 +175,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             );
-          }else if (state is WalletLoading) {
+          } else if (state is WalletLoading) {
             return Center(
               child: CircularLoading(),
             );

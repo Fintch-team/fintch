@@ -61,11 +61,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         RepositoryProvider(
-          create: (context) => WalletRepository(
-            walletService: Service.find(),
-          ),
-        ),
-        RepositoryProvider(
           create: (context) => HistoryRepository(
             historyService: Service.find(),
             localAuthService: Service.find(),
@@ -74,6 +69,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => WalletRepository(
             walletService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(

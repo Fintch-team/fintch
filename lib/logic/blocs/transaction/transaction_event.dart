@@ -25,3 +25,12 @@ class PostBarcodeTransaction extends TransactionEvent {
   @override
   List<Object> get props => [entity];
 }
+
+class PostTopUpTransaction extends TransactionEvent {
+  final TransactionTopUpPostEntity entity;
+
+  PostTopUpTransaction({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}

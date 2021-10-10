@@ -15,7 +15,7 @@ class WalletLoading extends WalletState {}
 class WalletRequestSuccess extends WalletState {}
 
 class WalletResponseSuccess extends WalletState {
-  final ListWalletEntity entity;
+  final WalletEntity entity;
 
   WalletResponseSuccess({required this.entity});
 

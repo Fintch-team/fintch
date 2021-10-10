@@ -5,3 +5,4 @@
 library auth;
 
 export 'token_model.dart';
+export 'top_up_model.dart';

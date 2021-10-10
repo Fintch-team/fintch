@@ -9,7 +9,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<GetWallet>((event, emit) async {
       emit(WalletLoading());
       try {
-        ListWalletEntity entity = await walletRepository.getWallet();
+        WalletEntity entity = await walletRepository.getWalletDetail();
 
         emit(WalletResponseSuccess(entity: entity));
       } on FailedException catch (e) {

@@ -62,12 +62,13 @@ class _FWalletPageState extends State<FWalletPage> {
         child: BlocBuilder<WalletBloc, WalletState>(
           builder: (context, state) {
             if (state is WalletResponseSuccess) {
-              // TODO: get wallet tidak perlu list
+              // TODO: harus ada nilai jumlah manage amount unutk d bawah
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AutoSizeText(
-                    'Rp.${state.entity.data.first.walletAmount.toString().parseCurrency()}',
+                    'Rp.${state.entity.walletAmount.toString().parseCurrency()}',
                     style: AppTheme.headline1.white,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
