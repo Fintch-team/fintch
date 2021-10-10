@@ -22,7 +22,7 @@ class TransactionBarcodePostEntity extends BaseEntity {
 
 class TransactionTopUpPostEntity extends BaseEntity {
   final String name;
-  final int amount;
+  final String amount;
 
   TransactionTopUpPostEntity({
     required this.name,

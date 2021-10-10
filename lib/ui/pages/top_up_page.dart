@@ -2,6 +2,7 @@ import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/src/provider.dart';
 
 class TopUpPage extends StatefulWidget {
   const TopUpPage({Key? key}) : super(key: key);
@@ -15,6 +16,12 @@ class _TopUpPageState extends State<TopUpPage> {
   double sliderValue = 10000;
   final _formKey = GlobalKey<FormState>();
   final textFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    textFieldController.text = value.toInt().toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +279,20 @@ class _TopUpPageState extends State<TopUpPage> {
             ),
             Expanded(
               flex: 4,
-              child: CustomButton(onTap: () {}, text: 'Bayar', isUpper: false),
+              child: CustomButton(
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<TransactionBloc>().add(PostTopUpTransaction(
+                              entity: TransactionTopUpPostEntity(
+                            amount: textFieldController.text,
+                            name: "test",
+                          )));
+
+                      Navigator.pushNamed(context, PagePath.payment);
+                    }
+                  },
+                  text: 'Bayar',
+                  isUpper: false),
             ),
           ],
         ),

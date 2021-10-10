@@ -45,7 +45,7 @@ class TransactionService extends ApiService {
 
   Future<TopUpModel> postTransactionTopUp({
     required String name,
-    required int amount,
+    required String amount,
   }) async {
     try {
       final res = await dio.post(
