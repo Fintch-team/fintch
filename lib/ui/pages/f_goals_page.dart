@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:provider/src/provider.dart';
 
 class FGoalsPage extends StatefulWidget {
   const FGoalsPage({Key? key}) : super(key: key);
@@ -24,43 +22,39 @@ class _FGoalsPageState extends State<FGoalsPage> {
   @override
   Widget build(BuildContext context) {
     Helper.setDarkAppBar();
-    return BlocConsumer<MoneyPlanBloc, MoneyPlanState>(
-      listener: (context, state) {
-        if (state is MoneyPlanLoading) {
-          context.loaderOverlay.show();
-        } else if (state is MoneyPlanFailure) {
-          context.loaderOverlay.hide();
-          Helper.snackBar(context, message: state.message, isFailure: true);
-        } else if (state is MoneyPlanResponseSuccess) {
-          context.loaderOverlay.hide();
-        }
-      },
-      builder: (context, state) {
-        if (state is MoneyPlanResponseSuccess) {
-          return Scaffold(
-            body: Background(
-              isWhite: true,
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Container(
-                    padding: EdgeInsets.all(Helper.normalPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomAppBar(
-                          title: '',
-                          isBlack: true,
-                        ),
-                        SizedBox(height: Helper.bigPadding),
-                        Text('F-Goals', style: AppTheme.headline1),
-                        SizedBox(height: Helper.bigPadding),
-                        Text(
-                          'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
-                          style: AppTheme.text1,
-                        ),
-                        SizedBox(height: Helper.bigPadding),
-                        ListView.builder(
+    return Scaffold(
+      body: Background(
+        isWhite: true,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomAppBar(
+                    title: '',
+                    isBlack: true,
+                  ),
+                  SizedBox(height: Helper.bigPadding),
+                  Text('F-Goals', style: AppTheme.headline1),
+                  SizedBox(height: Helper.bigPadding),
+                  Text(
+                    'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
+                    style: AppTheme.text1,
+                  ),
+                  SizedBox(height: Helper.bigPadding),
+                  BlocConsumer<MoneyPlanBloc, MoneyPlanState>(
+                    listener: (context, state) {
+                      if (state is MoneyPlanFailure) {
+                        Helper.snackBar(context,
+                            message: state.message, isFailure: true);
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is MoneyPlanResponseSuccess) {
+                        return ListView.builder(
                           shrinkWrap: true,
                           itemCount: state.entity.data.length,
                           physics: NeverScrollableScrollPhysics(),
@@ -69,17 +63,29 @@ class _FGoalsPageState extends State<FGoalsPage> {
                             return _fGoalItem(
                                 context, index, state.entity.data[index]);
                           },
-                        ),
-                      ],
-                    ),
+                        );
+                      } else if (state is MoneyPlanLoading) {
+                        return Center(
+                          child: CircularLoading(),
+                        );
+                      } else if (state is MoneyPlanFailure) {
+                        return Center(
+                          child: Text(
+                            'Data gagal di load',
+                            style: AppTheme.headline3.white,
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
                   ),
-                ),
+                ],
               ),
             ),
-          );
-        }
-        return Center(child: CircularProgressIndicator());
-      },
+          ),
+        ),
+      ),
     );
   }
 
