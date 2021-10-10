@@ -6,11 +6,14 @@ import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/src/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
@@ -149,8 +152,7 @@ class _PayPageState extends State<PayPage> {
                     cutOutSize: MediaQuery.of(context).size.height * 0.3,
                     cutOutBottomOffset: -MediaQuery.of(context).padding.top +
                         MediaQuery.of(context).size.height * 0.04),
-              )
-              /* Container()*/,
+              ) /* Container()*/,
             ),
           )
         : Container();
@@ -449,7 +451,12 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       onConfirmation: () {
                         showDialog(
                           context: context,
-                          builder: (context) => InputPinDialog(),
+                          builder: (context) => InputPinDialog(
+                            input: TransactionPostEntity(
+                              amount: textFieldController.text,
+                              idReceive: widget.id,
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -609,7 +616,9 @@ class _PaymentSheetState extends State<PaymentSheet> {
 }
 
 class InputPinDialog extends StatefulWidget {
-  const InputPinDialog({Key? key}) : super(key: key);
+  final TransactionPostEntity input;
+
+  const InputPinDialog({Key? key, required this.input}) : super(key: key);
 
   @override
   _InputPinDialogState createState() => _InputPinDialogState();
@@ -636,35 +645,10 @@ class _InputPinDialogState extends State<InputPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomDialog(
-      title: 'Masukin PIN Kamu',
-      content: CustomPinCode(
-        pinController: inputPinController,
-        errorController: errorController,
-        focusNode: inputFocusNode,
-        isDialog: true,
-        isObscure: true,
-        isAutoFocus: true,
-        onChanged: (value) {},
-        onCompleted: (value) {
-          if (inputPinController.text.length < 6) {
-            errorController!.add(ErrorAnimationType.shake);
-            inputFocusNode?.requestFocus();
-            Helper.snackBar(
-              context,
-              message: 'PIN harus 6 Digit!',
-            );
-            return;
-          } else if (inputPinController.text != '111111') {
-            inputPinController.clear();
-            inputFocusNode?.requestFocus();
-            errorController!.add(ErrorAnimationType.shake);
-            Helper.snackBar(
-              context,
-              message: 'PIN tidak cocok!',
-            );
-            return;
-          }
+    return BlocListener<TransactionBloc, TransactionState>(
+      listener: (context, state) {
+        if (state is TransactionSuccess) {
+          context.loaderOverlay.hide();
           Helper.unfocus();
           Navigator.of(context).pop();
           showDialog(
@@ -672,7 +656,48 @@ class _InputPinDialogState extends State<InputPinDialog> {
             barrierDismissible: false,
             builder: (context) => SuccessPaymentDialog(),
           );
-        },
+        } else if (state is TransactionLoading) {
+          context.loaderOverlay.show();
+          Helper.snackBar(context, message: 'Transaksi sedang...');
+        } else if (state is TransactionFailure) {
+          context.loaderOverlay.hide();
+          Helper.snackBar(context, message: 'Transaksi gagal', isFailure: true);
+        }
+      },
+      child: CustomDialog(
+        title: 'Masukin PIN Kamu',
+        content: CustomPinCode(
+          pinController: inputPinController,
+          errorController: errorController,
+          focusNode: inputFocusNode,
+          isDialog: true,
+          isObscure: true,
+          isAutoFocus: true,
+          onChanged: (value) {},
+          onCompleted: (value) {
+            if (inputPinController.text.length < 6) {
+              errorController!.add(ErrorAnimationType.shake);
+              inputFocusNode?.requestFocus();
+              Helper.snackBar(
+                context,
+                message: 'PIN harus 6 Digit!',
+              );
+              return;
+            } else if (inputPinController.text != '111111') {
+              inputPinController.clear();
+              inputFocusNode?.requestFocus();
+              errorController!.add(ErrorAnimationType.shake);
+              Helper.snackBar(
+                context,
+                message: 'PIN tidak cocok!',
+              );
+              return;
+            }
+            context
+                .read<TransactionBloc>()
+                .add(PostTransaction(entity: widget.input));
+          },
+        ),
       ),
     );
   }

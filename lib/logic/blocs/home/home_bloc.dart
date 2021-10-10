@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+mixin ReceiveBloc on Bloc<HomeEvent, HomeState> {}
+
+class HomeBloc extends Bloc<HomeEvent, HomeState> with ReceiveBloc {
   final UserRepository userRepository;
 
   HomeBloc({required this.userRepository}) : super(HomeInitial()) {

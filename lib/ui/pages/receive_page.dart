@@ -1,35 +1,69 @@
 import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:provider/src/provider.dart';
 
-class ReceivePage extends StatelessWidget {
+import 'package:loader_overlay/loader_overlay.dart';
+
+class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
 
   @override
+  State<ReceivePage> createState() => _ReceivePageState();
+}
+
+class _ReceivePageState extends State<ReceivePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ReceiveBloc>().add(HomeInit());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Background(
-        child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomAppBar(
-                  title: 'QR Code Saya',
+    return LoadingOverlay(
+      child: BlocConsumer<ReceiveBloc, HomeState>(
+        listener: (context, state) {
+          if (state is HomeLoading) {
+            context.loaderOverlay.show();
+          } else if (state is HomeFailure) {
+            context.loaderOverlay.hide();
+            Helper.snackBar(context, message: state.message, isFailure: true);
+          } else if (state is HomeSuccess) {
+            context.loaderOverlay.hide();
+          }
+        },
+        builder: (context, state) {
+          if (state is HomeSuccess) {
+            return Scaffold(
+              body: Background(
+                child: SafeArea(
+                  child: Container(
+                    padding: EdgeInsets.all(Helper.normalPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        CustomAppBar(
+                          title: 'QR Code Saya',
+                        ),
+                        SizedBox(height: 20),
+                        _userCard(context, state.entity),
+                      ],
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20),
-                _userCard(context),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
 
-  Expanded _userCard(BuildContext context) {
+  Expanded _userCard(BuildContext context, UserEntity user) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -55,19 +89,18 @@ class ReceivePage extends StatelessWidget {
                         SizedBox(
                           height: MediaQuery.of(context).size.width * 0.12,
                         ),
-                        Text('Adithya Firmansyah Putra',
-                            style: AppTheme.headline3),
+                        Text(user.name, style: AppTheme.headline3),
                         SizedBox(height: 8),
-                        Text('SMK Negeri 1 Majalengka', style: AppTheme.text3),
+                        Text(user.school.name, style: AppTheme.text3),
                         SizedBox(height: 8),
-                        Text('19042138210', style: AppTheme.text3.purple),
+                        Text(user.id.toString(), style: AppTheme.text3.purple),
                         SizedBox(height: Helper.normalPadding),
                         Expanded(
                           child: Center(
                             child: PrettyQr(
                               image: AssetImage(Resources.icFintchPointPng),
                               size: MediaQuery.of(context).size.height * 0.3,
-                              data: '19042138210',
+                              data: user.id.toString(),
                               errorCorrectLevel: QrErrorCorrectLevel.M,
                               roundEdges: true,
                             ),

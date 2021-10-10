@@ -8,6 +8,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   SettingsBloc({required this.userRepository}) : super(SettingsInitial()) {
     on<SettingsInit>((event, emit) async {
+      // TODO: di bawah ini bisa lebih baik di mixin ke home
       emit(SettingsLoading());
       try {
         UserEntity entity = await userRepository.currentUser();

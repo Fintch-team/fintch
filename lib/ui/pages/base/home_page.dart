@@ -331,8 +331,9 @@ class _HomePageState extends State<HomePage> {
           : index == 4
               ? EdgeInsets.only(left: 10, right: 20)
               : EdgeInsets.symmetric(horizontal: 10),
+      width: MediaQuery.of(context).size.width * 0.8,
       child: AspectRatio(
-        aspectRatio: 15 / 7,
+        aspectRatio: 15 / 6,
         child: Row(
           children: [
             Expanded(

@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => TransactionRepository(
             transactionService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(
@@ -119,6 +120,11 @@ class _MyAppState extends State<MyApp> {
               userRepository: context.read<UserRepository>(),
             ),
           ),
+          BlocProvider<ReceiveBloc>(
+            create: (context) => HomeBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
           BlocProvider<HistoryBloc>(
             create: (context) => HistoryBloc(
               userRepository: context.read<UserRepository>(),
@@ -149,6 +155,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<WalletBloc>(
             create: (context) => WalletBloc(
               walletRepository: context.read<WalletRepository>(),
+            ),
+          ),
+          BlocProvider<TransactionBloc>(
+            create: (context) => TransactionBloc(
+              transactionRepository: context.read<TransactionRepository>(),
             ),
           ),
         ],
