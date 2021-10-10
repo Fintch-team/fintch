@@ -44,7 +44,6 @@ class _FWalletPageState extends State<FWalletPage> {
               Icons.add_rounded,
               size: MediaQuery.of(context).size.width * 0.1,
             ),
-
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -53,19 +52,18 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 
   Widget _headerContent(BuildContext context) {
-    return BlocBuilder<WalletBloc, WalletState>(
-      builder: (context, state) {
-        if (state is WalletResponseSuccess) {
-          // TODO: get wallet tidak perlu list
-
-          return Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.32,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.32,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: BlocBuilder<WalletBloc, WalletState>(
+          builder: (context, state) {
+            if (state is WalletResponseSuccess) {
+              // TODO: get wallet tidak perlu list
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AutoSizeText(
@@ -87,14 +85,20 @@ class _FWalletPageState extends State<FWalletPage> {
                     ),
                   ),
                 ],
-              ),
-            ),
-          );
-        }
-
-        // TODO: state yg lain belum di implementasi
-        return SizedBox();
-      },
+              );
+            } else if (state is WalletLoading) {
+              return Center(
+                child: CircularLoading(),
+              );
+            } else if (state is WalletFailure) {
+              return Center(
+                child: Text('Gagal Load F-Wallet'),
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 
@@ -242,41 +246,64 @@ class _FWalletPageState extends State<FWalletPage> {
 
   Widget _cards() {
     // TODO: implementasi money manage item
-    return BlocBuilder<MoneyManageItemBloc, MoneyManageItemState>(
-      builder: (context, state) {
-        if (state is MoneyManageItemResponseSuccess) {
-          return Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-                  child: Text('Cards', style: AppTheme.headline3),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.width * 0.28,
-                  child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: state.entity.data.length,
-                    padding:
-                        EdgeInsets.symmetric(vertical: Helper.normalPadding),
-                    itemBuilder: (BuildContext context, int index) {
-                      return _cardItem(
-                          context, index, state.entity.data[index]);
-                    },
-                  ),
-                ),
-              ],
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Text('Cards', style: AppTheme.headline3),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.28,
+            child: BlocConsumer<MoneyManageItemBloc, MoneyManageItemState>(
+              listener: (context, state) {
+                if (state is MoneyManageItemFailure) {
+                  Helper.snackBar(context,
+                      message: state.message, isFailure: true);
+                }
+              },
+              builder: (context, state) {
+                if (state is MoneyManageItemResponseSuccess) {
+                  if (state.entity.data.isNotEmpty) {
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.entity.data.length,
+                      padding:
+                          EdgeInsets.symmetric(vertical: Helper.normalPadding),
+                      itemBuilder: (BuildContext context, int index) {
+                        return _cardItem(
+                            context, index, state.entity.data[index]);
+                      },
+                    );
+                  }
+                  return Center(
+                    child: Text(
+                      'Cards Kosong!',
+                      style: AppTheme.text1.bold,
+                    ),
+                  );
+                } else if (state is MoneyManageItemLoading) {
+                  return Center(
+                    child: CircularLoading(),
+                  );
+                } else if (state is MoneyManageItemFailure) {
+                  return Center(
+                    child: Text(
+                      'Data gagal di load',
+                      style: AppTheme.headline3.white,
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
-          );
-        }
-
-        // TODO: state yg lain belum di implementasi
-        return SizedBox();
-      },
+          ),
+        ],
+      ),
     );
   }
 
@@ -324,37 +351,60 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 
   Widget _activities() {
-    return BlocBuilder<MoneyManageBloc, MoneyManageState>(
-      builder: (context, state) {
-        if (state is MoneyManageResponseSuccess) {
-          return Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-                  child: Text('Activities', style: AppTheme.headline3),
-                ),
-                SizedBox(height: 12),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.entity.data.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 0),
-                  itemBuilder: (BuildContext context, int index) {
-                    return _activityItem(state.entity.data[index]);
-                  },
-                ),
-              ],
-            ),
-          );
-        }
-
-        // TODO: state yg lain belum di implementasi
-        return SizedBox();
-      },
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+            child: Text('Activities', style: AppTheme.headline3),
+          ),
+          SizedBox(height: Helper.smallPadding),
+          BlocConsumer<MoneyManageBloc, MoneyManageState>(
+            listener: (context, state) {
+              if (state is MoneyManageFailure) {
+                Helper.snackBar(context,
+                    message: state.message, isFailure: true);
+              }
+            },
+            builder: (context, state) {
+              if (state is MoneyManageResponseSuccess) {
+                if (state.entity.data.isNotEmpty) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.entity.data.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(vertical: 0),
+                    itemBuilder: (BuildContext context, int index) {
+                      return _activityItem(state.entity.data[index]);
+                    },
+                  );
+                }
+                return Center(
+                  child: Text(
+                    'Activities Kosong!',
+                    style: AppTheme.text1.bold,
+                  ),
+                );
+              } else if (state is MoneyManageLoading) {
+                return Center(
+                  child: CircularLoading(),
+                );
+              } else if (state is MoneyManageFailure) {
+                return Center(
+                  child: Text(
+                    'Data gagal di load',
+                    style: AppTheme.headline3.white,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
+      ),
     );
   }
 
