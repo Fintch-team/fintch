@@ -12,48 +12,57 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  int isPayHistory = 0;
+  bool isPayHistory = true;
   int historyTotal = 0;
 
   @override
   void initState() {
-    super.initState();
-
     _initHistory();
+    super.initState();
   }
 
   void _initHistory() {
     context.read<HistoryBloc>().add(GetHistory());
   }
 
+  void payCallback(){
+    setState(() {
+      isPayHistory = true;
+    });
+  }
+
+  void receiveCallback(){
+    setState(() {
+      isPayHistory = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LoadingOverlay(
-      child: BlocConsumer<HistoryBloc, HistoryState>(
-        listener: (context, state) {
-          if (state is HistoryResponseSuccess) {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-              setState(() {
-                historyTotal =
-                    state.history.pay.length + state.history.receive.length;
-              });
+    return BlocConsumer<HistoryBloc, HistoryState>(
+      listener: (context, state) {
+        if (state is HistoryResponseSuccess) {
+          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+            setState(() {
+              historyTotal =
+                  state.history.pay.length + state.history.receive.length;
             });
-          } else if (state is HistoryFailure) {
-            Helper.snackBar(context, message: state.message, isFailure: true);
-          }
-        },
-        builder: (context, state) {
-          return Container(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                _headerContent(context),
-                _historyScrollableSheet(state),
-              ],
-            ),
-          );
-        },
-      ),
+          });
+        } else if (state is HistoryFailure) {
+          Helper.snackBar(context, message: state.message, isFailure: true);
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              _headerContent(context),
+              _historyScrollableSheet(state),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -121,78 +130,37 @@ class _HistoryPageState extends State<HistoryPage> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppTheme.scaffold,
             ),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _bottomSheetLine(context),
-                  SizedBox(height: Helper.normalPadding),
-                  HistoryTab(
-                    isPay: isPayHistory == 0 ? true : false,
-                    payCallback: () {
-                      setState(() {
-                        isPayHistory = 0;
-                      });
-                    },
-                    receiveCallback: () {
-                      setState(() {
-                        isPayHistory = 1;
-                      });
-                    },
-                  ),
-                  SizedBox(height: Helper.normalPadding),
-                  state is HistoryResponseSuccess
-                      ? IndexedStack(
-                          index: isPayHistory,
-                          children: [
-                            state.history.pay.isNotEmpty
-                                ? ListView.builder(
-                                    itemCount: state.history.pay.length,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    itemBuilder: (context, index) {
-                                      return TransactionItem(
-                                        item: state.history.pay[index],
-                                        isPay: isPayHistory == 0 ? true : false,
-                                      );
-                                      // return SizedBox();
-                                    },
-                                  )
-                                : Text(
-                                    'History Pay Kosong!',
-                                    style: AppTheme.text1.bold,
-                                  ),
-                            state.history.receive.isNotEmpty
-                                ? ListView.builder(
-                                    itemCount: state.history.receive.length,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    itemBuilder: (context, index) {
-                                      return TransactionItem(
-                                        item: state.history.receive[index],
-                                        isPay: isPayHistory == 0 ? true : false,
-                                      );
-                                    },
-                                  )
-                                : Text(
-                                    'History Receive Kosong!',
-                                    style: AppTheme.text1.bold,
-                                  ),
-                          ],
-                        )
-                      : state is HistoryLoading
-                          ? Container(
-                              height: MediaQuery.of(context).size.width * 0.48,
-                              child: Center(
-                                child: CircularLoading(),
-                              ),
-                            )
-                          : Container(),
-                ],
+            child: SafeArea(
+              top: false,
+              right: false,
+              left: false,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _bottomSheetLine(context),
+                    SizedBox(height: Helper.normalPadding),
+                    HistoryTab(
+                      isPay: isPayHistory,
+                      payCallback: payCallback,
+                      receiveCallback: receiveCallback,
+                    ),
+                    SizedBox(height: Helper.normalPadding),
+                    state is HistoryResponseSuccess
+                        ? _historyList(state)
+                        : state is HistoryLoading
+                            ? Container(
+                                height:
+                                    MediaQuery.of(context).size.width * 0.48,
+                                child: Center(
+                                  child: CircularLoading(),
+                                ),
+                              )
+                            : Container(),
+                  ],
+                ),
               ),
             ),
           );
@@ -212,5 +180,44 @@ class _HistoryPageState extends State<HistoryPage> {
       width: MediaQuery.of(context).size.width * 0.15,
       height: 4,
     );
+  }
+
+  Widget _historyList(HistoryResponseSuccess state) {
+    return isPayHistory
+        ? state.history.pay.isNotEmpty
+            ? ListView.builder(
+                itemCount: state.history.pay.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                itemBuilder: (context, index) {
+                  return TransactionItem(
+                    item: state.history.pay[index],
+                    isPay: isPayHistory,
+                  );
+                  // return SizedBox();
+                },
+              )
+            : Text(
+                'History Pay Kosong!',
+                style: AppTheme.text1.bold,
+              )
+        : state.history.receive.isNotEmpty
+            ? ListView.builder(
+                itemCount: state.history.receive.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                itemBuilder: (context, index) {
+                  return TransactionItem(
+                    item: state.history.receive[index],
+                    isPay: isPayHistory,
+                  );
+                },
+              )
+            : Text(
+                'History Receive Kosong!',
+                style: AppTheme.text1.bold,
+              );
   }
 }
