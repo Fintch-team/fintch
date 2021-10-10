@@ -148,17 +148,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       receiveCallback: receiveCallback,
                     ),
                     SizedBox(height: Helper.normalPadding),
-                    state is HistoryResponseSuccess
-                        ? _historyList(state)
-                        : state is HistoryLoading
-                            ? Container(
-                                height:
-                                    MediaQuery.of(context).size.width * 0.48,
-                                child: Center(
-                                  child: CircularLoading(),
-                                ),
-                              )
-                            : Container(),
+                    _historyList(state),
                   ],
                 ),
               ),
@@ -182,42 +172,66 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _historyList(HistoryResponseSuccess state) {
-    return isPayHistory
-        ? state.history.pay.isNotEmpty
-            ? ListView.builder(
-                itemCount: state.history.pay.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                itemBuilder: (context, index) {
-                  return TransactionItem(
-                    item: state.history.pay[index],
-                    isPay: isPayHistory,
-                  );
-                  // return SizedBox();
-                },
-              )
-            : Text(
-                'History Pay Kosong!',
-                style: AppTheme.text1.bold,
-              )
-        : state.history.receive.isNotEmpty
-            ? ListView.builder(
-                itemCount: state.history.receive.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                itemBuilder: (context, index) {
-                  return TransactionItem(
-                    item: state.history.receive[index],
-                    isPay: isPayHistory,
-                  );
-                },
-              )
-            : Text(
-                'History Receive Kosong!',
-                style: AppTheme.text1.bold,
+  Widget _historyList(HistoryState state) {
+    if (state is HistoryResponseSuccess) {
+      if(isPayHistory){
+        if(state.history.pay.isNotEmpty){
+          return ListView.builder(
+            itemCount: state.history.pay.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) {
+              return TransactionItem(
+                item: state.history.pay[index],
+                isPay: isPayHistory,
               );
+              // return SizedBox();
+            },
+          );
+        } else {
+          return Text(
+            'History Pay Kosong!',
+            style: AppTheme.text1.bold,
+          );
+        }
+      } else {
+        if(state.history.receive.isNotEmpty){
+          return ListView.builder(
+            itemCount: state.history.receive.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) {
+              return TransactionItem(
+                item: state.history.receive[index],
+                isPay: isPayHistory,
+              );
+            },
+          );
+        } else {
+          return Text(
+            'History Receive Kosong!',
+            style: AppTheme.text1.bold,
+          );
+        }
+      }
+    } else if (state is HistoryLoading) {
+      return Container(
+        height: MediaQuery.of(context).size.width * 0.48,
+        child: Center(
+          child: CircularLoading(),
+        ),
+      );
+    } else if (state is HistoryFailure) {
+      return Center(
+        child: Text(
+          'Data gagal di load',
+          style: AppTheme.headline3.white,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    return Container();
   }
 }

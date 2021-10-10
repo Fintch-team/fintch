@@ -499,42 +499,48 @@ class _HomePageState extends State<HomePage> {
 
   Widget _historyList(HomeState state) {
     if (state is HomeSuccess) {
-      return isPayHistory
-          ? state.entity.pay.isNotEmpty
-              ? ListView.builder(
-                  itemCount: state.entity.pay.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  itemBuilder: (context, index) {
-                    return TransactionItem(
-                      item: state.entity.pay[index],
-                      isPay: isPayHistory,
-                    );
-                    // return SizedBox();
-                  },
-                )
-              : Text(
-                  'History Pay Kosong!',
-                  style: AppTheme.text1.bold,
-                )
-          : state.entity.receive.isNotEmpty
-              ? ListView.builder(
-                  itemCount: state.entity.receive.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  itemBuilder: (context, index) {
-                    return TransactionItem(
-                      item: state.entity.receive[index],
-                      isPay: isPayHistory,
-                    );
-                  },
-                )
-              : Text(
-                  'History Receive Kosong!',
-                  style: AppTheme.text1.bold,
-                );
+      if(isPayHistory){
+        if(state.entity.pay.isNotEmpty){
+          return ListView.builder(
+            itemCount: state.entity.pay.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) {
+              return TransactionItem(
+                item: state.entity.pay[index],
+                isPay: isPayHistory,
+              );
+              // return SizedBox();
+            },
+          );
+        } else {
+          return Text(
+            'History Pay Kosong!',
+            style: AppTheme.text1.bold,
+          );
+        }
+      } else {
+        if(state.entity.receive.isNotEmpty){
+          return ListView.builder(
+            itemCount: state.entity.receive.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            itemBuilder: (context, index) {
+              return TransactionItem(
+                item: state.entity.receive[index],
+                isPay: isPayHistory,
+              );
+            },
+          );
+        } else {
+          return Text(
+            'History Receive Kosong!',
+            style: AppTheme.text1.bold,
+          );
+        }
+      }
     } else if (state is HomeLoading) {
       return Container(
         height: MediaQuery.of(context).size.width * 0.48,
