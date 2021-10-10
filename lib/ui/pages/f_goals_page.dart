@@ -33,7 +33,8 @@ class FGoalsPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: SafeArea(
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
         child: FloatingActionButton(
           backgroundColor: AppTheme.purple,
           onPressed: () {},
