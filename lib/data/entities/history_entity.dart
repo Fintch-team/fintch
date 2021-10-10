@@ -23,9 +23,12 @@ class HistoryPutEntity extends BaseEntity {
 }
 
 class HistoryEntity extends BaseEntity {
-  final List<HistoryData> data;
+  final List<HistoryData> pay;
+  final List<HistoryData> receive;
 
   HistoryEntity({
-    required this.data,
-  });
+    List<HistoryData>? pay,
+    List<HistoryData>? receive,
+  })  : pay = pay ?? List<HistoryData>.empty(),
+        receive = receive ?? List<HistoryData>.empty();
 }

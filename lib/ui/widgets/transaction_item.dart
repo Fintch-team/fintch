@@ -35,14 +35,7 @@ class TransactionItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  /*TODO: di history page, array pay sama receive nya masih belum ke split,
-                     masih kegabung, tapi data didalemnya udah bener, ada user pay sama user receive
-                     kalau yang di home page, array pay sama receive nya udah ke split,
-                     tapi data didalemnya baru cuma user pay kalau di array pay, user receive kalau di array receive
-                     kalau bisa dua duanya, untuk di nama soalnya
-                  */
-                  'Dari Adit untuk Galuh',
-                  // 'Dari ${item.pay!.name} untuk ${item.receive!.name}',
+                  'Dari ${item.pay!.name} untuk ${item.receive!.name}',
                   style: AppTheme.text1,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

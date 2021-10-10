@@ -39,7 +39,8 @@ class DataMapper {
 
   static HistoryEntity historyMapper(ListHistoryModel historyModel) =>
       HistoryEntity(
-        data: historyModel.data,
+        pay: historyModel.data!.pay,
+        receive: historyModel.data!.receive,
       );
 
   static WalletEntity walletMapper(WalletModel walletModel) => WalletEntity(

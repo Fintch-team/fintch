@@ -36,7 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
               setState(() {
                 historyTotal =
-                    state.pay.data.length + state.receive.data.length;
+                    state.history.pay.length + state.history.receive.length;
               });
             });
           } else if (state is HistoryFailure) {
@@ -147,15 +147,15 @@ class _HistoryPageState extends State<HistoryPage> {
                       ? IndexedStack(
                           index: isPayHistory,
                           children: [
-                            state.pay.data.isNotEmpty
+                            state.history.pay.isNotEmpty
                                 ? ListView.builder(
-                                    itemCount: state.pay.data.length,
+                                    itemCount: state.history.pay.length,
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     padding: EdgeInsets.symmetric(vertical: 10),
                                     itemBuilder: (context, index) {
                                       return TransactionItem(
-                                        item: state.pay.data[index],
+                                        item: state.history.pay[index],
                                         isPay: isPayHistory == 0 ? true : false,
                                       );
                                       // return SizedBox();
@@ -165,15 +165,15 @@ class _HistoryPageState extends State<HistoryPage> {
                                     'History Pay Kosong!',
                                     style: AppTheme.text1.bold,
                                   ),
-                            state.receive.data.isNotEmpty
+                            state.history.receive.isNotEmpty
                                 ? ListView.builder(
-                                    itemCount: state.receive.data.length,
+                                    itemCount: state.history.receive.length,
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     padding: EdgeInsets.symmetric(vertical: 10),
                                     itemBuilder: (context, index) {
                                       return TransactionItem(
-                                        item: state.receive.data[index],
+                                        item: state.history.receive[index],
                                         isPay: isPayHistory == 0 ? true : false,
                                       );
                                     },
