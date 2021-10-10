@@ -10,6 +10,7 @@ class TransactionItem extends StatelessWidget {
   const TransactionItem({
     required this.item,
     required this.isPay,
+
     Key? key,
   }) : super(key: key);
 
@@ -35,9 +36,7 @@ class TransactionItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  isPay
-                      ? 'Untuk ${item.pay!.name}'
-                      : 'Dari ${item.receive!.name}',
+                  'Dari ${item.pay!.name} untuk ${item.receive!.name}',
                   style: AppTheme.text1,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

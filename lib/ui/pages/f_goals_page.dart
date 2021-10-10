@@ -84,6 +84,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: Helper.getShadow(),

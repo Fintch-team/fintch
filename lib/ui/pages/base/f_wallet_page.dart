@@ -44,6 +44,7 @@ class _FWalletPageState extends State<FWalletPage> {
               Icons.add_rounded,
               size: MediaQuery.of(context).size.width * 0.1,
             ),
+
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

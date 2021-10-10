@@ -7,17 +7,9 @@ class HistoryRepository {
   HistoryRepository(
       {required this.historyService, required this.localAuthService});
 
-  Future<HistoryEntity> getPayHistory({String id = ''}) async {
+  Future<HistoryEntity> getAllHistory({String id = ''}) async {
     ListHistoryModel historyModel = await historyService.getHistoryAll(
-      idPay: id.isNotEmpty ? id : localAuthService.currentUser!.id.toString(),
-    );
-
-    return DataMapper.historyMapper(historyModel);
-  }
-
-  Future<HistoryEntity> getReceiveHistory({String id = ''}) async {
-    ListHistoryModel historyModel = await historyService.getHistoryAll(
-      idReceive: id.isNotEmpty ? id : localAuthService.currentUser!.id.toString(),
+      // idReceive: id.isNotEmpty ? id : localAuthService.currentUser!.id.toString(),
     );
 
     return DataMapper.historyMapper(historyModel);

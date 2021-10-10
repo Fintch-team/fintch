@@ -13,13 +13,12 @@ class HistoryInitial extends HistoryState {}
 class HistoryLoading extends HistoryState {}
 
 class HistoryResponseSuccess extends HistoryState {
-  final HistoryEntity pay;
-  final HistoryEntity receive;
+  final HistoryEntity history;
 
-  HistoryResponseSuccess({required this.pay, required this.receive});
+  HistoryResponseSuccess({required this.history});
 
   @override
-  List<Object> get props => [pay, receive];
+  List<Object> get props => [history];
 }
 
 class HistoryRequestSuccess extends HistoryState {}

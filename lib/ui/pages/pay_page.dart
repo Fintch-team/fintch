@@ -521,7 +521,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
           }
           return null;
         },
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly, DecimalFormatter(decimalDigits: 3)],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
           hintText: 'Masukin jumlah Fintch Point yang mau kamu transfer',

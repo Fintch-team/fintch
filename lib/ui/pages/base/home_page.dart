@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -75,11 +74,6 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.payments_rounded,
-                  color: AppTheme.white,
-                ),
-                SizedBox(width: Helper.smallPadding),
                 Icon(
                   Icons.notifications_rounded,
                   color: AppTheme.white,
@@ -256,6 +250,13 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FeatureItem(
+            name: 'Top-up',
+            assetName: Resources.icTopUp,
+            onTap: () => Navigator.pushNamed(context, PagePath.topUp),
+            isOpacity: true,
+          ),
+          SizedBox(width: 20),
+          FeatureItem(
             name: 'Pay',
             assetName: Resources.icPay,
             onTap: () => Navigator.pushNamed(context, PagePath.pay),
@@ -273,19 +274,13 @@ class _HomePageState extends State<HomePage> {
             assetName: Resources.icBarrierCash,
             onTap: () {},
           ),
-          SizedBox(width: 20),
-          FeatureItem(
-            name: 'F-Goals',
-            assetName: Resources.icFGoals,
-            onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
-            isOpacity: true,
-          ),
         ],
       ),
     );
   }
 
   Widget _fGoalList(BuildContext context, UserEntity user) {
+
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -313,6 +308,50 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.48,
+            child: state is HomeSuccess
+                ? state.entity.moneyPlanning.isNotEmpty
+                    ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.entity.moneyPlanning.length,
+                        padding: EdgeInsets.symmetric(
+                            vertical: Helper.normalPadding),
+                        itemBuilder: (BuildContext context, int index) {
+                          return _fGoalItem(context, index,
+                              state.entity.moneyPlanning[index]);
+                        },
+                      )
+                    : Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              'F-Goals Kosong! \nTambah F-Goals',
+                              style: AppTheme.text1.bold,
+                            ),
+                          SizedBox(width: Helper.normalPadding),
+                          FeatureItem(
+                            name: 'F-Goals',
+                            assetName: Resources.icFGoals,
+                            onTap: () {
+                              Navigator.pushNamed(context, PagePath.fGoals);
+                            },
+                            showTitle: false,
+                            isExpand: false,
+                            size: MediaQuery.of(context).size.width * 0.18,
+                          ),
+                        ],
+                      ),
+                    )
+                : state is HomeLoading
+                    ? Center(
+                        child: CircularLoading(),
+                      )
+                    : Container(),
+          ),
         ],
       ),
     );
@@ -395,6 +434,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 AutoSizeText(
                   'Rp. ${data.amount.toString().parseCurrency()}',
+
                   style: AppTheme.text3.green,
                   maxLines: 1,
                 ),
@@ -407,6 +447,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _transactionList(UserEntity user) {
+
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -11,9 +11,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     on<GetHistory>((event, emit) async {
       emit(HistoryLoading());
       try {
-        HistoryEntity pay = await historyRepository.getPayHistory();
-        HistoryEntity receive = await historyRepository.getReceiveHistory();
-        emit(HistoryResponseSuccess(pay: pay, receive: receive));
+        HistoryEntity history = await historyRepository.getAllHistory();
+        emit(HistoryResponseSuccess(history: history));
       } on FailedException catch (e) {
         emit(HistoryFailure(message: e.message));
       } catch (e, stacktrace) {

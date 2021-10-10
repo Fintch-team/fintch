@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library money_plan;
 
-export 'money_plan_bloc.dart';
-export 'money_plan_event.dart';
 export 'money_plan_state.dart';
+export 'money_plan_event.dart';
+export 'money_plan_bloc.dart';
