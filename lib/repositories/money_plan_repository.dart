@@ -7,14 +7,21 @@ class MoneyPlanRepository {
     required this.moneyPlanService,
   });
 
-  Future<MoneyPlanEntity> getPayMoneyPlan({required String id}) async {
+  Future<MoneyPlanEntity> getMoneyPlanDetail({required String id}) async {
     MoneyPlanModel moneyPlanModel =
         await moneyPlanService.getMoneyPlanId(id: id);
 
     return DataMapper.moneyPlanMapper(moneyPlanModel);
   }
 
-  Future<bool> posttMoneyPlan({required MoneyPlanPostEntity postEntity}) async {
+  Future<ListMoneyPlanEntity> getMoneyPlan() async {
+    ListMoneyPlanModel moneyPlanModel =
+        await moneyPlanService.getMoneyPlanAll();
+
+    return DataMapper.listMoneyPlanMapper(moneyPlanModel);
+  }
+
+  Future<bool> postMoneyPlan({required MoneyPlanPostEntity postEntity}) async {
     bool res = await moneyPlanService.postMoneyPlan(
       deadline: postEntity.deadline,
       idUser: postEntity.idUser.toString(),

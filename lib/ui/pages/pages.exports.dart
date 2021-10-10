@@ -8,6 +8,6 @@ export 'auth/auth.exports.dart';
 export 'base/base.exports.dart';
 export 'f_goals_page.dart';
 export 'pay_page.dart';
-export 'profile_page.dart';
 export 'receive_page.dart';
+export 'settings_page.dart';
 export 'splash_page.dart';

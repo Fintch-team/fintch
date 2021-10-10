@@ -125,6 +125,32 @@ class _MyAppState extends State<MyApp> {
               historyRepository: context.read<HistoryRepository>(),
             ),
           ),
+          BlocProvider<SettingsBloc>(
+            create: (context) => SettingsBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyManageBloc>(
+            create: (context) => MoneyManageBloc(
+              moneyManageRepository: context.read<MoneyManageRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyManageItemBloc>(
+            create: (context) => MoneyManageItemBloc(
+              moneyManageItemRepository:
+                  context.read<MoneyManageItemRepository>(),
+            ),
+          ),
+          BlocProvider<MoneyPlanBloc>(
+            create: (context) => MoneyPlanBloc(
+              moneyPlanRepository: context.read<MoneyPlanRepository>(),
+            ),
+          ),
+          BlocProvider<WalletBloc>(
+            create: (context) => WalletBloc(
+              walletRepository: context.read<WalletRepository>(),
+            ),
+          ),
         ],
         child: MaterialApp(
           title: 'Fintch',

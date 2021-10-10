@@ -5,6 +5,7 @@
 library global;
 
 export 'auth_data.dart';
+export 'barcode_data.dart';
 export 'history_data.dart';
 export 'money_manage_data.dart';
 export 'money_manage_item_data.dart';
@@ -14,4 +15,3 @@ export 'school_data.dart';
 export 'user_data.dart';
 export 'user_mini.dart';
 export 'wallet_data.dart';
-export 'barcode_data.dart';

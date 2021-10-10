@@ -23,9 +23,8 @@ class HistoryPutEntity extends BaseEntity {
 }
 
 class HistoryEntity extends BaseEntity {
-  final List<HistoryData> data;
+  final List<HistoryData> pay;
+  final List<HistoryData> receive;
 
-  HistoryEntity({
-    required this.data,
-  });
+  HistoryEntity({required this.pay, required this.receive});
 }

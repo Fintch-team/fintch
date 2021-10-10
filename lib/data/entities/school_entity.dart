@@ -19,3 +19,11 @@ class SchoolEntity extends BaseEntity {
 
   SchoolEntity({required this.id, required this.name});
 }
+
+class ListSchoolEntity extends BaseEntity {
+  final List<SchoolData> data;
+
+  ListSchoolEntity({
+    required this.data,
+  });
+}

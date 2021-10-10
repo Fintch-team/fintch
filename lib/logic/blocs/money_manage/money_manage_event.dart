@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fintch/gen_export.dart';
 
 abstract class MoneyManageEvent extends Equatable {
   const MoneyManageEvent();
@@ -9,8 +10,38 @@ abstract class MoneyManageEvent extends Equatable {
 
 class GetMoneyManage extends MoneyManageEvent {}
 
-class PostMoneyManage extends MoneyManageEvent {}
+class PostIncomeMoneyManage extends MoneyManageEvent {
+  final MoneyManageInPostEntity entity;
 
-class EditMoneyManage extends MoneyManageEvent {}
+  PostIncomeMoneyManage({required this.entity});
 
-class DeleteMoneyManage extends MoneyManageEvent {}
+  @override
+  List<Object> get props => [entity];
+}
+
+class PostOutcomeMoneyManage extends MoneyManageEvent {
+  final MoneyManageOutPostEntity entity;
+
+  PostOutcomeMoneyManage({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class EditMoneyManage extends MoneyManageEvent {
+  final MoneyManagePutEntity entity;
+
+  EditMoneyManage({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class DeleteMoneyManage extends MoneyManageEvent {
+  final int id;
+
+  DeleteMoneyManage({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}

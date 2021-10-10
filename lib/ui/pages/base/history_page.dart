@@ -60,7 +60,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _headerContent(
       BuildContext context, HistoryEntity pay, HistoryEntity receive) {
-    int length = pay.data.length + receive.data.length;
+    int length = pay.pay.length + receive.receive.length;
     return Positioned(
       top: 0,
       left: 0,
@@ -149,59 +149,41 @@ class _HistoryPageState extends State<HistoryPage> {
                     index: isPayHistory,
                     children: [
                       // TODO: bentuk response mash salah
-                      if (pay.data.isNotEmpty)
+                      if (pay.pay.isNotEmpty)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListView.builder(
-                              itemCount: pay.data.length,
+                              itemCount: pay.pay.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                // TODO: history page
+                                return TransactionItem(
+                                  item: pay.pay[index],
+                                  isPay: true,
+                                );
 
-                                // return TransactionItem(
-                                //   item: Datum(
-                                //     id: 1,
-                                //     amount: '20000',
-                                //     createdAt: DateTime.now(),
-                                //     updatedAt: DateTime.now(),
-                                //     name: 'Dari Adit untuk Galuh',
-                                //   ),
-                                //   name: "name",
-                                //   isPay: isPayHistory == 0 ? true : false,
-                                // );
-
-                                return SizedBox();
+                                // return SizedBox();
                               },
                             ),
                           ],
                         ),
-                      if (receive.data.isNotEmpty)
+                      if (receive.receive.isNotEmpty)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListView.builder(
-                              itemCount: receive.data.length,
+                              itemCount: receive.receive.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemBuilder: (context, index) {
-                                // TODO: history page
-
-                                // return TransactionItem(
-                                //   item: Datum(
-                                //     id: 1,
-                                //     amount: '20000',
-                                //     createdAt: DateTime.now(),
-                                //     updatedAt: DateTime.now(),
-                                //     name: 'Dari Adit untuk Galuh',
-                                //   ),
-                                //   name: "name",
-                                //   isPay: isPayHistory == 0 ? true : false,
-                                // );
-                                return SizedBox();
+                                return TransactionItem(
+                                  item: receive.receive[index],
+                                  isPay: false,
+                                );
+                                // return SizedBox();
                               },
                             ),
                           ],

@@ -7,10 +7,16 @@ class SchoolRepository {
     required this.schoolService,
   });
 
-  Future<SchoolEntity> getPaySchool({required String id}) async {
+  Future<SchoolEntity> getSchoolDetail({required String id}) async {
     SchoolModel schoolModel = await schoolService.getSchoolId(id: id);
 
     return DataMapper.schoolMapper(schoolModel);
+  }
+
+  Future<ListSchoolEntity> getSchool() async {
+    ListSchoolModel schoolModel = await schoolService.getSchoolAll();
+
+    return DataMapper.listSchoolMapper(schoolModel);
   }
 
   Future<bool> postSchool({required SchoolPostEntity postEntity}) async {

@@ -39,7 +39,8 @@ class DataMapper {
 
   static HistoryEntity historyMapper(ListHistoryModel historyModel) =>
       HistoryEntity(
-        data: historyModel.data,
+        pay: historyModel.data.pay,
+        receive: historyModel.data.receive,
       );
 
   static WalletEntity walletMapper(WalletModel walletModel) => WalletEntity(
@@ -83,5 +84,33 @@ class DataMapper {
         amount: moneyPlan.data.amount,
         name: moneyPlan.data.name,
         percent: moneyPlan.data.percent,
+      );
+
+  static ListWalletEntity listWalletMapper(ListWalletModel walletModel) =>
+      ListWalletEntity(
+        data: walletModel.data,
+      );
+
+  static ListSchoolEntity listSchoolMapper(ListSchoolModel schoolModel) =>
+      ListSchoolEntity(
+        data: schoolModel.data,
+      );
+
+  static ListMoneyManageEntity listMoneyManageMapper(
+          ListMoneyManageModel moneyManage) =>
+      ListMoneyManageEntity(
+        data: moneyManage.data,
+      );
+
+  static ListMoneyManageItemEntity listMoneyManageItemMapper(
+          ListMoneyManageItemModel moneyManageItem) =>
+      ListMoneyManageItemEntity(
+        data: moneyManageItem.data,
+      );
+
+  static ListMoneyPlanEntity listMoneyPlanMapper(
+          ListMoneyPlanModel moneyPlan) =>
+      ListMoneyPlanEntity(
+        data: moneyPlan.data,
       );
 }

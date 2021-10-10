@@ -12,10 +12,12 @@ class WalletInitial extends WalletState {}
 
 class WalletLoading extends WalletState {}
 
-class WalletSuccess extends WalletState {
-  final WalletEntity entity;
+class WalletRequestSuccess extends WalletState {}
 
-  WalletSuccess({required this.entity});
+class WalletResponseSuccess extends WalletState {
+  final ListWalletEntity entity;
+
+  WalletResponseSuccess({required this.entity});
 
   @override
   List<Object> get props => [entity];

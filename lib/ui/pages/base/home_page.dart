@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initHome() {
-    context.read<HomeBloc>().add(GetUser());
+    context.read<HomeBloc>().add(HomeInit());
   }
 
   @override
@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
               color: Colors.transparent,
               child: Stack(
                 children: [
-                  _headerContent(context, user: state.entity),
-                  _homeScrollableSheet(user: state.entity),
+                  _headerContent(context, state.entity),
+                  _homeScrollableSheet(state.entity),
                 ],
               ),
             );
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _headerContent(BuildContext context, {UserEntity? user}) {
+  Widget _headerContent(BuildContext context, UserEntity user) {
     return Positioned(
       top: 0,
       left: 0,
@@ -107,9 +107,9 @@ class _HomePageState extends State<HomePage> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _userInfo(context, user: user),
+                          _userInfo(context, user),
                           SizedBox(height: Helper.normalPadding),
-                          _fintchWallet(user: user),
+                          _fintchWallet(user),
                         ],
                       ),
                     ),
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _userInfo(BuildContext context, {UserEntity? user}) {
+  Widget _userInfo(BuildContext context, UserEntity user) {
     return Row(
       children: [
         Container(
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fintchWallet({UserEntity? user}) {
+  Widget _fintchWallet(UserEntity user) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _homeScrollableSheet({UserEntity? user}) {
+  Widget _homeScrollableSheet(UserEntity user) {
     return Positioned.fill(
       child: DraggableScrollableSheet(
         initialChildSize: 0.68,
@@ -224,8 +224,8 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: Helper.normalPadding),
                   _listFeature(context),
                   SizedBox(height: Helper.normalPadding),
-                  _fGoalList(context, user: user),
-                  _transactionList(user: user),
+                  _fGoalList(context, user),
+                  _transactionList(user),
                 ],
               ),
             ),
@@ -285,7 +285,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _fGoalList(BuildContext context, {UserEntity? user}) {
+  Widget _fGoalList(BuildContext context, UserEntity user) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          if (user!.moneyPlanning.isNotEmpty)
+          if (user.moneyPlanning.isNotEmpty)
             Container(
               height: MediaQuery.of(context).size.width * 0.48,
               child: ListView.builder(
@@ -358,9 +358,7 @@ class _HomePageState extends State<HomePage> {
                           SvgPicture.asset(Resources.icTime, height: 12),
                           SizedBox(width: 4),
                           AutoSizeText(
-                            data.deadline!
-                                  .parseHourDateAndMonth()
-                                  .substring(0, 17),
+                            data.deadline!.parseHourDateAndMonth(),
                             style: AppTheme.subText1,
                             maxLines: 1,
                             maxFontSize: 10,
@@ -372,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   AutoSizeText(
-                    'Rp. 17.000.000.000.000',
+                    'Rp. ${data.totalAmount.toString().parseCurrency()}',
                     style: AppTheme.text1.bold,
                     maxLines: 1,
                   ),
@@ -381,21 +379,21 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(width: Helper.smallPadding),
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CircularPercentIndicator(
                   radius: MediaQuery.of(context).size.width * 0.2,
                   lineWidth: 16.0,
                   animation: true,
-                  percent: 0.7,
-                  center: Text("70%", style: AppTheme.text2.darkPurple.bold),
+                  percent: data.percent / 100,
+                  center: Text("${data.percent}%",
+                      style: AppTheme.text2.darkPurple.bold),
                   circularStrokeCap: CircularStrokeCap.round,
                   progressColor: AppTheme.purple,
                   backgroundColor: AppTheme.purpleOpacity,
                 ),
-                SizedBox(height: Helper.smallPadding),
                 AutoSizeText(
-                  data.totalAmount.toString().parseCurrency(),
+                  'Rp. ${data.amount.toString().parseCurrency()}',
                   style: AppTheme.text3.green,
                   maxLines: 1,
                 ),
@@ -407,7 +405,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _transactionList({UserEntity? user}) {
+  Widget _transactionList(UserEntity user) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -440,7 +438,7 @@ class _HomePageState extends State<HomePage> {
           IndexedStack(
             index: isPayHistory,
             children: [
-              if (user!.pay.isNotEmpty)
+              if (user.pay.isNotEmpty)
                 ListView.builder(
                   itemCount: user.pay.length,
                   shrinkWrap: true,
@@ -449,8 +447,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     return TransactionItem(
                       item: user.pay[index],
-                      name: user.name,
-                      isPay: isPayHistory == 0 ? true : false,
+                      isPay: true,
                     );
                     // return SizedBox();
                   },
@@ -464,8 +461,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     return TransactionItem(
                       item: user.receive[index],
-                      name: user.name,
-                      isPay: isPayHistory == 0 ? true : false,
+                      isPay: false,
                     );
 
                     // return SizedBox();

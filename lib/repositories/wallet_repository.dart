@@ -7,10 +7,16 @@ class WalletRepository {
     required this.walletService,
   });
 
-  Future<WalletEntity> getPayWallet({required String id}) async {
+  Future<WalletEntity> getWalletDetail({required String id}) async {
     WalletModel walletModel = await walletService.getWalletId(id: id);
 
     return DataMapper.walletMapper(walletModel);
+  }
+
+  Future<ListWalletEntity> getWallet() async {
+    ListWalletModel walletModel = await walletService.getWalletAll();
+
+    return DataMapper.listWalletMapper(walletModel);
   }
 
   Future<bool> postWallet({required WalletPostEntity postEntity}) async {

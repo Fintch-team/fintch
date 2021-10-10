@@ -28,8 +28,8 @@ class HistoryData {
         "id": id,
         "amount": amount,
         "created_at": createdAt.toIso8601String(),
-        "pay": pay!.toJson(),
-        "receive": receive!.toJson(),
+        "pay": pay == null ? null : pay!.toJson(),
+        "receive": receive == null ? null : receive!.toJson(),
       };
 }
 

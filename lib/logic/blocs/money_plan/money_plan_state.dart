@@ -12,10 +12,12 @@ class MoneyPlanInitial extends MoneyPlanState {}
 
 class MoneyPlanLoading extends MoneyPlanState {}
 
-class MoneyPlanSuccess extends MoneyPlanState {
-  final UserEntity entity;
+class MoneyPlanRequestSuccess extends MoneyPlanState {}
 
-  MoneyPlanSuccess({required this.entity});
+class MoneyPlanResponseSuccess extends MoneyPlanState {
+  final ListMoneyPlanEntity entity;
+
+  MoneyPlanResponseSuccess({required this.entity});
 
   @override
   List<Object> get props => [entity];

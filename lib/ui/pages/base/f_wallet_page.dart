@@ -3,8 +3,440 @@ import 'package:fintch/gen_export.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+class FWalletPage extends StatefulWidget {
+  const FWalletPage({Key? key}) : super(key: key);
+
+  @override
+  State<FWalletPage> createState() => _FWalletPageState();
+}
+
+class _FWalletPageState extends State<FWalletPage> {
+  bool isShowingMainData = true;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<WalletBloc>().add(GetWallet());
+    context.read<MoneyManageBloc>().add(GetMoneyManage());
+    context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadingOverlay(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            _headerContent(context),
+            _fWalletScrollableSheet(),
+          ],
+        ),
+        floatingActionButton: SafeArea(
+          child: FloatingActionButton(
+            backgroundColor: AppTheme.purple,
+            onPressed: () {},
+            child: Icon(
+              Icons.add_rounded,
+              size: MediaQuery.of(context).size.width * 0.1,
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      ),
+    );
+  }
+
+  Widget _headerContent(BuildContext context) {
+    return BlocBuilder<WalletBloc, WalletState>(
+      builder: (context, state) {
+        if (state is WalletResponseSuccess) {
+          // TODO: get wallet tidak perlu list
+
+          return Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.32,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AutoSizeText(
+                    'Rp.${state.entity.data.first.walletAmount.toString().parseCurrency()}',
+                    style: AppTheme.headline1.white,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: Helper.normalPadding),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.24,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: AppTheme.whiteOpacity,
+                      ),
+                      padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
+                      child: _LineChart(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        // TODO: state yg lain belum di implementasi
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _fWalletScrollableSheet() {
+    return Positioned.fill(
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.6,
+        expand: true,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              color: AppTheme.scaffold,
+            ),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _bottomSheetLine(context),
+                  SizedBox(height: Helper.normalPadding),
+                  _cashFlows(),
+                  SizedBox(height: Helper.normalPadding),
+                  _cards(),
+                  _activities(),
+                  SizedBox(height: Helper.normalPadding),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _bottomSheetLine(BuildContext context) {
+    return Container(
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppTheme.purpleOpacity,
+      ),
+      margin: EdgeInsets.only(top: Helper.smallPadding),
+      width: MediaQuery.of(context).size.width * 0.15,
+      height: 4,
+    );
+  }
+
+  Widget _cashFlows() {
+    // TODO: EP untuk get nilai income dan outcome
+    return Container(
+      padding: EdgeInsets.all(Helper.smallPadding),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Icon(
+                    Icons.trending_down_rounded,
+                    size: 28,
+                    color: AppTheme.red,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AutoSizeText(
+                        'Outcomes',
+                        style: AppTheme.text3,
+                        maxLines: 1,
+                      ),
+                      SizedBox(height: 4),
+                      AutoSizeText(
+                        'Rp.200,000',
+                        style: AppTheme.headline3,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 12),
+          Container(
+            width: 4,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppTheme.purple,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Icon(
+                    Icons.trending_up_rounded,
+                    size: 28,
+                    color: AppTheme.green,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AutoSizeText(
+                        'Incomes',
+                        style: AppTheme.text3,
+                        maxLines: 1,
+                      ),
+                      SizedBox(height: 4),
+                      AutoSizeText(
+                        'Rp.156,000',
+                        maxLines: 1,
+                        style: AppTheme.headline3,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _cards() {
+    // TODO: implementasi money manage item
+    return BlocBuilder<MoneyManageItemBloc, MoneyManageItemState>(
+      builder: (context, state) {
+        if (state is MoneyManageItemResponseSuccess) {
+          return Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+                  child: Text('Cards', style: AppTheme.headline3),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.28,
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: state.entity.data.length,
+                    padding:
+                        EdgeInsets.symmetric(vertical: Helper.normalPadding),
+                    itemBuilder: (BuildContext context, int index) {
+                      return _cardItem(
+                          context, index, state.entity.data[index]);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // TODO: state yg lain belum di implementasi
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _cardItem(BuildContext context, int index, MoneyManageItemData data) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: Helper.getShadow(),
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.all(12),
+      margin: index == 0
+          ? EdgeInsets.only(left: 20, right: 10)
+          : index == 4
+              ? EdgeInsets.only(left: 10, right: 20)
+              : EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 8,
+            width: 8,
+            decoration: BoxDecoration(
+              color: AppTheme.purple,
+              shape: BoxShape.circle,
+            ),
+          ),
+          SizedBox(width: Helper.smallPadding),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(data.name, style: AppTheme.text3),
+              SizedBox(height: 4),
+              AutoSizeText(
+                'Rp. ${data.amount.toString().parseCurrency()}',
+                style: AppTheme.headline3.darkPurple,
+                maxLines: 1,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _activities() {
+    return BlocBuilder<MoneyManageBloc, MoneyManageState>(
+      builder: (context, state) {
+        if (state is MoneyManageResponseSuccess) {
+          return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: Helper.normalPadding),
+                  child: Text('Activities', style: AppTheme.headline3),
+                ),
+                SizedBox(height: 12),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.entity.data.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(vertical: 0),
+                  itemBuilder: (BuildContext context, int index) {
+                    return _activityItem(state.entity.data[index]);
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+
+        // TODO: state yg lain belum di implementasi
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _activityItem(MoneyManageData data) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  data.name,
+                  style: AppTheme.headline3,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  minFontSize: 16,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(
+                      1,
+                      (index) => Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.yellow,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: EdgeInsets.all(4),
+                            child: Text(data.item.name),
+                          )).toList(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: Helper.normalPadding),
+          Expanded(
+            flex: 3,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                AutoSizeText(
+                  data.isIncome
+                      ? 'Rp.${data.amount.toString().parseCurrency()}'
+                      : '-Rp.${data.amount.toString().parseCurrency()}',
+                  style: data.isIncome
+                      ? AppTheme.headline2.green.bold
+                      : AppTheme.headline2.red.bold,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 4),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(Resources.icTime, height: 12),
+                    SizedBox(width: 4),
+                    AutoSizeText(
+                      '30 September 2021',
+                      style: AppTheme.subText1,
+                      maxLines: 1,
+                      maxFontSize: 8,
+                      minFontSize: 8,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class _LineChart extends StatelessWidget {
   @override
@@ -141,386 +573,4 @@ class _LineChart extends StatelessWidget {
           FlSpot(7, 4),
         ],
       );
-}
-
-class FWalletPage extends StatefulWidget {
-  const FWalletPage({Key? key}) : super(key: key);
-
-  @override
-  State<FWalletPage> createState() => _FWalletPageState();
-}
-
-class _FWalletPageState extends State<FWalletPage> {
-  bool isShowingMainData = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          _headerContent(context),
-          _fWalletScrollableSheet(),
-        ],
-      ),
-      floatingActionButton: SafeArea(
-        child: FloatingActionButton(
-          backgroundColor: AppTheme.purple,
-          onPressed: () {},
-          child: Icon(
-            Icons.add_rounded,
-            size: MediaQuery.of(context).size.width * 0.1,
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-    );
-  }
-
-  Widget _headerContent(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.32,
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AutoSizeText(
-              'Rp.1,700,000',
-              style: AppTheme.headline1.white,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: Helper.normalPadding),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.24,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: AppTheme.whiteOpacity,
-                ),
-                padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
-                child: _LineChart(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _fWalletScrollableSheet() {
-    return Positioned.fill(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
-        expand: true,
-        builder: (BuildContext context, ScrollController scrollController) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              color: AppTheme.scaffold,
-            ),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _bottomSheetLine(context),
-                  SizedBox(height: Helper.normalPadding),
-                  _cashFlows(),
-                  SizedBox(height: Helper.normalPadding),
-                  _cards(),
-                  _activities(),
-                  SizedBox(height: Helper.normalPadding),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _bottomSheetLine(BuildContext context) {
-    return Container(
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: AppTheme.purpleOpacity,
-      ),
-      margin: EdgeInsets.only(top: Helper.smallPadding),
-      width: MediaQuery.of(context).size.width * 0.15,
-      height: 4,
-    );
-  }
-
-  Widget _cashFlows() {
-    return Container(
-      padding: EdgeInsets.all(Helper.smallPadding),
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FittedBox(
-                  child: Icon(
-                    Icons.trending_down_rounded,
-                    size: 28,
-                    color: AppTheme.red,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AutoSizeText(
-                        'Outcomes',
-                        style: AppTheme.text3,
-                        maxLines: 1,
-                      ),
-                      SizedBox(height: 4),
-                      AutoSizeText(
-                        'Rp.200,000',
-                        style: AppTheme.headline3,
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 12),
-          Container(
-            width: 4,
-            height: 36,
-            decoration: BoxDecoration(
-              color: AppTheme.purple,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FittedBox(
-                  child: Icon(
-                    Icons.trending_up_rounded,
-                    size: 28,
-                    color: AppTheme.green,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AutoSizeText(
-                        'Incomes',
-                        style: AppTheme.text3,
-                        maxLines: 1,
-                      ),
-                      SizedBox(height: 4),
-                      AutoSizeText(
-                        'Rp.156,000',
-                        maxLines: 1,
-                        style: AppTheme.headline3,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _cards() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Text('Cards', style: AppTheme.headline3),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.width * 0.28,
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
-              itemBuilder: (BuildContext context, int index) {
-                return _cardItem(context, index);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _cardItem(BuildContext context, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(12),
-      margin: index == 0
-          ? EdgeInsets.only(left: 20, right: 10)
-          : index == 4
-              ? EdgeInsets.only(left: 10, right: 20)
-              : EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 8,
-            width: 8,
-            decoration: BoxDecoration(
-              color: AppTheme.purple,
-              shape: BoxShape.circle,
-            ),
-          ),
-          SizedBox(width: Helper.smallPadding),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Needs', style: AppTheme.text3),
-              SizedBox(height: 4),
-              AutoSizeText(
-                'Rp. 17.000.000',
-                style: AppTheme.headline3.darkPurple,
-                maxLines: 1,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _activities() {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Text('Activities', style: AppTheme.headline3),
-          ),
-          SizedBox(height: 12),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: 5,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(vertical: 0),
-            itemBuilder: (BuildContext context, int index) {
-              return _activityItem();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _activityItem() {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: Helper.getShadow(),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  'Chatimefiohisafisahifsaihsfa fjsahfjasjk',
-                  style: AppTheme.headline3,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 16,
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                      1,
-                      (index) => Container(
-                            decoration: BoxDecoration(
-                              color: AppTheme.yellow,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: EdgeInsets.all(4),
-                            child: Text('Wants'),
-                          )).toList(),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: Helper.normalPadding),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AutoSizeText(
-                  '-Rp.17,000000000',
-                  style: AppTheme.headline2.red.bold,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset(Resources.icTime, height: 12),
-                    SizedBox(width: 4),
-                    AutoSizeText(
-                      '30 September 2021',
-                      style: AppTheme.subText1,
-                      maxLines: 1,
-                      maxFontSize: 10,
-                      minFontSize: 8,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

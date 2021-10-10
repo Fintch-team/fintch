@@ -85,3 +85,19 @@ class MoneyManageItemPostEntity extends BaseEntity {
     required this.percent,
   });
 }
+
+class ListMoneyManageEntity extends BaseEntity {
+  final List<MoneyManageData> data;
+
+  ListMoneyManageEntity({
+    required this.data,
+  });
+}
+
+class ListMoneyManageItemEntity extends BaseEntity {
+  final List<MoneyManageItemData> data;
+
+  ListMoneyManageItemEntity({
+    required this.data,
+  });
+}

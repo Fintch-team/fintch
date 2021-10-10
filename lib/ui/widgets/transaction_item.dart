@@ -5,13 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionItem extends StatelessWidget {
   final HistoryData item;
-  final String name;
   final bool isPay;
 
   const TransactionItem({
     required this.item,
-    required this.name,
-    this.isPay: true,
+    required this.isPay,
     Key? key,
   }) : super(key: key);
 
@@ -37,7 +35,9 @@ class TransactionItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Dari $name',
+                  isPay
+                      ? 'Untuk ${item.pay!.name}'
+                      : 'Dari ${item.receive!.name}',
                   style: AppTheme.text1,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

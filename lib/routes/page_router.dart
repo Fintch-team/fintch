@@ -15,9 +15,17 @@ class PageRouter {
       case PagePath.login:
         return _buildRoute(settings, LoginPage());
       case PagePath.setPassword:
-        return _buildRoute(settings, SetPasswordPage(bundle: args as ArgumentBundle?,));
+        return _buildRoute(
+            settings,
+            SetPasswordPage(
+              bundle: args as ArgumentBundle?,
+            ));
       case PagePath.setPin:
-        return _buildRoute(settings, SetPinPage(bundle: args as ArgumentBundle?,));
+        return _buildRoute(
+            settings,
+            SetPinPage(
+              bundle: args as ArgumentBundle?,
+            ));
       case PagePath.confirmPin:
         return _buildRoute(
             settings, ConfirmPinPage(bundle: args as ArgumentBundle?));
@@ -26,7 +34,7 @@ class PageRouter {
       case PagePath.receive:
         return _buildRoute(settings, ReceivePage());
       case PagePath.profile:
-        return _buildRoute(settings, ProfilePage());
+        return _buildRoute(settings, SettingsPage());
       case PagePath.pay:
         return _buildRoute(settings, PayPage());
       case PagePath.fGoals:
