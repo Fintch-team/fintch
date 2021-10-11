@@ -23,6 +23,18 @@ class _FGoalsPageState extends State<FGoalsPage> {
   Widget build(BuildContext context) {
     Helper.setDarkAppBar();
     return Scaffold(
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
+        child: FloatingActionButton(
+          backgroundColor: AppTheme.purple,
+          onPressed: () {},
+          child: Icon(
+            Icons.add_rounded,
+            size: MediaQuery.of(context).size.width * 0.1,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: Background(
         isWhite: true,
         child: SafeArea(
@@ -54,15 +66,23 @@ class _FGoalsPageState extends State<FGoalsPage> {
                     },
                     builder: (context, state) {
                       if (state is MoneyPlanResponseSuccess) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.entity.data.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.symmetric(vertical: 0),
-                          itemBuilder: (context, index) {
-                            return _fGoalItem(
-                                context, index, state.entity.data[index]);
-                          },
+                        if (state.entity.data.isNotEmpty) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.entity.data.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(vertical: 0),
+                            itemBuilder: (context, index) {
+                              return _fGoalItem(
+                                  context, index, state.entity.data[index]);
+                            },
+                          );
+                        }
+                        return Center(
+                          child: Text(
+                            'F-Goals Kosong!',
+                            style: AppTheme.text1.bold,
+                          ),
                         );
                       } else if (state is MoneyPlanLoading) {
                         return Center(
