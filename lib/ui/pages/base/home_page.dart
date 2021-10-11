@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,11 +17,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isPayHistory = true;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
     _initHome();
     super.initState();
+  }
+
+  void _onRefresh() async{
+    _initHome();
   }
 
   void _initHome() {
@@ -43,18 +49,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
+        if(state is HomeSuccess){
+          _refreshController.refreshCompleted();
+        }
         if (state is HomeFailure) {
+          _refreshController.refreshFailed();
           Helper.snackBar(context, message: state.message, isFailure: true);
         }
       },
       builder: (context, state) {
-        return Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(context, state),
-              _homeScrollableSheet(state),
-            ],
+        return SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: Container(
+            color: Colors.transparent,
+            child: Stack(
+              children: [
+                _headerContent(context, state),
+                _homeScrollableSheet(state),
+              ],
+            ),
           ),
         );
       },
