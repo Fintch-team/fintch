@@ -1,12 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,7 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isPayHistory = true;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -25,7 +25,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void _onRefresh() async{
+  Future<void> _onRefresh() async {
+    context.read<HomeBloc>().add(HomeInit());
     _initHome();
   }
 
@@ -49,25 +50,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
-        if(state is HomeSuccess){
-          _refreshController.refreshCompleted();
-        }
+        if (state is HomeSuccess) {}
         if (state is HomeFailure) {
-          _refreshController.refreshFailed();
           Helper.snackBar(context, message: state.message, isFailure: true);
         }
       },
       builder: (context, state) {
-        return SmartRefresher(
-          controller: _refreshController,
+        return LiquidPullToRefresh(
+          color: AppTheme.darkPurpleOpacity,
+          backgroundColor: AppTheme.yellow,
+          showChildOpacityTransition: false,
           onRefresh: _onRefresh,
-          child: Container(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                _headerContent(context, state),
-                _homeScrollableSheet(state),
-              ],
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  52,
+              color: Colors.transparent,
+              child: Column(
+                children: [
+                  SizedBox(height: Helper.normalPadding),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _headerContent(context, state),
+                        _homeScrollableSheet(state),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -516,8 +529,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _historyList(HomeState state) {
     if (state is HomeSuccess) {
-      if(isPayHistory){
-        if(state.entity.pay.isNotEmpty){
+      if (isPayHistory) {
+        if (state.entity.pay.isNotEmpty) {
           return ListView.builder(
             itemCount: state.entity.pay.length,
             shrinkWrap: true,
@@ -538,7 +551,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
       } else {
-        if(state.entity.receive.isNotEmpty){
+        if (state.entity.receive.isNotEmpty) {
           return ListView.builder(
             itemCount: state.entity.receive.length,
             shrinkWrap: true,

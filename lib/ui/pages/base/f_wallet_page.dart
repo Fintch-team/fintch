@@ -544,8 +544,8 @@ class _LineChart extends StatelessWidget {
       );
 
   List<LineChartBarData> get lineBarsData1 => [
-        lineChartBarData1_1,
-        lineChartBarData1_2,
+        lineChartOutcomes,
+        lineChartIncomes,
       ];
 
   SideTitles leftTitles({required GetTitleFunction getTitles}) => SideTitles(
@@ -592,7 +592,7 @@ class _LineChart extends StatelessWidget {
         show: false,
       );
 
-  LineChartBarData get lineChartBarData1_1 => LineChartBarData(
+  LineChartBarData get lineChartOutcomes => LineChartBarData(
         isCurved: true,
         colors: [AppTheme.red],
         barWidth: 8,
@@ -610,7 +610,7 @@ class _LineChart extends StatelessWidget {
         ],
       );
 
-  LineChartBarData get lineChartBarData1_2 => LineChartBarData(
+  LineChartBarData get lineChartIncomes => LineChartBarData(
         isCurved: true,
         colors: [AppTheme.green],
         barWidth: 8,

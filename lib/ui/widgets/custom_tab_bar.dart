@@ -49,7 +49,7 @@ class ShiftingTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.labelFlex,
     this.labelStyle,
     this.forceUpperCase = true,
-  })  : super(key: key);
+  }) : super(key: key);
 
   /// Typically a list of two or more [ShiftingTab] widgets.
   ///
@@ -134,7 +134,7 @@ class _ShiftingTabBarState extends State<ShiftingTabBar> {
     final double margin = _computeTabMargin(widget.tabs.length);
     final List<_ShiftingTabWidget> tabWidgets = List<_ShiftingTabWidget>.from(
       widget.tabs.mapIndexed<_ShiftingTabWidget>(
-            (ShiftingTab tab, int index) => _ShiftingTabWidget(
+        (ShiftingTab tab, int index) => _ShiftingTabWidget(
           key: tab.key,
           animation: _ShiftingAnimation(_controller, index),
           margin: margin,
@@ -152,7 +152,9 @@ class _ShiftingTabBarState extends State<ShiftingTabBar> {
         key: widget.tabs[i].key,
         animation: _ShiftingAnimation(_controller, i),
         margin: margin,
-        icon: _controller!.index == i ? widget.tabs[i].icon : widget.tabs[i].inactiveIcon,
+        icon: _controller!.index == i
+            ? widget.tabs[i].icon
+            : widget.tabs[i].inactiveIcon,
         onTap: () => _controller!.animateTo(i),
         text: widget.forceUpperCase
             ? widget.tabs[i].text!.toUpperCase()
@@ -208,7 +210,7 @@ class _ShiftingTabWidget extends AnimatedWidget {
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable as Animation<double>;
     final Tween<double> tween =
-    Tween<double>(begin: 1.0, end: 1.0 + labelFlex!);
+        Tween<double>(begin: 1.0, end: 1.0 + labelFlex!);
 
     return Flexible(
       flex: (tween.animate(animation).value * 1000).round(),
@@ -222,11 +224,11 @@ class _ShiftingTabWidget extends AnimatedWidget {
   }
 
   Widget _buildTab(
-      Animation<double> animation,
-      Color? color,
-      double? margin,
-      BuildContext context,
-      ) {
+    Animation<double> animation,
+    Color? color,
+    double? margin,
+    BuildContext context,
+  ) {
     final TextDirection dir = Directionality.of(context);
 
     return Row(
@@ -254,11 +256,11 @@ class _ShiftingTabWidget extends AnimatedWidget {
   }
 
   Widget _buildText(
-      Animation<double> animation,
-      Color? color,
-      TextDirection dir,
-      TextStyle labelStyle,
-      ) {
+    Animation<double> animation,
+    Color? color,
+    TextDirection dir,
+    TextStyle labelStyle,
+  ) {
     return FadeTransition(
       opacity: animation,
       child: SizeTransition(
@@ -267,7 +269,10 @@ class _ShiftingTabWidget extends AnimatedWidget {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(text!, style: labelStyle,)
+                Text(
+                  text!,
+                  style: labelStyle,
+                )
               ]),
         ),
         axis: Axis.horizontal,
@@ -322,7 +327,7 @@ double _indexChangeProgress(TabController controller, int index) {
       return 1.0 - controller.offset.abs().clamp(0.0, 1.0);
     else
       return (controller.index + 1 == previousIndex && controller.offset > 0) ||
-          (controller.index - 1 == previousIndex && controller.offset < 0)
+              (controller.index - 1 == previousIndex && controller.offset < 0)
           ? controller.offset.abs().clamp(0.0, 1.0)
           : 0.0;
   }
