@@ -15,8 +15,6 @@ class FWalletPage extends StatefulWidget {
 }
 
 class _FWalletPageState extends State<FWalletPage> {
-  bool isShowingMainData = true;
-
   @override
   void initState() {
     requestFWallet();

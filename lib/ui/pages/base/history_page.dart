@@ -1,8 +1,8 @@
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:fintch/gen_export.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -21,17 +21,21 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
   }
 
+  Future<void> _onRefresh() async {
+    _initHistory();
+  }
+
   void _initHistory() {
     context.read<HistoryBloc>().add(GetHistory());
   }
 
-  void payCallback(){
+  void payCallback() {
     setState(() {
       isPayHistory = true;
     });
   }
 
-  void receiveCallback(){
+  void receiveCallback() {
     setState(() {
       isPayHistory = false;
     });
@@ -53,13 +57,32 @@ class _HistoryPageState extends State<HistoryPage> {
         }
       },
       builder: (context, state) {
-        return Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(context),
-              _historyScrollableSheet(state),
-            ],
+        return LiquidPullToRefresh(
+          color: AppTheme.darkPurpleOpacity,
+          backgroundColor: AppTheme.yellow,
+          showChildOpacityTransition: false,
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  52,
+              child: Column(
+                children: [
+                  SizedBox(height: Helper.normalPadding),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _headerContent(context),
+                        _historyScrollableSheet(state),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -175,8 +198,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _historyList(HistoryState state) {
     if (state is HistoryResponseSuccess) {
-      if(isPayHistory){
-        if(state.history.pay.isNotEmpty){
+      if (isPayHistory) {
+        if (state.history.pay.isNotEmpty) {
           return ListView.builder(
             itemCount: state.history.pay.length,
             shrinkWrap: true,
@@ -197,7 +220,7 @@ class _HistoryPageState extends State<HistoryPage> {
           );
         }
       } else {
-        if(state.history.receive.isNotEmpty){
+        if (state.history.receive.isNotEmpty) {
           return ListView.builder(
             itemCount: state.history.receive.length,
             shrinkWrap: true,
