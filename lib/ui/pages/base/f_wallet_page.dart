@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
-
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class FWalletPage extends StatefulWidget {
   const FWalletPage({Key? key}) : super(key: key);
@@ -19,7 +19,15 @@ class _FWalletPageState extends State<FWalletPage> {
 
   @override
   void initState() {
+    requestFWallet();
     super.initState();
+  }
+
+  Future<void> _onRefresh() async {
+    requestFWallet();
+  }
+
+  void requestFWallet() {
     context.read<WalletBloc>().add(GetWallet());
     context.read<MoneyManageBloc>().add(GetMoneyManage());
     context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
@@ -27,27 +35,47 @@ class _FWalletPageState extends State<FWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingOverlay(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            _headerContent(context),
-            _fWalletScrollableSheet(),
-          ],
-        ),
-        floatingActionButton: Container(
-          margin: EdgeInsets.only(bottom: Helper.normalPadding),
-          child: FloatingActionButton(
-            backgroundColor: AppTheme.purple,
-            onPressed: () {},
-            child: Icon(
-              Icons.add_rounded,
-              size: MediaQuery.of(context).size.width * 0.1,
+    return LiquidPullToRefresh(
+      color: AppTheme.darkPurpleOpacity,
+      backgroundColor: AppTheme.yellow,
+      showChildOpacityTransition: false,
+      onRefresh: _onRefresh,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              52,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Column(
+              children: [
+                SizedBox(height: Helper.normalPadding),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      _headerContent(context),
+                      _fWalletScrollableSheet(),
+                    ],
+                  ),
+                ),
+              ],
             ),
+            floatingActionButton: Container(
+              margin: EdgeInsets.only(bottom: Helper.normalPadding),
+              child: FloatingActionButton(
+                backgroundColor: AppTheme.purple,
+                onPressed: () {},
+                child: Icon(
+                  Icons.add_rounded,
+                  size: MediaQuery.of(context).size.width * 0.1,
+                ),
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       ),
     );
   }
