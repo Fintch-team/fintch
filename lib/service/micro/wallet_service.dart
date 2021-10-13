@@ -37,7 +37,7 @@ class WalletService extends ApiService {
       {required int walletAmount,
       required int barrierAmount,
       required int payAmount,
-      required DateTime barrierExpired}) async {
+      required String barrierExpired}) async {
     try {
       final res = await dio.post(
         'wallet',
@@ -61,7 +61,7 @@ class WalletService extends ApiService {
       required int walletAmount,
       required int barrierAmount,
       required int payAmount,
-      required DateTime barrierExpired}) async {
+      required String barrierExpired}) async {
     try {
       final res = await dio.put(
         'wallet/$idWallet',
@@ -89,6 +89,52 @@ class WalletService extends ApiService {
       );
 
       return res.statusCode == 204;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
+  Future<bool> postBarrierExpired({
+    required String barrierAmount,
+    required String barrierExpired,
+  }) async {
+    try {
+      final res = await dio.post(
+        'wallet/barrier-cash',
+        data: {
+          'barrier_amount': barrierAmount,
+          'barrier_expired': barrierExpired,
+        },
+      );
+
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
+  Future<bool> extendBarrierCash() async {
+    try {
+      final res = await dio.put(
+        'wallet/barrier-expired',
+      );
+
+      return res.statusCode == 200;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
+  Future<bool> deleteBarrierCash() async {
+    try {
+      final res = await dio.delete(
+        'wallet/barrier-expired',
+      );
+
+      return res.statusCode == 200;
     } on DioError catch (e) {
       debugPrint("error $e");
       throw e.error;

@@ -1,41 +1,41 @@
 import 'package:fintch/gen_export.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class TransactionEvent extends Equatable {
-  const TransactionEvent();
+abstract class PayEvent extends Equatable {
+  const PayEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class PostTransaction extends TransactionEvent {
+class PostPay extends PayEvent {
   final TransactionPostEntity entity;
 
-  PostTransaction({required this.entity});
+  PostPay({required this.entity});
 
   @override
   List<Object> get props => [entity];
 }
 
-class PostBarcodeTransaction extends TransactionEvent {
+class PostBarcodePay extends PayEvent {
   final TransactionBarcodePostEntity entity;
 
-  PostBarcodeTransaction({required this.entity});
+  PostBarcodePay({required this.entity});
 
   @override
   List<Object> get props => [entity];
 }
 
-class PostTopUpTransaction extends TransactionEvent {
+class PostTopUpPay extends PayEvent {
   final TransactionTopUpPostEntity entity;
 
-  PostTopUpTransaction({required this.entity});
+  PostTopUpPay({required this.entity});
 
   @override
   List<Object> get props => [entity];
 }
 
-class AuthPin extends TransactionEvent {
+class AuthPin extends PayEvent {
   final AuthPinPostEntity entity;
 
   AuthPin({required this.entity});

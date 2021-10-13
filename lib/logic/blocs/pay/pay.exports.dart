@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library transaction;
 
-export 'transaction_bloc.dart';
-export 'transaction_event.dart';
-export 'transaction_state.dart';
+export 'pay_bloc.dart';
+export 'pay_event.dart';
+export 'pay_state.dart';

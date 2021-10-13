@@ -22,9 +22,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TransactionBloc, TransactionState>(
+    return BlocBuilder<PayBloc, PayState>(
       builder: (context, state) {
-        if (state is TransactionTopUpSuccess) {
+        if (state is PayTopUpSuccess) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Payment'),

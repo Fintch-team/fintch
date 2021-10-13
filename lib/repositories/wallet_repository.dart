@@ -49,4 +49,26 @@ class WalletRepository {
 
     return res;
   }
+
+  Future<bool> postBarrierExpired(
+      {required BarrierCashPostEntity entity}) async {
+    bool res = await walletService.postBarrierExpired(
+      barrierAmount: entity.barrierAmount,
+      barrierExpired: entity.barrierExpired,
+    );
+
+    return res;
+  }
+
+  Future<bool> extendBarrierCash() async {
+    bool res = await walletService.extendBarrierCash();
+
+    return res;
+  }
+
+  Future<bool> deleteBarrierCash() async {
+    bool res = await walletService.deleteBarrierCash();
+
+    return res;
+  }
 }

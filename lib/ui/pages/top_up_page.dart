@@ -282,7 +282,7 @@ class _TopUpPageState extends State<TopUpPage> {
               child: CustomButton(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<TransactionBloc>().add(PostTopUpTransaction(
+                      context.read<PayBloc>().add(PostTopUpPay(
                               entity: TransactionTopUpPostEntity(
                             amount: textFieldController.text,
                             name: "test",

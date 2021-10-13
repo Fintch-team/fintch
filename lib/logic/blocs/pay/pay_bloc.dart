@@ -3,66 +3,65 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
+class PayBloc extends Bloc<PayEvent, PayState> {
   final TransactionRepository transactionRepository;
   final UserRepository userRepository;
 
-  TransactionBloc(
-      {required this.transactionRepository, required this.userRepository})
-      : super(TransactionInitial()) {
+  PayBloc({required this.transactionRepository, required this.userRepository})
+      : super(PayInitial()) {
     on<AuthPin>((event, emit) async {
-      emit(TransactionLoading());
+      emit(PayLoading());
       try {
         bool res =
             await userRepository.authWithPin(authPostEntity: event.entity);
-        emit(TransactionSuccess(entity: res));
+        emit(PaySuccess(entity: res));
       } on FailedException catch (e) {
-        emit(TransactionFailure(message: e.message));
+        emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
       }
     });
 
-    on<PostTransaction>((event, emit) async {
-      emit(TransactionLoading());
+    on<PostPay>((event, emit) async {
+      emit(PayLoading());
       try {
         bool res = await transactionRepository.postTransaction(
             postEntity: event.entity);
-        emit(TransactionSuccess(entity: res));
+        emit(PaySuccess(entity: res));
       } on FailedException catch (e) {
-        emit(TransactionFailure(message: e.message));
+        emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
       }
     });
 
-    on<PostBarcodeTransaction>((event, emit) async {
-      emit(TransactionLoading());
+    on<PostBarcodePay>((event, emit) async {
+      emit(PayLoading());
       try {
         bool res = await transactionRepository.postTransactionBarcode(
             postEntity: event.entity);
-        emit(TransactionSuccess(entity: res));
+        emit(PaySuccess(entity: res));
       } on FailedException catch (e) {
-        emit(TransactionFailure(message: e.message));
+        emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
       }
     });
 
-    on<PostTopUpTransaction>((event, emit) async {
-      emit(TransactionLoading());
+    on<PostTopUpPay>((event, emit) async {
+      emit(PayLoading());
       try {
         TransactionTopUpEntity res = await transactionRepository
             .postTransactionTopUp(postEntity: event.entity);
-        emit(TransactionTopUpSuccess(entity: res));
+        emit(PayTopUpSuccess(entity: res));
       } on FailedException catch (e) {
-        emit(TransactionFailure(message: e.message));
+        emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
       }
     });
   }

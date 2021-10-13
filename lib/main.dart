@@ -155,8 +155,8 @@ class _MyAppState extends State<MyApp> {
               walletRepository: context.read<WalletRepository>(),
             ),
           ),
-          BlocProvider<TransactionBloc>(
-            create: (context) => TransactionBloc(
+          BlocProvider<PayBloc>(
+            create: (context) => PayBloc(
               userRepository: context.read<UserRepository>(),
               transactionRepository: context.read<TransactionRepository>(),
             ),
