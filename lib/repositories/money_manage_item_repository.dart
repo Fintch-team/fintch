@@ -1,10 +1,12 @@
 import 'package:fintch/gen_export.dart';
 
 class MoneyManageItemRepository {
+  final LocalAuthService localAuthService;
   final MoneyManageService moneyManageItemService;
 
   MoneyManageItemRepository({
     required this.moneyManageItemService,
+    required this.localAuthService,
   });
 
   Future<MoneyManageItemEntity> getMoneyManageItemDetail(
@@ -28,6 +30,7 @@ class MoneyManageItemRepository {
       name: postEntity.name,
       amount: postEntity.amount,
       percent: postEntity.percent,
+      idUser: localAuthService.userId,
     );
 
     return res;
@@ -40,6 +43,7 @@ class MoneyManageItemRepository {
       name: putEntity.name,
       amount: putEntity.amount,
       percent: putEntity.percent,
+      idUser: localAuthService.userId,
     );
 
     return res;

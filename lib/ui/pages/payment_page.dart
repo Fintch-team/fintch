@@ -47,8 +47,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 },
                 navigationDelegate: (NavigationRequest request) {
                   print(request.url);
-                  if (request.url.startsWith('http://fintch.id/payment')) {
+                  if (request.url.startsWith('http://fintch.id/api/payment')) {
                     print('blocking navigation to }');
+                    context.read<HomeBloc>().add(HomeInit());
                     int count = 0;
                     Navigator.popUntil(context, (route) {
                       return count++ == 2;

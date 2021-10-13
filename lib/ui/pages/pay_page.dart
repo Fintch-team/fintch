@@ -661,14 +661,16 @@ class _InputPinDialogState extends State<InputPinDialog> {
     return BlocListener<TransactionBloc, TransactionState>(
       listener: (context, state) {
         if (state is TransactionSuccess) {
-          context.loaderOverlay.hide();
-          Helper.unfocus();
-          Navigator.of(context).pop();
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => SuccessPaymentDialog(),
-          );
+          if (state.entity) {
+            context.loaderOverlay.hide();
+            Helper.unfocus();
+            Navigator.of(context).pop();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => SuccessPaymentDialog(),
+            );
+          }
         } else if (state is TransactionLoading) {
           context.loaderOverlay.show();
           Helper.snackBar(context, message: 'Transaksi sedang...');
@@ -706,6 +708,10 @@ class _InputPinDialogState extends State<InputPinDialog> {
               );
               return;
             }
+
+            //TODO: dua kali get bloc
+            // context.read<TransactionBloc>().add(AuthPin(
+            //     entity: AuthPinPostEntity(pin: inputPinController.text)));
             context
                 .read<TransactionBloc>()
                 .add(PostTransaction(entity: widget.input));

@@ -34,3 +34,12 @@ class PostTopUpTransaction extends TransactionEvent {
   @override
   List<Object> get props => [entity];
 }
+
+class AuthPin extends TransactionEvent {
+  final AuthPinPostEntity entity;
+
+  AuthPin({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}

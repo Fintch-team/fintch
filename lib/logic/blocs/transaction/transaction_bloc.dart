@@ -5,9 +5,25 @@ import 'package:flutter/foundation.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   final TransactionRepository transactionRepository;
+  final UserRepository userRepository;
 
-  TransactionBloc({required this.transactionRepository})
+  TransactionBloc(
+      {required this.transactionRepository, required this.userRepository})
       : super(TransactionInitial()) {
+    on<AuthPin>((event, emit) async {
+      emit(TransactionLoading());
+      try {
+        bool res =
+            await userRepository.authWithPin(authPostEntity: event.entity);
+        emit(TransactionSuccess(entity: res));
+      } on FailedException catch (e) {
+        emit(TransactionFailure(message: e.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(TransactionFailure(message: 'unable to get moneyPlan: $e'));
+      }
+    });
+
     on<PostTransaction>((event, emit) async {
       emit(TransactionLoading());
       try {

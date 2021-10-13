@@ -28,7 +28,10 @@ class MoneyManageItemBloc
       try {
         await moneyManageItemRepository.postMoneyManageItem(
             postEntity: event.entity);
-        emit(MoneyManageItemRequestSuccess());
+        ListMoneyManageItemEntity entity =
+            await moneyManageItemRepository.getMoneyManageItem();
+
+        emit(MoneyManageItemResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageItemFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -42,7 +45,10 @@ class MoneyManageItemBloc
       try {
         await moneyManageItemRepository.editMoneyManageItem(
             putEntity: event.entity);
-        emit(MoneyManageItemRequestSuccess());
+        ListMoneyManageItemEntity entity =
+            await moneyManageItemRepository.getMoneyManageItem();
+
+        emit(MoneyManageItemResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageItemFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -56,7 +62,10 @@ class MoneyManageItemBloc
       try {
         await moneyManageItemRepository.deleteMoneyManageItem(
             idMoneyManageItem: event.id.toString());
-        emit(MoneyManageItemRequestSuccess());
+        ListMoneyManageItemEntity entity =
+            await moneyManageItemRepository.getMoneyManageItem();
+
+        emit(MoneyManageItemResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageItemFailure(message: e.message));
       } catch (e, stacktrace) {

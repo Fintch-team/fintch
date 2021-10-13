@@ -3,9 +3,12 @@ import 'package:fintch/gen_export.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FWalletPage extends StatefulWidget {
   const FWalletPage({Key? key}) : super(key: key);
@@ -59,19 +62,20 @@ class _FWalletPageState extends State<FWalletPage> {
                 ),
               ],
             ),
-            floatingActionButton: Container(
-              margin: EdgeInsets.only(bottom: Helper.normalPadding),
-              child: FloatingActionButton(
-                backgroundColor: AppTheme.purple,
-                onPressed: () {},
-                child: Icon(
-                  Icons.add_rounded,
-                  size: MediaQuery.of(context).size.width * 0.1,
-                ),
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.endDocked,
+            floatingActionButton: CustomFab(),
+            // floatingActionButton: Container(
+            //   margin: EdgeInsets.only(bottom: Helper.normalPadding),
+            //   child: FloatingActionButton(
+            //     backgroundColor: AppTheme.purple,
+            //     onPressed: () {},
+            //     child: Icon(
+            //       Icons.add_rounded,
+            //       size: MediaQuery.of(context).size.width * 0.1,
+            //     ),
+            //   ),
+            // ),
+            // floatingActionButtonLocation:
+            //     FloatingActionButtonLocation.endDocked,
           ),
         ),
       ),
@@ -289,6 +293,7 @@ class _FWalletPageState extends State<FWalletPage> {
             child: BlocConsumer<MoneyManageItemBloc, MoneyManageItemState>(
               listener: (context, state) {
                 if (state is MoneyManageItemFailure) {
+                  print("gagal");
                   Helper.snackBar(context,
                       message: state.message, isFailure: true);
                 }
@@ -337,44 +342,58 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 
   Widget _cardItem(BuildContext context, int index, MoneyManageItemData data) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(12),
-      margin: index == 0
-          ? EdgeInsets.only(left: 20, right: 10)
-          : index == 4
-              ? EdgeInsets.only(left: 10, right: 20)
-              : EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 8,
-            width: 8,
-            decoration: BoxDecoration(
-              color: AppTheme.purple,
-              shape: BoxShape.circle,
-            ),
-          ),
-          SizedBox(width: Helper.smallPadding),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(data.name, style: AppTheme.text3),
-              SizedBox(height: 4),
-              AutoSizeText(
-                'Rp. ${data.amount.toString().parseCurrency()}',
-                style: AppTheme.headline3.darkPurple,
-                maxLines: 1,
+    return GestureDetector(
+      onTap: () {
+        showCupertinoModalBottomSheet(
+          expand: false,
+          context: context,
+          enableDrag: true,
+          isDismissible: true,
+          topRadius: Radius.circular(20),
+          backgroundColor: AppTheme.white,
+          barrierColor: AppTheme.black.withOpacity(0.2),
+          builder: (context) => MoneyManageItemSheet(data: data),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: Helper.getShadow(),
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: EdgeInsets.all(12),
+        margin: index == 0
+            ? EdgeInsets.only(left: 20, right: 10)
+            : index == 4
+                ? EdgeInsets.only(left: 10, right: 20)
+                : EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 8,
+              width: 8,
+              decoration: BoxDecoration(
+                color: AppTheme.purple,
+                shape: BoxShape.circle,
               ),
-            ],
-          ),
-        ],
+            ),
+            SizedBox(width: Helper.smallPadding),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(data.name, style: AppTheme.text3),
+                SizedBox(height: 4),
+                AutoSizeText(
+                  'Rp. ${data.amount.toString().parseCurrency()}',
+                  style: AppTheme.headline3.darkPurple,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -518,6 +537,163 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 }
 
+class MoneyManageItemSheet extends StatefulWidget {
+  final MoneyManageItemData? data;
+
+  const MoneyManageItemSheet({Key? key, this.data}) : super(key: key);
+
+  @override
+  State<MoneyManageItemSheet> createState() => _MoneyManageItemSheetState();
+}
+
+class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
+  late TextEditingController titleController;
+  late TextEditingController percentController;
+  final _formKey = GlobalKey<FormState>();
+  DateTime datePicked = DateTime.now();
+  DateTime now = DateTime.now();
+
+  @override
+  void initState() {
+    titleController = TextEditingController();
+    percentController = TextEditingController();
+    if (widget.data != null) {
+      titleController.text = widget.data!.name;
+      percentController.text = widget.data!.percent.toString();
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: GestureDetector(
+        onTap: () => Helper.unfocus(),
+        child: Container(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              color: AppTheme.white,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          widget.data != null ? 'Update Card' : 'Add Card',
+                          style: AppTheme.headline3,
+                        ),
+                        SizedBox(height: Helper.bigPadding),
+                        Text('Judul', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: titleController,
+                          style: AppTheme.text3,
+                          decoration: InputDecoration(
+                            hintText: 'Masukan judul Card',
+                            enabledBorder: AppTheme.enabledBlackBorder,
+                            hintStyle: AppTheme.text3.blackOpacity,
+                          ),
+                          validator: Validator.notEmpty,
+                        ),
+                        SizedBox(height: 16),
+                        Text('Persen card', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: percentController,
+                          style: AppTheme.text3,
+                          decoration: InputDecoration(
+                            hintText: 'Masukan persen',
+                            enabledBorder: AppTheme.enabledBlackBorder,
+                            hintStyle: AppTheme.text3.blackOpacity,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          validator: (value) {
+                            Validator.notEmpty(value);
+                            Validator.number(value);
+                            final n = num.tryParse(value!);
+                            if (n == 0) {
+                              return "Harga tidak boleh nol";
+                            }
+                            if (n == null) {
+                              return '"$value" bukan bilangan!';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+
+                        SizedBox(height: Helper.bigPadding),
+                        SizedBox(height: Helper.bigPadding),
+                        //TODO: Add Validator
+                        CustomButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (widget.data != null) {
+                                context.read<MoneyManageItemBloc>().add(
+                                      EditMoneyManageItem(
+                                        entity: MoneyManageItemPutEntity(
+                                          idMoneyManageItem:
+                                              widget.data!.id.toString(),
+                                          amount: 0,
+                                          percent: percentController.text,
+                                          name: titleController.text,
+                                        ),
+                                      ),
+                                    );
+                              } else {
+                                context.read<MoneyManageItemBloc>().add(
+                                      PostMoneyManageItem(
+                                        entity: MoneyManageItemPostEntity(
+                                          amount: 0,
+                                          percent: percentController.text,
+                                          name: titleController.text,
+                                        ),
+                                      ),
+                                    );
+                              }
+
+                              context
+                                  .read<MoneyManageItemBloc>()
+                                  .add(GetMoneyManageItem());
+                              Navigator.pop(context);
+                            }
+                          },
+                          text: 'Simpan',
+                          isUpper: false,
+                        ),
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SvgPicture.asset(Resources.icClose),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -653,4 +829,161 @@ class _LineChart extends StatelessWidget {
           FlSpot(7, 4),
         ],
       );
+}
+
+class CustomFab extends StatefulWidget {
+  @override
+  _CustomFabState createState() => _CustomFabState();
+}
+
+class _CustomFabState extends State<CustomFab>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _translateAnimation;
+  late Animation<double> _rotationAnimation;
+
+  late Animation<double> _iconRotation;
+
+  bool _isExpanded = false;
+
+  void animate() {
+    if (!_isExpanded) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+
+    _isExpanded = !_isExpanded;
+  }
+
+  Widget fab1() {
+    return Container(
+      height: 60,
+      width: 60,
+      child: FittedBox(
+        child: FloatingActionButton(
+          tooltip: "Activities",
+          child: Transform.rotate(
+            angle: _iconRotation.value,
+            child: Icon(Icons.add),
+          ),
+          backgroundColor: AppTheme.darkPurple,
+          elevation: 0,
+          onPressed: () {
+            print("pressed");
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget fab2() {
+    return Container(
+      height: 60,
+      width: 60,
+      child: FittedBox(
+        child: FloatingActionButton(
+          tooltip: "Card",
+          child: Transform.rotate(
+            angle: _iconRotation.value,
+            child: Icon(Icons.add),
+          ),
+          elevation: _isExpanded ? 5 : 0,
+          backgroundColor: AppTheme.darkPurple,
+          onPressed: () {
+            showCupertinoModalBottomSheet(
+              expand: false,
+              context: context,
+              enableDrag: true,
+              isDismissible: true,
+              topRadius: Radius.circular(20),
+              backgroundColor: AppTheme.white,
+              barrierColor: AppTheme.black.withOpacity(0.2),
+              builder: (context) => MoneyManageItemSheet(),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget fab3() {
+    return Container(
+      height: 60,
+      width: 60,
+      child: FittedBox(
+        child: FloatingActionButton(
+          tooltip: "btn5",
+          child: Transform.rotate(
+            angle: _rotationAnimation.value,
+            child: Icon(Icons.add),
+          ),
+          backgroundColor: AppTheme.purple,
+          onPressed: () async {
+            animate();
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400))
+          ..addListener(() {
+            setState(() {});
+          });
+    _translateAnimation = Tween<double>(begin: 0, end: 80)
+        .chain(
+          CurveTween(
+            curve: _isExpanded ? Curves.fastOutSlowIn : Curves.bounceOut,
+          ),
+        )
+        .animate(_animationController);
+
+    _iconRotation = Tween<double>(begin: 3.14 / 2, end: 0)
+        .chain(
+          CurveTween(curve: Curves.bounceInOut),
+        )
+        .animate(_animationController);
+    _rotationAnimation = Tween<double>(begin: 0, end: 3 * 3.14 / 4)
+        .chain(
+          CurveTween(
+            curve: Curves.bounceInOut,
+          ),
+        )
+        .animate(_animationController);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          bottom: _translateAnimation.value + _translateAnimation.value,
+          right: 0,
+          child: fab1(),
+        ),
+        Positioned(
+          bottom: _translateAnimation.value,
+          right: 0,
+          child: fab2(),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: fab3(),
+        ),
+      ],
+    );
+  }
 }

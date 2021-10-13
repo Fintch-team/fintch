@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -18,6 +19,11 @@ class _FGoalsPageState extends State<FGoalsPage> {
   @override
   void initState() {
     super.initState();
+
+    _init();
+  }
+
+  void _init() {
     context.read<MoneyPlanBloc>().add(GetMoneyPlan());
   }
 
@@ -105,7 +111,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                         return Center(
                           child: Text(
                             'Data gagal di load',
-                            style: AppTheme.headline3.white,
+                            style: AppTheme.headline3.black,
                             textAlign: TextAlign.center,
                           ),
                         );
@@ -245,10 +251,18 @@ class _FGoalsPageState extends State<FGoalsPage> {
             ),
           ),
           SizedBox(width: Helper.normalPadding),
-          //TODO: Implement Delete F-Goal
           Flexible(
             child: CustomButton(
-              onTap: () => Navigator.pop(context, true),
+              onTap: () {
+                context.read<MoneyPlanBloc>().add(
+                      DeleteMoneyPlan(
+                        id: data.id,
+                      ),
+                    );
+
+                // context.read<MoneyPlanBloc>().add(GetMoneyPlan());
+                Navigator.pop(context, true);
+              },
               text: 'Iya',
               isOutline: true,
               isUpper: false,
@@ -284,7 +298,7 @@ class _FGoalSheetState extends State<FGoalSheet> {
     dateController = TextEditingController();
     if (widget.data != null) {
       titleController.text = widget.data!.name;
-      priceController.text = widget.data!.amount.toString();
+      priceController.text = widget.data!.totalAmount.toString();
       dateController.text = widget.data!.deadline!.parseYearMonthDay();
     }
     super.initState();
@@ -307,94 +321,129 @@ class _FGoalSheetState extends State<FGoalSheet> {
               children: [
                 SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        widget.data != null ? 'Update F-Goal' : 'Add F-Goal',
-                        style: AppTheme.headline3,
-                      ),
-                      SizedBox(height: Helper.bigPadding),
-                      Text('Judul', style: AppTheme.text3.bold),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        controller: titleController,
-                        style: AppTheme.text3,
-                        decoration: InputDecoration(
-                          hintText: 'Masukan judul F-Goal',
-                          enabledBorder: AppTheme.enabledBlackBorder,
-                          hintStyle: AppTheme.text3.blackOpacity,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          widget.data != null ? 'Update F-Goal' : 'Add F-Goal',
+                          style: AppTheme.headline3,
                         ),
-                        validator: Validator.notEmpty,
-                      ),
-                      SizedBox(height: 16),
-                      Text('Harga', style: AppTheme.text3.bold),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        controller: priceController,
-                        style: AppTheme.text3,
-                        decoration: InputDecoration(
-                          hintText: 'Masukan target harga',
-                          enabledBorder: AppTheme.enabledBlackBorder,
-                          hintStyle: AppTheme.text3.blackOpacity,
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (value) {
-                          Validator.notEmpty(value);
-                          Validator.number(value);
-                          final n = num.tryParse(value!);
-                          if (n == null) {
-                            return '"$value" bukan bilangan!';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: 16),
-                      Text('Tenggat Waktu', style: AppTheme.text3.bold),
-                      SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () async {
-                          final picked = await Helper.showDeadlineDatePicker(
-                            context,
-                            datePicked,
-                          );
-                          if (picked != null &&
-                              picked != datePicked &&
-                              picked.isAfter(now)) {
-                            setState(() {
-                              datePicked = picked;
-                              dateController.text =
-                                  datePicked.parseYearMonthDay();
-                            });
-                          }
-                        },
-                        child: TextFormField(
-                          controller: dateController,
+                        SizedBox(height: Helper.bigPadding),
+                        Text('Judul', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: titleController,
                           style: AppTheme.text3,
-                          enabled: false,
                           decoration: InputDecoration(
-                            hintText: 'Masukan tenggat waktu',
+                            hintText: 'Masukan judul F-Goal',
                             enabledBorder: AppTheme.enabledBlackBorder,
                             hintStyle: AppTheme.text3.blackOpacity,
-                            disabledBorder: AppTheme.enabledBlackBorder,
+                          ),
+                          validator: Validator.notEmpty,
+                        ),
+                        SizedBox(height: 16),
+                        Text('Harga', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        TextFormField(
+                          controller: priceController,
+                          style: AppTheme.text3,
+                          decoration: InputDecoration(
+                            hintText: 'Masukan target harga',
+                            enabledBorder: AppTheme.enabledBlackBorder,
+                            hintStyle: AppTheme.text3.blackOpacity,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          validator: (value) {
+                            Validator.notEmpty(value);
+                            Validator.number(value);
+                            final n = num.tryParse(value!);
+                            if (n == 0) {
+                              return "Harga tidak boleh nol";
+                            }
+                            if (n == null) {
+                              return '"$value" bukan bilangan!';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: 16),
+                        Text('Tenggat Waktu', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () async {
+                            final picked = await Helper.showDeadlineDatePicker(
+                              context,
+                              datePicked,
+                            );
+                            if (picked != null &&
+                                picked != datePicked &&
+                                picked.isAfter(now)) {
+                              setState(() {
+                                datePicked = picked;
+                                dateController.text =
+                                    datePicked.parseYearMonthDay();
+                              });
+                            }
+                          },
+                          child: TextFormField(
+                            controller: dateController,
+                            style: AppTheme.text3,
+                            enabled: false,
+                            decoration: InputDecoration(
+                              hintText: 'Masukan tenggat waktu',
+                              enabledBorder: AppTheme.enabledBlackBorder,
+                              hintStyle: AppTheme.text3.blackOpacity,
+                              disabledBorder: AppTheme.enabledBlackBorder,
+                            ),
+                            validator: Validator.notEmpty,
                           ),
                         ),
-                      ),
-                      SizedBox(height: Helper.bigPadding),
-                      SizedBox(height: Helper.bigPadding),
-                      //TODO: Add Validator
-                      //TODO: Implement Add F Goals and Update F-Goals using logic 'widget.data != null', if data null, Add F-Goals, otherwise, Update F-Goals
-                      CustomButton(
-                        onTap: () {},
-                        text: 'Simpan',
-                        isUpper: false,
-                      ),
-                      SizedBox(height: MediaQuery.of(context).padding.bottom),
-                    ],
+                        SizedBox(height: Helper.bigPadding),
+                        SizedBox(height: Helper.bigPadding),
+                        //TODO: Add Validator
+                        CustomButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (widget.data != null) {
+                                context.read<MoneyPlanBloc>().add(
+                                      EditMoneyPlan(
+                                        entity: MoneyPlanPutEntity(
+                                          idMoneyPlan:
+                                              widget.data!.id.toString(),
+                                          deadline: dateController.text,
+                                          totalAmount: priceController.text,
+                                          name: titleController.text,
+                                        ),
+                                      ),
+                                    );
+                              } else {
+                                context.read<MoneyPlanBloc>().add(
+                                      PostMoneyPlan(
+                                        entity: MoneyPlanPostEntity(
+                                          deadline: dateController.text,
+                                          totalAmount: priceController.text,
+                                          name: titleController.text,
+                                        ),
+                                      ),
+                                    );
+                              }
+
+                              context.read<MoneyPlanBloc>().add(GetMoneyPlan());
+                              Navigator.pop(context);
+                            }
+                          },
+                          text: 'Simpan',
+                          isUpper: false,
+                        ),
+                        SizedBox(height: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(

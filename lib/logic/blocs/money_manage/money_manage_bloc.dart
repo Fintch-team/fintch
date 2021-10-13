@@ -27,7 +27,11 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.inComePostMoneyManage(
             postEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -41,7 +45,10 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.outComePostMoneyManage(
             postEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -54,7 +61,10 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       emit(MoneyManageLoading());
       try {
         await moneyManageRepository.editMoneyManage(putEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -68,7 +78,10 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.deleteMoneyManage(
             idMoneyManage: event.id.toString());
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {

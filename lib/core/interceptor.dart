@@ -73,19 +73,17 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 422) {
-      if (response.data['details'] != null) {
-        // final msg = response.data['details'];
-        handler.reject(
-          DioError(
-            response: response,
-            requestOptions: response.requestOptions,
-            // error: ValidationErrorException(msg),
-            error: FailedException(response.data['message']),
-          ),
-          true,
-        );
-        return;
-      }
+      // final msg = response.data['details'];
+      handler.reject(
+        DioError(
+          response: response,
+          requestOptions: response.requestOptions,
+          // error: ValidationErrorException(msg),
+          error: FailedException(response.data['message']),
+        ),
+        true,
+      );
+      return;
     }
 
     if (response.statusCode == 401) {

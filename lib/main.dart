@@ -86,11 +86,13 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => MoneyManageItemRepository(
             moneyManageItemService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(
           create: (context) => MoneyPlanRepository(
             moneyPlanService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
       ],
@@ -155,6 +157,7 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<TransactionBloc>(
             create: (context) => TransactionBloc(
+              userRepository: context.read<UserRepository>(),
               transactionRepository: context.read<TransactionRepository>(),
             ),
           ),

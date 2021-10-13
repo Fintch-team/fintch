@@ -1,25 +1,23 @@
 import 'package:fintch/gen_export.dart';
 
 class MoneyPlanPostEntity extends BaseEntity {
-  final int idUser;
-  final int totalAmount;
-  final DateTime deadline;
+  final String name;
+  final String totalAmount;
+  final String deadline;
 
   MoneyPlanPostEntity(
-      {required this.idUser,
-      required this.totalAmount,
-      required this.deadline});
+      {required this.name, required this.totalAmount, required this.deadline});
 }
 
 class MoneyPlanPutEntity extends BaseEntity {
   final String idMoneyPlan;
-  final int idUser;
-  final int totalAmount;
-  final DateTime deadline;
+  final String totalAmount;
+  final String deadline;
+  final String name;
 
   MoneyPlanPutEntity(
       {required this.idMoneyPlan,
-      required this.idUser,
+      required this.name,
       required this.totalAmount,
       required this.deadline});
 }
