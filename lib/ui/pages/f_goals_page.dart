@@ -38,7 +38,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
               topRadius: Radius.circular(20),
               backgroundColor: AppTheme.white,
               barrierColor: AppTheme.black.withOpacity(0.2),
-              builder: (context) => AddFGoalSheet(),
+              builder: (context) => FGoalSheet(),
             );
           },
           child: Icon(
@@ -133,7 +133,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
           topRadius: Radius.circular(20),
           backgroundColor: AppTheme.white,
           barrierColor: AppTheme.black.withOpacity(0.2),
-          builder: (context) => AddFGoalSheet(data: data),
+          builder: (context) => FGoalSheet(data: data),
         );
       },
       child: Dismissible(
@@ -232,7 +232,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
 
   Widget _confirmDeleteFGoals(BuildContext context, MoneyPlanData data) {
     return CustomDialog(
-      title: 'Yakin nih ingin hapus F-Goal',
+      title: 'Yakin nih ingin hapus F-Goal?',
       content:
           Text('Kamu yakin mau hapus ${data.name} nih?', style: AppTheme.text3),
       buttons: Row(
@@ -241,15 +241,17 @@ class _FGoalsPageState extends State<FGoalsPage> {
             child: CustomButton(
               onTap: () => Navigator.pop(context, false),
               text: 'Tidak',
+              isUpper: false,
             ),
           ),
-          SizedBox(width: 20),
+          SizedBox(width: Helper.normalPadding),
           //TODO: Implement Delete F-Goal
           Flexible(
             child: CustomButton(
               onTap: () => Navigator.pop(context, true),
               text: 'Iya',
               isOutline: true,
+              isUpper: false,
             ),
           ),
         ],
@@ -258,16 +260,16 @@ class _FGoalsPageState extends State<FGoalsPage> {
   }
 }
 
-class AddFGoalSheet extends StatefulWidget {
+class FGoalSheet extends StatefulWidget {
   final MoneyPlanData? data;
 
-  const AddFGoalSheet({Key? key, this.data}) : super(key: key);
+  const FGoalSheet({Key? key, this.data}) : super(key: key);
 
   @override
-  State<AddFGoalSheet> createState() => _AddFGoalSheetState();
+  State<FGoalSheet> createState() => _FGoalSheetState();
 }
 
-class _AddFGoalSheetState extends State<AddFGoalSheet> {
+class _FGoalSheetState extends State<FGoalSheet> {
   late TextEditingController titleController;
   late TextEditingController priceController;
   late TextEditingController dateController;
@@ -386,7 +388,11 @@ class _AddFGoalSheetState extends State<AddFGoalSheet> {
                       SizedBox(height: Helper.bigPadding),
                       //TODO: Add Validator
                       //TODO: Implement Add F Goals and Update F-Goals using logic 'widget.data != null', if data null, Add F-Goals, otherwise, Update F-Goals
-                      CustomButton(onTap: () {}, text: 'Simpan'),
+                      CustomButton(
+                        onTap: () {},
+                        text: 'Simpan',
+                        isUpper: false,
+                      ),
                       SizedBox(height: MediaQuery.of(context).padding.bottom),
                     ],
                   ),
