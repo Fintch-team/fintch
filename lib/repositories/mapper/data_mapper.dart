@@ -72,6 +72,13 @@ class DataMapper {
         item: moneyManage.data.item,
       );
 
+  static MoneyManageIncomeEntity moneyManageIncomeMapper(
+          MoneyManageIncomeModel moneyManage) =>
+      MoneyManageIncomeEntity(
+        income: moneyManage.data.income,
+        outcome: moneyManage.data.outcome,
+      );
+
   static MoneyManageItemEntity moneyManageItemMapper(
           MoneyManageItemModel moneyManageItem) =>
       MoneyManageItemEntity(

@@ -46,6 +46,16 @@ class MoneyManageEntity extends BaseEntity {
       required this.item});
 }
 
+class MoneyManageIncomeEntity extends BaseEntity {
+  final int income;
+  final int outcome;
+
+  MoneyManageIncomeEntity({
+    required this.income,
+    required this.outcome,
+  });
+}
+
 class MoneyManageItemEntity extends BaseEntity {
   final int id;
   final String name;

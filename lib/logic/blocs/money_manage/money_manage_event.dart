@@ -10,6 +10,8 @@ abstract class MoneyManageEvent extends Equatable {
 
 class GetMoneyManage extends MoneyManageEvent {}
 
+class GetIncomeMoneyManage extends MoneyManageEvent {}
+
 class PostIncomeMoneyManage extends MoneyManageEvent {
   final MoneyManageInPostEntity entity;
 

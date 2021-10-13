@@ -29,8 +29,8 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 
   void requestFWallet() {
-    context.read<WalletBloc>().add(GetWallet());
     context.read<MoneyManageBloc>().add(GetMoneyManage());
+    context.read<InComeBloc>().add(GetIncomeMoneyManage());
     context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
   }
 
@@ -90,16 +90,16 @@ class _FWalletPageState extends State<FWalletPage> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.32,
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: BlocBuilder<WalletBloc, WalletState>(
+        child: BlocBuilder<InComeBloc, MoneyManageState>(
           builder: (context, state) {
-            if (state is WalletResponseSuccess) {
+            if (state is MoneyManageIncomeSuccess) {
               // TODO: harus ada nilai jumlah manage amount unutk d bawah
-
+              int amount = state.entity.income - state.entity.outcome;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AutoSizeText(
-                    'Rp.${state.entity.walletAmount.toString().parseCurrency()}',
+                    'Rp.${amount.toString().parseCurrency()}',
                     style: AppTheme.headline1.white,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -118,13 +118,9 @@ class _FWalletPageState extends State<FWalletPage> {
                   ),
                 ],
               );
-            } else if (state is WalletLoading) {
+            } else if (state is MoneyManageLoading) {
               return Center(
                 child: CircularLoading(),
-              );
-            } else if (state is WalletFailure) {
-              return Center(
-                child: Text('Gagal Load F-Wallet'),
               );
             }
             return Container();
@@ -184,96 +180,107 @@ class _FWalletPageState extends State<FWalletPage> {
 
   Widget _cashFlows() {
     // TODO: EP untuk get nilai income dan outcome
-    return Container(
-      padding: EdgeInsets.all(Helper.smallPadding),
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FittedBox(
-                  child: Icon(
-                    Icons.trending_down_rounded,
-                    size: 28,
-                    color: AppTheme.red,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AutoSizeText(
-                        'Outcomes',
-                        style: AppTheme.text3,
-                        maxLines: 1,
-                      ),
-                      SizedBox(height: 4),
-                      AutoSizeText(
-                        'Rp.200,000',
-                        style: AppTheme.headline3,
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 12),
-          Container(
-            width: 4,
-            height: 36,
+    return BlocBuilder<InComeBloc, MoneyManageState>(
+      builder: (context, state) {
+        if (state is MoneyManageIncomeSuccess) {
+          return Container(
+            padding: EdgeInsets.all(Helper.smallPadding),
+            margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: AppTheme.purple,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+              color: AppTheme.white,
             ),
-          ),
-          SizedBox(width: 12),
-          Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FittedBox(
-                  child: Icon(
-                    Icons.trending_up_rounded,
-                    size: 28,
-                    color: AppTheme.green,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FittedBox(
+                        child: Icon(
+                          Icons.trending_down_rounded,
+                          size: 28,
+                          color: AppTheme.red,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AutoSizeText(
+                              'Outcomes',
+                              style: AppTheme.text3,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 4),
+                            AutoSizeText(
+                              'Rp.${state.entity.outcome.toString().parseCurrency()} ',
+                              style: AppTheme.headline3,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 12),
+                Container(
+                  width: 4,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppTheme.purple,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                SizedBox(width: 12),
                 Expanded(
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      AutoSizeText(
-                        'Incomes',
-                        style: AppTheme.text3,
-                        maxLines: 1,
+                      FittedBox(
+                        child: Icon(
+                          Icons.trending_up_rounded,
+                          size: 28,
+                          color: AppTheme.green,
+                        ),
                       ),
-                      SizedBox(height: 4),
-                      AutoSizeText(
-                        'Rp.156,000',
-                        maxLines: 1,
-                        style: AppTheme.headline3,
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AutoSizeText(
+                              'Incomes',
+                              style: AppTheme.text3,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 4),
+                            AutoSizeText(
+                              'Rp.${state.entity.income.toString().parseCurrency()}',
+                              maxLines: 1,
+                              style: AppTheme.headline3,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else if (state is MoneyManageLoading) {
+          return Center(
+            child: CircularLoading(),
+          );
+        }
+        return Container();
+      },
     );
   }
 
@@ -418,7 +425,9 @@ class _FWalletPageState extends State<FWalletPage> {
             },
             builder: (context, state) {
               if (state is MoneyManageResponseSuccess) {
+                print(state.entity.data);
                 if (state.entity.data.isNotEmpty) {
+                  print("ok");
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.entity.data.length,
@@ -448,6 +457,7 @@ class _FWalletPageState extends State<FWalletPage> {
                   ),
                 );
               }
+
               return Container();
             },
           ),

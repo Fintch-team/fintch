@@ -139,6 +139,11 @@ class _MyAppState extends State<MyApp> {
               moneyManageRepository: context.read<MoneyManageRepository>(),
             ),
           ),
+          BlocProvider<InComeBloc>(
+            create: (context) => MoneyManageBloc(
+              moneyManageRepository: context.read<MoneyManageRepository>(),
+            ),
+          ),
           BlocProvider<MoneyManageItemBloc>(
             create: (context) => MoneyManageItemBloc(
               moneyManageItemRepository:

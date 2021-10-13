@@ -33,6 +33,19 @@ class MoneyManageService extends ApiService {
     }
   }
 
+  Future<MoneyManageIncomeModel> getMoneyManageIncome() async {
+    try {
+      final res = await dio.get(
+        'income',
+      );
+
+      return MoneyManageIncomeModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
   Future<bool> postIncomeMoneyManage({
     required String name,
     required String amount,
