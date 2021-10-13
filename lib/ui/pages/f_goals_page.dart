@@ -82,12 +82,12 @@ class _FGoalsPageState extends State<FGoalsPage> {
                         if (state.entity.data.isNotEmpty) {
                           return ListView.builder(
                             shrinkWrap: true,
-                            itemCount: 5,
+                            itemCount: state.entity.data.length,
                             physics: NeverScrollableScrollPhysics(),
                             padding: EdgeInsets.symmetric(vertical: 0),
                             itemBuilder: (context, index) {
                               return _fGoalItem(
-                                  context, index, state.entity.data[0]);
+                                  context, index, state.entity.data[index]);
                             },
                           );
                         }
