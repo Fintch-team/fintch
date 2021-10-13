@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -305,7 +304,18 @@ class _PayPageState extends State<PayPage> {
           FeatureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
-            onTap: () {},
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => BarrierCashSheet(),
+              );
+            },
             showTitle: false,
           ),
         ],
@@ -521,7 +531,10 @@ class _PaymentSheetState extends State<PaymentSheet> {
           }
           return null;
         },
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly, DecimalFormatter(decimalDigits: 3)],
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          DecimalFormatter(decimalDigits: 3)
+        ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
           hintText: 'Masukin jumlah Fintch Point yang mau kamu transfer',
