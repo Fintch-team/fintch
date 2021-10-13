@@ -332,9 +332,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
             child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, PagePath.fGoals);
-              },
+              onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -358,7 +356,9 @@ class _HomePageState extends State<HomePage> {
         return ListView.builder(
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemCount: state.entity.moneyPlanning.length,
+          itemCount: state.entity.moneyPlanning.length < 5
+              ? state.entity.moneyPlanning.length
+              : 5,
           padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
           itemBuilder: (BuildContext context, int index) {
             return _fGoalItem(
@@ -406,91 +406,93 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(20),
-      margin: index == 0
-          ? EdgeInsets.only(left: 20, right: 10)
-          : index == 4
-              ? EdgeInsets.only(left: 10, right: 20)
-              : EdgeInsets.symmetric(horizontal: 10),
-      // width: MediaQuery.of(context).size.width * 0.8,
-      child: AspectRatio(
-        aspectRatio: 15 / 7,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: Helper.getShadow(),
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: EdgeInsets.all(20),
+        margin: index == 0
+            ? EdgeInsets.only(left: 20, right: 10)
+            : index == 4
+                ? EdgeInsets.only(left: 10, right: 20)
+                : EdgeInsets.symmetric(horizontal: 10),
+        child: AspectRatio(
+          aspectRatio: 15 / 7,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AutoSizeText(
+                          data.name,
+                          style: AppTheme.headline2,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          minFontSize: 16,
+                        ),
+                        SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(Resources.icTime, height: 12),
+                            SizedBox(width: 4),
+                            AutoSizeText(
+                              data.deadline!
+                                  .parseHourDateAndMonth()
+                                  .substring(0, 17),
+                              style: AppTheme.subText1,
+                              maxLines: 1,
+                              maxFontSize: 10,
+                              minFontSize: 8,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    AutoSizeText(
+                      'Rp. ' + data.totalAmount.toString().parseCurrency(),
+                      style: AppTheme.text1.bold,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: Helper.smallPadding),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      AutoSizeText(
-                        data.name,
-                        style: AppTheme.headline2,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 16,
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(Resources.icTime, height: 12),
-                          SizedBox(width: 4),
-                          AutoSizeText(
-                            data.deadline!
-                                .parseHourDateAndMonth()
-                                .substring(0, 17),
-                            style: AppTheme.subText1,
-                            maxLines: 1,
-                            maxFontSize: 10,
-                            minFontSize: 8,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ],
+                  CircularPercentIndicator(
+                    radius: MediaQuery.of(context).size.width * 0.2,
+                    lineWidth: 16.0,
+                    animation: true,
+                    percent: data.percent / 100,
+                    center: Text("${data.percent} %",
+                        style: AppTheme.text2.darkPurple.bold),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    progressColor: AppTheme.purple,
+                    backgroundColor: AppTheme.purpleOpacity,
                   ),
+                  // SizedBox(height: Helper.smallPadding),
                   AutoSizeText(
-                    'Rp. ' + data.totalAmount.toString().parseCurrency(),
-                    style: AppTheme.text1.bold,
+                    'Rp. ' + data.amount.toString().parseCurrency(),
+                    style: AppTheme.text3.green,
                     maxLines: 1,
                   ),
                 ],
               ),
-            ),
-            SizedBox(width: Helper.smallPadding),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircularPercentIndicator(
-                  radius: MediaQuery.of(context).size.width * 0.2,
-                  lineWidth: 16.0,
-                  animation: true,
-                  percent: data.percent / 100,
-                  center: Text("${data.percent} %",
-                      style: AppTheme.text2.darkPurple.bold),
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: AppTheme.purple,
-                  backgroundColor: AppTheme.purpleOpacity,
-                ),
-                // SizedBox(height: Helper.smallPadding),
-                AutoSizeText(
-                  'Rp. ' + data.amount.toString().parseCurrency(),
-                  style: AppTheme.text3.green,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

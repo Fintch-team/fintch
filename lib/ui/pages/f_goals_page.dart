@@ -82,12 +82,12 @@ class _FGoalsPageState extends State<FGoalsPage> {
                         if (state.entity.data.isNotEmpty) {
                           return ListView.builder(
                             shrinkWrap: true,
-                            itemCount: state.entity.data.length,
+                            itemCount: 5,
                             physics: NeverScrollableScrollPhysics(),
                             padding: EdgeInsets.symmetric(vertical: 0),
                             itemBuilder: (context, index) {
                               return _fGoalItem(
-                                  context, index, state.entity.data[index]);
+                                  context, index, state.entity.data[0]);
                             },
                           );
                         }
@@ -123,93 +123,145 @@ class _FGoalsPageState extends State<FGoalsPage> {
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.symmetric(vertical: 10),
-      width: MediaQuery.of(context).size.width,
-      child: AspectRatio(
-        aspectRatio: 17 / 6,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
+    return GestureDetector(
+      onTap: () {
+        showCupertinoModalBottomSheet(
+          expand: false,
+          context: context,
+          enableDrag: true,
+          isDismissible: true,
+          topRadius: Radius.circular(20),
+          backgroundColor: AppTheme.white,
+          barrierColor: AppTheme.black.withOpacity(0.2),
+          builder: (context) => AddFGoalSheet(data: data),
+        );
+      },
+      child: Dismissible(
+        key: Key(data.id.toString()),
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (context) => _confirmDeleteFGoals(context, data),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: Helper.getShadow(),
+            color: AppTheme.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          width: MediaQuery.of(context).size.width,
+          child: AspectRatio(
+            aspectRatio: 17 / 6,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AutoSizeText(
-                        data.name,
-                        style: AppTheme.headline2,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 16,
-                      ),
-                      SizedBox(height: 4),
-                      Row(
+                      Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SvgPicture.asset(Resources.icTime, height: 12),
-                          SizedBox(width: 4),
                           AutoSizeText(
-                            data.deadline!.parseHourDateAndMonth(),
-                            style: AppTheme.subText1,
-                            maxLines: 1,
-                            maxFontSize: 10,
-                            minFontSize: 8,
+                            data.name,
+                            style: AppTheme.headline2,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            minFontSize: 16,
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(Resources.icTime, height: 12),
+                              SizedBox(width: 4),
+                              AutoSizeText(
+                                data.deadline!.parseHourDateAndMonth(),
+                                style: AppTheme.subText1,
+                                maxLines: 1,
+                                maxFontSize: 10,
+                                minFontSize: 8,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      AutoSizeText(
+                        'Rp. ${data.totalAmount.toString().parseCurrency()}',
+                        style: AppTheme.text1.bold,
+                        maxLines: 1,
+                      ),
                     ],
                   ),
-                  AutoSizeText(
-                    'Rp. ${data.totalAmount.toString().parseCurrency()}',
-                    style: AppTheme.text1.bold,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: Helper.smallPadding),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularPercentIndicator(
-                  radius: MediaQuery.of(context).size.width * 0.2,
-                  lineWidth: 16.0,
-                  animation: true,
-                  percent: data.percent / 100,
-                  center: Text("${data.percent}%",
-                      style: AppTheme.text2.darkPurple.bold),
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: AppTheme.purple,
-                  backgroundColor: AppTheme.purpleOpacity,
                 ),
-                SizedBox(height: Helper.smallPadding),
-                AutoSizeText(
-                  'Rp. ${data.amount.toString().parseCurrency()}',
-                  style: AppTheme.text3.green,
-                  maxLines: 1,
+                SizedBox(width: Helper.smallPadding),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularPercentIndicator(
+                      radius: MediaQuery.of(context).size.width * 0.2,
+                      lineWidth: 16.0,
+                      animation: true,
+                      percent: data.percent / 100,
+                      center: Text("${data.percent}%",
+                          style: AppTheme.text2.darkPurple.bold),
+                      circularStrokeCap: CircularStrokeCap.round,
+                      progressColor: AppTheme.purple,
+                      backgroundColor: AppTheme.purpleOpacity,
+                    ),
+                    SizedBox(height: Helper.smallPadding),
+                    AutoSizeText(
+                      'Rp. ${data.amount.toString().parseCurrency()}',
+                      style: AppTheme.text3.green,
+                      maxLines: 1,
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _confirmDeleteFGoals(BuildContext context, MoneyPlanData data) {
+    return CustomDialog(
+      title: 'Yakin nih ingin hapus F-Goal',
+      content:
+          Text('Kamu yakin mau hapus ${data.name} nih?', style: AppTheme.text3),
+      buttons: Row(
+        children: [
+          Flexible(
+            child: CustomButton(
+              onTap: () => Navigator.pop(context, false),
+              text: 'Tidak',
+            ),
+          ),
+          SizedBox(width: 20),
+          //TODO: Implement Delete F-Goal
+          Flexible(
+            child: CustomButton(
+              onTap: () => Navigator.pop(context, true),
+              text: 'Iya',
+              isOutline: true,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class AddFGoalSheet extends StatefulWidget {
-  const AddFGoalSheet({Key? key}) : super(key: key);
+  final MoneyPlanData? data;
+
+  const AddFGoalSheet({Key? key, this.data}) : super(key: key);
 
   @override
   State<AddFGoalSheet> createState() => _AddFGoalSheetState();
@@ -228,6 +280,11 @@ class _AddFGoalSheetState extends State<AddFGoalSheet> {
     titleController = TextEditingController();
     priceController = TextEditingController();
     dateController = TextEditingController();
+    if (widget.data != null) {
+      titleController.text = widget.data!.name;
+      priceController.text = widget.data!.amount.toString();
+      dateController.text = widget.data!.deadline!.parseYearMonthDay();
+    }
     super.initState();
   }
 
@@ -252,7 +309,10 @@ class _AddFGoalSheetState extends State<AddFGoalSheet> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Add F-Goal', style: AppTheme.headline3),
+                      Text(
+                        widget.data != null ? 'Update F-Goal' : 'Add F-Goal',
+                        style: AppTheme.headline3,
+                      ),
                       SizedBox(height: Helper.bigPadding),
                       Text('Judul', style: AppTheme.text3.bold),
                       SizedBox(height: 8),
@@ -324,6 +384,8 @@ class _AddFGoalSheetState extends State<AddFGoalSheet> {
                       ),
                       SizedBox(height: Helper.bigPadding),
                       SizedBox(height: Helper.bigPadding),
+                      //TODO: Add Validator
+                      //TODO: Implement Add F Goals and Update F-Goals using logic 'widget.data != null', if data null, Add F-Goals, otherwise, Update F-Goals
                       CustomButton(onTap: () {}, text: 'Simpan'),
                       SizedBox(height: MediaQuery.of(context).padding.bottom),
                     ],
