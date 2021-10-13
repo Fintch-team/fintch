@@ -5,6 +5,7 @@
 library widgets;
 
 export 'background.dart';
+export 'barrier_cash_sheet.dart';
 export 'circular_loading.dart';
 export 'custom_app_bar.dart';
 export 'custom_button.dart';
