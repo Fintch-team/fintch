@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-
   static const Color scaffold = Color(0xFFF4F7FA);
   static const Color purple = Color(0xFFB570F7);
   static const Color yellow = Color(0xFFFFDC00);
@@ -81,10 +80,14 @@ class AppTheme {
     borderSide: BorderSide(color: white),
   );
 
+  static OutlineInputBorder enabledBlackBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: black),
+  );
+
   static OutlineInputBorder focusedBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(12),
-    borderSide:
-    BorderSide(color: yellow),
+    borderSide: BorderSide(color: yellow),
   );
 
   static OutlineInputBorder errorBorder = OutlineInputBorder(

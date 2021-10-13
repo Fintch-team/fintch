@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,6 +23,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _initHome();
     super.initState();
+  }
+
+  Future<void> _onRefresh() async {
+    _initHome();
   }
 
   void _initHome() {
@@ -43,18 +49,38 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
+        if (state is HomeSuccess) {}
         if (state is HomeFailure) {
           Helper.snackBar(context, message: state.message, isFailure: true);
         }
       },
       builder: (context, state) {
-        return Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(context, state),
-              _homeScrollableSheet(state),
-            ],
+        return LiquidPullToRefresh(
+          color: AppTheme.darkPurpleOpacity,
+          backgroundColor: AppTheme.yellow,
+          showChildOpacityTransition: false,
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  52,
+              color: Colors.transparent,
+              child: Column(
+                children: [
+                  SizedBox(height: Helper.normalPadding),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _headerContent(context, state),
+                        _homeScrollableSheet(state),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -293,7 +319,18 @@ class _HomePageState extends State<HomePage> {
           FeatureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
-            onTap: () {},
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => BarrierCashSheet(),
+              );
+            },
           ),
         ],
       ),
@@ -308,9 +345,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
             child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, PagePath.fGoals);
-              },
+              onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -334,7 +369,9 @@ class _HomePageState extends State<HomePage> {
         return ListView.builder(
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemCount: state.entity.moneyPlanning.length,
+          itemCount: state.entity.moneyPlanning.length < 5
+              ? state.entity.moneyPlanning.length
+              : 5,
           padding: EdgeInsets.symmetric(vertical: Helper.normalPadding),
           itemBuilder: (BuildContext context, int index) {
             return _fGoalItem(
@@ -382,91 +419,93 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _fGoalItem(BuildContext context, int index, MoneyPlanData data) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: Helper.getShadow(),
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(20),
-      margin: index == 0
-          ? EdgeInsets.only(left: 20, right: 10)
-          : index == 4
-              ? EdgeInsets.only(left: 10, right: 20)
-              : EdgeInsets.symmetric(horizontal: 10),
-      // width: MediaQuery.of(context).size.width * 0.8,
-      child: AspectRatio(
-        aspectRatio: 15 / 7,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, PagePath.fGoals),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: Helper.getShadow(),
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: EdgeInsets.all(20),
+        margin: index == 0
+            ? EdgeInsets.only(left: 20, right: 10)
+            : index == 4
+                ? EdgeInsets.only(left: 10, right: 20)
+                : EdgeInsets.symmetric(horizontal: 10),
+        child: AspectRatio(
+          aspectRatio: 15 / 7,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AutoSizeText(
+                          data.name,
+                          style: AppTheme.headline2,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          minFontSize: 16,
+                        ),
+                        SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(Resources.icTime, height: 12),
+                            SizedBox(width: 4),
+                            AutoSizeText(
+                              data.deadline!
+                                  .parseHourDateAndMonth()
+                                  .substring(0, 17),
+                              style: AppTheme.subText1,
+                              maxLines: 1,
+                              maxFontSize: 10,
+                              minFontSize: 8,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    AutoSizeText(
+                      'Rp. ' + data.totalAmount.toString().parseCurrency(),
+                      style: AppTheme.text1.bold,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: Helper.smallPadding),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      AutoSizeText(
-                        data.name,
-                        style: AppTheme.headline2,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 16,
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(Resources.icTime, height: 12),
-                          SizedBox(width: 4),
-                          AutoSizeText(
-                            data.deadline!
-                                .parseHourDateAndMonth()
-                                .substring(0, 17),
-                            style: AppTheme.subText1,
-                            maxLines: 1,
-                            maxFontSize: 10,
-                            minFontSize: 8,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ],
+                  CircularPercentIndicator(
+                    radius: MediaQuery.of(context).size.width * 0.2,
+                    lineWidth: 16.0,
+                    animation: true,
+                    percent: data.percent / 100,
+                    center: Text("${data.percent} %",
+                        style: AppTheme.text2.darkPurple.bold),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    progressColor: AppTheme.purple,
+                    backgroundColor: AppTheme.purpleOpacity,
                   ),
+                  // SizedBox(height: Helper.smallPadding),
                   AutoSizeText(
-                    'Rp. ' + data.totalAmount.toString().parseCurrency(),
-                    style: AppTheme.text1.bold,
+                    'Rp. ' + data.amount.toString().parseCurrency(),
+                    style: AppTheme.text3.green,
                     maxLines: 1,
                   ),
                 ],
               ),
-            ),
-            SizedBox(width: Helper.smallPadding),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircularPercentIndicator(
-                  radius: MediaQuery.of(context).size.width * 0.2,
-                  lineWidth: 16.0,
-                  animation: true,
-                  percent: data.percent / 100,
-                  center: Text("${data.percent} %",
-                      style: AppTheme.text2.darkPurple.bold),
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: AppTheme.purple,
-                  backgroundColor: AppTheme.purpleOpacity,
-                ),
-                // SizedBox(height: Helper.smallPadding),
-                AutoSizeText(
-                  'Rp. ' + data.amount.toString().parseCurrency(),
-                  style: AppTheme.text3.green,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -502,8 +541,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _historyList(HomeState state) {
     if (state is HomeSuccess) {
-      if(isPayHistory){
-        if(state.entity.pay.isNotEmpty){
+      if (isPayHistory) {
+        if (state.entity.pay.isNotEmpty) {
           return ListView.builder(
             itemCount: state.entity.pay.length,
             shrinkWrap: true,
@@ -524,7 +563,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
       } else {
-        if(state.entity.receive.isNotEmpty){
+        if (state.entity.receive.isNotEmpty) {
           return ListView.builder(
             itemCount: state.entity.receive.length,
             shrinkWrap: true,
@@ -561,5 +600,161 @@ class _HomePageState extends State<HomePage> {
       );
     }
     return Container();
+  }
+}
+
+class BarrierCashSheet extends StatefulWidget {
+  const BarrierCashSheet({Key? key}) : super(key: key);
+
+  @override
+  State<BarrierCashSheet> createState() => _BarrierCashSheetState();
+}
+
+class _BarrierCashSheetState extends State<BarrierCashSheet> {
+  late TextEditingController priceController;
+  late TextEditingController dateController;
+  final _formKey = GlobalKey<FormState>();
+  DateTime datePicked = DateTime.now();
+  DateTime now = DateTime.now();
+  bool isUpdate = true;
+
+  @override
+  void initState() {
+    priceController = TextEditingController();
+    dateController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //TODO: Implement Get Barrier Cash, kalau misal Barrier Cash null, Add Barrier cash, kalau ada, Update barrier cash dan datanya jadi default
+    return Material(
+      child: GestureDetector(
+        onTap: () => Helper.unfocus(),
+        child: Container(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              color: AppTheme.white,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        isUpdate ? 'Update Barrier Cash' : 'Add Barrier Cash',
+                        style: AppTheme.headline3,
+                      ),
+                      SizedBox(height: Helper.bigPadding),
+                      Text('Harga', style: AppTheme.text3.bold),
+                      SizedBox(height: 8),
+                      TextFormField(
+                        controller: priceController,
+                        style: AppTheme.text3,
+                        decoration: InputDecoration(
+                          hintText: 'Masukan target harga',
+                          enabledBorder: AppTheme.enabledBlackBorder,
+                          hintStyle: AppTheme.text3.blackOpacity,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          Validator.notEmpty(value);
+                          Validator.number(value);
+                          final n = num.tryParse(value!);
+                          if (n == null) {
+                            return '"$value" bukan bilangan!';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                      ),
+                      SizedBox(height: 16),
+                      Text('Tenggat Waktu', style: AppTheme.text3.bold),
+                      SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () async {
+                          final picked = await Helper.showDeadlineDatePicker(
+                            context,
+                            datePicked,
+                          );
+                          if (picked != null &&
+                              picked != datePicked &&
+                              picked.isAfter(now)) {
+                            setState(() {
+                              datePicked = picked;
+                              dateController.text =
+                                  datePicked.parseYearMonthDay();
+                            });
+                          }
+                        },
+                        child: TextFormField(
+                          controller: dateController,
+                          style: AppTheme.text3,
+                          enabled: false,
+                          decoration: InputDecoration(
+                            hintText: 'Masukan tenggat waktu',
+                            enabledBorder: AppTheme.enabledBlackBorder,
+                            hintStyle: AppTheme.text3.blackOpacity,
+                            disabledBorder: AppTheme.enabledBlackBorder,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: Helper.bigPadding),
+                      SizedBox(height: Helper.bigPadding),
+                      //TODO: Add Validator
+                      //TODO: Implement Add Barrier Cash and Update F-Goals using logic if data was null for get Barrier Cash, Add F-Goals, otherwise, Update F-Goals
+                      isUpdate
+                          ? Row(
+                              children: [
+                                Flexible(
+                                  child: CustomButton(
+                                    onTap: () => Navigator.pop(context),
+                                    text: 'Hapus',
+                                    isOutline: true,
+                                    isUpper: false,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                //TODO: Implement Delete F-Goal
+                                Flexible(
+                                  child: CustomButton(
+                                    onTap: () => Navigator.pop(context, true),
+                                    text: 'Perbarui',
+                                    isUpper: false,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : CustomButton(
+                              onTap: () {},
+                              text: 'Simpan',
+                              isUpper: false,
+                            ),
+                      SizedBox(height: MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SvgPicture.asset(Resources.icClose),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

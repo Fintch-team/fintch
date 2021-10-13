@@ -63,7 +63,6 @@ class FeatureItem extends StatelessWidget {
             name,
             style: AppTheme.text3.black.bold,
             textAlign: TextAlign.center,
-            maxLines: 1,
           ) : Container(),
         ],
       ),

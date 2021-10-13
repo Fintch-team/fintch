@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,14 +20,11 @@ class _BasePageState extends State<BasePage> {
       length: _tabBarLength,
       child: Scaffold(
         body: Background(
-          child: Container(
-            child: Column(
-              children: [
-                _tabBar(),
-                SizedBox(height: Helper.normalPadding),
-                _tabBarView(),
-              ],
-            ),
+          child: Column(
+            children: [
+              _tabBar(),
+              _tabBarView(),
+            ],
           ),
         ),
       ),
