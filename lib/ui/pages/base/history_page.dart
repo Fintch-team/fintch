@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -142,13 +143,13 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _historyScrollableSheet(HistoryState state) {
     //TODO: sort history data harus latest
-    //TODO: Refactor DraggableScrollableSheet
     return Positioned.fill(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.68,
-        minChildSize: 0.68,
-        expand: true,
-        builder: (BuildContext context, ScrollController scrollController) {
+      child: SlidingUpPanel(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        color: AppTheme.scaffold,
+        minHeight: MediaQuery.of(context).size.height * 0.60,
+        maxHeight: MediaQuery.of(context).size.height * 0.90,
+        panelBuilder: (scrollController) {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),

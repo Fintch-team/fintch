@@ -3,12 +3,11 @@ import 'package:fintch/gen_export.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class FWalletPage extends StatefulWidget {
   const FWalletPage({Key? key}) : super(key: key);
@@ -130,14 +129,14 @@ class _FWalletPageState extends State<FWalletPage> {
     );
   }
 
-  //TODO: Refactor DraggableScrollableSheet
   Widget _fWalletScrollableSheet() {
     return Positioned.fill(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.6,
-        expand: true,
-        builder: (BuildContext context, ScrollController scrollController) {
+      child: SlidingUpPanel(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        color: AppTheme.scaffold,
+        minHeight: MediaQuery.of(context).size.height * 0.52,
+        maxHeight: MediaQuery.of(context).size.height * 0.90,
+        panelBuilder: (scrollController) {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
