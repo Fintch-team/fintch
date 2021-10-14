@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -122,7 +121,7 @@ class _ReceivePageState extends State<ReceivePage> {
                       ],
                     );
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularLoading());
                 },
               ),
             ),

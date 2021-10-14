@@ -166,6 +166,12 @@ class _MyAppState extends State<MyApp> {
               transactionRepository: context.read<TransactionRepository>(),
             ),
           ),
+          BlocProvider<AuthPinBloc>(
+            create: (context) => PayBloc(
+              userRepository: context.read<UserRepository>(),
+              transactionRepository: context.read<TransactionRepository>(),
+            ),
+          ),
         ],
         child: MaterialApp(
           title: 'Fintch',
