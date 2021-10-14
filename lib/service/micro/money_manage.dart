@@ -33,13 +33,26 @@ class MoneyManageService extends ApiService {
     }
   }
 
+  Future<MoneyManageIncomeModel> getMoneyManageIncome() async {
+    try {
+      final res = await dio.get(
+        'income',
+      );
+
+      return MoneyManageIncomeModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
   Future<bool> postIncomeMoneyManage({
     required String name,
-    required int amount,
+    required String amount,
   }) async {
     try {
       final res = await dio.post(
-        'money-management',
+        'money-management/each',
         data: {
           'name': name,
           'amount': amount,
@@ -55,12 +68,12 @@ class MoneyManageService extends ApiService {
 
   Future<bool> postOutcomeMoneyManage({
     required String name,
-    required int amount,
+    required String amount,
     required String idMoneyManageItem,
   }) async {
     try {
       final res = await dio.post(
-        'money-management',
+        'money-management/one',
         data: {
           'name': name,
           'amount': amount,
@@ -78,7 +91,7 @@ class MoneyManageService extends ApiService {
   Future<bool> putMoneyManage({
     required String idMoneyManage,
     required String name,
-    required int amount,
+    required String amount,
     required String idMoneyManageItem,
   }) async {
     try {
@@ -141,14 +154,23 @@ class MoneyManageService extends ApiService {
     }
   }
 
-  Future<bool> postMoneyManageItem(
-      {required String name, required int amount, required int percent}) async {
+  Future<bool> postMoneyManageItem({
+    required String name,
+    required int amount,
+    required String percent,
+    required int idUser,
+  }) async {
     try {
       final res = await dio.post(
         'money-management-item',
-        data: {'name': name, 'amount': amount, 'percent': percent},
+        data: {
+          'name': name,
+          'amount': amount,
+          'percent': percent,
+          'id_user': idUser,
+        },
       );
-
+      print(res.statusCode);
       return res.statusCode == 201;
     } on DioError catch (e) {
       debugPrint("error $e");
@@ -160,12 +182,18 @@ class MoneyManageService extends ApiService {
     required String idMoneyManageItem,
     required String name,
     required int amount,
-    required int percent,
+    required String percent,
+    required int idUser,
   }) async {
     try {
       final res = await dio.put(
         'money-management-item/$idMoneyManageItem',
-        data: {'name': name, 'amount': amount, 'percent': percent},
+        data: {
+          'name': name,
+          'amount': amount,
+          'percent': percent,
+          'id_user': idUser
+        },
       );
 
       return res.statusCode == 200;

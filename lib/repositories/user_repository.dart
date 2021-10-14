@@ -40,7 +40,7 @@ class UserRepository {
 
   Future<bool> authWithPin({required AuthPinPostEntity authPostEntity}) async {
     bool authPin = await userService.authWithPin(
-      user: authPostEntity.nickname,
+      user: localAuthService.currentUser!.nickname,
       pin: authPostEntity.pin,
     );
 

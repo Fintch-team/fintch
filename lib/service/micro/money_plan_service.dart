@@ -33,18 +33,20 @@ class MoneyPlanService extends ApiService {
     }
   }
 
-  Future<bool> postMoneyPlan({
-    required DateTime deadline,
-    required String idUser,
-    required int totalAmount,
-  }) async {
+  Future<bool> postMoneyPlan(
+      {required String deadline,
+      required String idUser,
+      required String totalAmount,
+      required String name}) async {
     try {
       final res = await dio.post(
         'money-planning',
         data: {
+          'name': name,
           'deadline': deadline,
           'id_user': idUser,
           'total_amount': totalAmount,
+          'amount': 0
         },
       );
 
@@ -57,17 +59,19 @@ class MoneyPlanService extends ApiService {
 
   Future<bool> putMoneyPlan({
     required String idMoneyPlan,
-    required DateTime deadline,
+    required String name,
+    required String deadline,
     required String idUser,
-    required int totalAmount,
+    required String totalAmount,
   }) async {
     try {
       final res = await dio.put(
         'money-planning/$idMoneyPlan',
         data: {
-          'deadline': 'required',
-          'id_user': 'required',
-          'total_amount': 'required',
+          'deadline': deadline,
+          'id_user': idUser,
+          'total_amount': totalAmount,
+          'name': name,
         },
       );
 

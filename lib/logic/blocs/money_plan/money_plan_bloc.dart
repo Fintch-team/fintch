@@ -25,7 +25,9 @@ class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
       emit(MoneyPlanLoading());
       try {
         await moneyPlanRepository.postMoneyPlan(postEntity: event.entity);
-        emit(MoneyPlanRequestSuccess());
+        ListMoneyPlanEntity entity = await moneyPlanRepository.getMoneyPlan();
+
+        emit(MoneyPlanResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyPlanFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -38,7 +40,9 @@ class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
       emit(MoneyPlanLoading());
       try {
         await moneyPlanRepository.editMoneyPlan(putEntity: event.entity);
-        emit(MoneyPlanRequestSuccess());
+        ListMoneyPlanEntity entity = await moneyPlanRepository.getMoneyPlan();
+
+        emit(MoneyPlanResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyPlanFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -52,7 +56,9 @@ class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
       try {
         await moneyPlanRepository.deleteMoneyPlan(
             idMoneyPlan: event.id.toString());
-        emit(MoneyPlanRequestSuccess());
+        ListMoneyPlanEntity entity = await moneyPlanRepository.getMoneyPlan();
+
+        emit(MoneyPlanResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyPlanFailure(message: e.message));
       } catch (e, stacktrace) {

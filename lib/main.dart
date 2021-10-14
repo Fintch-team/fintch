@@ -86,11 +86,13 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
           create: (context) => MoneyManageItemRepository(
             moneyManageItemService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(
           create: (context) => MoneyPlanRepository(
             moneyPlanService: Service.find(),
+            localAuthService: Service.find(),
           ),
         ),
       ],
@@ -137,6 +139,11 @@ class _MyAppState extends State<MyApp> {
               moneyManageRepository: context.read<MoneyManageRepository>(),
             ),
           ),
+          BlocProvider<InComeBloc>(
+            create: (context) => MoneyManageBloc(
+              moneyManageRepository: context.read<MoneyManageRepository>(),
+            ),
+          ),
           BlocProvider<MoneyManageItemBloc>(
             create: (context) => MoneyManageItemBloc(
               moneyManageItemRepository:
@@ -153,8 +160,9 @@ class _MyAppState extends State<MyApp> {
               walletRepository: context.read<WalletRepository>(),
             ),
           ),
-          BlocProvider<TransactionBloc>(
-            create: (context) => TransactionBloc(
+          BlocProvider<PayBloc>(
+            create: (context) => PayBloc(
+              userRepository: context.read<UserRepository>(),
               transactionRepository: context.read<TransactionRepository>(),
             ),
           ),

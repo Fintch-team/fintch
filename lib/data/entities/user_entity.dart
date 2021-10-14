@@ -43,10 +43,13 @@ class AuthEntity extends BaseEntity {
 }
 
 class AuthPinPostEntity extends BaseEntity {
-  final String nickname;
+  // final String nickname;
   final String pin;
 
-  AuthPinPostEntity({required this.nickname, required this.pin});
+  AuthPinPostEntity({
+    // required this.nickname,
+    required this.pin,
+  });
 }
 
 class UserEntity extends BaseEntity {

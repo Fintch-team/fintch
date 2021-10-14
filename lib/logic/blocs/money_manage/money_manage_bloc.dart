@@ -2,7 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
+mixin InComeBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
+
+class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState>
+    with InComeBloc {
   final MoneyManageRepository moneyManageRepository;
 
   MoneyManageBloc({required this.moneyManageRepository})
@@ -27,7 +30,11 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.inComePostMoneyManage(
             postEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -41,7 +48,10 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.outComePostMoneyManage(
             postEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -54,7 +64,10 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       emit(MoneyManageLoading());
       try {
         await moneyManageRepository.editMoneyManage(putEntity: event.entity);
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {
@@ -68,7 +81,25 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState> {
       try {
         await moneyManageRepository.deleteMoneyManage(
             idMoneyManage: event.id.toString());
-        emit(MoneyManageRequestSuccess());
+        ListMoneyManageEntity entity =
+            await moneyManageRepository.getMoneyManage();
+
+        emit(MoneyManageResponseSuccess(entity: entity));
+      } on FailedException catch (e) {
+        emit(MoneyManageFailure(message: e.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(MoneyManageFailure(message: 'unable to get moneyPlan: $e'));
+      }
+    });
+
+    on<GetIncomeMoneyManage>((event, emit) async {
+      emit(MoneyManageLoading());
+      try {
+        MoneyManageIncomeEntity income =
+            await moneyManageRepository.getMoneyManageIncome();
+
+        emit(MoneyManageIncomeSuccess(entity: income));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {

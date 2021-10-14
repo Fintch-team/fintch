@@ -36,3 +36,16 @@ class DeleteWallet extends WalletEvent {
   @override
   List<Object> get props => [id];
 }
+
+class AddBarrierCash extends WalletEvent {
+  final BarrierCashPostEntity entity;
+
+  AddBarrierCash({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class DeleteBarrierCash extends WalletEvent {}
+
+class ExtendBarrierCash extends WalletEvent {}

@@ -21,6 +21,13 @@ class MoneyManageRepository {
     return DataMapper.listMoneyManageMapper(moneyManageModel);
   }
 
+  Future<MoneyManageIncomeEntity> getMoneyManageIncome() async {
+    MoneyManageIncomeModel moneyManageModel =
+        await moneyManageService.getMoneyManageIncome();
+
+    return DataMapper.moneyManageIncomeMapper(moneyManageModel);
+  }
+
   Future<bool> inComePostMoneyManage(
       {required MoneyManageInPostEntity postEntity}) async {
     bool res = await moneyManageService.postIncomeMoneyManage(

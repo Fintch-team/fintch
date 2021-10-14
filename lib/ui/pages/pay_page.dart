@@ -658,21 +658,23 @@ class _InputPinDialogState extends State<InputPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TransactionBloc, TransactionState>(
+    return BlocListener<PayBloc, PayState>(
       listener: (context, state) {
-        if (state is TransactionSuccess) {
-          context.loaderOverlay.hide();
-          Helper.unfocus();
-          Navigator.of(context).pop();
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => SuccessPaymentDialog(),
-          );
-        } else if (state is TransactionLoading) {
+        if (state is PaySuccess) {
+          if (state.entity) {
+            context.loaderOverlay.hide();
+            Helper.unfocus();
+            Navigator.of(context).pop();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => SuccessPaymentDialog(),
+            );
+          }
+        } else if (state is PayLoading) {
           context.loaderOverlay.show();
           Helper.snackBar(context, message: 'Transaksi sedang...');
-        } else if (state is TransactionFailure) {
+        } else if (state is PayFailure) {
           context.loaderOverlay.hide();
           Helper.snackBar(context, message: 'Transaksi gagal', isFailure: true);
         }
@@ -706,9 +708,11 @@ class _InputPinDialogState extends State<InputPinDialog> {
               );
               return;
             }
-            context
-                .read<TransactionBloc>()
-                .add(PostTransaction(entity: widget.input));
+
+            //TODO: dua kali get bloc
+            // context.read<PayBloc>().add(AuthPin(
+            //     entity: AuthPinPostEntity(pin: inputPinController.text)));
+            context.read<PayBloc>().add(PostPay(entity: widget.input));
           },
         ),
       ),

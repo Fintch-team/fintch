@@ -64,6 +64,8 @@ class LocalAuthService extends Service {
       : DateTime.tryParse(getStorage.read(KeyStorage.kExpired));
 
   bool get isHasLoggedIn =>
+      isSetPass! &&
+      isSetPin! &&
       token != null &&
       accessTokenExpired != null &&
       isSetPass != null &&

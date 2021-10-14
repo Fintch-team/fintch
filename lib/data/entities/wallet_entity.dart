@@ -4,7 +4,7 @@ class WalletPostEntity extends BaseEntity {
   final int walletAmount;
   final int barrierAmount;
   final int payAmount;
-  final DateTime barrierExpired;
+  final String barrierExpired;
 
   WalletPostEntity(
       {required this.walletAmount,
@@ -18,7 +18,7 @@ class WalletPutEntity extends BaseEntity {
   final int walletAmount;
   final int barrierAmount;
   final int payAmount;
-  final DateTime barrierExpired;
+  final String barrierExpired;
 
   WalletPutEntity(
       {required this.idWallet,
@@ -26,6 +26,14 @@ class WalletPutEntity extends BaseEntity {
       required this.barrierAmount,
       required this.payAmount,
       required this.barrierExpired});
+}
+
+class BarrierCashPostEntity extends BaseEntity {
+  final String barrierAmount;
+  final String barrierExpired;
+
+  BarrierCashPostEntity(
+      {required this.barrierAmount, required this.barrierExpired});
 }
 
 class WalletEntity extends BaseEntity {
