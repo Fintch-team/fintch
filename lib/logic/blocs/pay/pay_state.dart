@@ -49,3 +49,21 @@ class PayFailure extends PayState {
   @override
   List<Object> get props => [message];
 }
+
+class GetReceiveSuccess extends PayState {
+  final UserEntity entity;
+
+  GetReceiveSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class GetMerchantSuccess extends PayState {
+  final ListMerchantEntity entity;
+
+  GetMerchantSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}

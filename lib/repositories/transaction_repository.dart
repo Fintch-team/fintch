@@ -13,7 +13,7 @@ class TransactionRepository {
       {required TransactionPostEntity postEntity}) async {
     bool res = await transactionService.postTransaction(
         idUserReceive: postEntity.idReceive,
-        idUserPay: localAuthService.userId.toString(),
+        idUserPay: localAuthService.currentUser!.nickname,
         amount: postEntity.amount);
 
     return res;

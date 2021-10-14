@@ -18,6 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     context.read<SettingsBloc>().add(SettingsInit());
     context.read<WalletBloc>().add(GetWallet());
+    context.read<InComeBloc>().add(GetIncomeMoneyManage());
   }
 
   @override
@@ -125,39 +126,12 @@ class _SettingsPageState extends State<SettingsPage> {
         boxShadow: Helper.getShadow(),
         color: AppTheme.white,
       ),
-      child: BlocBuilder<WalletBloc, WalletState>(
-        builder: (context, state) {
-          if (state is WalletResponseSuccess) {
-            // TODO: get wallet tidak perlu list
-            return Row(
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        Resources.fWalletPurple,
-                        height: 28,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        state.entity.walletAmount.toString().parseCurrency(),
-                        style: AppTheme.text1.bold,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 8),
-                Container(
-                  width: 4,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: AppTheme.purple,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
+      child: Row(
+        children: [
+          BlocBuilder<WalletBloc, WalletState>(
+            builder: (context, state) {
+              if (state is WalletResponseSuccess) {
+                return Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -167,25 +141,68 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        state.entity.barrierAmount.toString().parseCurrency(),
+                        state.entity.walletAmount.toString().parseCurrency(),
                         style: AppTheme.text1.bold,
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          } else if (state is WalletLoading) {
-            return Center(
-              child: CircularLoading(),
-            );
-          } else if (state is WalletFailure) {
-            return Center(
-              child: Text('Gagal Load Data'),
-            );
-          }
-          return Container();
-        },
+                );
+              } else if (state is WalletLoading) {
+                return Center(
+                  child: CircularLoading(),
+                );
+              } else if (state is WalletFailure) {
+                return Center(
+                  child: Text('Gagal Load Data'),
+                );
+              }
+              return Container();
+            },
+          ),
+          SizedBox(width: 8),
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: AppTheme.purple,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          SizedBox(width: 8),
+          BlocBuilder<InComeBloc, MoneyManageState>(
+            builder: (context, state) {
+              if (state is MoneyManageIncomeSuccess) {
+                // TODO: harus ada nilai jumlah manage amount unutk d bawah
+                int amount = state.entity.income - state.entity.outcome;
+                return Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        Resources.fWalletPurple,
+                        height: 28,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        amount.toString().parseCurrency(),
+                        style: AppTheme.text1.bold,
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is MoneyManageLoading) {
+                return Center(
+                  child: CircularLoading(),
+                );
+              } else if (state is MoneyManageFailure) {
+                return Center(
+                  child: Text('Gagal Load Data'),
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
     );
   }

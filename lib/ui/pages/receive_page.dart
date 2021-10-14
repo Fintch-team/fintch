@@ -83,7 +83,7 @@ class _ReceivePageState extends State<ReceivePage> {
                                 Text(state.entity.school.name,
                                     style: AppTheme.text3),
                                 SizedBox(height: 8),
-                                Text(state.entity.id.toString(),
+                                Text(state.entity.nickname.toString(),
                                     style: AppTheme.text3.purple),
                                 SizedBox(height: Helper.normalPadding),
                                 Expanded(
@@ -93,7 +93,7 @@ class _ReceivePageState extends State<ReceivePage> {
                                           Resources.icFintchPointPng),
                                       size: MediaQuery.of(context).size.height *
                                           0.3,
-                                      data: state.entity.id.toString(),
+                                      data: state.entity.nickname.toString(),
                                       errorCorrectLevel: QrErrorCorrectLevel.M,
                                       roundEdges: true,
                                     ),

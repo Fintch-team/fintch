@@ -78,3 +78,11 @@ class UserEntity extends BaseEntity {
       required this.receive,
       required this.pay});
 }
+
+class ListMerchantEntity extends BaseEntity {
+  final List<UserData> data;
+
+  ListMerchantEntity({
+    required this.data,
+  });
+}
