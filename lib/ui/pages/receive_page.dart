@@ -53,7 +53,8 @@ class _ReceivePageState extends State<ReceivePage> {
               child: BlocConsumer<ReceiveBloc, HomeState>(
                 listener: (context, state) {
                   if (state is HomeFailure) {
-                    Helper.snackBar(context, message: state.message, isFailure: true);
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
                   }
                 },
                 builder: (context, state) {
@@ -74,20 +75,26 @@ class _ReceivePageState extends State<ReceivePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.width * 0.12,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.12,
                                 ),
-                                Text(state.entity.name, style: AppTheme.headline3),
+                                Text(state.entity.name,
+                                    style: AppTheme.headline3),
                                 SizedBox(height: 8),
-                                Text(state.entity.school.name, style: AppTheme.text3),
+                                Text(state.entity.school.name,
+                                    style: AppTheme.text3),
                                 SizedBox(height: 8),
-                                Text(state.entity.id.toString(), style: AppTheme.text3.purple),
+                                Text(state.entity.nickname.toString(),
+                                    style: AppTheme.text3.purple),
                                 SizedBox(height: Helper.normalPadding),
                                 Expanded(
                                   child: Center(
                                     child: PrettyQr(
-                                      image: AssetImage(Resources.icFintchPointPng),
-                                      size: MediaQuery.of(context).size.height * 0.3,
-                                      data: state.entity.id.toString(),
+                                      image: AssetImage(
+                                          Resources.icFintchPointPng),
+                                      size: MediaQuery.of(context).size.height *
+                                          0.3,
+                                      data: state.entity.nickname.toString(),
                                       errorCorrectLevel: QrErrorCorrectLevel.M,
                                       roundEdges: true,
                                     ),

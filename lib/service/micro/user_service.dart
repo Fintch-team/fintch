@@ -95,13 +95,15 @@ class UserService extends ApiService {
     }
   }
 
-  Future<UserModel> getUserId({
-    required String id,
+  Future<UserModel> getUserNickname({
+    required String nickname,
   }) async {
     try {
       final res = await dio.get(
-        'users/$id',
+        'users/$nickname',
       );
+
+      print(res.statusCode);
 
       return UserModel.fromJson(res.data);
     } on DioError catch (e) {
@@ -113,6 +115,14 @@ class UserService extends ApiService {
   Future<ListUserModel> getUserAll() async {
     final res = await dio.get(
       'users',
+    );
+
+    return ListUserModel.fromJson(res.data);
+  }
+
+  Future<ListUserModel> getMerchantAll() async {
+    final res = await dio.get(
+      'merchant',
     );
 
     return ListUserModel.fromJson(res.data);

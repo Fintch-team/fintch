@@ -69,6 +69,18 @@ class UserRepository {
     return DataMapper.userMapper(userModel);
   }
 
+  Future<UserEntity> getByNickname({required String nickname}) async {
+    UserModel userModel = await userService.getUserNickname(nickname: nickname);
+
+    return DataMapper.userMapper(userModel);
+  }
+
+  Future<ListMerchantEntity> getMerchant() async {
+    ListUserModel userModel = await userService.getMerchantAll();
+
+    return DataMapper.listMerchantMapper(userModel);
+  }
+
   Future<UserEntity> currentUser() async {
     try {
       return await authGet();
