@@ -5,8 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class MerchantItem extends StatelessWidget {
   final VoidCallback onMerchantTap;
+  final UserData user;
   const MerchantItem({
-    Key? key, required this.onMerchantTap,
+    Key? key,
+    required this.onMerchantTap,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -24,7 +27,7 @@ class MerchantItem extends StatelessWidget {
         child: Row(
           children: [
             CustomNetworkImage(
-              imgUrl: Dummy.profileImg,
+              imgUrl: user.img,
               borderRadius: 64,
               width: MediaQuery.of(context).size.width * 0.12,
               height: MediaQuery.of(context).size.width * 0.12,
@@ -35,12 +38,12 @@ class MerchantItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Chatime',
+                    user.name,
                     style: AppTheme.headline3,
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'SMK Negeri 1 Majalengka',
+                    user.school.name,
                     style: AppTheme.text3,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

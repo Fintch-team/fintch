@@ -60,7 +60,7 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 307 || response.statusCode == 404) {
-      debugPrint(response.requestOptions.uri.toString());
+      print(response.data['message']);
       handler.reject(
         DioError(
           response: response,
@@ -73,7 +73,7 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 422) {
-      // final msg = response.data['details'];
+      print(response.data['message']);
       handler.reject(
         DioError(
           response: response,
@@ -87,6 +87,8 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 401) {
+      print(response.data['message']);
+
       final error = DioError(
         requestOptions: response.requestOptions,
         error: FailedException(response.data['message']),
@@ -96,6 +98,8 @@ class FintchInterceptor extends Interceptor {
     }
 
     if (response.statusCode == 406) {
+      print(response.data['message']);
+
       final error = DioError(
         requestOptions: response.requestOptions,
         error: FailedException(response.data['message']),

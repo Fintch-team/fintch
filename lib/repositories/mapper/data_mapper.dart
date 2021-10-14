@@ -30,6 +30,11 @@ class DataMapper {
         moneyManage: userModel.data.moneyManage,
       );
 
+  static ListMerchantEntity listMerchantMapper(ListUserModel userModel) =>
+      ListMerchantEntity(
+        data: userModel.data,
+      );
+
   static UserEntity localUserMapper(UserData userModel) => UserEntity(
         id: userModel.id,
         name: userModel.name,

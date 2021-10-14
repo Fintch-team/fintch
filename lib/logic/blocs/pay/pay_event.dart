@@ -43,3 +43,14 @@ class AuthPin extends PayEvent {
   @override
   List<Object> get props => [entity];
 }
+
+class GetReceive extends PayEvent {
+  final String entity;
+
+  GetReceive({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class GetMerchant extends PayEvent {}
