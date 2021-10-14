@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,60 +23,77 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PayBloc, PayState>(
-      builder: (context, state) {
-        if (state is PayTopUpSuccess) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Payment'),
-              actions: <Widget>[
-                NavigationControls(_controller.future),
-              ],
-            ),
-            body: Builder(builder: (BuildContext context) {
-              return WebView(
-                initialUrl: state.entity.webUrl,
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                },
-                onProgress: (int progress) {
-                  print("WebView is loading (progress : %)");
-                },
-                javascriptChannels: <JavascriptChannel>{
-                  _toasterJavascriptChannel(context),
-                },
-                navigationDelegate: (NavigationRequest request) {
-                  print(request.url);
-                  if (request.url.startsWith('http://fintch.id/api/payment')) {
-                    print('blocking navigation to }');
-                    context.read<HomeBloc>().add(HomeInit());
-                    int count = 0;
-                    Navigator.popUntil(context, (route) {
-                      return count++ == 2;
-                    });
-                    return NavigationDecision.prevent;
-                  }
-                  print('allowing navigation to ');
-                  return NavigationDecision.navigate;
-                },
-                onPageStarted: (String url) {
-                  print('Page started loading: ');
-                },
-                onPageFinished: (String url) {
-                  print('Page finished loading: ');
-                },
-                gestureNavigationEnabled: true,
-              );
-            }),
-          );
-        }
-
-        // TODO: tampilan untuk state yg lainnya
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Payment Top Up',
+          style: AppTheme.text1.white.bold,
+          textAlign: TextAlign.start,
+        ),
+        centerTitle: false,
+        actions: <Widget>[
+          NavigationControls(_controller.future),
+        ],
+        backgroundColor: AppTheme.webViewPurple,
+      ),
+      body: BlocConsumer<PayBloc, PayState>(
+        listener: (context, state) {
+          if (state is PayFailure) {
+            Helper.snackBar(context, message: state.message, isFailure: true);
+          }
+        },
+        builder: (context, state) {
+          if (state is PayTopUpSuccess) {
+            return WebView(
+              initialUrl: state.entity.webUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+              onProgress: (int progress) {
+                print("WebView is loading (progress : %)");
+              },
+              javascriptChannels: <JavascriptChannel>{
+                _toasterJavascriptChannel(context),
+              },
+              navigationDelegate: (NavigationRequest request) {
+                print(request.url);
+                if (request.url.startsWith('http://fintch.id/api/payment')) {
+                  print('blocking navigation to }');
+                  context.read<HomeBloc>().add(HomeInit());
+                  int count = 0;
+                  Navigator.popUntil(context, (route) {
+                    return count++ == 2;
+                  });
+                  return NavigationDecision.prevent;
+                }
+                print('allowing navigation to ');
+                return NavigationDecision.navigate;
+              },
+              onPageStarted: (String url) {
+                print('Page started loading: ');
+              },
+              onPageFinished: (String url) {
+                print('Page finished loading: ');
+              },
+              gestureNavigationEnabled: true,
+            );
+          } else if (state is PayLoading) {
+            return Center(
+              child: CircularLoading(),
+            );
+          } else if (state is PayFailure) {
+            return Center(
+              child: Text(
+                state.message,
+                style: AppTheme.headline3.white,
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+          return Container();
+        },
+      ),
     );
   }
 
@@ -83,10 +101,7 @@ class _PaymentPageState extends State<PaymentPage> {
     return JavascriptChannel(
         name: 'Toaster',
         onMessageReceived: (JavascriptMessage message) {
-          // ignore: deprecated_member_use
-          Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
+          Helper.snackBar(context, message: message.message);
         });
   }
 }
@@ -116,9 +131,8 @@ class NavigationControls extends StatelessWidget {
                         await controller.goBack();
                       } else {
                         // ignore: deprecated_member_use
-                        Scaffold.of(context).showSnackBar(
-                          const SnackBar(content: Text("No back history item")),
-                        );
+                        Helper.snackBar(context,
+                            message: 'No Back History Item');
                         return;
                       }
                     },
@@ -132,10 +146,8 @@ class NavigationControls extends StatelessWidget {
                         await controller.goForward();
                       } else {
                         // ignore: deprecated_member_use
-                        Scaffold.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("No forward history item")),
-                        );
+                        Helper.snackBar(context,
+                            message: 'No Forward History Item');
                         return;
                       }
                     },

@@ -17,6 +17,7 @@ class AppTheme {
   static Color purpleOpacity = purple.withOpacity(0.3);
   static Color whiteOpacity = white.withOpacity(0.6);
   static Color darkPurple = Color(0xFF9024A1);
+  static Color webViewPurple = Color(0xFF7558d6);
   static Color darkPurpleOpacity = Color(0xFF9024A1).withOpacity(0.5);
 
   ///font size: 30, color: black, fontWeight: bold

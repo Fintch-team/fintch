@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -53,7 +52,8 @@ class _ReceivePageState extends State<ReceivePage> {
               child: BlocConsumer<ReceiveBloc, HomeState>(
                 listener: (context, state) {
                   if (state is HomeFailure) {
-                    Helper.snackBar(context, message: state.message, isFailure: true);
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
                   }
                 },
                 builder: (context, state) {
@@ -74,19 +74,25 @@ class _ReceivePageState extends State<ReceivePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.width * 0.12,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.12,
                                 ),
-                                Text(state.entity.name, style: AppTheme.headline3),
+                                Text(state.entity.name,
+                                    style: AppTheme.headline3),
                                 SizedBox(height: 8),
-                                Text(state.entity.school.name, style: AppTheme.text3),
+                                Text(state.entity.school.name,
+                                    style: AppTheme.text3),
                                 SizedBox(height: 8),
-                                Text(state.entity.id.toString(), style: AppTheme.text3.purple),
+                                Text(state.entity.id.toString(),
+                                    style: AppTheme.text3.purple),
                                 SizedBox(height: Helper.normalPadding),
                                 Expanded(
                                   child: Center(
                                     child: PrettyQr(
-                                      image: AssetImage(Resources.icFintchPointPng),
-                                      size: MediaQuery.of(context).size.height * 0.3,
+                                      image: AssetImage(
+                                          Resources.icFintchPointPng),
+                                      size: MediaQuery.of(context).size.height *
+                                          0.3,
                                       data: state.entity.id.toString(),
                                       errorCorrectLevel: QrErrorCorrectLevel.M,
                                       roundEdges: true,
@@ -115,7 +121,7 @@ class _ReceivePageState extends State<ReceivePage> {
                       ],
                     );
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularLoading());
                 },
               ),
             ),
