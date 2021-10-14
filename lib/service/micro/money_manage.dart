@@ -52,7 +52,7 @@ class MoneyManageService extends ApiService {
   }) async {
     try {
       final res = await dio.post(
-        'money-management',
+        'money-management/each',
         data: {
           'name': name,
           'amount': amount,
@@ -73,7 +73,7 @@ class MoneyManageService extends ApiService {
   }) async {
     try {
       final res = await dio.post(
-        'money-management',
+        'money-management/one',
         data: {
           'name': name,
           'amount': amount,

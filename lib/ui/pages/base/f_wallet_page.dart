@@ -300,7 +300,6 @@ class _FWalletPageState extends State<FWalletPage> {
             child: BlocConsumer<MoneyManageItemBloc, MoneyManageItemState>(
               listener: (context, state) {
                 if (state is MoneyManageItemFailure) {
-                  print("gagal");
                   Helper.snackBar(context,
                       message: state.message, isFailure: true);
                 }
@@ -425,9 +424,7 @@ class _FWalletPageState extends State<FWalletPage> {
             },
             builder: (context, state) {
               if (state is MoneyManageResponseSuccess) {
-                print(state.entity.data);
                 if (state.entity.data.isNotEmpty) {
-                  print("ok");
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.entity.data.length,
@@ -542,163 +539,6 @@ class _FWalletPageState extends State<FWalletPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MoneyManageItemSheet extends StatefulWidget {
-  final MoneyManageItemData? data;
-
-  const MoneyManageItemSheet({Key? key, this.data}) : super(key: key);
-
-  @override
-  State<MoneyManageItemSheet> createState() => _MoneyManageItemSheetState();
-}
-
-class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
-  late TextEditingController titleController;
-  late TextEditingController percentController;
-  final _formKey = GlobalKey<FormState>();
-  DateTime datePicked = DateTime.now();
-  DateTime now = DateTime.now();
-
-  @override
-  void initState() {
-    titleController = TextEditingController();
-    percentController = TextEditingController();
-    if (widget.data != null) {
-      titleController.text = widget.data!.name;
-      percentController.text = widget.data!.percent.toString();
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: GestureDetector(
-        onTap: () => Helper.unfocus(),
-        child: Container(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              color: AppTheme.white,
-            ),
-            padding: EdgeInsets.all(20),
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          widget.data != null ? 'Update Card' : 'Add Card',
-                          style: AppTheme.headline3,
-                        ),
-                        SizedBox(height: Helper.bigPadding),
-                        Text('Judul', style: AppTheme.text3.bold),
-                        SizedBox(height: 8),
-                        TextFormField(
-                          controller: titleController,
-                          style: AppTheme.text3,
-                          decoration: InputDecoration(
-                            hintText: 'Masukan judul Card',
-                            enabledBorder: AppTheme.enabledBlackBorder,
-                            hintStyle: AppTheme.text3.blackOpacity,
-                          ),
-                          validator: Validator.notEmpty,
-                        ),
-                        SizedBox(height: 16),
-                        Text('Persen card', style: AppTheme.text3.bold),
-                        SizedBox(height: 8),
-                        TextFormField(
-                          controller: percentController,
-                          style: AppTheme.text3,
-                          decoration: InputDecoration(
-                            hintText: 'Masukan persen',
-                            enabledBorder: AppTheme.enabledBlackBorder,
-                            hintStyle: AppTheme.text3.blackOpacity,
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          validator: (value) {
-                            Validator.notEmpty(value);
-                            Validator.number(value);
-                            final n = num.tryParse(value!);
-                            if (n == 0) {
-                              return "Harga tidak boleh nol";
-                            }
-                            if (n == null) {
-                              return '"$value" bukan bilangan!';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                        ),
-
-                        SizedBox(height: Helper.bigPadding),
-                        SizedBox(height: Helper.bigPadding),
-                        //TODO: Add Validator
-                        CustomButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (widget.data != null) {
-                                context.read<MoneyManageItemBloc>().add(
-                                      EditMoneyManageItem(
-                                        entity: MoneyManageItemPutEntity(
-                                          idMoneyManageItem:
-                                              widget.data!.id.toString(),
-                                          amount: 0,
-                                          percent: percentController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
-                              } else {
-                                context.read<MoneyManageItemBloc>().add(
-                                      PostMoneyManageItem(
-                                        entity: MoneyManageItemPostEntity(
-                                          amount: 0,
-                                          percent: percentController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
-                              }
-
-                              context
-                                  .read<MoneyManageItemBloc>()
-                                  .add(GetMoneyManageItem());
-                              Navigator.pop(context);
-                            }
-                          },
-                          text: 'Simpan',
-                          isUpper: false,
-                        ),
-                        SizedBox(height: MediaQuery.of(context).padding.bottom),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SvgPicture.asset(Resources.icClose),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -880,7 +720,16 @@ class _CustomFabState extends State<CustomFab>
           backgroundColor: AppTheme.darkPurple,
           elevation: 0,
           onPressed: () {
-            print("pressed");
+            showCupertinoModalBottomSheet(
+              expand: false,
+              context: context,
+              enableDrag: true,
+              isDismissible: true,
+              topRadius: Radius.circular(20),
+              backgroundColor: AppTheme.white,
+              barrierColor: AppTheme.black.withOpacity(0.2),
+              builder: (context) => MoneyManageSheet(),
+            );
           },
         ),
       ),
