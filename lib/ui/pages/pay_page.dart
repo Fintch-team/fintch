@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:provider/src/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PayPage extends StatefulWidget {
   const PayPage({Key? key}) : super(key: key);
@@ -159,12 +158,12 @@ class _PayPageState extends State<PayPage> {
 
   Widget _payScrollableSheet() {
     return Positioned.fill(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.4,
-        minChildSize: 0.4,
-        maxChildSize: 0.84,
-        expand: true,
-        builder: (BuildContext context, ScrollController scrollController) {
+      child: SlidingUpPanel(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        color: AppTheme.scaffold,
+        minHeight: MediaQuery.of(context).size.height * 0.60,
+        maxHeight: MediaQuery.of(context).size.height * 0.90,
+        panelBuilder: (scrollController) {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -172,7 +171,7 @@ class _PayPageState extends State<PayPage> {
             ),
             child: SingleChildScrollView(
               controller: scrollController,
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -658,11 +657,10 @@ class _InputPinDialogState extends State<InputPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PayBloc, PayState>(
+    return BlocConsumer<PayBloc, PayState>(
       listener: (context, state) {
         if (state is PaySuccess) {
           if (state.entity) {
-            context.loaderOverlay.hide();
             Helper.unfocus();
             Navigator.of(context).pop();
             showDialog(
@@ -670,52 +668,57 @@ class _InputPinDialogState extends State<InputPinDialog> {
               barrierDismissible: false,
               builder: (context) => SuccessPaymentDialog(),
             );
+          } else {
+            print('else');
+          }
+        } else if (state is AuthPinSuccess) {
+          if (state.entity) {
+            context.read<PayBloc>().add(PostPay(entity: widget.input));
+          } else {
+            inputPinController.clear();
+            inputFocusNode?.requestFocus();
+            errorController!.add(ErrorAnimationType.shake);
+            Helper.snackBar(
+              context,
+              message: 'PIN tidak cocok!',
+            );
           }
         } else if (state is PayLoading) {
-          context.loaderOverlay.show();
-          Helper.snackBar(context, message: 'Transaksi sedang...');
+          Helper.snackBar(context, message: 'Transaksi sedang berlangsung...');
         } else if (state is PayFailure) {
-          context.loaderOverlay.hide();
-          Helper.snackBar(context, message: 'Transaksi gagal', isFailure: true);
+          Helper.snackBar(context, message: state.message, isFailure: true);
         }
       },
-      child: CustomDialog(
-        title: 'Masukin PIN Kamu',
-        content: CustomPinCode(
-          pinController: inputPinController,
-          errorController: errorController,
-          focusNode: inputFocusNode,
-          isDialog: true,
-          isObscure: true,
-          isAutoFocus: true,
-          onChanged: (value) {},
-          onCompleted: (value) {
-            if (inputPinController.text.length < 6) {
-              errorController!.add(ErrorAnimationType.shake);
-              inputFocusNode?.requestFocus();
-              Helper.snackBar(
-                context,
-                message: 'PIN harus 6 Digit!',
-              );
-              return;
-            } else if (inputPinController.text != '111111') {
-              inputPinController.clear();
-              inputFocusNode?.requestFocus();
-              errorController!.add(ErrorAnimationType.shake);
-              Helper.snackBar(
-                context,
-                message: 'PIN tidak cocok!',
-              );
-              return;
-            }
-
-            //TODO: dua kali get bloc
-            // context.read<PayBloc>().add(AuthPin(
-            //     entity: AuthPinPostEntity(pin: inputPinController.text)));
-            context.read<PayBloc>().add(PostPay(entity: widget.input));
-          },
-        ),
-      ),
+      builder: (context, state) {
+        return CustomDialog(
+          title: 'Masukin PIN Kamu',
+          content: state is AuthPinLoading
+              ? CircularLoading()
+              : CustomPinCode(
+                  pinController: inputPinController,
+                  errorController: errorController,
+                  focusNode: inputFocusNode,
+                  isDialog: true,
+                  isObscure: true,
+                  isAutoFocus: true,
+                  onChanged: (value) {},
+                  onCompleted: (value) {
+                    if (inputPinController.text.length < 6) {
+                      errorController!.add(ErrorAnimationType.shake);
+                      inputFocusNode?.requestFocus();
+                      Helper.snackBar(
+                        context,
+                        message: 'PIN harus 6 Digit!',
+                      );
+                      return;
+                    }
+                    context.read<PayBloc>().add(AuthPin(
+                        entity:
+                            AuthPinPostEntity(pin: inputPinController.text)));
+                  },
+                ),
+        );
+      },
     );
   }
 }

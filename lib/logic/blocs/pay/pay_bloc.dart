@@ -1,16 +1,17 @@
 import 'package:bloc/bloc.dart';
-
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class PayBloc extends Bloc<PayEvent, PayState> {
+mixin AuthPinBloc on Bloc<PayEvent, PayState> {}
+
+class PayBloc extends Bloc<PayEvent, PayState> with AuthPinBloc {
   final TransactionRepository transactionRepository;
   final UserRepository userRepository;
 
   PayBloc({required this.transactionRepository, required this.userRepository})
       : super(PayInitial()) {
     on<AuthPin>((event, emit) async {
-      emit(PayLoading());
+      emit(AuthPinLoading());
       try {
         bool res =
             await userRepository.authWithPin(authPostEntity: event.entity);
@@ -19,7 +20,7 @@ class PayBloc extends Bloc<PayEvent, PayState> {
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to auth Pin: $e'));
       }
     });
 
@@ -33,7 +34,7 @@ class PayBloc extends Bloc<PayEvent, PayState> {
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to Transaction: $e'));
       }
     });
 
@@ -47,7 +48,7 @@ class PayBloc extends Bloc<PayEvent, PayState> {
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to Barcode Pay: $e'));
       }
     });
 
@@ -61,7 +62,7 @@ class PayBloc extends Bloc<PayEvent, PayState> {
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
+        emit(PayFailure(message: 'unable to top up pay: $e'));
       }
     });
   }
