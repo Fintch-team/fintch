@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
             ),
             child: SingleChildScrollView(
               controller: scrollController,
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -474,7 +474,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     AutoSizeText(
-                      'Rp. ' + data.totalAmount.toString().parseCurrency(),
+                      'Rp ' + data.totalAmount.toString().parseCurrency(),
                       style: AppTheme.text1.bold,
                       maxLines: 1,
                     ),
@@ -498,7 +498,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   // SizedBox(height: Helper.smallPadding),
                   AutoSizeText(
-                    'Rp. ' + data.amount.toString().parseCurrency(),
+                    'Rp ' + data.amount.toString().parseCurrency(),
                     style: AppTheme.text3.green,
                     maxLines: 1,
                   ),

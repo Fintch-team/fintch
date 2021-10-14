@@ -66,10 +66,10 @@ class _HistoryPageState extends State<HistoryPage> {
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Container(
-              color: Colors.transparent,
               height: MediaQuery.of(context).size.height -
                   MediaQuery.of(context).padding.top -
                   52,
+              color: Colors.transparent,
               child: Column(
                 children: [
                   SizedBox(height: Helper.normalPadding),
@@ -155,27 +155,22 @@ class _HistoryPageState extends State<HistoryPage> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppTheme.scaffold,
             ),
-            child: SafeArea(
-              top: false,
-              right: false,
-              left: false,
-              child: SingleChildScrollView(
-                controller: scrollController,
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _bottomSheetLine(context),
-                    SizedBox(height: Helper.normalPadding),
-                    HistoryTab(
-                      isPay: isPayHistory,
-                      payCallback: payCallback,
-                      receiveCallback: receiveCallback,
-                    ),
-                    SizedBox(height: Helper.normalPadding),
-                    _historyList(state),
-                  ],
-                ),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _bottomSheetLine(context),
+                  SizedBox(height: Helper.normalPadding),
+                  HistoryTab(
+                    isPay: isPayHistory,
+                    payCallback: payCallback,
+                    receiveCallback: receiveCallback,
+                  ),
+                  SizedBox(height: Helper.normalPadding),
+                  _historyList(state),
+                ],
               ),
             ),
           );

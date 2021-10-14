@@ -98,7 +98,7 @@ class _FWalletPageState extends State<FWalletPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AutoSizeText(
-                    'Rp.${amount.toString().parseCurrency()}',
+                    'Rp${amount.toString().parseCurrency()}',
                     style: AppTheme.headline1.white,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -144,7 +144,7 @@ class _FWalletPageState extends State<FWalletPage> {
             ),
             child: SingleChildScrollView(
               controller: scrollController,
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -216,7 +216,7 @@ class _FWalletPageState extends State<FWalletPage> {
                             ),
                             SizedBox(height: 4),
                             AutoSizeText(
-                              'Rp.${state.entity.outcome.toString().parseCurrency()} ',
+                              'Rp${state.entity.outcome.toString().parseCurrency()} ',
                               style: AppTheme.headline3,
                               maxLines: 1,
                             ),
@@ -260,7 +260,7 @@ class _FWalletPageState extends State<FWalletPage> {
                             ),
                             SizedBox(height: 4),
                             AutoSizeText(
-                              'Rp.${state.entity.income.toString().parseCurrency()}',
+                              'Rp${state.entity.income.toString().parseCurrency()}',
                               maxLines: 1,
                               style: AppTheme.headline3,
                             ),
@@ -391,7 +391,7 @@ class _FWalletPageState extends State<FWalletPage> {
                 Text(data.name, style: AppTheme.text3),
                 SizedBox(height: 4),
                 AutoSizeText(
-                  'Rp. ${data.amount.toString().parseCurrency()}',
+                  'Rp ${data.amount.toString().parseCurrency()}',
                   style: AppTheme.headline3.darkPurple,
                   maxLines: 1,
                 ),
@@ -511,8 +511,8 @@ class _FWalletPageState extends State<FWalletPage> {
               children: [
                 AutoSizeText(
                   data.isIncome
-                      ? 'Rp.${data.amount.toString().parseCurrency()}'
-                      : '-Rp.${data.amount.toString().parseCurrency()}',
+                      ? 'Rp${data.amount.toString().parseCurrency()}'
+                      : '-Rp${data.amount.toString().parseCurrency()}',
                   style: data.isIncome
                       ? AppTheme.headline2.green.bold
                       : AppTheme.headline2.red.bold,

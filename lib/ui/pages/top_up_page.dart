@@ -273,7 +273,8 @@ class _TopUpPageState extends State<TopUpPage> {
                 children: [
                   Text('Total Pembayaran', style: AppTheme.text2),
                   SizedBox(height: 8),
-                  Text('Rp10.000', style: AppTheme.headline3),
+                  Text('Rp${value.toString().parseCurrency()}',
+                      style: AppTheme.headline3),
                 ],
               ),
             ),
@@ -284,7 +285,7 @@ class _TopUpPageState extends State<TopUpPage> {
                     if (_formKey.currentState!.validate()) {
                       context.read<PayBloc>().add(PostTopUpPay(
                               entity: TransactionTopUpPostEntity(
-                            amount: textFieldController.text,
+                            amount: value.toString(),
                             name: "test",
                           )));
 
