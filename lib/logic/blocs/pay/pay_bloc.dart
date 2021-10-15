@@ -2,55 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-mixin AuthPinBloc on Bloc<PayEvent, PayState> {}
-
-class PayBloc extends Bloc<PayEvent, PayState> with AuthPinBloc {
+class PayBloc extends Bloc<PayEvent, PayState> {
   final TransactionRepository transactionRepository;
   final UserRepository userRepository;
 
   PayBloc({required this.transactionRepository, required this.userRepository})
       : super(PayInitial()) {
-    on<AuthPin>((event, emit) async {
-      emit(AuthPinLoading());
-      try {
-        bool res =
-            await userRepository.authWithPin(authPostEntity: event.entity);
-        emit(PaySuccess(entity: res));
-      } on FailedException catch (e) {
-        emit(PayFailure(message: e.message));
-      } catch (e, stacktrace) {
-        debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to auth Pin: $e'));
-      }
-    });
-
-    on<GetMerchant>((event, emit) async {
-      emit(PayLoading());
-      try {
-        ListMerchantEntity res = await userRepository.getMerchant();
-        emit(GetMerchantSuccess(entity: res));
-      } on FailedException catch (e) {
-        emit(PayFailure(message: e.message));
-      } catch (e, stacktrace) {
-        debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
-      }
-    });
-
-    on<GetReceive>((event, emit) async {
-      emit(PayLoading());
-      try {
-        UserEntity res =
-            await userRepository.getByNickname(nickname: event.entity);
-        emit(GetReceiveSuccess(entity: res));
-      } on FailedException catch (e) {
-        emit(PayFailure(message: e.message));
-      } catch (e, stacktrace) {
-        debugPrint(stacktrace.toString());
-        emit(PayFailure(message: 'unable to get moneyPlan: $e'));
-      }
-    });
-
     on<PostPay>((event, emit) async {
       emit(PayLoading());
       try {
@@ -58,8 +15,10 @@ class PayBloc extends Bloc<PayEvent, PayState> with AuthPinBloc {
             postEntity: event.entity);
         emit(PaySuccess(entity: res));
       } on FailedException catch (e) {
+        print('e anjayani : $e');
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
+        print('e anjayani : $e');
         debugPrint(stacktrace.toString());
         emit(PayFailure(message: 'unable to Transaction: $e'));
       }

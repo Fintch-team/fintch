@@ -36,6 +36,7 @@ class ValidationErrorException extends HttpException {
 
 class FailedException extends HttpException {
   final String message;
+  final int statusCode;
 
-  FailedException(this.message, [error]) : super(error);
+  FailedException(this.message, this.statusCode, [error]) : super(error);
 }

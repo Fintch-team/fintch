@@ -39,4 +39,13 @@ class AuthIsLoggedIn extends AuthState {
   List<Object> get props => [isLoggedIn];
 }
 
+class AuthPinFetched extends AuthState {
+  final bool isCorrect;
+
+  AuthPinFetched({required this.isCorrect});
+
+  @override
+  List<Object> get props => [isCorrect];
+}
+
 class ChangeSuccess extends AuthState {}

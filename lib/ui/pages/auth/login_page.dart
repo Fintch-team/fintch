@@ -191,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 24),
             CustomButton(
               onTap: () {
+                Helper.unfocus();
                 if (_formKey.currentState!.validate()) {
                   context.read<AuthBloc>().add(
                         PostAuth(

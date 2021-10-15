@@ -18,7 +18,10 @@ class FintchInterceptor extends Interceptor {
     if (connectivityResult == ConnectivityResult.none) {
       final error = DioError(
         requestOptions: options,
-        error: FailedException('Connection Error'),
+        error: FailedException(
+          'Connection Error',
+          12163,
+        ),
       );
       handler.reject(error);
       return;
@@ -65,7 +68,8 @@ class FintchInterceptor extends Interceptor {
         DioError(
           response: response,
           requestOptions: response.requestOptions,
-          error: FailedException(response.data['message']),
+          error:
+              FailedException(response.data['message'], response.statusCode!),
         ),
         true,
       );
@@ -79,7 +83,8 @@ class FintchInterceptor extends Interceptor {
           response: response,
           requestOptions: response.requestOptions,
           // error: ValidationErrorException(msg),
-          error: FailedException(response.data['message']),
+          error:
+              FailedException(response.data['message'], response.statusCode!),
         ),
         true,
       );
@@ -91,7 +96,7 @@ class FintchInterceptor extends Interceptor {
 
       final error = DioError(
         requestOptions: response.requestOptions,
-        error: FailedException(response.data['message']),
+        error: FailedException(response.data['message'], response.statusCode!),
       );
       handler.reject(error);
       return;
@@ -102,7 +107,7 @@ class FintchInterceptor extends Interceptor {
 
       final error = DioError(
         requestOptions: response.requestOptions,
-        error: FailedException(response.data['message']),
+        error: FailedException(response.data['message'], response.statusCode!),
       );
       handler.reject(error);
       return;

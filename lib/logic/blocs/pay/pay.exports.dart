@@ -2,8 +2,10 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library transaction;
+library pay;
 
-export 'pay_bloc.dart';
 export 'pay_event.dart';
 export 'pay_state.dart';
+export 'profile_pay/profile_pay.exports.dart';
+export 'pay_bloc.dart';
+export 'merchant/merchant.exports.dart';

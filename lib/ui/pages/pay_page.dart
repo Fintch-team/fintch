@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -34,8 +35,7 @@ class _PayPageState extends State<PayPage> {
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
-    context.read<InComeBloc>().add(GetIncomeMoneyManage());
-    context.read<PayBloc>().add(GetMerchant());
+    context.read<MerchantBloc>().add(GetMerchants());
   }
 
   @override
@@ -165,8 +165,8 @@ class _PayPageState extends State<PayPage> {
       child: SlidingUpPanel(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         color: AppTheme.scaffold,
-        minHeight: MediaQuery.of(context).size.height * 0.60,
-        maxHeight: MediaQuery.of(context).size.height * 0.90,
+        minHeight: MediaQuery.of(context).size.height * 0.44,
+        maxHeight: MediaQuery.of(context).size.height * 0.88,
         panelBuilder: (scrollController) {
           return Container(
             decoration: BoxDecoration(
@@ -181,9 +181,7 @@ class _PayPageState extends State<PayPage> {
                 children: [
                   _bottomSheetLine(context),
                   SizedBox(height: Helper.normalPadding),
-                  _fintchWallet(),
-                  SizedBox(height: Helper.smallPadding),
-                  _barrierCash(),
+                  _fintchPointAndBarrierCash(),
                   SizedBox(height: Helper.normalPadding),
                   SizedBox(height: Helper.normalPadding),
                   Container(
@@ -193,9 +191,9 @@ class _PayPageState extends State<PayPage> {
                     child: Text('Daftar Merchant', style: AppTheme.headline3),
                   ),
                   SizedBox(height: Helper.normalPadding),
-                  BlocBuilder<PayBloc, PayState>(
+                  BlocBuilder<MerchantBloc, MerchantState>(
                     builder: (context, state) {
-                      if (state is GetMerchantSuccess) {
+                      if (state is MerchantSuccess) {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: List.generate(
@@ -208,18 +206,22 @@ class _PayPageState extends State<PayPage> {
                                   isShowSheet = false;
                                   controller!.resumeCamera();
                                 },
-                                nickname: 'Merchant',
+                                nickname: state.entity.data[index].nickname,
                               ),
                             ),
                           ),
                         );
-                      } else if (state is PayLoading) {
+                      } else if (state is MerchantLoading) {
                         return Center(
                           child: CircularLoading(),
                         );
-                      } else if (state is PayFailure) {
+                      } else if (state is MerchantFailure) {
                         return Center(
-                          child: Text('Gagal Load Data'),
+                          child: Text(
+                            'Gagal Load Merchant',
+                            style: AppTheme.headline3.black,
+                            textAlign: TextAlign.center,
+                          ),
                         );
                       }
                       return Container();
@@ -234,132 +236,18 @@ class _PayPageState extends State<PayPage> {
     );
   }
 
-  Widget _fintchWallet() {
-    return BlocBuilder<InComeBloc, MoneyManageState>(
-      builder: (context, state) {
-        if (state is MoneyManageIncomeSuccess) {
-          // TODO: harus ada nilai jumlah manage amount unutk d bawah
-          int amount = state.entity.income - state.entity.outcome;
-          return Container(
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              color: AppTheme.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: Helper.getShadow(),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Isi Fintch Wallet kamu',
-                        style: AppTheme.text3,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            Resources.icFintchWallet,
-                            height: 32,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            amount.toString().parseCurrency(),
-                            style: AppTheme.headline1,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                FeatureItem(
-                  name: 'Terima',
-                  assetName: Resources.icReceive,
-                  onTap: () => Navigator.pushNamed(context, PagePath.receive),
-                  isOpacity: true,
-                  showTitle: false,
-                ),
-              ],
-            ),
-          );
-        } else if (state is MoneyManageLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
-        } else if (state is MoneyManageFailure) {
-          return Center(
-            child: Text('Gagal Load Data'),
-          );
-        }
-        return Container();
-      },
-    );
-  }
-
-  Widget _barrierCash() {
+  Widget _fintchPointAndBarrierCash() {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
         if (state is WalletResponseSuccess) {
           int valueDiff = state.entity.barrierAmount - state.entity.payAmount;
-          return Container(
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              color: AppTheme.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: Helper.getShadow(),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Sisa Barrier Cash Kamu',
-                        style: AppTheme.text3,
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            Resources.icFintchPoint,
-                            height: 32,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            valueDiff.toString().parseCurrency(),
-                            style: AppTheme.headline1,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                FeatureItem(
-                  name: 'Barrier Cash',
-                  assetName: Resources.icBarrierCash,
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      expand: false,
-                      context: context,
-                      enableDrag: true,
-                      isDismissible: true,
-                      topRadius: Radius.circular(20),
-                      backgroundColor: AppTheme.white,
-                      barrierColor: AppTheme.black.withOpacity(0.2),
-                      builder: (context) => BarrierCashSheet(),
-                    );
-                  },
-                  showTitle: false,
-                ),
-              ],
-            ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _fintchPoint(state.entity.walletAmount.toString()),
+              SizedBox(height: Helper.smallPadding),
+              _barrierCash(valueDiff.toString()),
+            ],
           );
         } else if (state is WalletLoading) {
           return Center(
@@ -367,11 +255,123 @@ class _PayPageState extends State<PayPage> {
           );
         } else if (state is WalletFailure) {
           return Center(
-            child: Text('Gagal Load Data'),
+            child: Text(
+              'Gagal Load Wallet',
+              style: AppTheme.headline3.black,
+              textAlign: TextAlign.center,
+            ),
           );
         }
         return Container();
       },
+    );
+  }
+
+  Widget _fintchPoint(String amount) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Isi Fintch Point kamu',
+                  style: AppTheme.text3,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      Resources.icFintchWallet,
+                      height: 32,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      amount.parseCurrency(),
+                      style: AppTheme.headline1,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          FeatureItem(
+            name: 'Terima',
+            assetName: Resources.icReceive,
+            onTap: () => Navigator.pushNamed(context, PagePath.receive),
+            isOpacity: true,
+            showTitle: false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _barrierCash(String barrierCash) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppTheme.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: Helper.getShadow(),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Sisa Barrier Cash Kamu',
+                  style: AppTheme.text3,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      Resources.icFintchPoint,
+                      height: 32,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      barrierCash.parseCurrency(),
+                      style: AppTheme.headline1,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          FeatureItem(
+            name: 'Barrier Cash',
+            assetName: Resources.icBarrierCash,
+            onTap: () {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => BarrierCashSheet(),
+              );
+            },
+            showTitle: false,
+          ),
+        ],
+      ),
     );
   }
 
@@ -446,33 +446,34 @@ class _PaymentSheetState extends State<PaymentSheet> {
   @override
   void initState() {
     super.initState();
-    context.read<PayBloc>().add(GetReceive(entity: widget.nickname));
+    context
+        .read<ProfilePayBloc>()
+        .add(GetReceiveByNickname(nickname: widget.nickname));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PayBloc, PayState>(
-      listener: (context, state) {
-        if (state is PayFailure) {
-          Helper.snackBar(context, message: state.message, isFailure: true);
-
-          Navigator.pop(context);
-        }
-      },
-      builder: (context, state) {
-        if (state is GetReceiveSuccess) {
-          return Material(
-            child: Container(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  color: AppTheme.scaffold,
-                ),
-                padding: EdgeInsets.all(20),
-                child: Stack(
-                  children: [
-                    SingleChildScrollView(
+    return Material(
+      child: Container(
+        padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            color: AppTheme.scaffold,
+          ),
+          padding: EdgeInsets.all(20),
+          child: Stack(
+            children: [
+              BlocConsumer<ProfilePayBloc, ProfilePayState>(
+                listener: (context, state) async {
+                  if (state is ProfilePayFailure) {
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is ProfilePaySuccess) {
+                    return SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -543,31 +544,43 @@ class _PaymentSheetState extends State<PaymentSheet> {
                           SizedBox(height: Helper.normalPadding),
                         ],
                       ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: GestureDetector(
-                        onTap: widget.onClose,
-                        child: SvgPicture.asset(Resources.icClose),
+                    );
+                  } else if (state is ProfilePayLoading) {
+                    return Center(
+                      child: CircularLoading(),
+                    );
+                  } else if (state is ProfilePayFailure) {
+                    return Center(
+                      child: Text(
+                        'Gagal Load Profile',
+                        style: AppTheme.headline3.black,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    );
+                  } else if (state is ProfilePayNotFound) {
+                    return Center(
+                      child: Text(
+                        'User / Merchant tidak ditemukan :(',
+                        style: AppTheme.headline3.black,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: GestureDetector(
+                  onTap: widget.onClose,
+                  child: SvgPicture.asset(Resources.icClose),
                 ),
               ),
-            ),
-          );
-        } else if (state is PayLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
-        } else if (state is PayFailure) {
-          return Center(
-            child: Text('Gagal Load Data'),
-          );
-        }
-        return Container();
-      },
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -722,93 +735,115 @@ class InputPinDialog extends StatefulWidget {
 class _InputPinDialogState extends State<InputPinDialog> {
   TextEditingController inputPinController = TextEditingController();
   StreamController<ErrorAnimationType>? errorController;
-  FocusNode? inputFocusNode;
+  FocusNode inputFocusNode = FocusNode();
 
   @override
   void initState() {
     errorController = StreamController<ErrorAnimationType>();
-    inputFocusNode = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
     errorController?.close();
-    inputFocusNode!.dispose();
+    inputPinController.dispose();
+    inputFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PayBloc, PayState>(
-      listener: (context, state) {
-        if (state is PaySuccess) {
-          if (state.entity) {
-            Helper.unfocus();
-            Navigator.of(context).pop();
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => SuccessPaymentDialog(),
-            );
-          } else {
-            print('else');
-          }
-        } else if (state is AuthPinSuccess) {
-          if (state.entity) {
-            context.read<PayBloc>().add(PostPay(entity: widget.input));
-          } else {
+    return LoadingOverlay(
+      child: BlocListener<AuthPinBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthPinFetched) {
+            context.loaderOverlay.hide();
+            if (state.isCorrect) {
+              context.read<PayBloc>().add(PostPay(entity: widget.input));
+            } else {
+              inputPinController.clear();
+              inputFocusNode.requestFocus();
+              errorController!.add(ErrorAnimationType.shake);
+            }
+          } else if (state is AuthFailure) {
+            context.loaderOverlay.hide();
             inputPinController.clear();
-            inputFocusNode?.requestFocus();
+            inputFocusNode.requestFocus();
             errorController!.add(ErrorAnimationType.shake);
-            Helper.snackBar(
-              context,
-              message: 'PIN tidak cocok!',
-            );
+          } else if (state is AuthLoading) {
+            context.loaderOverlay.show();
           }
-        } else if (state is PayLoading) {
-          Helper.snackBar(context, message: 'Transaksi sedang berlangsung...');
-        } else if (state is PayFailure) {
-          Helper.snackBar(context, message: state.message, isFailure: true);
-        }
-      },
-      builder: (context, state) {
-        return CustomDialog(
-          title: 'Masukin PIN Kamu',
-          content: state is AuthPinLoading
-              ? CircularLoading()
-              : CustomPinCode(
-                  pinController: inputPinController,
-                  errorController: errorController,
-                  focusNode: inputFocusNode,
-                  isDialog: true,
-                  isObscure: true,
-                  isAutoFocus: true,
-                  onChanged: (value) {},
-                  onCompleted: (value) {
-                    if (inputPinController.text.length < 6) {
-                      errorController!.add(ErrorAnimationType.shake);
-                      inputFocusNode?.requestFocus();
-                      Helper.snackBar(
-                        context,
-                        message: 'PIN harus 6 Digit!',
-                      );
-                      return;
-                    }
-                    context.read<PayBloc>().add(AuthPin(
-                        entity:
-                            AuthPinPostEntity(pin: inputPinController.text)));
-                  },
-                ),
-        );
-      },
+        },
+        child: BlocListener<PayBloc, PayState>(
+          listener: (context, state) {
+            if (state is PaySuccess) {
+              context.loaderOverlay.hide();
+              if (state.entity) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => SuccessPaymentDialog(
+                      fintchPoint: '8000', fintchWallet: '210000'),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+                );
+              }
+            } else if (state is PayLoading) {
+              context.loaderOverlay.show();
+            } else if (state is PayFailure) {
+              context.loaderOverlay.hide();
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) =>
+                    SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+              );
+            }
+          },
+          child: CustomDialog(
+            title: 'Masukin PIN Kamu',
+            content: CustomPinCode(
+              pinController: inputPinController,
+              errorController: errorController,
+              focusNode: inputFocusNode,
+              isDialog: true,
+              isObscure: true,
+              isAutoFocus: true,
+              onChanged: (value) {},
+              onCompleted: (value) {
+                if (inputPinController.text.length < 6) {
+                  errorController!.add(ErrorAnimationType.shake);
+                  inputFocusNode.requestFocus();
+                  Helper.snackBar(
+                    context,
+                    message: 'PIN harus 6 Digit!',
+                  );
+                  return;
+                }
+                context.read<AuthPinBloc>().add(AuthPin(
+                    entity: AuthPinPostEntity(pin: inputPinController.text)));
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
 class SuccessPaymentDialog extends StatefulWidget {
+  final String fintchPoint;
+  final String fintchWallet;
+
   const SuccessPaymentDialog({
     Key? key,
+    required this.fintchPoint,
+    required this.fintchWallet,
   }) : super(key: key);
 
   @override
@@ -867,7 +902,7 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          '- 8,000',
+                          '-${widget.fintchPoint}',
                           style: AppTheme.headline3.red,
                         ),
                       ],
@@ -883,7 +918,7 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          '56,000',
+                          widget.fintchWallet,
                           style: AppTheme.headline3,
                         ),
                       ],

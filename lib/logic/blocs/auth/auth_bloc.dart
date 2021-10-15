@@ -6,12 +6,32 @@ mixin PinBloc on Bloc<AuthEvent, AuthState> {}
 
 mixin PasswordBloc on Bloc<AuthEvent, AuthState> {}
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> with PinBloc, PasswordBloc {
+mixin AuthPinBloc on Bloc<AuthEvent, AuthState> {}
+
+class AuthBloc extends Bloc<AuthEvent, AuthState>
+    with PinBloc, PasswordBloc, AuthPinBloc {
   final UserRepository userRepository;
 
   AuthBloc({
     required this.userRepository,
   }) : super(AuthInitial()) {
+    on<AuthPin>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        bool isCorrect =
+            await userRepository.authWithPin(authPostEntity: event.entity);
+        emit(AuthPinFetched(isCorrect: isCorrect));
+      } on FailedException catch (e) {
+        if (e.statusCode == 422) {
+          emit(AuthPinFetched(isCorrect: false));
+        }
+        emit(AuthFailure(message: e.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(AuthFailure(message: 'unable to auth Pin: $e'));
+      }
+    });
+
     on<PostAuth>((event, emit) async {
       emit(AuthLoading());
       try {

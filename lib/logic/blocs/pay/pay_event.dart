@@ -1,5 +1,5 @@
-import 'package:fintch/gen_export.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fintch/gen_export.dart';
 
 abstract class PayEvent extends Equatable {
   const PayEvent();
@@ -34,23 +34,3 @@ class PostTopUpPay extends PayEvent {
   @override
   List<Object> get props => [entity];
 }
-
-class AuthPin extends PayEvent {
-  final AuthPinPostEntity entity;
-
-  AuthPin({required this.entity});
-
-  @override
-  List<Object> get props => [entity];
-}
-
-class GetReceive extends PayEvent {
-  final String entity;
-
-  GetReceive({required this.entity});
-
-  @override
-  List<Object> get props => [entity];
-}
-
-class GetMerchant extends PayEvent {}

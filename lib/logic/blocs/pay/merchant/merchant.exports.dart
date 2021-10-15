@@ -2,8 +2,8 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library history;
+library merchant;
 
-export 'history_bloc.dart';
-export 'history_state.dart';
-export 'history_event.dart';
+export 'merchant_event.dart';
+export 'merchant_state.dart';
+export 'merchant_bloc.dart';

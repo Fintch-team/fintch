@@ -10,6 +10,8 @@ class TransactionService extends ApiService {
     required String idUserPay,
     required String amount,
   }) async {
+    print(idUserPay);
+    print(idUserReceive);
     try {
       final res = await dio.post('transaction', data: {
         'amount': amount,

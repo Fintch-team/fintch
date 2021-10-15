@@ -166,10 +166,20 @@ class _MyAppState extends State<MyApp> {
               transactionRepository: context.read<TransactionRepository>(),
             ),
           ),
-          BlocProvider<AuthPinBloc>(
-            create: (context) => PayBloc(
+          BlocProvider<ProfilePayBloc>(
+            create: (context) => ProfilePayBloc(
               userRepository: context.read<UserRepository>(),
               transactionRepository: context.read<TransactionRepository>(),
+            ),
+          ),
+          BlocProvider<MerchantBloc>(
+            create: (context) => MerchantBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<AuthPinBloc>(
+            create: (context) => AuthBloc(
+              userRepository: context.read<UserRepository>(),
             ),
           ),
         ],

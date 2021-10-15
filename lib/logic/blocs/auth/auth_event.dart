@@ -36,3 +36,12 @@ class ChangePassword extends AuthEvent {
   @override
   List<Object?> get props => [entity];
 }
+
+class AuthPin extends AuthEvent {
+  final AuthPinPostEntity entity;
+
+  AuthPin({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}

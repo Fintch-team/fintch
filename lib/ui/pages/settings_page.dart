@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -153,7 +152,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               } else if (state is WalletFailure) {
                 return Center(
-                  child: Text('Gagal Load Data'),
+                  child: Text(
+                    'Gagal Load Data',
+                    style: AppTheme.headline3.black,
+                    textAlign: TextAlign.center,
+                  ),
                 );
               }
               return Container();
@@ -196,7 +199,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               } else if (state is MoneyManageFailure) {
                 return Center(
-                  child: Text('Gagal Load Data'),
+                  child: Text(
+                    'Gagal Load Data',
+                    style: AppTheme.headline3.black,
+                    textAlign: TextAlign.center,
+                  ),
                 );
               }
               return Container();
