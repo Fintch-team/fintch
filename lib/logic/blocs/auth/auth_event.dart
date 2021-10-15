@@ -45,3 +45,5 @@ class AuthPin extends AuthEvent {
   @override
   List<Object> get props => [entity];
 }
+
+class Logout extends AuthEvent {}

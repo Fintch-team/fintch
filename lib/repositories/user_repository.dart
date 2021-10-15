@@ -89,6 +89,10 @@ class UserRepository {
     }
   }
 
+  Future<void> logout() {
+    return localAuthService.clear();
+  }
+
   bool get isHasLoggedIn => localAuthService.isHasLoggedIn;
 
   int get userID => localAuthService.userId;

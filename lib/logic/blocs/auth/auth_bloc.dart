@@ -87,5 +87,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         emit(AuthFailure(message: 'unable to change: $e'));
       }
     });
+
+    on<Logout>((event, emit) async {
+      try {
+        await userRepository.logout();
+      } on FailedException catch (e) {
+        FailedException fail = e.error;
+        emit(AuthFailure(message: fail.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(AuthFailure(message: 'unable to change: $e'));
+      }
+    });
   }
 }

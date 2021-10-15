@@ -35,8 +35,8 @@ class LocalAuthService extends Service {
   }
 
   Future<void> clear() async {
-    getStorage.remove(KeyStorage.kToken);
-    getStorage.remove(KeyStorage.kExpired);
+    await getStorage.remove(KeyStorage.kToken);
+    await getStorage.remove(KeyStorage.kExpired);
   }
 
   UserData? get currentUser {

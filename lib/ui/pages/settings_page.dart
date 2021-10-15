@@ -283,8 +283,11 @@ class _SettingsPageState extends State<SettingsPage> {
           SizedBox(width: 20),
           Flexible(
             child: CustomButton(
-              onTap: () => Navigator.pushNamedAndRemoveUntil(
-                  context, PagePath.login, (route) => false),
+              onTap: () {
+                context.read<AuthBloc>().add(Logout());
+                Navigator.pushNamedAndRemoveUntil(
+                    context, PagePath.login, (route) => false);
+              },
               text: 'Keluar',
               isOutline: true,
             ),
