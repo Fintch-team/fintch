@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
 
       // Local Service
       ServiceInjector.value(value: LocalAuthService()),
+      ServiceInjector.value(value: BiometricAuthService()),
     ]);
   }
 
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => UserRepository(
             userService: Service.find(),
             localAuthService: Service.find(),
+            biometricAuthService: Service.find(),
           ),
         ),
         RepositoryProvider(
@@ -130,6 +132,11 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           BlocProvider<SettingsBloc>(
+            create: (context) => SettingsBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<BiometricBloc>(
             create: (context) => SettingsBloc(
               userRepository: context.read<UserRepository>(),
             ),

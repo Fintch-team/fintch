@@ -21,6 +21,15 @@ class SettingsSuccess extends SettingsState {
   List<Object> get props => [entity];
 }
 
+class SettingsBoolSuccess extends SettingsState {
+  final bool entity;
+
+  SettingsBoolSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class SettingsFailure extends SettingsState {
   final String message;
 

@@ -8,3 +8,7 @@ abstract class SettingsEvent extends Equatable {
 }
 
 class SettingsInit extends SettingsEvent {}
+
+class BiometricInit extends SettingsEvent {}
+
+class BiometricAuth extends SettingsEvent {}

@@ -3,8 +3,12 @@ import 'package:fintch/gen_export.dart';
 class UserRepository {
   final UserService userService;
   final LocalAuthService localAuthService;
+  final BiometricAuthService biometricAuthService;
 
-  UserRepository({required this.userService, required this.localAuthService});
+  UserRepository(
+      {required this.userService,
+      required this.localAuthService,
+      required this.biometricAuthService});
 
   Future<AuthEntity> authWithNickname(
       {required AuthPostEntity authPostEntity}) async {
@@ -87,6 +91,14 @@ class UserRepository {
     } catch (e) {
       return DataMapper.localUserMapper(localAuthService.currentUser!);
     }
+  }
+
+  Future<bool> hasBiometrics() async {
+    return await biometricAuthService.hasBiometrics();
+  }
+
+  Future<bool> authBiometrics() async {
+    return await biometricAuthService.authenticate();
   }
 
   Future<void> logout() {

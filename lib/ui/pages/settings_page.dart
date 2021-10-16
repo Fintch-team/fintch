@@ -16,6 +16,7 @@ class _SettingPageState extends State<SettingPage> {
     super.initState();
 
     context.read<SettingsBloc>().add(SettingsInit());
+    context.read<BiometricBloc>().add(BiometricInit());
     context.read<WalletBloc>().add(GetWallet());
     context.read<InComeBloc>().add(GetIncomeMoneyManage());
   }
@@ -255,6 +256,23 @@ class _SettingPageState extends State<SettingPage> {
             );
           },
           child: _optionItems('Ganti Kata Pin'),
+        ),
+        BlocBuilder<BiometricBloc, SettingsState>(
+          builder: (context, state) {
+            if (state is SettingsBoolSuccess) {
+              if (state.entity) {
+                return GestureDetector(
+                    onTap: () {
+                      context.read<BiometricBloc>().add(BiometricAuth());
+                    },
+                    child: _optionItems('Biometric Auth'));
+              }
+              return SizedBox();
+            } else if (state is SettingsFailure) {
+              return SizedBox();
+            }
+            return SizedBox();
+          },
         ),
         _optionItems('Bahasa'),
       ],

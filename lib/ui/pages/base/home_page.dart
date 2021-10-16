@@ -103,9 +103,13 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.notifications_rounded,
-                  color: AppTheme.white,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, PagePath.setting)
+                      .setLightAppBar(),
+                  child: Icon(
+                    Icons.notifications_rounded,
+                    color: AppTheme.white,
+                  ),
                 ),
                 SizedBox(width: Helper.smallPadding),
                 GestureDetector(
