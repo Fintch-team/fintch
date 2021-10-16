@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -17,8 +18,11 @@ class FGoalsPage extends StatefulWidget {
 class _FGoalsPageState extends State<FGoalsPage> {
   @override
   void initState() {
+    _init();
     super.initState();
+  }
 
+  Future<void> _onRefresh() async {
     _init();
   }
 
@@ -56,59 +60,65 @@ class _FGoalsPageState extends State<FGoalsPage> {
       body: Background(
         isWhite: true,
         child: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              padding: EdgeInsets.all(Helper.normalPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomAppBar(
-                    title: '',
-                    isBlack: true,
-                  ),
-                  SizedBox(height: Helper.bigPadding),
-                  Text('F-Goals', style: AppTheme.headline1),
-                  SizedBox(height: Helper.bigPadding),
-                  Text(
-                    'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
-                    style: AppTheme.text1,
-                  ),
-                  SizedBox(height: Helper.bigPadding),
-                  BlocConsumer<MoneyPlanBloc, MoneyPlanState>(
-                    listener: (context, state) {
-                      if (state is MoneyPlanFailure) {
-                        Helper.snackBar(context,
-                            message: state.message, isFailure: true);
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is MoneyPlanResponseSuccess) {
-                        if (state.entity.data.isNotEmpty) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: state.entity.data.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.symmetric(vertical: 0),
-                            itemBuilder: (context, index) {
-                              return _fGoalItem(
-                                  context, index, state.entity.data[index]);
-                            },
-                          );
+          child: LiquidPullToRefresh(
+            color: AppTheme.scaffold,
+            backgroundColor: AppTheme.purple,
+            showChildOpacityTransition: false,
+            onRefresh: _onRefresh,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Container(
+                padding: EdgeInsets.all(Helper.normalPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomAppBar(
+                      title: '',
+                      isBlack: true,
+                    ),
+                    SizedBox(height: Helper.bigPadding),
+                    Text('F-Goals', style: AppTheme.headline1),
+                    SizedBox(height: Helper.bigPadding),
+                    Text(
+                      'Di F-Goals ini kamu bisa merencanakan barang atau sesuatu apa yang kamu mau beli dan inginkan atau capai, jika waktu tenggat sudah dekat, sistem pasti memberitahu kamu kok!',
+                      style: AppTheme.text1,
+                    ),
+                    SizedBox(height: Helper.bigPadding),
+                    BlocConsumer<MoneyPlanBloc, MoneyPlanState>(
+                      listener: (context, state) {
+                        if (state is MoneyPlanFailure) {
+                          Helper.snackBar(context,
+                              message: state.message, isFailure: true);
                         }
-                        return EmptyStateWidget(message: 'F-Goals Kosong!');
-                      } else if (state is MoneyPlanLoading) {
-                        return Center(
-                          child: CircularLoading(),
-                        );
-                      } else if (state is MoneyPlanFailure) {
-                        return FailureStateWidget(
-                            message: 'F-Goals Gagal di Load!');
-                      }
-                      return Container();
-                    },
-                  ),
-                ],
+                      },
+                      builder: (context, state) {
+                        if (state is MoneyPlanResponseSuccess) {
+                          if (state.entity.data.isNotEmpty) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: state.entity.data.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(vertical: 0),
+                              itemBuilder: (context, index) {
+                                return _fGoalItem(
+                                    context, index, state.entity.data[index]);
+                              },
+                            );
+                          }
+                          return EmptyStateWidget(message: 'F-Goals Kosong!');
+                        } else if (state is MoneyPlanLoading) {
+                          return Center(
+                            child: CircularLoading(),
+                          );
+                        } else if (state is MoneyPlanFailure) {
+                          return FailureStateWidget(
+                              message: 'F-Goals Gagal di Load!');
+                        }
+                        return Container();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
