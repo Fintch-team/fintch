@@ -11,7 +11,6 @@ class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
       emit(MoneyPlanLoading());
       try {
         ListMoneyPlanEntity entity = await moneyPlanRepository.getMoneyPlan();
-
         emit(MoneyPlanResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyPlanFailure(message: e.message));

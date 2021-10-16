@@ -47,13 +47,19 @@ class _LoginPageState extends State<LoginPage> {
                         Helper.snackBar(context, message: 'Masuk berhasil!');
                         print(
                             "${state.entity.isSetPin} ${state.entity.isSetPass}");
-                        if (!state.entity.isSetPass || !state.entity.isSetPin) {
+                        if (!state.entity.isSetPass) {
                           Navigator.pushReplacementNamed(
                               context, PagePath.setPassword,
                               arguments: ArgumentBundle(extras: {
                                 'username': usernameController.text,
                                 'password': passwordController.text
-                                
+                              }));
+                        } else if (!state.entity.isSetPin) {
+                          Navigator.pushReplacementNamed(
+                              context, PagePath.setPin,
+                              arguments: ArgumentBundle(extras: {
+                                'username': usernameController.text,
+                                'password': passwordController.text,
                               }));
                         } else {
                           Navigator.pushNamedAndRemoveUntil(

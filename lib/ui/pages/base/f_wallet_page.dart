@@ -62,19 +62,8 @@ class _FWalletPageState extends State<FWalletPage> {
               ],
             ),
             floatingActionButton: CustomFab(),
-            // floatingActionButton: Container(
-            //   margin: EdgeInsets.only(bottom: Helper.normalPadding),
-            //   child: FloatingActionButton(
-            //     backgroundColor: AppTheme.purple,
-            //     onPressed: () {},
-            //     child: Icon(
-            //       Icons.add_rounded,
-            //       size: MediaQuery.of(context).size.width * 0.1,
-            //     ),
-            //   ),
-            // ),
-            // floatingActionButtonLocation:
-            //     FloatingActionButtonLocation.endDocked,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
           ),
         ),
       ),
@@ -92,7 +81,6 @@ class _FWalletPageState extends State<FWalletPage> {
         child: BlocBuilder<InComeBloc, MoneyManageState>(
           builder: (context, state) {
             if (state is MoneyManageIncomeSuccess) {
-              // TODO: harus ada nilai jumlah manage amount unutk d bawah
               int amount = state.entity.income - state.entity.outcome;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -118,9 +106,10 @@ class _FWalletPageState extends State<FWalletPage> {
                 ],
               );
             } else if (state is MoneyManageLoading) {
-              return Center(
-                child: CircularLoading(),
-              );
+              return FWalletHeaderShimmer();
+            } else if (state is MoneyManageFailure) {
+              return FailureStateWidget(
+                  message: 'Balance & Chart gagal di Load!');
             }
             return Container();
           },
@@ -198,50 +187,6 @@ class _FWalletPageState extends State<FWalletPage> {
                     children: [
                       FittedBox(
                         child: Icon(
-                          Icons.trending_down_rounded,
-                          size: 28,
-                          color: AppTheme.red,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AutoSizeText(
-                              'Outcomes',
-                              style: AppTheme.text3,
-                              maxLines: 1,
-                            ),
-                            SizedBox(height: 4),
-                            AutoSizeText(
-                              'Rp${state.entity.outcome.toString().parseCurrency()} ',
-                              style: AppTheme.headline3,
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 12),
-                Container(
-                  width: 4,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppTheme.purple,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FittedBox(
-                        child: Icon(
                           Icons.trending_up_rounded,
                           size: 28,
                           color: AppTheme.green,
@@ -270,13 +215,57 @@ class _FWalletPageState extends State<FWalletPage> {
                     ],
                   ),
                 ),
+                SizedBox(width: 12),
+                Container(
+                  width: 4,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppTheme.purple,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FittedBox(
+                        child: Icon(
+                          Icons.trending_down_rounded,
+                          size: 28,
+                          color: AppTheme.red,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AutoSizeText(
+                              'Outcomes',
+                              style: AppTheme.text3,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 4),
+                            AutoSizeText(
+                              'Rp${state.entity.outcome.toString().parseCurrency()} ',
+                              style: AppTheme.headline3,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
         } else if (state is MoneyManageLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
+          return IncomeOutcomeShimmer();
+        } else if (state is MoneyManageFailure) {
+          return FailureStateWidget(message: 'Income Outcome Gagal di Load!');
         }
         return Container();
       },
@@ -294,19 +283,19 @@ class _FWalletPageState extends State<FWalletPage> {
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
             child: Text('Cards', style: AppTheme.headline3),
           ),
-          Container(
-            height: MediaQuery.of(context).size.width * 0.28,
-            child: BlocConsumer<MoneyManageItemBloc, MoneyManageItemState>(
-              listener: (context, state) {
-                if (state is MoneyManageItemFailure) {
-                  Helper.snackBar(context,
-                      message: state.message, isFailure: true);
-                }
-              },
-              builder: (context, state) {
-                if (state is MoneyManageItemResponseSuccess) {
-                  if (state.entity.data.isNotEmpty) {
-                    return ListView.builder(
+          BlocConsumer<MoneyManageItemBloc, MoneyManageItemState>(
+            listener: (context, state) {
+              if (state is MoneyManageItemFailure) {
+                Helper.snackBar(context,
+                    message: state.message, isFailure: true);
+              }
+            },
+            builder: (context, state) {
+              if (state is MoneyManageItemResponseSuccess) {
+                if (state.entity.data.isNotEmpty) {
+                  return Container(
+                    height: MediaQuery.of(context).size.width * 0.28,
+                    child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: state.entity.data.length,
@@ -316,30 +305,17 @@ class _FWalletPageState extends State<FWalletPage> {
                         return _cardItem(
                             context, index, state.entity.data[index]);
                       },
-                    );
-                  }
-                  return Center(
-                    child: Text(
-                      'Cards Kosong!',
-                      style: AppTheme.text1.bold,
-                    ),
-                  );
-                } else if (state is MoneyManageItemLoading) {
-                  return Center(
-                    child: CircularLoading(),
-                  );
-                } else if (state is MoneyManageItemFailure) {
-                  return Center(
-                    child: Text(
-                      'Data gagal di load',
-                      style: AppTheme.headline3.white,
-                      textAlign: TextAlign.center,
                     ),
                   );
                 }
-                return Container();
-              },
-            ),
+                return EmptyStateWidget(message: 'Cards Kosong!');
+              } else if (state is MoneyManageItemLoading) {
+                return CardsShimmer();
+              } else if (state is MoneyManageItemFailure) {
+                return FailureStateWidget(message: 'Cards Gagal di Load!');
+              }
+              return Container();
+            },
           ),
         ],
       ),
@@ -434,24 +410,11 @@ class _FWalletPageState extends State<FWalletPage> {
                     },
                   );
                 }
-                return Center(
-                  child: Text(
-                    'Activities Kosong!',
-                    style: AppTheme.text1.bold,
-                  ),
-                );
+                return EmptyStateWidget(message: 'Activities Kosong!');
               } else if (state is MoneyManageLoading) {
-                return Center(
-                  child: CircularLoading(),
-                );
+                return ActivitiesShimmer();
               } else if (state is MoneyManageFailure) {
-                return Center(
-                  child: Text(
-                    'Data gagal di load',
-                    style: AppTheme.headline3.white,
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return FailureStateWidget(message: 'Activities Gagal di Load!');
               }
 
               return Container();
@@ -706,29 +669,38 @@ class _CustomFabState extends State<CustomFab>
   }
 
   Widget fab1() {
-    return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
-          tooltip: "Activities",
-          child: Transform.rotate(
-            angle: _iconRotation.value,
-            child: Icon(Icons.add),
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 400),
+      opacity: _isExpanded ? 1 : 0,
+      child: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
+        child: FloatingActionButton.extended(
+          tooltip: "Activity",
+          label: Text(
+            'Activity',
+            style: AppTheme.text2.white.bold,
           ),
-          backgroundColor: AppTheme.darkPurple,
-          elevation: 0,
+          icon: Transform.rotate(
+            angle: _iconRotation.value,
+            child: Icon(
+              Icons.add_rounded,
+            ),
+          ),
+          backgroundColor: AppTheme.purple,
+          elevation: _isExpanded ? 5 : 0,
           onPressed: () {
-            showCupertinoModalBottomSheet(
-              expand: false,
-              context: context,
-              enableDrag: true,
-              isDismissible: true,
-              topRadius: Radius.circular(20),
-              backgroundColor: AppTheme.white,
-              barrierColor: AppTheme.black.withOpacity(0.2),
-              builder: (context) => MoneyManageSheet(),
-            );
+            if (_isExpanded) {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => MoneyManageSheet(),
+              );
+            }
           },
         ),
       ),
@@ -736,29 +708,38 @@ class _CustomFabState extends State<CustomFab>
   }
 
   Widget fab2() {
-    return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 400),
+      opacity: _isExpanded ? 1 : 0,
+      child: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
+        child: FloatingActionButton.extended(
           tooltip: "Card",
-          child: Transform.rotate(
+          label: Text(
+            'Card',
+            style: AppTheme.text2.white.bold,
+          ),
+          icon: Transform.rotate(
             angle: _iconRotation.value,
-            child: Icon(Icons.add),
+            child: Icon(
+              Icons.add_rounded,
+            ),
           ),
           elevation: _isExpanded ? 5 : 0,
-          backgroundColor: AppTheme.darkPurple,
+          backgroundColor: AppTheme.purple,
           onPressed: () {
-            showCupertinoModalBottomSheet(
-              expand: false,
-              context: context,
-              enableDrag: true,
-              isDismissible: true,
-              topRadius: Radius.circular(20),
-              backgroundColor: AppTheme.white,
-              barrierColor: AppTheme.black.withOpacity(0.2),
-              builder: (context) => MoneyManageItemSheet(),
-            );
+            if (_isExpanded) {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => MoneyManageItemSheet(),
+              );
+            }
           },
         ),
       ),
@@ -767,20 +748,20 @@ class _CustomFabState extends State<CustomFab>
 
   Widget fab3() {
     return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
-          tooltip: "btn5",
-          child: Transform.rotate(
-            angle: _rotationAnimation.value,
-            child: Icon(Icons.add),
+      margin: EdgeInsets.only(bottom: Helper.normalPadding),
+      child: FloatingActionButton(
+        tooltip: "Add Card or Activity",
+        child: Transform.rotate(
+          angle: _rotationAnimation.value,
+          child: Icon(
+            Icons.add_rounded,
+            size: MediaQuery.of(context).size.width * 0.1,
           ),
-          backgroundColor: AppTheme.purple,
-          onPressed: () async {
-            animate();
-          },
         ),
+        backgroundColor: AppTheme.purple,
+        onPressed: () async {
+          animate();
+        },
       ),
     );
   }
@@ -795,20 +776,20 @@ class _CustomFabState extends State<CustomFab>
     _translateAnimation = Tween<double>(begin: 0, end: 80)
         .chain(
           CurveTween(
-            curve: _isExpanded ? Curves.fastOutSlowIn : Curves.bounceOut,
+            curve: _isExpanded ? Curves.fastOutSlowIn : Curves.fastOutSlowIn,
           ),
         )
         .animate(_animationController);
 
     _iconRotation = Tween<double>(begin: 3.14 / 2, end: 0)
         .chain(
-          CurveTween(curve: Curves.bounceInOut),
+          CurveTween(curve: Curves.fastOutSlowIn),
         )
         .animate(_animationController);
     _rotationAnimation = Tween<double>(begin: 0, end: 3 * 3.14 / 4)
         .chain(
           CurveTween(
-            curve: Curves.bounceInOut,
+            curve: Curves.fastOutSlowIn,
           ),
         )
         .animate(_animationController);
@@ -827,7 +808,9 @@ class _CustomFabState extends State<CustomFab>
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          bottom: _translateAnimation.value + _translateAnimation.value,
+          bottom: _translateAnimation.value +
+              _translateAnimation.value -
+              (_translateAnimation.value / 4),
           right: 0,
           child: fab1(),
         ),

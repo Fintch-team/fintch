@@ -1,9 +1,6 @@
-
-import 'package:fintch/gen_export.dart';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CustomNetworkImage extends StatelessWidget {
   final String imgUrl;
@@ -34,15 +31,13 @@ class CustomNetworkImage extends StatelessWidget {
         fadeInDuration: Duration(milliseconds: 500),
         fadeOutCurve: Curves.easeOutCubic,
         fadeOutDuration: Duration(milliseconds: 500),
-        placeholder: (context, url) => Shimmer.fromColors(
+        placeholder: (context, url) => Shimmers(
           child: Container(
             decoration: BoxDecoration(
               color: AppTheme.yellow,
               borderRadius: BorderRadius.circular(borderRadius),
             ),
           ),
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
         ),
         errorWidget: (context, url, error) => Container(
           height: double.infinity,

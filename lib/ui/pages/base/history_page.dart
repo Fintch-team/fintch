@@ -209,12 +209,8 @@ class _HistoryPageState extends State<HistoryPage> {
               // return SizedBox();
             },
           );
-        } else {
-          return Text(
-            'History Pay Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Pay Kosong!');
       } else {
         if (state.history.receive.isNotEmpty) {
           return ListView.builder(
@@ -229,28 +225,13 @@ class _HistoryPageState extends State<HistoryPage> {
               );
             },
           );
-        } else {
-          return Text(
-            'History Receive Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HistoryLoading) {
-      return Container(
-        height: MediaQuery.of(context).size.width * 0.48,
-        child: Center(
-          child: CircularLoading(),
-        ),
-      );
+      return HistoryItemShimmer();
     } else if (state is HistoryFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'History Gagal di Load!');
     }
     return Container();
   }

@@ -135,7 +135,9 @@ class _ReceivePageState extends State<ReceivePage> {
           SizedBox(height: Helper.normalPadding),
           CustomButton(
             text: 'Top Up',
-            onTap: () => Navigator.of(context).pushNamed(PagePath.topUp),
+            onTap: () => Navigator.of(context)
+                .pushNamed(PagePath.topUp)
+                .setLightAppBar(),
             isUpper: false,
           ),
         ],

@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomePage extends StatefulWidget {
@@ -108,8 +109,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: Helper.smallPadding),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, PagePath.profile)
-                      .then((value) => Helper.setLightAppBar()),
+                  onTap: () => Navigator.pushNamed(context, PagePath.setting)
+                      .setLightAppBar(),
                   child: Icon(
                     Icons.settings_rounded,
                     color: AppTheme.white,
@@ -138,7 +139,8 @@ class _HomePageState extends State<HomePage> {
   Widget _headerLeft(HomeState state) {
     if (state is HomeSuccess) {
       return GestureDetector(
-        onTap: () => Navigator.pushNamed(context, PagePath.profile),
+        onTap: () =>
+            Navigator.pushNamed(context, PagePath.setting).setLightAppBar(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -150,17 +152,9 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else if (state is HomeLoading) {
-      return Center(
-        child: CircularLoading(),
-      );
+      return HomeHeaderShimmer();
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'Profile Gagal di Load!');
     }
     return Container();
   }
@@ -182,18 +176,12 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(width: 16),
         Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AutoSizeText(
-                user != null ? 'Halo\n${user.name}!' : ' ',
-                style: AppTheme.headline1.white,
-                maxLines: 3,
-                minFontSize: 20,
-                overflow: TextOverflow.visible,
-              ),
-            ],
+          child: AutoSizeText(
+            user != null ? 'Halo\n${user.name}!' : ' ',
+            style: AppTheme.headline1.white,
+            maxLines: 3,
+            minFontSize: 20,
+            overflow: TextOverflow.visible,
           ),
         ),
       ],
@@ -299,7 +287,8 @@ class _HomePageState extends State<HomePage> {
           FeatureItem(
             name: 'Top-up',
             assetName: Resources.icTopUp,
-            onTap: () => Navigator.pushNamed(context, PagePath.topUp),
+            onTap: () =>
+                Navigator.pushNamed(context, PagePath.topUp).setLightAppBar(),
             isOpacity: true,
           ),
           SizedBox(width: 20),
@@ -403,17 +392,9 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } else if (state is HomeLoading) {
-      return Center(
-        child: CircularLoading(),
-      );
+      return FGoalItemShimmer();
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'F-Goals Gagal di Load!');
     }
     return Container();
   }
@@ -556,12 +537,8 @@ class _HomePageState extends State<HomePage> {
               // return SizedBox();
             },
           );
-        } else {
-          return Text(
-            'History Pay Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Pay Kosong!');
       } else {
         if (state.entity.receive.isNotEmpty) {
           return ListView.builder(
@@ -576,29 +553,70 @@ class _HomePageState extends State<HomePage> {
               );
             },
           );
-        } else {
-          return Text(
-            'History Receive Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HomeLoading) {
-      return Container(
-        height: MediaQuery.of(context).size.width * 0.48,
-        child: Center(
-          child: CircularLoading(),
-        ),
-      );
+      return HistoryItemShimmer();
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'History Gagal di Load!');
     }
     return Container();
+  }
+}
+
+class EmptyStateWidget extends StatelessWidget {
+  final String message;
+  const EmptyStateWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
+      padding: EdgeInsets.all(Helper.normalPadding),
+      child: Column(
+        children: [
+          Expanded(
+            child: SvgPicture.asset(Resources.empty),
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Text(
+            message,
+            style: AppTheme.text1.bold,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FailureStateWidget extends StatelessWidget {
+  final String message;
+  const FailureStateWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
+      padding: EdgeInsets.all(Helper.normalPadding),
+      child: Column(
+        children: [
+          Expanded(
+            child: SvgPicture.asset(Resources.failure),
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Text(
+            message,
+            style: AppTheme.text1.bold,
+          ),
+        ],
+      ),
+    );
   }
 }
