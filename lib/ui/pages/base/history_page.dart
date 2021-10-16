@@ -209,12 +209,8 @@ class _HistoryPageState extends State<HistoryPage> {
               // return SizedBox();
             },
           );
-        } else {
-          return Text(
-            'History Pay Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Pay Kosong!');
       } else {
         if (state.history.receive.isNotEmpty) {
           return ListView.builder(
@@ -229,12 +225,8 @@ class _HistoryPageState extends State<HistoryPage> {
               );
             },
           );
-        } else {
-          return Text(
-            'History Receive Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HistoryLoading) {
       return Container(

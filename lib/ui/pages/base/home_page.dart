@@ -556,12 +556,8 @@ class _HomePageState extends State<HomePage> {
               // return SizedBox();
             },
           );
-        } else {
-          return Text(
-            'History Pay Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Pay Kosong!');
       } else {
         if (state.entity.receive.isNotEmpty) {
           return ListView.builder(
@@ -576,12 +572,8 @@ class _HomePageState extends State<HomePage> {
               );
             },
           );
-        } else {
-          return Text(
-            'History Receive Kosong!',
-            style: AppTheme.text1.bold,
-          );
         }
+        return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HomeLoading) {
       return Container(
@@ -600,5 +592,33 @@ class _HomePageState extends State<HomePage> {
       );
     }
     return Container();
+  }
+}
+
+class EmptyStateWidget extends StatelessWidget {
+  final String message;
+  const EmptyStateWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
+      padding: EdgeInsets.all(Helper.normalPadding),
+      child: Column(
+        children: [
+          Expanded(
+            child: SvgPicture.asset(Resources.empty),
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Text(
+            message,
+            style: AppTheme.text1.bold,
+          ),
+        ],
+      ),
+    );
   }
 }

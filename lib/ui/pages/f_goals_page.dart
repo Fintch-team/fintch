@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -97,12 +96,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                             },
                           );
                         }
-                        return Center(
-                          child: Text(
-                            'F-Goals Kosong!',
-                            style: AppTheme.text1.bold,
-                          ),
-                        );
+                        return EmptyStateWidget(message: 'F-Goals Kosong!');
                       } else if (state is MoneyPlanLoading) {
                         return Center(
                           child: CircularLoading(),
