@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomePage extends StatefulWidget {
@@ -151,9 +152,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else if (state is HomeLoading) {
-      return Center(
-        child: CircularLoading(),
-      );
+      return HomeHeaderShimmer();
     } else if (state is HomeFailure) {
       return FailureStateWidget(message: 'Profile Gagal di Load!');
     }
@@ -177,18 +176,12 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(width: 16),
         Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AutoSizeText(
-                user != null ? 'Halo\n${user.name}!' : ' ',
-                style: AppTheme.headline1.white,
-                maxLines: 3,
-                minFontSize: 20,
-                overflow: TextOverflow.visible,
-              ),
-            ],
+          child: AutoSizeText(
+            user != null ? 'Halo\n${user.name}!' : ' ',
+            style: AppTheme.headline1.white,
+            maxLines: 3,
+            minFontSize: 20,
+            overflow: TextOverflow.visible,
           ),
         ),
       ],
@@ -399,9 +392,7 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } else if (state is HomeLoading) {
-      return Center(
-        child: CircularLoading(),
-      );
+      return FGoalItemShimmer();
     } else if (state is HomeFailure) {
       return FailureStateWidget(message: 'F-Goals Gagal di Load!');
     }
@@ -566,12 +557,7 @@ class _HomePageState extends State<HomePage> {
         return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HomeLoading) {
-      return Container(
-        height: MediaQuery.of(context).size.width * 0.48,
-        child: Center(
-          child: CircularLoading(),
-        ),
-      );
+      return HistoryItemShimmer();
     } else if (state is HomeFailure) {
       return FailureStateWidget(message: 'History Gagal di Load!');
     }
