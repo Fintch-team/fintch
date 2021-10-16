@@ -43,6 +43,9 @@ class Resources {
   static const String icTime = '$_baseSvg/time.svg';
   static const String icTopUp = '$_baseSvg/top_up.svg';
   static const String topUpIllustration = '$_baseSvg/top_up_illustration.svg';
+  static const String empty = '$_baseSvg/empty.svg';
+  static const String failure = '$_baseSvg/failure.svg';
+  static const String noInternet = '$_baseSvg/no_internet.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';
