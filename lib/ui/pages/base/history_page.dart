@@ -229,12 +229,7 @@ class _HistoryPageState extends State<HistoryPage> {
         return EmptyStateWidget(message: 'History Receive Kosong!');
       }
     } else if (state is HistoryLoading) {
-      return Container(
-        height: MediaQuery.of(context).size.width * 0.48,
-        child: Center(
-          child: CircularLoading(),
-        ),
-      );
+      return HistoryItemShimmer();
     } else if (state is HistoryFailure) {
       return FailureStateWidget(message: 'History Gagal di Load!');
     }
