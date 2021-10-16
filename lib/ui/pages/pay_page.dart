@@ -212,17 +212,10 @@ class _PayPageState extends State<PayPage> {
                           ),
                         );
                       } else if (state is MerchantLoading) {
-                        return Center(
-                          child: CircularLoading(),
-                        );
+                        return MerchantsShimmer();
                       } else if (state is MerchantFailure) {
-                        return Center(
-                          child: Text(
-                            'Gagal Load Merchant',
-                            style: AppTheme.headline3.black,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
+                        return FailureStateWidget(
+                            message: 'Merchant List Gagal di Load!');
                       }
                       return Container();
                     },
@@ -250,17 +243,9 @@ class _PayPageState extends State<PayPage> {
             ],
           );
         } else if (state is WalletLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
+          return PayWalletShimmer();
         } else if (state is WalletFailure) {
-          return Center(
-            child: Text(
-              'Gagal Load Wallet',
-              style: AppTheme.headline3.black,
-              textAlign: TextAlign.center,
-            ),
-          );
+          return FailureStateWidget(message: 'Wallet Gagal di Load!');
         }
         return Container();
       },
@@ -550,21 +535,11 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       child: CircularLoading(),
                     );
                   } else if (state is ProfilePayFailure) {
-                    return Center(
-                      child: Text(
-                        'Gagal Load Profile',
-                        style: AppTheme.headline3.black,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                    return FailureStateWidget(
+                        message: 'Profile Pay Receive  Gagal di Load');
                   } else if (state is ProfilePayNotFound) {
-                    return Center(
-                      child: Text(
-                        'User / Merchant tidak ditemukan :(',
-                        style: AppTheme.headline3.black,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                    return EmptyStateWidget(
+                        message: 'User / Merchant tidak ditemukan :(');
                   }
                   return Container();
                 },
@@ -789,8 +764,8 @@ class _InputPinDialogState extends State<InputPinDialog> {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) =>
-                      SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+                  builder: (context) => FailedPaymentDialog(
+                      message: 'Pembayaran belum berhasil!'),
                 );
               }
             } else if (state is PayLoading) {
@@ -801,7 +776,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
                 context: context,
                 barrierDismissible: false,
                 builder: (context) =>
-                    SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+                    FailedPaymentDialog(message: state.message),
               );
             }
           },
@@ -925,6 +900,69 @@ class _SuccessPaymentDialogState extends State<SuccessPaymentDialog> {
                     ),
                   ),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FailedPaymentDialog extends StatefulWidget {
+  final String message;
+  const FailedPaymentDialog({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  _FailedPaymentDialogState createState() => _FailedPaymentDialogState();
+}
+
+class _FailedPaymentDialogState extends State<FailedPaymentDialog> {
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 4000)).then((_) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(PagePath.base, (route) => false);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      elevation: 2,
+      insetPadding: EdgeInsets.all(Helper.normalPadding),
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Pembayaran Gagal!!',
+                style: AppTheme.headline3,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Helper.normalPadding),
+              LottieBuilder.asset(Resources.paymentFailed,
+                  height: MediaQuery.of(context).size.height * 0.3),
+              SizedBox(height: Helper.normalPadding),
+              Text(
+                widget.message,
+                style: AppTheme.headline3,
               ),
             ],
           ),

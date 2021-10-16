@@ -53,6 +53,7 @@ class Resources {
 
   // JSON ASSETS
   static const String paymentSuccessful = '$_baseJson/payment_successful.json';
+  static const String paymentFailed = '$_baseJson/payment_failed.json';
 }
 
 class Keys {
