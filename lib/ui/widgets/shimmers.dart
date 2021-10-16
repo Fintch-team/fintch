@@ -518,3 +518,65 @@ class ProfileBalanceShimmer extends StatelessWidget {
     );
   }
 }
+
+class MerchantsShimmer extends StatelessWidget {
+  const MerchantsShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          6,
+          (index) => Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PayWalletShimmer extends StatelessWidget {
+  const PayWalletShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+          SizedBox(height: Helper.smallPadding),
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+        ],
+      ),
+    );
+  }
+}

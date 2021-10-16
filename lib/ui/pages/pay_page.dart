@@ -212,17 +212,9 @@ class _PayPageState extends State<PayPage> {
                           ),
                         );
                       } else if (state is MerchantLoading) {
-                        return Center(
-                          child: CircularLoading(),
-                        );
+                        return MerchantsShimmer();
                       } else if (state is MerchantFailure) {
-                        return Center(
-                          child: Text(
-                            'Gagal Load Merchant',
-                            style: AppTheme.headline3.black,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
+                        return FailureStateWidget(message: 'Merchant List Gagal di Load!');
                       }
                       return Container();
                     },
@@ -250,17 +242,9 @@ class _PayPageState extends State<PayPage> {
             ],
           );
         } else if (state is WalletLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
+          return PayWalletShimmer();
         } else if (state is WalletFailure) {
-          return Center(
-            child: Text(
-              'Gagal Load Wallet',
-              style: AppTheme.headline3.black,
-              textAlign: TextAlign.center,
-            ),
-          );
+          return FailureStateWidget(message: 'Wallet Gagal di Load!');
         }
         return Container();
       },
@@ -550,21 +534,9 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       child: CircularLoading(),
                     );
                   } else if (state is ProfilePayFailure) {
-                    return Center(
-                      child: Text(
-                        'Gagal Load Profile',
-                        style: AppTheme.headline3.black,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                    return FailureStateWidget(message: 'Profile Pay Receive  Gagal di Load');
                   } else if (state is ProfilePayNotFound) {
-                    return Center(
-                      child: Text(
-                        'User / Merchant tidak ditemukan :(',
-                        style: AppTheme.headline3.black,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
+                    return EmptyStateWidget(message: 'User / Merchant tidak ditemukan :(');
                   }
                   return Container();
                 },
