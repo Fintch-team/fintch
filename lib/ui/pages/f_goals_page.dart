@@ -107,9 +107,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                           }
                           return EmptyStateWidget(message: 'F-Goals Kosong!');
                         } else if (state is MoneyPlanLoading) {
-                          return Center(
-                            child: CircularLoading(),
-                          );
+                          return FGoalPageItemShimmer();
                         } else if (state is MoneyPlanFailure) {
                           return FailureStateWidget(
                               message: 'F-Goals Gagal di Load!');
