@@ -102,13 +102,8 @@ class _FGoalsPageState extends State<FGoalsPage> {
                           child: CircularLoading(),
                         );
                       } else if (state is MoneyPlanFailure) {
-                        return Center(
-                          child: Text(
-                            'Data gagal di load',
-                            style: AppTheme.headline3.black,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
+                        return FailureStateWidget(
+                            message: 'F-Goals Gagal di Load!');
                       }
                       return Container();
                     },

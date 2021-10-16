@@ -236,13 +236,7 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       );
     } else if (state is HistoryFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'History Gagal di Load!');
     }
     return Container();
   }

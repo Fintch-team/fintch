@@ -328,13 +328,7 @@ class _FWalletPageState extends State<FWalletPage> {
                   ),
                 );
               } else if (state is MoneyManageItemFailure) {
-                return Center(
-                  child: Text(
-                    'Data gagal di load',
-                    style: AppTheme.headline3.white,
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return FailureStateWidget(message: 'Cards Gagal di Load!');
               }
               return Container();
             },
@@ -438,13 +432,7 @@ class _FWalletPageState extends State<FWalletPage> {
                   child: CircularLoading(),
                 );
               } else if (state is MoneyManageFailure) {
-                return Center(
-                  child: Text(
-                    'Data gagal di load',
-                    style: AppTheme.headline3.white,
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return FailureStateWidget(message: 'Activities Gagal di Load!');
               }
 
               return Container();

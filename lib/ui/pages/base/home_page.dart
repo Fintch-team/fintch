@@ -154,13 +154,7 @@ class _HomePageState extends State<HomePage> {
         child: CircularLoading(),
       );
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'Profile Gagal di Load!');
     }
     return Container();
   }
@@ -407,13 +401,7 @@ class _HomePageState extends State<HomePage> {
         child: CircularLoading(),
       );
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'F-Goals Gagal di Load!');
     }
     return Container();
   }
@@ -583,13 +571,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else if (state is HomeFailure) {
-      return Center(
-        child: Text(
-          'Data gagal di load',
-          style: AppTheme.headline3.white,
-          textAlign: TextAlign.center,
-        ),
-      );
+      return FailureStateWidget(message: 'History Gagal di Load!');
     }
     return Container();
   }
@@ -611,6 +593,34 @@ class EmptyStateWidget extends StatelessWidget {
         children: [
           Expanded(
             child: SvgPicture.asset(Resources.empty),
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Text(
+            message,
+            style: AppTheme.text1.bold,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FailureStateWidget extends StatelessWidget {
+  final String message;
+  const FailureStateWidget({
+    Key? key,
+    required this.message,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
+      padding: EdgeInsets.all(Helper.normalPadding),
+      child: Column(
+        children: [
+          Expanded(
+            child: SvgPicture.asset(Resources.failure),
           ),
           SizedBox(height: Helper.normalPadding),
           Text(
