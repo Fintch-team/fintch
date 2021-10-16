@@ -222,7 +222,40 @@ class _SettingPageState extends State<SettingPage> {
         Text('Pengaturan', style: AppTheme.headline3),
         SizedBox(height: Helper.smallPadding),
         _optionItems('Notifikasi'),
-        _optionItems('Ganti Kata Sandi'),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => InputPinDialog(
+                whenSuccess: () {
+                  Navigator.pushReplacementNamed(context, PagePath.setPassword,
+                      arguments: ArgumentBundle(extras: {
+                        'username': 'admin123',
+                        'password': 'admin123'
+                      }));
+                },
+              ),
+            );
+          },
+          child: _optionItems('Ganti Kata Sandi'),
+        ),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => InputPinDialog(
+                whenSuccess: () {
+                  Navigator.pushReplacementNamed(context, PagePath.setPin,
+                      arguments: ArgumentBundle(extras: {
+                        'username': 'admin123',
+                        'password': 'admin123'
+                      }));
+                },
+              ),
+            );
+          },
+          child: _optionItems('Ganti Kata Pin'),
+        ),
         _optionItems('Bahasa'),
       ],
     );

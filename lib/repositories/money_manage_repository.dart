@@ -40,6 +40,7 @@ class MoneyManageRepository {
     bool res = await moneyManageService.postIncomeMoneyManage(
       name: postEntity.name,
       amount: postEntity.amount,
+      date: postEntity.date,
     );
 
     return res;
@@ -48,9 +49,11 @@ class MoneyManageRepository {
   Future<bool> outComePostMoneyManage(
       {required MoneyManageOutPostEntity postEntity}) async {
     bool res = await moneyManageService.postOutcomeMoneyManage(
-        name: postEntity.name,
-        amount: postEntity.amount,
-        idMoneyManageItem: postEntity.idMoneyManageItem);
+      name: postEntity.name,
+      amount: postEntity.amount,
+      date: postEntity.date,
+      idMoneyManageItem: postEntity.idMoneyManageItem,
+    );
 
     return res;
   }

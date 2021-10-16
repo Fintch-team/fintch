@@ -3,19 +3,23 @@ import 'package:fintch/gen_export.dart';
 class MoneyManageInPostEntity extends BaseEntity {
   final String name;
   final String amount;
+  final String date;
 
-  MoneyManageInPostEntity({required this.name, required this.amount});
+  MoneyManageInPostEntity({required this.name, required this.amount,required this.date,});
 }
 
 class MoneyManageOutPostEntity extends BaseEntity {
   final String name;
   final String amount;
   final String idMoneyManageItem;
+  final String date;
 
-  MoneyManageOutPostEntity(
-      {required this.name,
-      required this.amount,
-      required this.idMoneyManageItem});
+  MoneyManageOutPostEntity({
+    required this.name,
+    required this.amount,
+    required this.idMoneyManageItem,
+    required this.date,
+  });
 }
 
 class MoneyManagePutEntity extends BaseEntity {
@@ -23,12 +27,15 @@ class MoneyManagePutEntity extends BaseEntity {
   final String name;
   final String amount;
   final String idMoneyManageItem;
+  final String date;
 
-  MoneyManagePutEntity(
-      {required this.idMoneyManage,
-      required this.name,
-      required this.amount,
-      required this.idMoneyManageItem});
+  MoneyManagePutEntity({
+    required this.idMoneyManage,
+    required this.name,
+    required this.amount,
+    required this.idMoneyManageItem,
+    required this.date,
+  });
 }
 
 class MoneyManageEntity extends BaseEntity {

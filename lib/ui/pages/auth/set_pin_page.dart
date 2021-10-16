@@ -27,7 +27,7 @@ class _SetPinPageState extends State<SetPinPage> {
 
   @override
   void initState() {
-    if(widget.bundle != null){
+    if (widget.bundle != null) {
       username = widget.bundle!.extras['username'];
       password = widget.bundle!.extras['password'];
     }

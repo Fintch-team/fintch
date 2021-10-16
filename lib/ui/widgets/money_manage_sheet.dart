@@ -17,13 +17,19 @@ class MoneyManageSheet extends StatefulWidget {
 class _MoneyManageSheetState extends State<MoneyManageSheet> {
   late TextEditingController titleController;
   late TextEditingController amountController;
+  late TextEditingController dateController;
   final _formKey = GlobalKey<FormState>();
   bool isIncome = true;
+  DateTime datePicked = DateTime.now();
+  DateTime now = DateTime.now();
 
   @override
   void initState() {
     titleController = TextEditingController();
     amountController = TextEditingController();
+    dateController = TextEditingController();
+    dateController.text = datePicked.parseYearMonthDay();
+
     context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
 
     if (widget.data != null) {
@@ -121,6 +127,38 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                           },
                           keyboardType: TextInputType.number,
                         ),
+                        SizedBox(height: 16),
+                        Text('Tanggal Waktu', style: AppTheme.text3.bold),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () async {
+                            final picked = await Helper.showDeadlineDatePicker(
+                              context,
+                              datePicked,
+                            );
+                            if (picked != null &&
+                                picked != datePicked &&
+                                picked.isAfter(now)) {
+                              setState(() {
+                                datePicked = picked;
+                                dateController.text =
+                                    datePicked.parseYearMonthDay();
+                              });
+                            }
+                          },
+                          child: TextFormField(
+                            controller: dateController,
+                            style: AppTheme.text3,
+                            enabled: false,
+                            decoration: InputDecoration(
+                              hintText: 'Masukan tanggal waktu',
+                              enabledBorder: AppTheme.enabledBlackBorder,
+                              hintStyle: AppTheme.text3.blackOpacity,
+                              disabledBorder: AppTheme.enabledBlackBorder,
+                            ),
+                          ),
+                        ),
+
                         if (!isIncome) ...[
                           SizedBox(height: 16),
                           Text('Pilih Card', style: AppTheme.text3.bold),
@@ -143,6 +181,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                             amount: amountController.text,
                                             name: titleController.text,
                                             idMoneyManageItem: _selectedCardId!,
+                                            date: dateController.text,
                                           ),
                                         ),
                                       );
@@ -154,6 +193,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                           entity: MoneyManageInPostEntity(
                                             amount: amountController.text,
                                             name: titleController.text,
+                                            date: dateController.text,
                                           ),
                                         ),
                                       );
@@ -166,6 +206,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                               name: titleController.text,
                                               idMoneyManageItem:
                                                   _selectedCardId!,
+                                              date: dateController.text,
                                             ),
                                           ),
                                         );

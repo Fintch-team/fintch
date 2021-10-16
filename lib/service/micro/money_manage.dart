@@ -63,6 +63,7 @@ class MoneyManageService extends ApiService {
   Future<bool> postIncomeMoneyManage({
     required String name,
     required String amount,
+    required String date,
   }) async {
     try {
       final res = await dio.post(
@@ -70,6 +71,7 @@ class MoneyManageService extends ApiService {
         data: {
           'name': name,
           'amount': amount,
+          'created_at': date,
         },
       );
 
@@ -83,6 +85,7 @@ class MoneyManageService extends ApiService {
   Future<bool> postOutcomeMoneyManage({
     required String name,
     required String amount,
+    required String date,
     required String idMoneyManageItem,
   }) async {
     try {
@@ -91,6 +94,7 @@ class MoneyManageService extends ApiService {
         data: {
           'name': name,
           'amount': amount,
+          'created_at': date,
           'id_money_management_item': idMoneyManageItem
         },
       );
