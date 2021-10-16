@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 
 mixin InComeBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
 
+mixin TabelBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
+
 class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState>
-    with InComeBloc {
+    with InComeBloc, TabelBloc {
   final MoneyManageRepository moneyManageRepository;
 
   MoneyManageBloc({required this.moneyManageRepository})
@@ -100,6 +102,21 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState>
             await moneyManageRepository.getMoneyManageIncome();
 
         emit(MoneyManageIncomeSuccess(entity: income));
+      } on FailedException catch (e) {
+        emit(MoneyManageFailure(message: e.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(MoneyManageFailure(message: 'unable to get moneyPlan: $e'));
+      }
+    });
+
+    on<GetTabelMoneyManage>((event, emit) async {
+      emit(MoneyManageLoading());
+      try {
+        MoneyManageTabelEntity income =
+            await moneyManageRepository.getMoneyManageTabel();
+
+        emit(MoneyManageTabelSuccess(entity: income));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {

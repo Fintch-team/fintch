@@ -12,6 +12,8 @@ class GetMoneyManage extends MoneyManageEvent {}
 
 class GetIncomeMoneyManage extends MoneyManageEvent {}
 
+class GetTabelMoneyManage extends MoneyManageEvent {}
+
 class PostIncomeMoneyManage extends MoneyManageEvent {
   final MoneyManageInPostEntity entity;
 

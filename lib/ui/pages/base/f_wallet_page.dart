@@ -30,6 +30,7 @@ class _FWalletPageState extends State<FWalletPage> {
   void requestFWallet() {
     context.read<MoneyManageBloc>().add(GetMoneyManage());
     context.read<InComeBloc>().add(GetIncomeMoneyManage());
+    context.read<TabelBloc>().add(GetTabelMoneyManage());
     context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
   }
 
@@ -506,13 +507,54 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 }
 
-class _LineChart extends StatelessWidget {
+class _LineChart extends StatefulWidget {
+  @override
+  State<_LineChart> createState() => _LineChartState();
+}
+
+class _LineChartState extends State<_LineChart> {
+  MoneyManageTabelEntity tabel = MoneyManageTabelEntity(
+      income: Tabel(
+        fri: 0,
+        mon: 0,
+        sat: 0,
+        sun: 0,
+        thu: 0,
+        tue: 0,
+        wed: 0,
+      ),
+      outcome: Tabel(
+        fri: 0,
+        mon: 0,
+        sat: 0,
+        sun: 0,
+        thu: 0,
+        tue: 0,
+        wed: 0,
+      ));
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TabelBloc>().add(GetTabelMoneyManage());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      sampleData1,
-      swapAnimationDuration: const Duration(milliseconds: 250),
-      swapAnimationCurve: Curves.easeInOut,
+    return BlocListener<TabelBloc, MoneyManageState>(
+      listener: (context, state) {
+        if (state is MoneyManageTabelSuccess) {
+          print("ok ${state.entity.income.sat}");
+          setState(() {
+            tabel = state.entity;
+          });
+        }
+      },
+      child: LineChart(
+        sampleData1,
+        swapAnimationDuration: const Duration(milliseconds: 250),
+        swapAnimationCurve: Curves.easeInOut,
+      ),
     );
   }
 
@@ -614,13 +656,13 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: [
-          FlSpot(1, 5),
-          FlSpot(2, 7),
-          FlSpot(3, 10),
-          FlSpot(4, 2),
-          FlSpot(5, 15),
-          FlSpot(6, 20),
-          FlSpot(7, 16),
+          FlSpot(1, tabel.outcome.mon.toDouble()),
+          FlSpot(2, tabel.outcome.tue.toDouble()),
+          FlSpot(3, tabel.outcome.wed.toDouble()),
+          FlSpot(4, tabel.outcome.thu.toDouble()),
+          FlSpot(5, tabel.outcome.fri.toDouble()),
+          FlSpot(6, tabel.outcome.sat.toDouble()),
+          FlSpot(7, tabel.outcome.sun.toDouble()),
         ],
       );
 
@@ -632,13 +674,13 @@ class _LineChart extends StatelessWidget {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: [
-          FlSpot(1, 10),
-          FlSpot(2, 8),
-          FlSpot(3, 4),
-          FlSpot(4, 16),
-          FlSpot(5, 12),
-          FlSpot(6, 10),
-          FlSpot(7, 4),
+          FlSpot(1, tabel.income.mon.toDouble()),
+          FlSpot(2, tabel.income.tue.toDouble()),
+          FlSpot(3, tabel.income.wed.toDouble()),
+          FlSpot(4, tabel.income.thu.toDouble()),
+          FlSpot(5, tabel.income.fri.toDouble()),
+          FlSpot(6, tabel.income.sat.toDouble()),
+          FlSpot(7, tabel.income.sun.toDouble()),
         ],
       );
 }

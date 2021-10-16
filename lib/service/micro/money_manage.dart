@@ -46,6 +46,20 @@ class MoneyManageService extends ApiService {
     }
   }
 
+  Future<MoneyManageTabelModel> getMoneyManageTabel() async {
+    try {
+      final res = await dio.get(
+        'tabel',
+      );
+      print(res.statusCode);
+
+      return MoneyManageTabelModel.fromJson(res.data);
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
   Future<bool> postIncomeMoneyManage({
     required String name,
     required String amount,

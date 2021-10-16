@@ -23,6 +23,15 @@ class MoneyManageIncomeSuccess extends MoneyManageState {
   List<Object> get props => [entity];
 }
 
+class MoneyManageTabelSuccess extends MoneyManageState {
+  final MoneyManageTabelEntity entity;
+
+  MoneyManageTabelSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class MoneyManageResponseSuccess extends MoneyManageState {
   final ListMoneyManageEntity entity;
 
