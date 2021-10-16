@@ -108,8 +108,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: Helper.smallPadding),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, PagePath.profile)
-                      .then((value) => Helper.setLightAppBar()),
+                  onTap: () => Navigator.pushNamed(context, PagePath.setting)
+                      .setLightAppBar(),
                   child: Icon(
                     Icons.settings_rounded,
                     color: AppTheme.white,
@@ -138,7 +138,8 @@ class _HomePageState extends State<HomePage> {
   Widget _headerLeft(HomeState state) {
     if (state is HomeSuccess) {
       return GestureDetector(
-        onTap: () => Navigator.pushNamed(context, PagePath.profile),
+        onTap: () =>
+            Navigator.pushNamed(context, PagePath.setting).setLightAppBar(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -293,7 +294,8 @@ class _HomePageState extends State<HomePage> {
           FeatureItem(
             name: 'Top-up',
             assetName: Resources.icTopUp,
-            onTap: () => Navigator.pushNamed(context, PagePath.topUp),
+            onTap: () =>
+                Navigator.pushNamed(context, PagePath.topUp).setLightAppBar(),
             isOpacity: true,
           ),
           SizedBox(width: 20),

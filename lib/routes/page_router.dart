@@ -1,5 +1,4 @@
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 
 class PageRouter {
@@ -33,8 +32,8 @@ class PageRouter {
         return _buildRoute(settings, BasePage());
       case PagePath.receive:
         return _buildRoute(settings, ReceivePage());
-      case PagePath.profile:
-        return _buildRoute(settings, SettingsPage());
+      case PagePath.setting:
+        return _buildRoute(settings, SettingPage());
       case PagePath.pay:
         return _buildRoute(settings, PayPage());
       case PagePath.fGoals:

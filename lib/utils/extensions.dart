@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:fintch/gen_export.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'app_theme.dart';
 
 extension StyleText on TextStyle {
@@ -20,7 +21,8 @@ extension StyleText on TextStyle {
   TextStyle get blackOpacity => this.copyWith(color: AppTheme.blackOpacity);
   TextStyle get purpleOpacity => this.copyWith(color: AppTheme.purpleOpacity);
   TextStyle get whiteOpacity => this.copyWith(color: AppTheme.whiteOpacity);
-  TextStyle get darkPurpleOpacity => this.copyWith(color: AppTheme.darkPurpleOpacity);
+  TextStyle get darkPurpleOpacity =>
+      this.copyWith(color: AppTheme.darkPurpleOpacity);
 }
 
 extension StringInsert on String {
@@ -55,3 +57,12 @@ extension DateParsing on DateTime {
   }
 }
 
+extension AppBarTheme on Future {
+  Future setLightAppBar() async {
+    this.then((value) => Helper.setLightAppBar());
+  }
+
+  Future setDarkAppBar() async {
+    this.then((value) => Helper.setLightAppBar());
+  }
+}
