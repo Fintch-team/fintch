@@ -764,8 +764,8 @@ class _InputPinDialogState extends State<InputPinDialog> {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (context) =>
-                      SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+                  builder: (context) => FailedPaymentDialog(
+                      message: 'Pembayaran belum berhasil!'),
                 );
               }
             } else if (state is PayLoading) {
@@ -776,7 +776,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
                 context: context,
                 barrierDismissible: false,
                 builder: (context) =>
-                    SuccessPaymentDialog(fintchPoint: '-', fintchWallet: '-'),
+                    FailedPaymentDialog(message: state.message),
               );
             }
           },
