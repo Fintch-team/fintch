@@ -51,7 +51,6 @@ class MoneyManageService extends ApiService {
       final res = await dio.get(
         'tabel',
       );
-      print(res.statusCode);
 
       return MoneyManageTabelModel.fromJson(res.data);
     } on DioError catch (e) {
@@ -188,7 +187,6 @@ class MoneyManageService extends ApiService {
           'id_user': idUser,
         },
       );
-      print(res.statusCode);
       return res.statusCode == 201;
     } on DioError catch (e) {
       debugPrint("error $e");

@@ -405,3 +405,178 @@ class ActivitiesShimmer extends StatelessWidget {
     );
   }
 }
+
+class ProfileShimmer extends StatelessWidget {
+  const ProfileShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(64),
+              boxShadow: Helper.getShadow(),
+              color: AppTheme.grey,
+            ),
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.3,
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 12,
+            width: 40,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 12,
+            width: 40,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileWalletShimmer extends StatelessWidget {
+  const ProfileWalletShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.36,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              Resources.icFintchWallet,
+              height: 28,
+            ),
+            SizedBox(width: 8),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: AppTheme.grey,
+              ),
+              height: 20,
+              width: 60,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileBalanceShimmer extends StatelessWidget {
+  const ProfileBalanceShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.36,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              Resources.fWalletPurple,
+              height: 28,
+            ),
+            SizedBox(width: 8),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: AppTheme.grey,
+              ),
+              height: 20,
+              width: 60,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MerchantsShimmer extends StatelessWidget {
+  const MerchantsShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          6,
+          (index) => Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PayWalletShimmer extends StatelessWidget {
+  const PayWalletShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+          SizedBox(height: Helper.smallPadding),
+          Container(
+            padding: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: Helper.getShadow(),
+            ),
+            height: MediaQuery.of(context).size.height * 0.12,
+          ),
+        ],
+      ),
+    );
+  }
+}

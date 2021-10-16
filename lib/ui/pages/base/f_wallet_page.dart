@@ -544,7 +544,6 @@ class _LineChartState extends State<_LineChart> {
     return BlocListener<TabelBloc, MoneyManageState>(
       listener: (context, state) {
         if (state is MoneyManageTabelSuccess) {
-          print("ok ${state.entity.income.sat}");
           setState(() {
             tabel = state.entity;
           });

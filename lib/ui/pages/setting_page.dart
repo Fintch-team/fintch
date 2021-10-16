@@ -95,23 +95,9 @@ class _SettingPageState extends State<SettingPage> {
             ],
           );
         } else if (state is SettingsLoading) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Center(
-              child: CircularLoading(),
-            ),
-          );
+          return ProfileShimmer();
         } else if (state is SettingsFailure) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Center(
-              child: Text(
-                'Data gagal di load',
-                style: AppTheme.headline3.white,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          return FailureStateWidget(message: 'Profile Gagal di Load!');
         }
         return Container();
       },
@@ -148,17 +134,10 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 );
               } else if (state is WalletLoading) {
-                return Center(
-                  child: CircularLoading(),
-                );
+                return ProfileWalletShimmer();
               } else if (state is WalletFailure) {
-                return Center(
-                  child: Text(
-                    'Gagal Load Data',
-                    style: AppTheme.headline3.black,
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return FailureStateWidget(
+                    message: 'Fintch Point Gagal di Load!');
               }
               return Container();
             },
@@ -195,17 +174,9 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 );
               } else if (state is MoneyManageLoading) {
-                return Center(
-                  child: CircularLoading(),
-                );
+                return ProfileBalanceShimmer();
               } else if (state is MoneyManageFailure) {
-                return Center(
-                  child: Text(
-                    'Gagal Load Data',
-                    style: AppTheme.headline3.black,
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return FailureStateWidget(message: 'F-Wallet Gagal di Load!');
               }
               return Container();
             },
