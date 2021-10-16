@@ -64,19 +64,6 @@ class _FWalletPageState extends State<FWalletPage> {
             floatingActionButton: CustomFab(),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.endDocked,
-            // floatingActionButton: Container(
-            //   margin: EdgeInsets.only(bottom: Helper.normalPadding),
-            //   child: FloatingActionButton(
-            //     backgroundColor: AppTheme.purple,
-            //     onPressed: () {},
-            //     child: Icon(
-            //       Icons.add_rounded,
-            //       size: MediaQuery.of(context).size.width * 0.1,
-            //     ),
-            //   ),
-            // ),
-            // floatingActionButtonLocation:
-            //     FloatingActionButtonLocation.endDocked,
           ),
         ),
       ),
@@ -94,7 +81,6 @@ class _FWalletPageState extends State<FWalletPage> {
         child: BlocBuilder<InComeBloc, MoneyManageState>(
           builder: (context, state) {
             if (state is MoneyManageIncomeSuccess) {
-              // TODO: harus ada nilai jumlah manage amount unutk d bawah
               int amount = state.entity.income - state.entity.outcome;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -120,9 +106,10 @@ class _FWalletPageState extends State<FWalletPage> {
                 ],
               );
             } else if (state is MoneyManageLoading) {
-              return Center(
-                child: CircularLoading(),
-              );
+              return FWalletHeaderShimmer();
+            } else if (state is MoneyManageFailure) {
+              return FailureStateWidget(
+                  message: 'Balance & Chart gagal di Load!');
             }
             return Container();
           },
@@ -276,9 +263,9 @@ class _FWalletPageState extends State<FWalletPage> {
             ),
           );
         } else if (state is MoneyManageLoading) {
-          return Center(
-            child: CircularLoading(),
-          );
+          return IncomeOutcomeShimmer();
+        } else if (state is MoneyManageFailure) {
+          return FailureStateWidget(message: 'Income Outcome Gagal di Load!');
         }
         return Container();
       },
@@ -323,12 +310,7 @@ class _FWalletPageState extends State<FWalletPage> {
                 }
                 return EmptyStateWidget(message: 'Cards Kosong!');
               } else if (state is MoneyManageItemLoading) {
-                return Container(
-                  height: MediaQuery.of(context).size.width * 0.28,
-                  child: Center(
-                    child: CircularLoading(),
-                  ),
-                );
+                return CardsShimmer();
               } else if (state is MoneyManageItemFailure) {
                 return FailureStateWidget(message: 'Cards Gagal di Load!');
               }
@@ -430,9 +412,7 @@ class _FWalletPageState extends State<FWalletPage> {
                 }
                 return EmptyStateWidget(message: 'Activities Kosong!');
               } else if (state is MoneyManageLoading) {
-                return Center(
-                  child: CircularLoading(),
-                );
+                return ActivitiesShimmer();
               } else if (state is MoneyManageFailure) {
                 return FailureStateWidget(message: 'Activities Gagal di Load!');
               }
