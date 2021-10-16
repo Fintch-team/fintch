@@ -62,6 +62,8 @@ class _FWalletPageState extends State<FWalletPage> {
               ],
             ),
             floatingActionButton: CustomFab(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
             // floatingActionButton: Container(
             //   margin: EdgeInsets.only(bottom: Helper.normalPadding),
             //   child: FloatingActionButton(
@@ -198,9 +200,9 @@ class _FWalletPageState extends State<FWalletPage> {
                     children: [
                       FittedBox(
                         child: Icon(
-                          Icons.trending_down_rounded,
+                          Icons.trending_up_rounded,
                           size: 28,
-                          color: AppTheme.red,
+                          color: AppTheme.green,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -210,15 +212,15 @@ class _FWalletPageState extends State<FWalletPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             AutoSizeText(
-                              'Outcomes',
+                              'Incomes',
                               style: AppTheme.text3,
                               maxLines: 1,
                             ),
                             SizedBox(height: 4),
                             AutoSizeText(
-                              'Rp${state.entity.outcome.toString().parseCurrency()} ',
-                              style: AppTheme.headline3,
+                              'Rp${state.entity.income.toString().parseCurrency()}',
                               maxLines: 1,
+                              style: AppTheme.headline3,
                             ),
                           ],
                         ),
@@ -242,9 +244,9 @@ class _FWalletPageState extends State<FWalletPage> {
                     children: [
                       FittedBox(
                         child: Icon(
-                          Icons.trending_up_rounded,
+                          Icons.trending_down_rounded,
                           size: 28,
-                          color: AppTheme.green,
+                          color: AppTheme.red,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -254,15 +256,15 @@ class _FWalletPageState extends State<FWalletPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             AutoSizeText(
-                              'Incomes',
+                              'Outcomes',
                               style: AppTheme.text3,
                               maxLines: 1,
                             ),
                             SizedBox(height: 4),
                             AutoSizeText(
-                              'Rp${state.entity.income.toString().parseCurrency()}',
-                              maxLines: 1,
+                              'Rp${state.entity.outcome.toString().parseCurrency()} ',
                               style: AppTheme.headline3,
+                              maxLines: 1,
                             ),
                           ],
                         ),
@@ -687,29 +689,38 @@ class _CustomFabState extends State<CustomFab>
   }
 
   Widget fab1() {
-    return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
-          tooltip: "Activities",
-          child: Transform.rotate(
-            angle: _iconRotation.value,
-            child: Icon(Icons.add),
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 400),
+      opacity: _isExpanded ? 1 : 0,
+      child: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
+        child: FloatingActionButton.extended(
+          tooltip: "Activity",
+          label: Text(
+            'Activity',
+            style: AppTheme.text2.white.bold,
           ),
-          backgroundColor: AppTheme.darkPurple,
-          elevation: 0,
+          icon: Transform.rotate(
+            angle: _iconRotation.value,
+            child: Icon(
+              Icons.add_rounded,
+            ),
+          ),
+          backgroundColor: AppTheme.purple,
+          elevation: _isExpanded ? 5 : 0,
           onPressed: () {
-            showCupertinoModalBottomSheet(
-              expand: false,
-              context: context,
-              enableDrag: true,
-              isDismissible: true,
-              topRadius: Radius.circular(20),
-              backgroundColor: AppTheme.white,
-              barrierColor: AppTheme.black.withOpacity(0.2),
-              builder: (context) => MoneyManageSheet(),
-            );
+            if (_isExpanded) {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => MoneyManageSheet(),
+              );
+            }
           },
         ),
       ),
@@ -717,29 +728,38 @@ class _CustomFabState extends State<CustomFab>
   }
 
   Widget fab2() {
-    return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 400),
+      opacity: _isExpanded ? 1 : 0,
+      child: Container(
+        margin: EdgeInsets.only(bottom: Helper.normalPadding),
+        child: FloatingActionButton.extended(
           tooltip: "Card",
-          child: Transform.rotate(
+          label: Text(
+            'Card',
+            style: AppTheme.text2.white.bold,
+          ),
+          icon: Transform.rotate(
             angle: _iconRotation.value,
-            child: Icon(Icons.add),
+            child: Icon(
+              Icons.add_rounded,
+            ),
           ),
           elevation: _isExpanded ? 5 : 0,
-          backgroundColor: AppTheme.darkPurple,
+          backgroundColor: AppTheme.purple,
           onPressed: () {
-            showCupertinoModalBottomSheet(
-              expand: false,
-              context: context,
-              enableDrag: true,
-              isDismissible: true,
-              topRadius: Radius.circular(20),
-              backgroundColor: AppTheme.white,
-              barrierColor: AppTheme.black.withOpacity(0.2),
-              builder: (context) => MoneyManageItemSheet(),
-            );
+            if (_isExpanded) {
+              showCupertinoModalBottomSheet(
+                expand: false,
+                context: context,
+                enableDrag: true,
+                isDismissible: true,
+                topRadius: Radius.circular(20),
+                backgroundColor: AppTheme.white,
+                barrierColor: AppTheme.black.withOpacity(0.2),
+                builder: (context) => MoneyManageItemSheet(),
+              );
+            }
           },
         ),
       ),
@@ -748,20 +768,20 @@ class _CustomFabState extends State<CustomFab>
 
   Widget fab3() {
     return Container(
-      height: 60,
-      width: 60,
-      child: FittedBox(
-        child: FloatingActionButton(
-          tooltip: "btn5",
-          child: Transform.rotate(
-            angle: _rotationAnimation.value,
-            child: Icon(Icons.add),
+      margin: EdgeInsets.only(bottom: Helper.normalPadding),
+      child: FloatingActionButton(
+        tooltip: "Add Card or Activity",
+        child: Transform.rotate(
+          angle: _rotationAnimation.value,
+          child: Icon(
+            Icons.add_rounded,
+            size: MediaQuery.of(context).size.width * 0.1,
           ),
-          backgroundColor: AppTheme.purple,
-          onPressed: () async {
-            animate();
-          },
         ),
+        backgroundColor: AppTheme.purple,
+        onPressed: () async {
+          animate();
+        },
       ),
     );
   }
@@ -776,20 +796,20 @@ class _CustomFabState extends State<CustomFab>
     _translateAnimation = Tween<double>(begin: 0, end: 80)
         .chain(
           CurveTween(
-            curve: _isExpanded ? Curves.fastOutSlowIn : Curves.bounceOut,
+            curve: _isExpanded ? Curves.fastOutSlowIn : Curves.fastOutSlowIn,
           ),
         )
         .animate(_animationController);
 
     _iconRotation = Tween<double>(begin: 3.14 / 2, end: 0)
         .chain(
-          CurveTween(curve: Curves.bounceInOut),
+          CurveTween(curve: Curves.fastOutSlowIn),
         )
         .animate(_animationController);
     _rotationAnimation = Tween<double>(begin: 0, end: 3 * 3.14 / 4)
         .chain(
           CurveTween(
-            curve: Curves.bounceInOut,
+            curve: Curves.fastOutSlowIn,
           ),
         )
         .animate(_animationController);
@@ -808,7 +828,9 @@ class _CustomFabState extends State<CustomFab>
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          bottom: _translateAnimation.value + _translateAnimation.value,
+          bottom: _translateAnimation.value +
+              _translateAnimation.value -
+              (_translateAnimation.value / 4),
           right: 0,
           child: fab1(),
         ),
