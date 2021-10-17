@@ -165,6 +165,15 @@ class _PayPageState extends State<PayPage> {
         color: AppTheme.scaffold,
         minHeight: MediaQuery.of(context).size.height * 0.44,
         maxHeight: MediaQuery.of(context).size.height * 0.88,
+        onPanelOpened: () async {
+          await controller!.pauseCamera();
+        },
+        onPanelSlide: (position) async {
+          await controller!.pauseCamera();
+        },
+        onPanelClosed: () async {
+          await controller!.resumeCamera();
+        },
         panelBuilder: (scrollController) {
           return Container(
             decoration: BoxDecoration(
