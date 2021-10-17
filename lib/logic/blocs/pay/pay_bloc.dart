@@ -18,7 +18,6 @@ class PayBloc extends Bloc<PayEvent, PayState> {
         print('e anjayani : $e');
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
-        print('e anjayani : $e');
         debugPrint(stacktrace.toString());
         emit(PayFailure(message: 'unable to Transaction: $e'));
       }

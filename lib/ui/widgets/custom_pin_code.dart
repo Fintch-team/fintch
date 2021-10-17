@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -31,7 +30,8 @@ class CustomPinCode extends StatelessWidget {
   Widget build(BuildContext context) {
     return PinCodeTextField(
       appContext: context,
-      pastedTextStyle: isObscure ? AppTheme.headline1.purple : AppTheme.headline1,
+      pastedTextStyle:
+          isObscure ? AppTheme.headline1.purple : AppTheme.headline1,
       length: 6,
       obscureText: isObscure,
       animationType: AnimationType.fade,

@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library money_manage_item;
 
+export 'money_manage_item_bloc.dart';
 export 'money_manage_item_event.dart';
 export 'money_manage_item_state.dart';
-export 'money_manage_item_bloc.dart';

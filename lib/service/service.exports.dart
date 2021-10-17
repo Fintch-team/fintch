@@ -4,7 +4,7 @@
 // flutter pub run bin/gen_export
 library service;
 
-export 'micro/micro.exports.dart';
 export 'locals/locals.exports.dart';
+export 'micro/micro.exports.dart';
 export 'service_base.dart';
 export 'services.dart';

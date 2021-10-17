@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library locals;
 
-export 'local_auth_datasource.dart';
 export 'biometric_auth_datasource.dart';
+export 'local_auth_datasource.dart';

@@ -7,16 +7,12 @@ class TransactionService extends ApiService {
 
   Future<bool> postTransaction({
     required String idUserReceive,
-    required String idUserPay,
     required String amount,
   }) async {
-    print(idUserPay);
-    print(idUserReceive);
     try {
       final res = await dio.post('transaction', data: {
         'amount': amount,
       }, queryParameters: {
-        'pay': idUserPay,
         'receive': idUserReceive,
       });
 

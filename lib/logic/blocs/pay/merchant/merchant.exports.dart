@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library merchant;
 
+export 'merchant_bloc.dart';
 export 'merchant_event.dart';
 export 'merchant_state.dart';
-export 'merchant_bloc.dart';

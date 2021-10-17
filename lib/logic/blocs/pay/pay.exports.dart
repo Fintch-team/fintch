@@ -4,8 +4,8 @@
 // flutter pub run bin/gen_export
 library pay;
 
+export 'merchant/merchant.exports.dart';
+export 'pay_bloc.dart';
 export 'pay_event.dart';
 export 'pay_state.dart';
 export 'profile_pay/profile_pay.exports.dart';
-export 'pay_bloc.dart';
-export 'merchant/merchant.exports.dart';

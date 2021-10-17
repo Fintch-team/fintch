@@ -12,9 +12,7 @@ class TransactionRepository {
   Future<bool> postTransaction(
       {required TransactionPostEntity postEntity}) async {
     bool res = await transactionService.postTransaction(
-        idUserReceive: postEntity.idReceive,
-        idUserPay: localAuthService.currentUser!.nickname,
-        amount: postEntity.amount);
+        idUserReceive: postEntity.idReceive, amount: postEntity.amount);
 
     return res;
   }

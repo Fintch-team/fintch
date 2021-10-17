@@ -1,5 +1,3 @@
-import 'package:fintch/gen_export.dart';
-
 class MoneyManageTabelModel {
   MoneyManageTabelModel({
     required this.message,

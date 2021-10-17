@@ -1,6 +1,4 @@
-
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -8,7 +6,8 @@ class CustomDialog extends StatelessWidget {
   final Widget content;
   final Widget? buttons;
 
-  const CustomDialog({Key? key, required this.title, required this.content, this.buttons})
+  const CustomDialog(
+      {Key? key, required this.title, required this.content, this.buttons})
       : super(key: key);
 
   @override
@@ -34,13 +33,15 @@ class CustomDialog extends StatelessWidget {
               Text(title, style: AppTheme.headline3),
               SizedBox(height: 16.0),
               content,
-              buttons != null ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: 16.0),
-                  buttons!,
-                ],
-              ): Container(),
+              buttons != null
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 16.0),
+                        buttons!,
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),
