@@ -37,9 +37,10 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
         if (state is WalletResponseSuccess) {
           if (state.entity.barrierExpired != null) {
             priceController.text = state.entity.barrierAmount.toString();
-            dateController.text = state.entity.barrierExpired.toString();
+            dateController.text =
+                state.entity.barrierExpired!.parseYearMonthDay();
+            datePicked = state.entity.barrierExpired!;
           }
-
           return Material(
             child: GestureDetector(
               onTap: () => Helper.unfocus(),
@@ -94,35 +95,38 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                             SizedBox(height: 16),
                             Text('Tenggat Waktu', style: AppTheme.text3.bold),
                             SizedBox(height: 8),
-                            GestureDetector(
-                              onTap: () async {
-                                final picked =
-                                    await Helper.showDeadlineDatePicker(
-                                  context,
-                                  datePicked,
-                                );
-                                if (picked != null &&
-                                    picked != datePicked &&
-                                    picked.isAfter(now)) {
-                                  setState(() {
-                                    datePicked = picked;
-                                    dateController.text =
-                                        datePicked.parseYearMonthDay();
-                                  });
-                                }
-                              },
-                              child: TextFormField(
-                                controller: dateController,
-                                style: AppTheme.text3,
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  hintText: 'Masukan tenggat waktu',
-                                  enabledBorder: AppTheme.enabledBlackBorder,
-                                  hintStyle: AppTheme.text3.blackOpacity,
-                                  disabledBorder: AppTheme.enabledBlackBorder,
+                            StatefulBuilder(builder: (context, dateSetState) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  final picked =
+                                      await Helper.showDeadlineDatePicker(
+                                    context,
+                                    datePicked,
+                                  );
+                                  print(picked.toString());
+                                  if (picked != null &&
+                                      picked != datePicked &&
+                                      picked.isAfter(now)) {
+                                    dateSetState(() {
+                                      datePicked = picked;
+                                      dateController.text =
+                                          datePicked.parseYearMonthDay();
+                                    });
+                                  }
+                                },
+                                child: TextFormField(
+                                  controller: dateController,
+                                  style: AppTheme.text3,
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'Masukan tenggat waktu',
+                                    enabledBorder: AppTheme.enabledBlackBorder,
+                                    hintStyle: AppTheme.text3.blackOpacity,
+                                    disabledBorder: AppTheme.enabledBlackBorder,
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                             SizedBox(height: Helper.bigPadding),
                             SizedBox(height: Helper.bigPadding),
                             //TODO: Add Validator

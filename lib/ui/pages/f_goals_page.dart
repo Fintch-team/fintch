@@ -297,6 +297,7 @@ class _FGoalSheetState extends State<FGoalSheet> {
       titleController.text = widget.data!.name;
       priceController.text = widget.data!.totalAmount.toString();
       dateController.text = widget.data!.deadline!.parseYearMonthDay();
+      datePicked = widget.data!.deadline!;
     }
     super.initState();
   }
