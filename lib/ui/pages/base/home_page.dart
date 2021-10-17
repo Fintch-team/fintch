@@ -528,7 +528,8 @@ class _HomePageState extends State<HomePage> {
       if (isPayHistory) {
         if (state.entity.pay.isNotEmpty) {
           return ListView.builder(
-            itemCount: state.entity.pay.length,
+            itemCount:
+                state.entity.pay.length < 5 ? state.entity.pay.length : 5,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -545,7 +546,9 @@ class _HomePageState extends State<HomePage> {
       } else {
         if (state.entity.receive.isNotEmpty) {
           return ListView.builder(
-            itemCount: state.entity.receive.length,
+            itemCount: state.entity.receive.length < 5
+                ? state.entity.receive.length
+                : 5,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: 10),
