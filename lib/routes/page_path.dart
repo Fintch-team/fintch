@@ -13,4 +13,5 @@ class PagePath {
   static const String payment = '/payment';
   static const String changePassword = '/change_password';
   static const String changePin = '/change_pin';
+  static const String barcode = '/barcode';
 }

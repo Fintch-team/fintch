@@ -139,4 +139,9 @@ class DataMapper {
       ListMoneyPlanEntity(
         data: moneyPlan.data,
       );
+
+  static ListBarcodeEntity listBarcodeMapper(ListBarcodeModel moneyPlan) =>
+      ListBarcodeEntity(
+        data: moneyPlan.data,
+      );
 }

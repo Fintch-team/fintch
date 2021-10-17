@@ -13,3 +13,4 @@ export 'post/post.exports.dart';
 export 'school/school.exports.dart';
 export 'user/user.exports.dart';
 export 'wallet/wallet.exports.dart';
+export 'barcode/barcode.exports.dart';

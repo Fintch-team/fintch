@@ -12,3 +12,4 @@ export 'school_entity.dart';
 export 'transaction_entity.dart';
 export 'user_entity.dart';
 export 'wallet_entity.dart';
+export 'barcode_entity.dart';

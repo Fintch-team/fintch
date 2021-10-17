@@ -13,3 +13,4 @@ export 'school_repository.dart';
 export 'transaction_repository.dart';
 export 'user_repository.dart';
 export 'wallet_repository.dart';
+export 'barcode_repository.dart';

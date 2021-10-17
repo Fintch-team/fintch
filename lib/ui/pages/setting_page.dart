@@ -193,16 +193,22 @@ class _SettingPageState extends State<SettingPage> {
       children: [
         Text('Pengaturan', style: AppTheme.headline3),
         SizedBox(height: Helper.smallPadding),
-        _optionItems('Notifikasi'),
+        // GestureDetector(
+        //   onTap: () => Navigator.pushReplacementNamed(
+        //           context,
+        //           PagePath.barcode,
+        //         ),
+        //   child: _optionItems('F-Barcode'),
+        // ),
         GestureDetector(
           onTap: () {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () =>  Navigator.pushReplacementNamed(
-                    context,
-                    PagePath.changePassword,
-                  ),
+                whenSuccess: () => Navigator.pushReplacementNamed(
+                  context,
+                  PagePath.changePassword,
+                ),
               ),
             );
           },
