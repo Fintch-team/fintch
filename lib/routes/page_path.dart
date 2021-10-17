@@ -11,4 +11,6 @@ class PagePath {
   static const String confirmPin = '/confirm_pin';
   static const String topUp = '/top_up';
   static const String payment = '/payment';
+  static const String changePassword = '/change_password';
+  static const String changePin = '/change_pin';
 }

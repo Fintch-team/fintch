@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       try {
         emit(AuthIsLoggedIn(isLoggedIn: userRepository.isHasLoggedIn));
       } on FailedException catch (e) {
-        FailedException fail = e.error;
+        FailedException fail = e;
         emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
@@ -66,7 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
             postChangePasswordEntity: event.entity);
         emit(ChangeSuccess());
       } on FailedException catch (e) {
-        FailedException fail = e.error;
+        FailedException fail = e;
         emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
@@ -80,7 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         await userRepository.changePin(postChangePinEntity: event.entity);
         emit(ChangeSuccess());
       } on FailedException catch (e) {
-        FailedException fail = e.error;
+        FailedException fail = e;
         emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());
@@ -92,7 +92,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
       try {
         await userRepository.logout();
       } on FailedException catch (e) {
-        FailedException fail = e.error;
+        FailedException fail = e;
         emit(AuthFailure(message: fail.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());

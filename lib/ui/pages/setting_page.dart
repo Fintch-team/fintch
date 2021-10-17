@@ -199,13 +199,10 @@ class _SettingPageState extends State<SettingPage> {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () {
-                  Navigator.pushReplacementNamed(context, PagePath.setPassword,
-                      arguments: ArgumentBundle(extras: {
-                        'username': 'admin123',
-                        'password': 'admin123'
-                      }));
-                },
+                whenSuccess: () =>  Navigator.pushReplacementNamed(
+                    context,
+                    PagePath.changePassword,
+                  ),
               ),
             );
           },
@@ -216,13 +213,10 @@ class _SettingPageState extends State<SettingPage> {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () {
-                  Navigator.pushReplacementNamed(context, PagePath.setPin,
-                      arguments: ArgumentBundle(extras: {
-                        'username': 'admin123',
-                        'password': 'admin123'
-                      }));
-                },
+                whenSuccess: () => Navigator.pushReplacementNamed(
+                  context,
+                  PagePath.changePin,
+                ),
               ),
             );
           },
