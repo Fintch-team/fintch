@@ -193,19 +193,22 @@ class _SettingPageState extends State<SettingPage> {
       children: [
         Text('Pengaturan', style: AppTheme.headline3),
         SizedBox(height: Helper.smallPadding),
-        _optionItems('Notifikasi'),
+        // GestureDetector(
+        //   onTap: () => Navigator.pushReplacementNamed(
+        //           context,
+        //           PagePath.barcode,
+        //         ),
+        //   child: _optionItems('F-Barcode'),
+        // ),
         GestureDetector(
           onTap: () {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () {
-                  Navigator.pushReplacementNamed(context, PagePath.setPassword,
-                      arguments: ArgumentBundle(extras: {
-                        'username': 'admin123',
-                        'password': 'admin123'
-                      }));
-                },
+                whenSuccess: () => Navigator.pushReplacementNamed(
+                  context,
+                  PagePath.changePassword,
+                ),
               ),
             );
           },
@@ -216,13 +219,10 @@ class _SettingPageState extends State<SettingPage> {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () {
-                  Navigator.pushReplacementNamed(context, PagePath.setPin,
-                      arguments: ArgumentBundle(extras: {
-                        'username': 'admin123',
-                        'password': 'admin123'
-                      }));
-                },
+                whenSuccess: () => Navigator.pushReplacementNamed(
+                  context,
+                  PagePath.changePin,
+                ),
               ),
             );
           },

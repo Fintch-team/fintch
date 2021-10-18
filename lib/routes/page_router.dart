@@ -42,6 +42,12 @@ class PageRouter {
         return _buildRoute(settings, TopUpPage());
       case PagePath.payment:
         return _buildRoute(settings, PaymentPage());
+      case PagePath.changePassword:
+        return _buildRoute(settings, ChangePasswordPage());
+      case PagePath.changePin:
+        return _buildRoute(settings, ChangePinPage());
+      case PagePath.barcode:
+        return _buildRoute(settings, BarcodePage());
       default:
         return _errorRoute();
     }

@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
       ServiceInjector(create: () => TransactionService()),
       ServiceInjector(create: () => MoneyPlanService()),
       ServiceInjector(create: () => MoneyManageService()),
+      ServiceInjector(create: () => BarcodeService()),
 
       // Local Service
       ServiceInjector.value(value: LocalAuthService()),
@@ -101,6 +102,12 @@ class _MyAppState extends State<MyApp> {
             localAuthService: Service.find(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => BarcodeRepository(
+            barcodeService: Service.find(),
+            localAuthService: Service.find(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -133,6 +140,12 @@ class _MyAppState extends State<MyApp> {
             create: (context) => HistoryBloc(
               userRepository: context.read<UserRepository>(),
               historyRepository: context.read<HistoryRepository>(),
+            ),
+          ),
+          BlocProvider<BarcodeBloc>(
+            create: (context) => BarcodeBloc(
+              userRepository: context.read<UserRepository>(),
+              barcodeRepository: context.read<BarcodeRepository>(),
             ),
           ),
           BlocProvider<SettingsBloc>(

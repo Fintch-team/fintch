@@ -14,3 +14,4 @@ export 'history/history.exports.dart';
 export 'wallet/wallet.exports.dart';
 export 'blocs.dart';
 export 'money_plan/money_plan.exports.dart';
+export 'barcode/barcode.exports.dart';

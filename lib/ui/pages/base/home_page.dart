@@ -103,10 +103,12 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, PagePath.setting)
-                      .setLightAppBar(),
+                  onTap: () => Navigator.pushReplacementNamed(
+                    context,
+                    PagePath.barcode,
+                  ),
                   child: Icon(
-                    Icons.notifications_rounded,
+                    CupertinoIcons.barcode_viewfinder,
                     color: AppTheme.white,
                   ),
                 ),

@@ -13,3 +13,6 @@ export 'receive_page.dart';
 export 'setting_page.dart';
 export 'splash_page.dart';
 export 'top_up_page.dart';
+export 'change_password_page.dart';
+export 'change_pin_page.dart';
+export 'barcode_page.dart';
