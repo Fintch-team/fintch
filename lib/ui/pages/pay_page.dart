@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -246,7 +247,7 @@ class _PayPageState extends State<PayPage> {
             children: [
               _fintchPoint(state.entity.walletAmount.toString()),
               SizedBox(height: Helper.smallPadding),
-              _barrierCash(valueDiff.toString()),
+              _barrierCash(valueDiff.toString(), state.entity.barrierExpired),
             ],
           );
         } else if (state is WalletLoading) {
@@ -308,7 +309,13 @@ class _PayPageState extends State<PayPage> {
     );
   }
 
-  Widget _barrierCash(String barrierCash) {
+  Widget _barrierCash(String barrierCash, DateTime? barrierExpired) {
+    bool isBarrierExpired = false;
+    if (barrierExpired != null) {
+      if (barrierExpired.isAfter(DateTime.now())) {
+        isBarrierExpired = true;
+      }
+    }
     return Container(
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.symmetric(horizontal: 20),
@@ -336,15 +343,21 @@ class _PayPageState extends State<PayPage> {
                       height: 32,
                     ),
                     SizedBox(width: 8),
-                    Text(
-                      barrierCash.parseCurrency(),
-                      style: AppTheme.headline1,
+                    Expanded(
+                      child: AutoSizeText(
+                        isBarrierExpired
+                            ? barrierCash.parseCurrency()
+                            : 'Barrier cash tidak aktif',
+                        style: AppTheme.headline1,
+                        maxLines: 1,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
+          SizedBox(width: Helper.normalPadding),
           FeatureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
@@ -438,6 +451,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
   @override
   void initState() {
     super.initState();
+    textFieldController.text = '5000';
     context
         .read<ProfilePayBloc>()
         .add(GetReceiveByNickname(nickname: widget.nickname));

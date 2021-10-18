@@ -28,6 +28,7 @@ class DataMapper {
         img: userModel.data.img,
         barcode: userModel.data.barcode,
         moneyManage: userModel.data.moneyManage,
+        level: userModel.data.level,
       );
 
   static ListMerchantEntity listMerchantMapper(ListUserModel userModel) =>
@@ -47,6 +48,7 @@ class DataMapper {
         img: userModel.img,
         barcode: userModel.barcode,
         moneyManage: userModel.moneyManage,
+        level: userModel.level,
       );
 
   static HistoryEntity historyMapper(ListHistoryModel historyModel) =>
