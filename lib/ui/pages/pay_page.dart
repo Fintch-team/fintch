@@ -29,7 +29,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    getCameraPermission();
+    // getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -438,6 +438,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
   @override
   void initState() {
     super.initState();
+    textFieldController.text = value.toInt().toString();
     context
         .read<ProfilePayBloc>()
         .add(GetReceiveByNickname(nickname: widget.nickname));
@@ -600,10 +601,8 @@ class _PaymentSheetState extends State<PaymentSheet> {
         controller: textFieldController,
         style: AppTheme.text3.purple,
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Harap masukan jumlah bayar';
-          }
-          final n = num.tryParse(value);
+          Validator.number(value);
+          final n = num.tryParse(value!);
           if (n == null) {
             return '"$value" bukan bilangan!';
           } else if (double.parse(value) < 500) {
@@ -613,7 +612,6 @@ class _PaymentSheetState extends State<PaymentSheet> {
         },
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          DecimalFormatter(decimalDigits: 3)
         ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
