@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(
+                  onTap: () => Navigator.pushNamed(
                     context,
                     PagePath.barcode,
                   ),
@@ -502,14 +502,13 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
+          Container(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Transaksi terakhir', style: AppTheme.headline3),
-                SvgPicture.asset(Resources.next, height: 16),
-              ],
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Transaksi terakhir',
+              style: AppTheme.headline3,
+              textAlign: TextAlign.start,
             ),
           ),
           SizedBox(height: Helper.normalPadding),
@@ -519,7 +518,9 @@ class _HomePageState extends State<HomePage> {
             receiveCallback: receiveCallback,
           ),
           SizedBox(height: Helper.smallPadding),
-          _historyList(state)
+          _historyList(state),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.bigPadding),
         ],
       ),
     );
@@ -570,61 +571,5 @@ class _HomePageState extends State<HomePage> {
       return FailureStateWidget(message: 'History Gagal di Load!');
     }
     return Container();
-  }
-}
-
-class EmptyStateWidget extends StatelessWidget {
-  final String message;
-  const EmptyStateWidget({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
-      padding: EdgeInsets.all(Helper.normalPadding),
-      child: Column(
-        children: [
-          Expanded(
-            child: SvgPicture.asset(Resources.empty),
-          ),
-          SizedBox(height: Helper.normalPadding),
-          Text(
-            message,
-            style: AppTheme.text1.bold,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FailureStateWidget extends StatelessWidget {
-  final String message;
-  const FailureStateWidget({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
-      padding: EdgeInsets.all(Helper.normalPadding),
-      child: Column(
-        children: [
-          Expanded(
-            child: SvgPicture.asset(Resources.failure),
-          ),
-          SizedBox(height: Helper.normalPadding),
-          Text(
-            message,
-            style: AppTheme.text1.bold,
-          ),
-        ],
-      ),
-    );
   }
 }
