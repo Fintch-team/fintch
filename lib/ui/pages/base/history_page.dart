@@ -170,6 +170,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   SizedBox(height: Helper.normalPadding),
                   _historyList(state),
+                  SizedBox(height: Helper.bigPadding),
+                  SizedBox(height: Helper.bigPadding),
                 ],
               ),
             ),

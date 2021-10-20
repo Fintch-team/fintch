@@ -518,7 +518,9 @@ class _HomePageState extends State<HomePage> {
             receiveCallback: receiveCallback,
           ),
           SizedBox(height: Helper.smallPadding),
-          _historyList(state)
+          _historyList(state),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.bigPadding),
         ],
       ),
     );
