@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(
+                  onTap: () => Navigator.pushNamed(
                     context,
                     PagePath.barcode,
                   ),
