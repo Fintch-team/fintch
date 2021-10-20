@@ -502,14 +502,13 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
+          Container(
             padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Transaksi terakhir', style: AppTheme.headline3),
-                SvgPicture.asset(Resources.next, height: 16),
-              ],
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Transaksi terakhir',
+              style: AppTheme.headline3,
+              textAlign: TextAlign.start,
             ),
           ),
           SizedBox(height: Helper.normalPadding),
@@ -575,6 +574,7 @@ class _HomePageState extends State<HomePage> {
 
 class EmptyStateWidget extends StatelessWidget {
   final String message;
+
   const EmptyStateWidget({
     Key? key,
     required this.message,
@@ -603,6 +603,7 @@ class EmptyStateWidget extends StatelessWidget {
 
 class FailureStateWidget extends StatelessWidget {
   final String message;
+
   const FailureStateWidget({
     Key? key,
     required this.message,
