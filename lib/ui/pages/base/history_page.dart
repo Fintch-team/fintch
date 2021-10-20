@@ -105,6 +105,8 @@ class _HistoryPageState extends State<HistoryPage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                _historyIllustration(context),
+                SizedBox(width: Helper.normalPadding),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -123,8 +125,6 @@ class _HistoryPageState extends State<HistoryPage> {
                     ],
                   ),
                 ),
-                SizedBox(width: Helper.normalPadding),
-                _historyIllustration(context),
               ],
             ),
           ],
@@ -135,7 +135,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _historyIllustration(BuildContext context) {
     return SvgPicture.asset(
-      Resources.homeIllustration,
+      Resources.historyIllustration,
       width: MediaQuery.of(context).size.width * 0.3,
       fit: BoxFit.fitWidth,
     );
