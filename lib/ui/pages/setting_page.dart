@@ -245,7 +245,7 @@ class _SettingPageState extends State<SettingPage> {
             return SizedBox();
           },
         ),
-        _optionItems('Bahasa'),
+        // _optionItems('Bahasa'),
       ],
     );
   }
