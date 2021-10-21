@@ -9,12 +9,12 @@ class TransactionRepository {
     required this.localAuthService,
   });
 
-  Future<bool> postTransaction(
+  Future<TransactionEntity> postTransaction(
       {required TransactionPostEntity postEntity}) async {
-    bool res = await transactionService.postTransaction(
+    TransactionModel res = await transactionService.postTransaction(
         idUserReceive: postEntity.idReceive, amount: postEntity.amount);
 
-    return res;
+    return DataMapper.transactionMapper(res);
   }
 
   Future<bool> postTransactionBarcode(

@@ -41,3 +41,15 @@ class TransactionTopUpEntity extends BaseEntity {
     required this.user,
   });
 }
+
+class TransactionEntity extends BaseEntity {
+  final String amount;
+  final WalletData pay;
+  final WalletData receive;
+
+  TransactionEntity({
+    required this.amount,
+    required this.pay,
+    required this.receive,
+  });
+}

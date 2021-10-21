@@ -4,7 +4,7 @@
 // flutter pub run bin/gen_export
 library base;
 
-export 'history_page.dart';
 export 'base_page.dart';
 export 'f_wallet_page.dart';
+export 'history_page.dart';
 export 'home_page.dart';

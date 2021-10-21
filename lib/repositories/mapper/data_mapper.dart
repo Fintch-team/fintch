@@ -16,6 +16,13 @@ class DataMapper {
         user: topUp.data.user,
       );
 
+  static TransactionEntity transactionMapper(TransactionModel topUp) =>
+      TransactionEntity(
+        amount: topUp.data.amount,
+        pay: topUp.data.pay,
+        receive: topUp.data.receive,
+      );
+
   static UserEntity userMapper(UserModel userModel) => UserEntity(
         id: userModel.data.id,
         name: userModel.data.name,

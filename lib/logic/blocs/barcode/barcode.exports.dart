@@ -2,7 +2,7 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library history;
+library barcode;
 
 export 'barcode_bloc.dart';
 export 'barcode_event.dart';

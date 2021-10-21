@@ -11,9 +11,9 @@ class PayBloc extends Bloc<PayEvent, PayState> {
     on<PostPay>((event, emit) async {
       emit(PayLoading());
       try {
-        bool res = await transactionRepository.postTransaction(
+        TransactionEntity res = await transactionRepository.postTransaction(
             postEntity: event.entity);
-        emit(PaySuccess(entity: res));
+        emit(PayTransctionSuccess(entity: res));
       } on FailedException catch (e) {
         print('e anjayani : $e');
         emit(PayFailure(message: e.message));

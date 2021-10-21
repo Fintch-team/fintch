@@ -316,6 +316,7 @@ class _PayPageState extends State<PayPage> {
         isBarrierExpired = true;
       }
     }
+
     return Container(
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.symmetric(horizontal: 20),

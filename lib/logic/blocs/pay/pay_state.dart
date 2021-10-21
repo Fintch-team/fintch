@@ -21,6 +21,15 @@ class PaySuccess extends PayState {
   List<Object> get props => [entity];
 }
 
+class PayTransctionSuccess extends PayState {
+  final TransactionEntity entity;
+
+  PayTransctionSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class PayTopUpSuccess extends PayState {
   final TransactionTopUpEntity entity;
 

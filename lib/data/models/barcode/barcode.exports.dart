@@ -2,7 +2,7 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library user;
+library barcode;
 
-export 'list_barcode_model.dart';
 export 'barcode_model.dart';
+export 'list_barcode_model.dart';
