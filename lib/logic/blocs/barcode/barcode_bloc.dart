@@ -2,7 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class BarcodeBloc extends Bloc<BarcodeEvent, BarcodeState> {
+mixin BarcodeSheetBloc on Bloc<BarcodeEvent, BarcodeState> {}
+
+class BarcodeBloc extends Bloc<BarcodeEvent, BarcodeState>
+    implements BarcodeSheetBloc {
   final BarcodeRepository barcodeRepository;
   final UserRepository userRepository;
 
@@ -51,7 +54,7 @@ class BarcodeBloc extends Bloc<BarcodeEvent, BarcodeState> {
       emit(BarcodeLoading());
       try {
         await barcodeRepository.deleteBarcode(idBarcode: event.id.toString());
-        emit(BarcodeRequestSuccess());
+        emit(DeleteBarcodeRequestSuccess());
       } on FailedException catch (e) {
         emit(BarcodeFailure(message: e.message));
       } catch (e, stacktrace) {

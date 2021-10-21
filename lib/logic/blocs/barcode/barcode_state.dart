@@ -23,6 +23,8 @@ class BarcodeResponseSuccess extends BarcodeState {
 
 class BarcodeRequestSuccess extends BarcodeState {}
 
+class DeleteBarcodeRequestSuccess extends BarcodeState {}
+
 class BarcodeFailure extends BarcodeState {
   final String message;
 
