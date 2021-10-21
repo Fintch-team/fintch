@@ -233,8 +233,6 @@ class _BarcodePageState extends State<BarcodePage> {
                         id: data.id,
                       ),
                     );
-
-                // context.read<BarcodeBloc>().add(GetBarcode());
                 Navigator.pop(context, true);
               },
               text: 'Iya',

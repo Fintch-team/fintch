@@ -30,7 +30,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    // getCameraPermission();
+    getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());

@@ -69,6 +69,7 @@ class Helper {
         content: Text(message, style: AppTheme.text1),
         backgroundColor: isFailure ? AppTheme.red : AppTheme.yellow,
         behavior: SnackBarBehavior.floating,
+        elevation: 40,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
