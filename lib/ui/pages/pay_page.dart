@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    // getCameraPermission();
+    getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -542,9 +543,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       ),
                     );
                   } else if (state is ProfilePayLoading) {
-                    return Center(
-                      child: CircularLoading(),
-                    );
+                    return ReceiveSheetShimmer();
                   } else if (state is ProfilePayFailure) {
                     return FailureStateWidget(
                         message: 'Profile Pay Receive  Gagal di Load');
@@ -573,22 +572,26 @@ class _PaymentSheetState extends State<PaymentSheet> {
   Widget _totalAmount() {
     return Row(
       children: [
-        Expanded(
-          child: Text('Total', style: AppTheme.text1),
-        ),
+        Text('Total', style: AppTheme.text1),
         SizedBox(width: Helper.normalPadding),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              Resources.icFintchPoint,
-            ),
-            SizedBox(width: 8),
-            Text(
-              value.toStringAsFixed(0).parseCurrency(),
-              style: AppTheme.text1,
-            ),
-          ],
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SvgPicture.asset(
+                Resources.icFintchPoint,
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                child: AutoSizeText(
+                  value.toStringAsFixed(0).parseCurrency(),
+                  style: AppTheme.text1,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -627,7 +630,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
         onChanged: (String text) {
           if (_formKey.currentState!.validate()) {
             setState(() {
-              value = double.parse(text);
+              value = double.tryParse(text) ?? 0;
             });
           }
         },

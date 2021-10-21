@@ -580,3 +580,210 @@ class PayWalletShimmer extends StatelessWidget {
     );
   }
 }
+
+class BarrierCashShimmer extends StatelessWidget {
+  const BarrierCashShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 80,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 40,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.bigPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom),
+        ],
+      ),
+    );
+  }
+}
+
+class ReceiveSheetShimmer extends StatelessWidget {
+  const ReceiveSheetShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(64),
+              boxShadow: Helper.getShadow(),
+              color: AppTheme.grey,
+            ),
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.3,
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 12,
+            width: 40,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 12,
+            width: 40,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(64),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: Helper.normalPadding),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.bigPadding),
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppTheme.grey,
+                ),
+                height: 20,
+                width: 40,
+              ),
+              SizedBox(width: Helper.normalPadding),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SvgPicture.asset(
+                      Resources.icFintchPoint,
+                    ),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: AppTheme.grey,
+                        ),
+                        height: 20,
+                        width: 60,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: Helper.normalPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: Helper.normalPadding),
+        ],
+      ),
+    );
+  }
+}

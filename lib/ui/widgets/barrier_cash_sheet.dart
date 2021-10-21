@@ -19,6 +19,7 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
   final _formKey = GlobalKey<FormState>();
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -30,32 +31,47 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
   }
 
   @override
+  void dispose() {
+    print('dispose');
+    priceController.dispose();
+    dateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //TODO: Implement Get Barrier Cash, kalau misal Barrier Cash null, Add Barrier cash, kalau ada, Update barrier cash dan datanya jadi default
-    return BlocBuilder<WalletBloc, WalletState>(
-      builder: (context, state) {
-        if (state is WalletResponseSuccess) {
-          if (state.entity.barrierExpired != null) {
-            priceController.text = state.entity.barrierAmount.toString();
-            dateController.text =
-                state.entity.barrierExpired!.parseYearMonthDay();
-            datePicked = state.entity.barrierExpired!;
-          }
-          return Material(
-            child: GestureDetector(
-              onTap: () => Helper.unfocus(),
-              child: Container(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                    color: AppTheme.white,
-                  ),
-                  padding: EdgeInsets.all(20),
-                  child: Stack(
-                    children: [
-                      SingleChildScrollView(
+    return Material(
+      child: GestureDetector(
+        onTap: () => Helper.unfocus(),
+        child: Container(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              color: AppTheme.white,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                BlocConsumer<WalletBloc, WalletState>(
+                  listener: (context, state) {
+                    if (state is WalletFailure) {
+                      Helper.snackBar(context,
+                          message: state.message, isFailure: true);
+                    } else if (state is WalletResponseSuccess) {
+                      if (state.entity.barrierExpired != null) {
+                        priceController.text =
+                            state.entity.barrierAmount.toString();
+                        dateController.text =
+                            state.entity.barrierExpired!.parseYearMonthDay();
+                        datePicked = state.entity.barrierExpired!;
+                      }
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is WalletResponseSuccess) {
+                      return SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -96,115 +112,184 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                             Text('Tenggat Waktu', style: AppTheme.text3.bold),
                             SizedBox(height: 8),
                             StatefulBuilder(builder: (context, dateSetState) {
-                              return GestureDetector(
-                                onTap: () async {
-                                  final picked =
-                                      await Helper.showDeadlineDatePicker(
-                                    context,
-                                    datePicked,
-                                  );
-                                  print(picked.toString());
-                                  if (picked != null &&
-                                      picked != datePicked &&
-                                      picked.isAfter(now)) {
-                                    dateSetState(() {
-                                      datePicked = picked;
-                                      dateController.text =
-                                          datePicked.parseYearMonthDay();
-                                    });
-                                  }
-                                },
-                                child: TextFormField(
-                                  controller: dateController,
-                                  style: AppTheme.text3,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukan tenggat waktu',
-                                    enabledBorder: AppTheme.enabledBlackBorder,
-                                    hintStyle: AppTheme.text3.blackOpacity,
-                                    disabledBorder: AppTheme.enabledBlackBorder,
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final picked =
+                                          await Helper.showDeadlineDatePicker(
+                                        context,
+                                        datePicked,
+                                      );
+                                      print(picked.toString());
+                                      if (picked != null &&
+                                          picked != datePicked &&
+                                          picked.isAfter(now)) {
+                                        dateSetState(() {
+                                          datePicked = picked;
+                                          dateController.text =
+                                              datePicked.parseYearMonthDay();
+                                        });
+                                      }
+                                    },
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      style: AppTheme.text3,
+                                      enabled: false,
+                                      decoration: InputDecoration(
+                                        hintText: 'Masukan tenggat waktu',
+                                        enabledBorder:
+                                            AppTheme.enabledBlackBorder,
+                                        hintStyle: AppTheme.text3.blackOpacity,
+                                        disabledBorder:
+                                            AppTheme.enabledBlackBorder,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  state.entity.barrierExpired != null
+                                      ? SizedBox(height: Helper.smallPadding)
+                                      : Container(),
+                                  state.entity.barrierExpired != null
+                                      ? Align(
+                                          alignment: Alignment.centerRight,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              dateSetState(() {
+                                                datePicked = datePicked
+                                                    .add(Duration(days: 7));
+                                                dateController.text = datePicked
+                                                    .parseYearMonthDay();
+                                              });
+                                            },
+                                            child: Text('Perbarui Seminggu',
+                                                style: AppTheme.text3.purple),
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
                               );
                             }),
                             SizedBox(height: Helper.bigPadding),
                             SizedBox(height: Helper.bigPadding),
                             //TODO: Add Validator
-                            //TODO: Implement Add Barrier Cash and Update F-Goals using logic if data was null for get Barrier Cash, Add F-Goals, otherwise, Update F-Goals
-                            state.entity.barrierExpired != null
-                                ? Row(
-                                    children: [
-                                      Flexible(
-                                        child: CustomButton(
+                            StatefulBuilder(
+                                builder: (context, barrierCashSetState) {
+                              return BlocConsumer<BarrierCashBloc, WalletState>(
+                                listener: (context, state) {
+                                  if (!(state is WalletLoading)) {
+                                    barrierCashSetState(
+                                        () => isLoading = false);
+                                  }
+                                  if (state is WalletLoading) {
+                                    barrierCashSetState(() => isLoading = true);
+                                  } else if (state is WalletResponseSuccess) {
+                                    Helper.snackBar(context,
+                                        message:
+                                            'Berhasil Simpan Barrier Cash');
+                                    Navigator.of(context).pop();
+                                  } else if (state
+                                      is DeleteBarrierCashSuccess) {
+                                    priceController.clear();
+                                    dateController.clear();
+                                    Helper.snackBar(context,
+                                        message: 'Berhasil Hapus Barrier Cash');
+                                    Navigator.of(context).pop();
+                                  } else if (state is WalletFailure) {
+                                    Helper.snackBar(context,
+                                        message: state.message,
+                                        isFailure: true);
+                                  }
+                                },
+                                builder: (context, barrierCashState) {
+                                  return state.entity.barrierExpired != null
+                                      ? Row(
+                                          children: [
+                                            Flexible(
+                                              child: CustomButton(
+                                                onTap: () {
+                                                  context
+                                                      .read<BarrierCashBloc>()
+                                                      .add(DeleteBarrierCash());
+                                                },
+                                                text: 'Hapus',
+                                                isOutline: true,
+                                                isUpper: false,
+                                                isLoading: isLoading,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20),
+                                            //TODO: Implement Delete F-Goal
+                                            Flexible(
+                                              child: CustomButton(
+                                                onTap: () {
+                                                  context
+                                                      .read<BarrierCashBloc>()
+                                                      .add(AddBarrierCash(
+                                                          entity:
+                                                              BarrierCashPostEntity(
+                                                        barrierAmount:
+                                                            priceController
+                                                                .text,
+                                                        barrierExpired:
+                                                            dateController.text,
+                                                      )));
+                                                },
+                                                text: 'Simpan',
+                                                isUpper: false,
+                                                isLoading: isLoading,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : CustomButton(
                                           onTap: () {
                                             context
-                                                .read<WalletBloc>()
-                                                .add(DeleteBarrierCash());
-
-                                            Navigator.pop(context);
+                                                .read<BarrierCashBloc>()
+                                                .add(AddBarrierCash(
+                                                    entity:
+                                                        BarrierCashPostEntity(
+                                                  barrierAmount:
+                                                      priceController.text,
+                                                  barrierExpired:
+                                                      dateController.text,
+                                                )));
                                           },
-                                          text: 'Hapus',
-                                          isOutline: true,
+                                          text: 'Simpan',
                                           isUpper: false,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20),
-                                      //TODO: Implement Delete F-Goal
-                                      Flexible(
-                                        flex: 2,
-                                        child: CustomButton(
-                                          onTap: () {
-                                            context
-                                                .read<WalletBloc>()
-                                                .add(ExtendBarrierCash());
-
-                                            Navigator.pop(context, true);
-                                          },
-                                          text: 'Perbarui seminggu',
-                                          isUpper: false,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : CustomButton(
-                                    onTap: () {
-                                      context
-                                          .read<WalletBloc>()
-                                          .add(AddBarrierCash(
-                                              entity: BarrierCashPostEntity(
-                                            barrierAmount: priceController.text,
-                                            barrierExpired: dateController.text,
-                                          )));
-
-                                      Navigator.pop(context, true);
-                                    },
-                                    text: 'Simpan',
-                                    isUpper: false,
-                                  ),
+                                          isLoading: isLoading,
+                                        );
+                                },
+                              );
+                            }),
                             SizedBox(
                                 height: MediaQuery.of(context).padding.bottom),
                           ],
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: SvgPicture.asset(Resources.icClose),
-                        ),
-                      ),
-                    ],
+                      );
+                    } else if (state is WalletLoading) {
+                      return BarrierCashShimmer();
+                    } else if (state is WalletFailure) {
+                      return FailureStateWidget(
+                          message: 'Barrier Cash di Load!');
+                    }
+                    return Container();
+                  },
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SvgPicture.asset(Resources.icClose),
                   ),
                 ),
-              ),
+              ],
             ),
-          );
-        }
-
-        // TODO: implementasi state yg lain
-        return Container();
-      },
+          ),
+        ),
+      ),
     );
   }
 }

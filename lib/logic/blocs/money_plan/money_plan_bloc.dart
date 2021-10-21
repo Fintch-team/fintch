@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
+mixin MoneyPlanSheetBloc on Bloc<MoneyPlanEvent, MoneyPlanState>{}
+
+class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> implements MoneyPlanSheetBloc{
   final MoneyPlanRepository moneyPlanRepository;
 
   MoneyPlanBloc({required this.moneyPlanRepository})
@@ -57,7 +59,7 @@ class MoneyPlanBloc extends Bloc<MoneyPlanEvent, MoneyPlanState> {
             idMoneyPlan: event.id.toString());
         ListMoneyPlanEntity entity = await moneyPlanRepository.getMoneyPlan();
 
-        emit(MoneyPlanResponseSuccess(entity: entity));
+        emit(DeleteMoneyPlanResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyPlanFailure(message: e.message));
       } catch (e, stacktrace) {

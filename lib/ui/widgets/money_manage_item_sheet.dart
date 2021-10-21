@@ -20,6 +20,7 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
   final _formKey = GlobalKey<FormState>();
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -104,42 +105,67 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
                         SizedBox(height: Helper.bigPadding),
                         SizedBox(height: Helper.bigPadding),
                         //TODO: Add Validator
-                        CustomButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (widget.data != null) {
-                                context.read<MoneyManageItemBloc>().add(
-                                      EditMoneyManageItem(
-                                        entity: MoneyManageItemPutEntity(
-                                          idMoneyManageItem:
-                                              widget.data!.id.toString(),
-                                          amount: 0,
-                                          percent: percentController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
-                              } else {
-                                context.read<MoneyManageItemBloc>().add(
-                                      PostMoneyManageItem(
-                                        entity: MoneyManageItemPostEntity(
-                                          amount: 0,
-                                          percent: percentController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
+                        StatefulBuilder(builder: (context, buttonSetState) {
+                          return BlocConsumer<MoneyManageItemSheetBloc,
+                              MoneyManageItemState>(
+                            listener: (context, state) {
+                              if (!(state is MoneyManageItemLoading)) {
+                                buttonSetState(() => isLoading = false);
                               }
-
-                              context
-                                  .read<MoneyManageItemBloc>()
-                                  .add(GetMoneyManageItem());
-                              Navigator.pop(context);
-                            }
-                          },
-                          text: 'Simpan',
-                          isUpper: false,
-                        ),
+                              if (state is MoneyManageItemLoading) {
+                                buttonSetState(() => isLoading = true);
+                              } else if (state
+                                  is MoneyManageItemResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Simpan Card');
+                                context
+                                    .read<MoneyManageItemBloc>()
+                                    .add(GetMoneyManageItem());
+                                Navigator.pop(context);
+                              } else if (state is MoneyManageItemFailure) {
+                                Helper.snackBar(context,
+                                    message: state.message, isFailure: true);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomButton(
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (widget.data != null) {
+                                      context
+                                          .read<MoneyManageItemSheetBloc>()
+                                          .add(
+                                            EditMoneyManageItem(
+                                              entity: MoneyManageItemPutEntity(
+                                                idMoneyManageItem:
+                                                    widget.data!.id.toString(),
+                                                amount: 0,
+                                                percent: percentController.text,
+                                                name: titleController.text,
+                                              ),
+                                            ),
+                                          );
+                                    } else {
+                                      context
+                                          .read<MoneyManageItemSheetBloc>()
+                                          .add(
+                                            PostMoneyManageItem(
+                                              entity: MoneyManageItemPostEntity(
+                                                amount: 0,
+                                                percent: percentController.text,
+                                                name: titleController.text,
+                                              ),
+                                            ),
+                                          );
+                                    }
+                                  }
+                                },
+                                text: 'Simpan',
+                                isUpper: false,
+                              );
+                            },
+                          );
+                        }),
                         SizedBox(height: MediaQuery.of(context).padding.bottom),
                       ],
                     ),

@@ -15,6 +15,7 @@ class BarcodePage extends StatefulWidget {
 }
 
 class _BarcodePageState extends State<BarcodePage> {
+  bool isLoading = false;
   @override
   void initState() {
     _init();
@@ -212,7 +213,7 @@ class _BarcodePageState extends State<BarcodePage> {
 
   Widget _confirmDeleteFGoals(BuildContext context, BarcodeData data) {
     return CustomDialog(
-      title: 'Yakin nih ingin hapus F-Barcode?',
+      title: 'Yakin nih ingin hapus Barcode?',
       content:
           Text('Kamu yakin mau hapus ${data.name} nih?', style: AppTheme.text3),
       buttons: Row(
@@ -226,21 +227,41 @@ class _BarcodePageState extends State<BarcodePage> {
           ),
           SizedBox(width: Helper.normalPadding),
           Flexible(
-            child: CustomButton(
-              onTap: () {
-                context.read<BarcodeBloc>().add(
-                      DeleteBarcode(
-                        id: data.id,
-                      ),
-                    );
-
-                // context.read<BarcodeBloc>().add(GetBarcode());
-                Navigator.pop(context, true);
-              },
-              text: 'Iya',
-              isOutline: true,
-              isUpper: false,
-            ),
+            child: StatefulBuilder(builder: (context, buttonSetState) {
+              return BlocConsumer<BarcodeSheetBloc, BarcodeState>(
+                listener: (context, state) {
+                  if (!(state is BarcodeLoading)) {
+                    buttonSetState(() => isLoading = false);
+                  }
+                  if (state is BarcodeLoading) {
+                    buttonSetState(() => isLoading = true);
+                  } else if (state is DeleteBarcodeRequestSuccess) {
+                    Helper.snackBar(context, message: 'Berhasil Hapus Barcode');
+                    context.read<MoneyPlanBloc>().add(GetMoneyPlan());
+                    Navigator.of(context).pop(true);
+                  } else if (state is BarcodeFailure) {
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
+                    Navigator.pop(context, false);
+                  }
+                },
+                builder: (context, state) {
+                  return CustomButton(
+                    onTap: () {
+                      context.read<BarcodeSheetBloc>().add(
+                            DeleteBarcode(
+                              id: data.id,
+                            ),
+                          );
+                      Navigator.pop(context, true);
+                    },
+                    text: 'Iya',
+                    isOutline: true,
+                    isUpper: false,
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -263,6 +284,7 @@ class _FGoalSheetState extends State<BarcodeSheet> {
   final _formKey = GlobalKey<FormState>();
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -348,39 +370,58 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                         SizedBox(height: Helper.bigPadding),
                         SizedBox(height: Helper.bigPadding),
                         //TODO: Add Validator
-                        CustomButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (widget.data != null) {
-                                context.read<BarcodeBloc>().add(
-                                      EditBarcode(
-                                        entity: BarcodePutEntity(
-                                            idBarcode:
-                                                widget.data!.id.toString(),
-                                            amount: priceController.text,
-                                            name: titleController.text,
-                                            confirm: '123456'),
-                                      ),
-                                    );
-                              } else {
-                                context.read<BarcodeBloc>().add(
-                                      PostBarcode(
-                                        entity: BarcodePostEntity(
-                                          confirm: '123456',
-                                          amount: priceController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
+                        StatefulBuilder(builder: (context, buttonSetState) {
+                          return BlocConsumer<BarcodeSheetBloc, BarcodeState>(
+                            listener: (context, state) {
+                              if (!(state is BarcodeLoading)) {
+                                buttonSetState(() => isLoading = false);
                               }
-
-                              context.read<BarcodeBloc>().add(GetBarcode());
-                              Navigator.pop(context);
-                            }
-                          },
-                          text: 'Simpan',
-                          isUpper: false,
-                        ),
+                              if (state is BarcodeLoading) {
+                                buttonSetState(() => isLoading = true);
+                              } else if (state is BarcodeResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Simpan Card');
+                                context.read<BarcodeBloc>().add(GetBarcode());
+                                Navigator.pop(context);
+                              } else if (state is BarcodeFailure) {
+                                Helper.snackBar(context,
+                                    message: state.message, isFailure: true);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomButton(
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (widget.data != null) {
+                                      context.read<BarcodeSheetBloc>().add(
+                                            EditBarcode(
+                                              entity: BarcodePutEntity(
+                                                  idBarcode: widget.data!.id
+                                                      .toString(),
+                                                  amount: priceController.text,
+                                                  name: titleController.text,
+                                                  confirm: '123456'),
+                                            ),
+                                          );
+                                    } else {
+                                      context.read<BarcodeSheetBloc>().add(
+                                            PostBarcode(
+                                              entity: BarcodePostEntity(
+                                                confirm: '123456',
+                                                amount: priceController.text,
+                                                name: titleController.text,
+                                              ),
+                                            ),
+                                          );
+                                    }
+                                  }
+                                },
+                                text: 'Simpan',
+                                isUpper: false,
+                              );
+                            },
+                          );
+                        }),
                         SizedBox(height: MediaQuery.of(context).padding.bottom),
                       ],
                     ),

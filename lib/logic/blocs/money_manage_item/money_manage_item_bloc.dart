@@ -2,8 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
+mixin MoneyManageItemSheetBloc
+    on Bloc<MoneyManageItemEvent, MoneyManageItemState> {}
+
 class MoneyManageItemBloc
-    extends Bloc<MoneyManageItemEvent, MoneyManageItemState> {
+    extends Bloc<MoneyManageItemEvent, MoneyManageItemState>
+    implements MoneyManageItemSheetBloc {
   final MoneyManageItemRepository moneyManageItemRepository;
 
   MoneyManageItemBloc({required this.moneyManageItemRepository})

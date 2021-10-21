@@ -16,6 +16,8 @@ class FGoalsPage extends StatefulWidget {
 }
 
 class _FGoalsPageState extends State<FGoalsPage> {
+  bool isLoading = false;
+
   @override
   void initState() {
     _init();
@@ -249,21 +251,40 @@ class _FGoalsPageState extends State<FGoalsPage> {
           ),
           SizedBox(width: Helper.normalPadding),
           Flexible(
-            child: CustomButton(
-              onTap: () {
-                context.read<MoneyPlanBloc>().add(
-                      DeleteMoneyPlan(
-                        id: data.id,
-                      ),
-                    );
-
-                // context.read<MoneyPlanBloc>().add(GetMoneyPlan());
-                Navigator.pop(context, true);
-              },
-              text: 'Iya',
-              isOutline: true,
-              isUpper: false,
-            ),
+            child: StatefulBuilder(builder: (context, buttonSetState) {
+              return BlocConsumer<MoneyPlanSheetBloc, MoneyPlanState>(
+                listener: (context, state) {
+                  if (!(state is MoneyPlanLoading)) {
+                    buttonSetState(() => isLoading = false);
+                  }
+                  if (state is MoneyPlanLoading) {
+                    buttonSetState(() => isLoading = true);
+                  } else if (state is DeleteMoneyPlanResponseSuccess) {
+                    Helper.snackBar(context, message: 'Berhasil Hapus F-Goals');
+                    context.read<MoneyPlanBloc>().add(GetMoneyPlan());
+                    Navigator.of(context).pop(true);
+                  } else if (state is MoneyPlanFailure) {
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
+                    Navigator.pop(context, false);
+                  }
+                },
+                builder: (context, state) {
+                  return CustomButton(
+                    onTap: () {
+                      context.read<MoneyPlanSheetBloc>().add(
+                            DeleteMoneyPlan(
+                              id: data.id,
+                            ),
+                          );
+                    },
+                    text: 'Iya',
+                    isOutline: true,
+                    isUpper: false,
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -287,6 +308,7 @@ class _FGoalSheetState extends State<FGoalSheet> {
   final _formKey = GlobalKey<FormState>();
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -405,40 +427,66 @@ class _FGoalSheetState extends State<FGoalSheet> {
                         SizedBox(height: Helper.bigPadding),
                         SizedBox(height: Helper.bigPadding),
                         //TODO: Add Validator
-                        CustomButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (widget.data != null) {
-                                context.read<MoneyPlanBloc>().add(
-                                      EditMoneyPlan(
-                                        entity: MoneyPlanPutEntity(
-                                          idMoneyPlan:
-                                              widget.data!.id.toString(),
-                                          deadline: dateController.text,
-                                          totalAmount: priceController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
-                              } else {
-                                context.read<MoneyPlanBloc>().add(
-                                      PostMoneyPlan(
-                                        entity: MoneyPlanPostEntity(
-                                          deadline: dateController.text,
-                                          totalAmount: priceController.text,
-                                          name: titleController.text,
-                                        ),
-                                      ),
-                                    );
+                        StatefulBuilder(builder: (context, buttonSetState) {
+                          return BlocConsumer<MoneyPlanSheetBloc,
+                              MoneyPlanState>(
+                            listener: (context, state) {
+                              if (!(state is MoneyPlanLoading)) {
+                                buttonSetState(() => isLoading = false);
                               }
+                              if (state is MoneyPlanLoading) {
+                                buttonSetState(() => isLoading = true);
+                              } else if (state is MoneyPlanResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Simpan F-Goals');
 
-                              context.read<MoneyPlanBloc>().add(GetMoneyPlan());
-                              Navigator.pop(context);
-                            }
-                          },
-                          text: 'Simpan',
-                          isUpper: false,
-                        ),
+                                context
+                                    .read<MoneyPlanBloc>()
+                                    .add(GetMoneyPlan());
+                                Navigator.pop(context);
+                              } else if (state is MoneyPlanFailure) {
+                                Helper.snackBar(context,
+                                    message: state.message, isFailure: true);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomButton(
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (widget.data != null) {
+                                      context.read<MoneyPlanSheetBloc>().add(
+                                            EditMoneyPlan(
+                                              entity: MoneyPlanPutEntity(
+                                                idMoneyPlan:
+                                                    widget.data!.id.toString(),
+                                                deadline: dateController.text,
+                                                totalAmount:
+                                                    priceController.text,
+                                                name: titleController.text,
+                                              ),
+                                            ),
+                                          );
+                                    } else {
+                                      context.read<MoneyPlanSheetBloc>().add(
+                                            PostMoneyPlan(
+                                              entity: MoneyPlanPostEntity(
+                                                deadline: dateController.text,
+                                                totalAmount:
+                                                    priceController.text,
+                                                name: titleController.text,
+                                              ),
+                                            ),
+                                          );
+                                    }
+                                  }
+                                },
+                                text: 'Simpan',
+                                isUpper: false,
+                                isLoading: isLoading,
+                              );
+                            },
+                          );
+                        }),
                         SizedBox(height: MediaQuery.of(context).padding.bottom),
                       ],
                     ),
