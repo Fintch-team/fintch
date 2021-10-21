@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class TransactionService extends ApiService {
   TransactionService() : super('$kUrl/');
 
-  Future<bool> postTransaction({
+  Future<TransactionModel> postTransaction({
     required String idUserReceive,
     required String amount,
   }) async {
@@ -16,9 +16,9 @@ class TransactionService extends ApiService {
         'receive': idUserReceive,
       });
 
-      print(res.statusCode);
+      // print(res.statusCode);
 
-      return res.statusCode == 200;
+      return TransactionModel.fromJson(res.data);
     } on DioError catch (e) {
       debugPrint("error $e");
       throw e.error;

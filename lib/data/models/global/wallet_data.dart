@@ -1,3 +1,5 @@
+import 'package:fintch/gen_export.dart';
+
 class WalletData {
   WalletData({
     required this.id,
@@ -5,6 +7,7 @@ class WalletData {
     required this.barrierAmount,
     required this.payAmount,
     required this.barrierExpired,
+    required this.user,
   });
 
   int id;
@@ -12,6 +15,7 @@ class WalletData {
   int barrierAmount;
   int payAmount;
   DateTime? barrierExpired;
+  UserMini? user;
 
   factory WalletData.fromJson(Map<String, dynamic> json) => WalletData(
         id: json["id"],
@@ -21,6 +25,7 @@ class WalletData {
         barrierExpired: json["barrier_expired"] == null
             ? null
             : DateTime.parse(json["barrier_expired"]),
+        user: json["user"] == null ? null : UserMini.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +33,7 @@ class WalletData {
         "wallet_amount": walletAmount,
         "barrier_amount": barrierAmount,
         "pay_amount": payAmount,
+        "user": user == null ? null : user!.toJson(),
         "barrier_expired": barrierExpired == null
             ? null
             : "${barrierExpired!.year.toString().padLeft(4, '0')}-${barrierExpired!.month.toString().padLeft(2, '0')}-${barrierExpired!.day.toString().padLeft(2, '0')}",

@@ -60,14 +60,15 @@ class _InputPinDialogState extends State<InputPinDialog> {
         },
         child: BlocListener<PayBloc, PayState>(
           listener: (context, state) {
-            if (state is PaySuccess) {
+            if (state is PayTransctionSuccess) {
               context.loaderOverlay.hide();
-              if (state.entity) {
+              if (state.entity.amount.isNotEmpty) {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
                   builder: (context) => SuccessPaymentDialog(
-                      fintchPoint: '8000', fintchWallet: '210000'),
+                      fintchPoint: state.entity.amount,
+                      fintchWallet: state.entity.pay.walletAmount.toString()),
                 );
               } else {
                 showDialog(

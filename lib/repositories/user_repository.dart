@@ -27,7 +27,10 @@ class UserRepository {
       password: postChangePasswordEntity.password,
       passwordOld: postChangePasswordEntity.passwordOld,
     );
-    await userService.changePassword(postChangePassword);
+
+    UserModel res = await userService.changePassword(postChangePassword);
+
+    await localAuthService.updateUserInformation(res.data);
     return;
   }
 
@@ -38,7 +41,10 @@ class UserRepository {
       pin: postChangePinEntity.pin,
       password: postChangePinEntity.password,
     );
-    await userService.changePin(postChangePin);
+    UserModel res = await userService.changePin(postChangePin);
+
+    await localAuthService.updateUserInformation(res.data);
+
     return;
   }
 

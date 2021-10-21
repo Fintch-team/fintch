@@ -11,7 +11,9 @@ class WalletRepository {
 
   Future<WalletEntity> getWalletDetail({String id = ""}) async {
     WalletModel walletModel = await walletService.getWalletId(
-        id: id.isNotEmpty ? id : localAuthService.userId.toString());
+        id: id.isNotEmpty
+            ? id
+            : localAuthService.currentUser!.wallet.id.toString());
 
     return DataMapper.walletMapper(walletModel);
   }

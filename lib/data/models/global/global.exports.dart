@@ -12,6 +12,7 @@ export 'money_manage_item_data.dart';
 export 'money_plan_data.dart';
 export 'pagination.dart';
 export 'school_data.dart';
+export 'transaction_data.dart';
 export 'user_data.dart';
 export 'user_mini.dart';
 export 'wallet_data.dart';

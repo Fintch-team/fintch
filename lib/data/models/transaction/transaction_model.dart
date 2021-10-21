@@ -1,7 +1,7 @@
 import 'package:fintch/gen_export.dart';
 
-class BarcodeModel {
-  BarcodeModel({
+class TransactionModel {
+  TransactionModel({
     required this.message,
     required this.details,
     required this.data,
@@ -9,12 +9,13 @@ class BarcodeModel {
 
   String message;
   dynamic details;
-  BarcodeData data;
+  TransactionData data;
 
-  factory BarcodeModel.fromJson(Map<String, dynamic> json) => BarcodeModel(
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      TransactionModel(
         message: json["message"],
         details: json["details"],
-        data: BarcodeData.fromJson(json["data"]),
+        data: TransactionData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {

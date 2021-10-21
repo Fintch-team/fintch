@@ -6,5 +6,5 @@ library service;
 
 export 'locals/locals.exports.dart';
 export 'micro/micro.exports.dart';
-export 'service_base.dart';
 export 'services.dart';
+export 'service_base.dart';
