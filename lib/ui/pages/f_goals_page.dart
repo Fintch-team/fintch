@@ -262,10 +262,11 @@ class _FGoalsPageState extends State<FGoalsPage> {
                   } else if (state is DeleteMoneyPlanResponseSuccess) {
                     Helper.snackBar(context, message: 'Berhasil Hapus F-Goals');
                     context.read<MoneyPlanBloc>().add(GetMoneyPlan());
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(true);
                   } else if (state is MoneyPlanFailure) {
                     Helper.snackBar(context,
                         message: state.message, isFailure: true);
+                    Navigator.pop(context, false);
                   }
                 },
                 builder: (context, state) {
@@ -434,8 +435,6 @@ class _FGoalSheetState extends State<FGoalSheet> {
                                 buttonSetState(() => isLoading = false);
                               }
                               if (state is MoneyPlanLoading) {
-                                Helper.snackBar(context,
-                                    message: 'Berhasil Hapus F-Goals');
                                 buttonSetState(() => isLoading = true);
                               } else if (state is MoneyPlanResponseSuccess) {
                                 Helper.snackBar(context,
