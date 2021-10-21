@@ -32,6 +32,7 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
 
   @override
   void dispose() {
+    print('dispose');
     priceController.dispose();
     dateController.dispose();
     super.dispose();
@@ -40,30 +41,37 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
   @override
   Widget build(BuildContext context) {
     //TODO: Implement Get Barrier Cash, kalau misal Barrier Cash null, Add Barrier cash, kalau ada, Update barrier cash dan datanya jadi default
-    return BlocBuilder<WalletBloc, WalletState>(
-      builder: (context, state) {
-        if (state is WalletResponseSuccess) {
-          if (state.entity.barrierExpired != null) {
-            priceController.text = state.entity.barrierAmount.toString();
-            dateController.text =
-                state.entity.barrierExpired!.parseYearMonthDay();
-            datePicked = state.entity.barrierExpired!;
-          }
-          return Material(
-            child: GestureDetector(
-              onTap: () => Helper.unfocus(),
-              child: Container(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
-                    color: AppTheme.white,
-                  ),
-                  padding: EdgeInsets.all(20),
-                  child: Stack(
-                    children: [
-                      SingleChildScrollView(
+    return Material(
+      child: GestureDetector(
+        onTap: () => Helper.unfocus(),
+        child: Container(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              color: AppTheme.white,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                BlocConsumer<WalletBloc, WalletState>(
+                  listener: (context, state) {
+                    if (state is WalletFailure) {
+                      Helper.snackBar(context,
+                          message: state.message, isFailure: true);
+                    } else if (state is WalletResponseSuccess) {
+                      if (state.entity.barrierExpired != null) {
+                        priceController.text =
+                            state.entity.barrierAmount.toString();
+                        dateController.text =
+                            state.entity.barrierExpired!.parseYearMonthDay();
+                        datePicked = state.entity.barrierExpired!;
+                      }
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is WalletResponseSuccess) {
+                      return SingleChildScrollView(
                         physics: BouncingScrollPhysics(),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -155,6 +163,8 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                                     Navigator.of(context).pop();
                                   } else if (state
                                       is DeleteBarrierCashSuccess) {
+                                    priceController.clear();
+                                    dateController.clear();
                                     Helper.snackBar(context,
                                         message: 'Berhasil Hapus Barrier Cash');
                                     Navigator.of(context).pop();
@@ -229,26 +239,29 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                                 height: MediaQuery.of(context).padding.bottom),
                           ],
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: SvgPicture.asset(Resources.icClose),
-                        ),
-                      ),
-                    ],
+                      );
+                    } else if (state is WalletLoading) {
+                      return BarrierCashShimmer();
+                    } else if (state is WalletFailure) {
+                      return FailureStateWidget(
+                          message: 'Barrier Cash di Load!');
+                    }
+                    return Container();
+                  },
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SvgPicture.asset(Resources.icClose),
                   ),
                 ),
-              ),
+              ],
             ),
-          );
-        }
-
-        // TODO: implementasi state yg lain
-        return Container();
-      },
+          ),
+        ),
+      ),
     );
   }
 }

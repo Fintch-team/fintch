@@ -580,3 +580,74 @@ class PayWalletShimmer extends StatelessWidget {
     );
   }
 }
+
+class BarrierCashShimmer extends StatelessWidget {
+  const BarrierCashShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmers(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 80,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 40,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 20,
+            width: 60,
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: Helper.bigPadding),
+          SizedBox(height: Helper.bigPadding),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppTheme.grey,
+            ),
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+          ),
+          SizedBox(height: MediaQuery.of(context).padding.bottom),
+        ],
+      ),
+    );
+  }
+}
