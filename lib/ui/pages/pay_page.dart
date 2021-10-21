@@ -451,7 +451,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
   @override
   void initState() {
     super.initState();
-    textFieldController.text = '5000';
+    textFieldController.text = value.toInt().toString();
     context
         .read<ProfilePayBloc>()
         .add(GetReceiveByNickname(nickname: widget.nickname));
@@ -555,9 +555,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       ),
                     );
                   } else if (state is ProfilePayLoading) {
-                    return Center(
-                      child: CircularLoading(),
-                    );
+                    return ReceiveSheetShimmer();
                   } else if (state is ProfilePayFailure) {
                     return FailureStateWidget(
                         message: 'Profile Pay Receive  Gagal di Load');
@@ -586,22 +584,26 @@ class _PaymentSheetState extends State<PaymentSheet> {
   Widget _totalAmount() {
     return Row(
       children: [
-        Expanded(
-          child: Text('Total', style: AppTheme.text1),
-        ),
+        Text('Total', style: AppTheme.text1),
         SizedBox(width: Helper.normalPadding),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              Resources.icFintchPoint,
-            ),
-            SizedBox(width: 8),
-            Text(
-              value.toStringAsFixed(0).parseCurrency(),
-              style: AppTheme.text1,
-            ),
-          ],
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SvgPicture.asset(
+                Resources.icFintchPoint,
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                child: AutoSizeText(
+                  value.toStringAsFixed(0).parseCurrency(),
+                  style: AppTheme.text1,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -614,10 +616,8 @@ class _PaymentSheetState extends State<PaymentSheet> {
         controller: textFieldController,
         style: AppTheme.text3.purple,
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Harap masukan jumlah bayar';
-          }
-          final n = num.tryParse(value);
+          Validator.number(value);
+          final n = num.tryParse(value!);
           if (n == null) {
             return '"$value" bukan bilangan!';
           } else if (double.parse(value) < 500) {
@@ -627,7 +627,6 @@ class _PaymentSheetState extends State<PaymentSheet> {
         },
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          DecimalFormatter(decimalDigits: 3)
         ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
@@ -643,7 +642,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
         onChanged: (String text) {
           if (_formKey.currentState!.validate()) {
             setState(() {
-              value = double.parse(text);
+              value = double.tryParse(text) ?? 0;
             });
           }
         },

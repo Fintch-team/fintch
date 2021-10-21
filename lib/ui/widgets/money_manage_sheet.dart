@@ -22,6 +22,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
   bool isIncome = true;
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -168,61 +169,90 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                         SizedBox(height: Helper.bigPadding),
                         SizedBox(height: Helper.bigPadding),
                         //TODO: Add Validator
-                        CustomButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (widget.data != null) {
-                                if (_selectedCardId != null) {
-                                  context.read<MoneyManageBloc>().add(
-                                        EditMoneyManage(
-                                          entity: MoneyManagePutEntity(
-                                            idMoneyManage:
-                                                widget.data!.id.toString(),
-                                            amount: amountController.text,
-                                            name: titleController.text,
-                                            idMoneyManageItem: _selectedCardId!,
-                                            date: dateController.text,
-                                          ),
-                                        ),
-                                      );
-                                }
-                              } else {
-                                if (isIncome) {
-                                  context.read<MoneyManageBloc>().add(
-                                        PostIncomeMoneyManage(
-                                          entity: MoneyManageInPostEntity(
-                                            amount: amountController.text,
-                                            name: titleController.text,
-                                            date: dateController.text,
-                                          ),
-                                        ),
-                                      );
-                                } else {
-                                  if (_selectedCardId != null) {
-                                    context.read<MoneyManageBloc>().add(
-                                          PostOutcomeMoneyManage(
-                                            entity: MoneyManageOutPostEntity(
-                                              amount: amountController.text,
-                                              name: titleController.text,
-                                              idMoneyManageItem:
-                                                  _selectedCardId!,
-                                              date: dateController.text,
-                                            ),
-                                          ),
-                                        );
-                                  }
-                                }
+                        StatefulBuilder(builder: (context, buttonSetState) {
+                          return BlocConsumer<MoneyManageSheetBloc,
+                              MoneyManageState>(
+                            listener: (context, state) {
+                              if (!(state is MoneyManageLoading)) {
+                                buttonSetState(() => isLoading = false);
                               }
-
-                              context
-                                  .read<MoneyManageBloc>()
-                                  .add(GetMoneyManage());
-                              Navigator.pop(context);
-                            }
-                          },
-                          text: 'Simpan',
-                          isUpper: false,
-                        ),
+                              if (state is MoneyManageLoading) {
+                                buttonSetState(() => isLoading = true);
+                              } else if (state is MoneyManageResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Simpan Activity');
+                                context
+                                    .read<MoneyManageBloc>()
+                                    .add(GetMoneyManage());
+                                Navigator.pop(context);
+                              } else if (state is MoneyManageFailure) {
+                                Helper.snackBar(context,
+                                    message: state.message, isFailure: true);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomButton(
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (widget.data != null) {
+                                      if (_selectedCardId != null) {
+                                        context
+                                            .read<MoneyManageSheetBloc>()
+                                            .add(
+                                              EditMoneyManage(
+                                                entity: MoneyManagePutEntity(
+                                                  idMoneyManage: widget.data!.id
+                                                      .toString(),
+                                                  amount: amountController.text,
+                                                  name: titleController.text,
+                                                  idMoneyManageItem:
+                                                      _selectedCardId!,
+                                                  date: dateController.text,
+                                                ),
+                                              ),
+                                            );
+                                      }
+                                    } else {
+                                      if (isIncome) {
+                                        context
+                                            .read<MoneyManageSheetBloc>()
+                                            .add(
+                                              PostIncomeMoneyManage(
+                                                entity: MoneyManageInPostEntity(
+                                                  amount: amountController.text,
+                                                  name: titleController.text,
+                                                  date: dateController.text,
+                                                ),
+                                              ),
+                                            );
+                                      } else {
+                                        if (_selectedCardId != null) {
+                                          context
+                                              .read<MoneyManageSheetBloc>()
+                                              .add(
+                                                PostOutcomeMoneyManage(
+                                                  entity:
+                                                      MoneyManageOutPostEntity(
+                                                    amount:
+                                                        amountController.text,
+                                                    name: titleController.text,
+                                                    idMoneyManageItem:
+                                                        _selectedCardId!,
+                                                    date: dateController.text,
+                                                  ),
+                                                ),
+                                              );
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                text: 'Simpan',
+                                isUpper: false,
+                              );
+                            },
+                          );
+                        }),
                         SizedBox(height: MediaQuery.of(context).padding.bottom),
                       ],
                     ),
@@ -246,6 +276,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
 
   MoneyManageItemData? _selectedCard;
   String? _selectedCardId;
+
   Widget buildCard() {
     return BlocBuilder<MoneyManageItemBloc, MoneyManageItemState>(
       builder: (context, state) {

@@ -148,6 +148,12 @@ class _MyAppState extends State<MyApp> {
               barcodeRepository: context.read<BarcodeRepository>(),
             ),
           ),
+          BlocProvider<BarcodeSheetBloc>(
+            create: (context) => BarcodeBloc(
+              userRepository: context.read<UserRepository>(),
+              barcodeRepository: context.read<BarcodeRepository>(),
+            ),
+          ),
           BlocProvider<SettingsBloc>(
             create: (context) => SettingsBloc(
               userRepository: context.read<UserRepository>(),
@@ -168,6 +174,11 @@ class _MyAppState extends State<MyApp> {
               moneyManageRepository: context.read<MoneyManageRepository>(),
             ),
           ),
+          BlocProvider<MoneyManageSheetBloc>(
+            create: (context) => MoneyManageBloc(
+              moneyManageRepository: context.read<MoneyManageRepository>(),
+            ),
+          ),
           BlocProvider<TabelBloc>(
             create: (context) => MoneyManageBloc(
               moneyManageRepository: context.read<MoneyManageRepository>(),
@@ -179,12 +190,28 @@ class _MyAppState extends State<MyApp> {
                   context.read<MoneyManageItemRepository>(),
             ),
           ),
+          BlocProvider<MoneyManageItemSheetBloc>(
+            create: (context) => MoneyManageItemBloc(
+              moneyManageItemRepository:
+                  context.read<MoneyManageItemRepository>(),
+            ),
+          ),
           BlocProvider<MoneyPlanBloc>(
             create: (context) => MoneyPlanBloc(
               moneyPlanRepository: context.read<MoneyPlanRepository>(),
             ),
           ),
+          BlocProvider<MoneyPlanSheetBloc>(
+            create: (context) => MoneyPlanBloc(
+              moneyPlanRepository: context.read<MoneyPlanRepository>(),
+            ),
+          ),
           BlocProvider<WalletBloc>(
+            create: (context) => WalletBloc(
+              walletRepository: context.read<WalletRepository>(),
+            ),
+          ),
+          BlocProvider<BarrierCashBloc>(
             create: (context) => WalletBloc(
               walletRepository: context.read<WalletRepository>(),
             ),

@@ -46,6 +46,8 @@ class Resources {
   static const String empty = '$_baseSvg/empty.svg';
   static const String failure = '$_baseSvg/failure.svg';
   static const String noInternet = '$_baseSvg/no_internet.svg';
+  static const String historyIllustration =
+      '$_baseSvg/history_illustration.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';

@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _changeLanguage(),
+                        // _changeLanguage(),
                         SizedBox(height: 32),
                         _loginContent(context),
                       ],
@@ -99,27 +99,27 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  Widget _changeLanguage() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('Bahasa: ', style: AppTheme.text3.white),
-          GestureDetector(
-            onTap: () {},
-            child: Text('EN', style: AppTheme.text3.white),
-          ),
-          Text(' / ', style: AppTheme.text3.white),
-          GestureDetector(
-            onTap: () {},
-            child: Text('ID', style: AppTheme.text3.whiteOpacity),
-          ),
-        ],
-      ),
-    );
-  }
+  //
+  // Widget _changeLanguage() {
+  //   return Align(
+  //     alignment: Alignment.centerRight,
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Text('Bahasa: ', style: AppTheme.text3.white),
+  //         GestureDetector(
+  //           onTap: () {},
+  //           child: Text('EN', style: AppTheme.text3.white),
+  //         ),
+  //         Text(' / ', style: AppTheme.text3.white),
+  //         GestureDetector(
+  //           onTap: () {},
+  //           child: Text('ID', style: AppTheme.text3.whiteOpacity),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _loginContent(BuildContext context) {
     return Expanded(

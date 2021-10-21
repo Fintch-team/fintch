@@ -6,8 +6,10 @@ mixin InComeBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
 
 mixin TabelBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
 
+mixin MoneyManageSheetBloc on Bloc<MoneyManageEvent, MoneyManageState> {}
+
 class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState>
-    with InComeBloc, TabelBloc {
+    with InComeBloc, TabelBloc, MoneyManageSheetBloc {
   final MoneyManageRepository moneyManageRepository;
 
   MoneyManageBloc({required this.moneyManageRepository})

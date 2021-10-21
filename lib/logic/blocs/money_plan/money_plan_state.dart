@@ -23,6 +23,15 @@ class MoneyPlanResponseSuccess extends MoneyPlanState {
   List<Object> get props => [entity];
 }
 
+class DeleteMoneyPlanResponseSuccess extends MoneyPlanState {
+  final ListMoneyPlanEntity entity;
+
+  DeleteMoneyPlanResponseSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class MoneyPlanFailure extends MoneyPlanState {
   final String message;
 

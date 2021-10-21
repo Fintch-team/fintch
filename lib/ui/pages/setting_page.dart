@@ -136,8 +136,8 @@ class _SettingPageState extends State<SettingPage> {
               } else if (state is WalletLoading) {
                 return ProfileWalletShimmer();
               } else if (state is WalletFailure) {
-                return FailureStateWidget(
-                    message: 'Fintch Point Gagal di Load!');
+                return Text('Fintch Point Gagal di Load!',
+                    style: AppTheme.text1.bold);
               }
               return Container();
             },
@@ -245,7 +245,7 @@ class _SettingPageState extends State<SettingPage> {
             return SizedBox();
           },
         ),
-        _optionItems('Bahasa'),
+        // _optionItems('Bahasa'),
       ],
     );
   }
