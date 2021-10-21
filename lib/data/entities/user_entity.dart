@@ -56,6 +56,7 @@ class UserEntity extends BaseEntity {
   final int id;
   final String name;
   final String nickname;
+  final String level;
   final String img;
   final WalletData wallet;
   final SchoolData school;
@@ -69,6 +70,7 @@ class UserEntity extends BaseEntity {
       {required this.id,
       required this.name,
       required this.nickname,
+      required this.level,
       required this.img,
       required this.wallet,
       required this.school,

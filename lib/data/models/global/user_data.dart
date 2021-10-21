@@ -7,6 +7,7 @@ class UserData {
     required this.nickname,
     required this.img,
     required this.isSetPass,
+    required this.level,
     required this.isSetPin,
     required this.wallet,
     required this.school,
@@ -21,6 +22,7 @@ class UserData {
   String name;
   String nickname;
   String img;
+  String level;
   bool isSetPass;
   bool isSetPin;
   WalletData wallet;
@@ -38,6 +40,7 @@ class UserData {
         img: json["img"],
         isSetPass: json["is_set_pass"],
         isSetPin: json["is_set_pin"],
+        level: json["level"],
         wallet: WalletData.fromJson(json["wallet"]),
         school: SchoolData.fromJson(json["school"]),
         barcode: List<BarcodeData>.from(
@@ -56,6 +59,7 @@ class UserData {
         "id": id,
         "name": name,
         "nickname": nickname,
+        "level": level,
         "img": img,
         "is_set_pass": isSetPass,
         "is_set_pin": isSetPin,

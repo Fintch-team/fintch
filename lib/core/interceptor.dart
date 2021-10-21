@@ -102,6 +102,17 @@ class FintchInterceptor extends Interceptor {
       return;
     }
 
+    if (response.statusCode == 405) {
+      print(response.data['message']);
+
+      final error = DioError(
+        requestOptions: response.requestOptions,
+        error: FailedException(response.data['message'], response.statusCode!),
+      );
+      handler.reject(error);
+      return;
+    }
+
     if (response.statusCode == 406) {
       print(response.data['message']);
 
