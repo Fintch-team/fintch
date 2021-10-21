@@ -112,35 +112,63 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                             Text('Tenggat Waktu', style: AppTheme.text3.bold),
                             SizedBox(height: 8),
                             StatefulBuilder(builder: (context, dateSetState) {
-                              return GestureDetector(
-                                onTap: () async {
-                                  final picked =
-                                      await Helper.showDeadlineDatePicker(
-                                    context,
-                                    datePicked,
-                                  );
-                                  print(picked.toString());
-                                  if (picked != null &&
-                                      picked != datePicked &&
-                                      picked.isAfter(now)) {
-                                    dateSetState(() {
-                                      datePicked = picked;
-                                      dateController.text =
-                                          datePicked.parseYearMonthDay();
-                                    });
-                                  }
-                                },
-                                child: TextFormField(
-                                  controller: dateController,
-                                  style: AppTheme.text3,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukan tenggat waktu',
-                                    enabledBorder: AppTheme.enabledBlackBorder,
-                                    hintStyle: AppTheme.text3.blackOpacity,
-                                    disabledBorder: AppTheme.enabledBlackBorder,
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final picked =
+                                          await Helper.showDeadlineDatePicker(
+                                        context,
+                                        datePicked,
+                                      );
+                                      print(picked.toString());
+                                      if (picked != null &&
+                                          picked != datePicked &&
+                                          picked.isAfter(now)) {
+                                        dateSetState(() {
+                                          datePicked = picked;
+                                          dateController.text =
+                                              datePicked.parseYearMonthDay();
+                                        });
+                                      }
+                                    },
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      style: AppTheme.text3,
+                                      enabled: false,
+                                      decoration: InputDecoration(
+                                        hintText: 'Masukan tenggat waktu',
+                                        enabledBorder:
+                                            AppTheme.enabledBlackBorder,
+                                        hintStyle: AppTheme.text3.blackOpacity,
+                                        disabledBorder:
+                                            AppTheme.enabledBlackBorder,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  state.entity.barrierExpired != null
+                                      ? SizedBox(height: Helper.smallPadding)
+                                      : Container(),
+                                  state.entity.barrierExpired != null
+                                      ? Align(
+                                          alignment: Alignment.centerRight,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              dateSetState(() {
+                                                datePicked = datePicked
+                                                    .add(Duration(days: 7));
+                                                dateController.text = datePicked
+                                                    .parseYearMonthDay();
+                                              });
+                                            },
+                                            child: Text('Perbarui Seminggu',
+                                                style: AppTheme.text3.purple),
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
                               );
                             }),
                             SizedBox(height: Helper.bigPadding),
