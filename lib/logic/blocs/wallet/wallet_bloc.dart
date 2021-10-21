@@ -2,7 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
 
-class WalletBloc extends Bloc<WalletEvent, WalletState> {
+mixin BarrierCashBloc on Bloc<WalletEvent, WalletState> {}
+
+class WalletBloc extends Bloc<WalletEvent, WalletState>
+    implements BarrierCashBloc {
   final WalletRepository walletRepository;
 
   WalletBloc({required this.walletRepository}) : super(WalletInitial()) {
@@ -71,7 +74,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         await walletRepository.deleteBarrierCash();
         WalletEntity entity = await walletRepository.getWalletDetail();
 
-        emit(WalletResponseSuccess(entity: entity));
+        emit(DeleteBarrierCashSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(WalletFailure(message: e.message));
       } catch (e, stacktrace) {

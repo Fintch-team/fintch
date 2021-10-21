@@ -23,6 +23,15 @@ class WalletResponseSuccess extends WalletState {
   List<Object> get props => [entity];
 }
 
+class DeleteBarrierCashSuccess extends WalletState {
+  final WalletEntity entity;
+
+  DeleteBarrierCashSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class WalletFailure extends WalletState {
   final String message;
 

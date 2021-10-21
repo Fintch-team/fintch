@@ -19,6 +19,7 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
   final _formKey = GlobalKey<FormState>();
   DateTime datePicked = DateTime.now();
   DateTime now = DateTime.now();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -27,6 +28,13 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
+  }
+
+  @override
+  void dispose() {
+    priceController.dispose();
+    dateController.dispose();
+    super.dispose();
   }
 
   @override
@@ -130,57 +138,93 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                             SizedBox(height: Helper.bigPadding),
                             SizedBox(height: Helper.bigPadding),
                             //TODO: Add Validator
-                            //TODO: Implement Add Barrier Cash and Update F-Goals using logic if data was null for get Barrier Cash, Add F-Goals, otherwise, Update F-Goals
-                            state.entity.barrierExpired != null
-                                ? Row(
-                                    children: [
-                                      Flexible(
-                                        child: CustomButton(
+                            StatefulBuilder(
+                                builder: (context, barrierCashSetState) {
+                              return BlocConsumer<BarrierCashBloc, WalletState>(
+                                listener: (context, state) {
+                                  if (!(state is WalletLoading)) {
+                                    barrierCashSetState(
+                                        () => isLoading = false);
+                                  }
+                                  if (state is WalletLoading) {
+                                    barrierCashSetState(() => isLoading = true);
+                                  } else if (state is WalletResponseSuccess) {
+                                    Helper.snackBar(context,
+                                        message:
+                                            'Berhasil Simpan Barrier Cash');
+                                    Navigator.of(context).pop();
+                                  } else if (state
+                                      is DeleteBarrierCashSuccess) {
+                                    Helper.snackBar(context,
+                                        message: 'Berhasil Hapus Barrier Cash');
+                                    Navigator.of(context).pop();
+                                  } else if (state is WalletFailure) {
+                                    Helper.snackBar(context,
+                                        message: state.message,
+                                        isFailure: true);
+                                  }
+                                },
+                                builder: (context, barrierCashState) {
+                                  return state.entity.barrierExpired != null
+                                      ? Row(
+                                          children: [
+                                            Flexible(
+                                              child: CustomButton(
+                                                onTap: () {
+                                                  context
+                                                      .read<BarrierCashBloc>()
+                                                      .add(DeleteBarrierCash());
+                                                },
+                                                text: 'Hapus',
+                                                isOutline: true,
+                                                isUpper: false,
+                                                isLoading: isLoading,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20),
+                                            //TODO: Implement Delete F-Goal
+                                            Flexible(
+                                              child: CustomButton(
+                                                onTap: () {
+                                                  context
+                                                      .read<BarrierCashBloc>()
+                                                      .add(AddBarrierCash(
+                                                          entity:
+                                                              BarrierCashPostEntity(
+                                                        barrierAmount:
+                                                            priceController
+                                                                .text,
+                                                        barrierExpired:
+                                                            dateController.text,
+                                                      )));
+                                                },
+                                                text: 'Simpan',
+                                                isUpper: false,
+                                                isLoading: isLoading,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : CustomButton(
                                           onTap: () {
                                             context
-                                                .read<WalletBloc>()
-                                                .add(DeleteBarrierCash());
-
-                                            Navigator.pop(context);
+                                                .read<BarrierCashBloc>()
+                                                .add(AddBarrierCash(
+                                                    entity:
+                                                        BarrierCashPostEntity(
+                                                  barrierAmount:
+                                                      priceController.text,
+                                                  barrierExpired:
+                                                      dateController.text,
+                                                )));
                                           },
-                                          text: 'Hapus',
-                                          isOutline: true,
+                                          text: 'Simpan',
                                           isUpper: false,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20),
-                                      //TODO: Implement Delete F-Goal
-                                      Flexible(
-                                        flex: 2,
-                                        child: CustomButton(
-                                          onTap: () {
-                                            context
-                                                .read<WalletBloc>()
-                                                .add(ExtendBarrierCash());
-
-                                            Navigator.pop(context, true);
-                                          },
-                                          text: 'Perbarui seminggu',
-                                          isUpper: false,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : CustomButton(
-                                    onTap: () {
-                                      context
-                                          .read<WalletBloc>()
-                                          .add(AddBarrierCash(
-                                              entity: BarrierCashPostEntity(
-                                            barrierAmount: priceController.text,
-                                            barrierExpired: dateController.text,
-                                          )));
-
-                                      Navigator.pop(context, true);
-                                    },
-                                    text: 'Simpan',
-                                    isUpper: false,
-                                  ),
+                                          isLoading: isLoading,
+                                        );
+                                },
+                              );
+                            }),
                             SizedBox(
                                 height: MediaQuery.of(context).padding.bottom),
                           ],
