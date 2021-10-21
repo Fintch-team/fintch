@@ -26,6 +26,9 @@ class WalletService extends ApiService {
         'wallet',
       );
 
+      print(res.statusCode);
+      print(res.statusMessage);
+
       return ListWalletModel.fromJson(res.data);
     } on DioError catch (e) {
       debugPrint("error $e");
@@ -107,6 +110,9 @@ class WalletService extends ApiService {
           'barrier_expired': barrierExpired,
         },
       );
+
+      // print(res.statusCode);
+      // print(res.statusMessage);
 
       return res.statusCode == 200;
     } on DioError catch (e) {

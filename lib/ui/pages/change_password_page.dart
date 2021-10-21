@@ -247,7 +247,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               ));
         }
       },
-      text: 'Lanjut',
+      text: 'Simpan',
     );
   }
 

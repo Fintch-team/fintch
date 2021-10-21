@@ -102,16 +102,18 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    PagePath.barcode,
-                  ),
-                  child: Icon(
-                    CupertinoIcons.barcode_viewfinder,
-                    color: AppTheme.white,
-                  ),
-                ),
+                if (state is HomeSuccess)
+                  if (state.entity.level != 'User')
+                    GestureDetector(
+                      onTap: () => Navigator.pushReplacementNamed(
+                        context,
+                        PagePath.barcode,
+                      ),
+                      child: Icon(
+                        CupertinoIcons.barcode_viewfinder,
+                        color: AppTheme.white,
+                      ),
+                    ),
                 SizedBox(width: Helper.smallPadding),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, PagePath.setting)

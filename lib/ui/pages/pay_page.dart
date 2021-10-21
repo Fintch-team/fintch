@@ -358,6 +358,7 @@ class _PayPageState extends State<PayPage> {
               ],
             ),
           ),
+          SizedBox(width: Helper.normalPadding),
           FeatureItem(
             name: 'Barrier Cash',
             assetName: Resources.icBarrierCash,
