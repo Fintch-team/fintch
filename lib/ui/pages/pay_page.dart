@@ -30,7 +30,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    getCameraPermission();
+    // getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -543,9 +543,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       ),
                     );
                   } else if (state is ProfilePayLoading) {
-                    return Center(
-                      child: CircularLoading(),
-                    );
+                    return ReceiveSheetShimmer();
                   } else if (state is ProfilePayFailure) {
                     return FailureStateWidget(
                         message: 'Profile Pay Receive  Gagal di Load');
