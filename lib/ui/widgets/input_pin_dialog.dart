@@ -17,13 +17,14 @@ class InputPinDialog extends StatefulWidget {
 }
 
 class _InputPinDialogState extends State<InputPinDialog> {
-  TextEditingController inputPinController = TextEditingController();
+  late TextEditingController inputPinController;
   StreamController<ErrorAnimationType>? errorController;
   FocusNode inputFocusNode = FocusNode();
 
   @override
   void initState() {
     errorController = StreamController<ErrorAnimationType>();
+    inputPinController = TextEditingController();
     super.initState();
   }
 

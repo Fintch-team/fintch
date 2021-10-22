@@ -448,11 +448,12 @@ class _PaymentSheetState extends State<PaymentSheet> {
   double value = 5000;
   double sliderValue = 5000;
   final _formKey = GlobalKey<FormState>();
-  final textFieldController = TextEditingController();
+  late TextEditingController textFieldController;
 
   @override
   void initState() {
     super.initState();
+    textFieldController = TextEditingController();
     textFieldController.text = value.doubleToThousand();
     context
         .read<ProfilePayBloc>()

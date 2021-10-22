@@ -1,6 +1,5 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,14 +18,15 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   bool isPasswordObscure = true;
   bool isPasswordConfirmationObscure = true;
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController =
-      TextEditingController();
+  late TextEditingController _passwordController;
+  late TextEditingController _passwordConfirmationController;
   String username = '';
   String password = '';
 
   @override
   void initState() {
+    _passwordController = TextEditingController();
+    _passwordConfirmationController = TextEditingController();
     if (widget.bundle != null) {
       username = widget.bundle!.extras['username'];
       password = widget.bundle!.extras['password'];

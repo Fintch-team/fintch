@@ -19,7 +19,7 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
   late String setPin = widget.bundle!.extras[Keys.setPin];
   late String username = widget.bundle!.extras['username'];
   late String password = widget.bundle!.extras['password'];
-  TextEditingController confirmPinController = TextEditingController();
+  late TextEditingController confirmPinController;
   StreamController<ErrorAnimationType>? errorController;
 
   _onKeyboardTap(String value) {
@@ -30,6 +30,7 @@ class _ConfirmPinPageState extends State<ConfirmPinPage> {
 
   @override
   void initState() {
+    confirmPinController = TextEditingController();
     errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }

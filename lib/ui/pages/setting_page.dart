@@ -205,7 +205,7 @@ class _SettingPageState extends State<SettingPage> {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () => Navigator.pushReplacementNamed(
+                whenSuccess: () => Navigator.pushNamed(
                   context,
                   PagePath.changePassword,
                 ),
@@ -219,7 +219,7 @@ class _SettingPageState extends State<SettingPage> {
             showDialog(
               context: context,
               builder: (context) => InputPinDialog(
-                whenSuccess: () => Navigator.pushReplacementNamed(
+                whenSuccess: () => Navigator.pushNamed(
                   context,
                   PagePath.changePin,
                 ),

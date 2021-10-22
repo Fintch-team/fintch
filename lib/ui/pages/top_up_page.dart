@@ -16,11 +16,12 @@ class _TopUpPageState extends State<TopUpPage> {
   double value = 10000;
   double sliderValue = 10000;
   final _formKey = GlobalKey<FormState>();
-  final textFieldController = TextEditingController();
+  late TextEditingController textFieldController;
 
   @override
   void initState() {
     super.initState();
+    textFieldController = TextEditingController();
     textFieldController.text = value.doubleToThousand();
   }
 
