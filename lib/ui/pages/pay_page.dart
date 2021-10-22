@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
@@ -30,7 +31,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    getCameraPermission();
+    // getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -452,7 +453,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
   @override
   void initState() {
     super.initState();
-    textFieldController.text = value.toInt().toString();
+    textFieldController.text = value.doubleToThousand();
     context
         .read<ProfilePayBloc>()
         .add(GetReceiveByNickname(nickname: widget.nickname));
@@ -543,7 +544,9 @@ class _PaymentSheetState extends State<PaymentSheet> {
                                   whenSuccess: () {
                                     context.read<PayBloc>().add(PostPay(
                                             entity: TransactionPostEntity(
-                                          amount: textFieldController.text,
+                                          amount: textFieldController.text
+                                              .thousandToDouble()
+                                              .toString(),
                                           idReceive: widget.nickname,
                                         )));
                                   },
@@ -618,16 +621,17 @@ class _PaymentSheetState extends State<PaymentSheet> {
         style: AppTheme.text3.purple,
         validator: (value) {
           Validator.number(value);
-          final n = num.tryParse(value!);
+          final n = value!.thousandToDouble();
           if (n == null) {
             return '"$value" bukan bilangan!';
-          } else if (double.parse(value) < 500) {
+          } else if (n < 500) {
             return 'Input harus lebih dari 500';
           }
           return null;
         },
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
+          ThousandsFormatter(),
         ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
@@ -643,7 +647,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
         onChanged: (String text) {
           if (_formKey.currentState!.validate()) {
             setState(() {
-              value = double.tryParse(text) ?? 0;
+              value = text.thousandToDouble() ?? 0;
             });
           }
         },
@@ -715,7 +719,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
         setState(() {
           sliderValue = lowerValue;
           value = sliderValue;
-          textFieldController.text = value.toStringAsFixed(0);
+          textFieldController.text = value.doubleToThousand();
         });
       },
     );
