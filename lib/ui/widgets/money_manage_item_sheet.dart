@@ -128,40 +128,76 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
                               }
                             },
                             builder: (context, state) {
-                              return CustomButton(
-                                onTap: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    if (widget.data != null) {
-                                      context
-                                          .read<MoneyManageItemSheetBloc>()
-                                          .add(
-                                            EditMoneyManageItem(
-                                              entity: MoneyManageItemPutEntity(
-                                                idMoneyManageItem:
-                                                    widget.data!.id.toString(),
-                                                amount: 0,
-                                                percent: percentController.text,
-                                                name: titleController.text,
-                                              ),
-                                            ),
-                                          );
-                                    } else {
-                                      context
-                                          .read<MoneyManageItemSheetBloc>()
-                                          .add(
-                                            PostMoneyManageItem(
-                                              entity: MoneyManageItemPostEntity(
-                                                amount: 0,
-                                                percent: percentController.text,
-                                                name: titleController.text,
-                                              ),
-                                            ),
-                                          );
-                                    }
-                                  }
-                                },
-                                text: 'Simpan',
-                                isUpper: false,
+                              return Row(
+                                children: [
+                                  if (widget.data != null) ...[
+                                    Flexible(
+                                      child: CustomButton(
+                                        onTap: () {
+                                          context
+                                              .read<MoneyManageItemSheetBloc>()
+                                              .add(
+                                                DeleteMoneyManageItem(
+                                                  id: widget.data!.id,
+                                                ),
+                                              );
+                                        },
+                                        text: 'Hapus',
+                                        isOutline: true,
+                                        isUpper: false,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                  ],
+                                  Flexible(
+                                    child: CustomButton(
+                                      onTap: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          if (widget.data != null) {
+                                            context
+                                                .read<
+                                                    MoneyManageItemSheetBloc>()
+                                                .add(
+                                                  EditMoneyManageItem(
+                                                    entity:
+                                                        MoneyManageItemPutEntity(
+                                                      idMoneyManageItem: widget
+                                                          .data!.id
+                                                          .toString(),
+                                                      amount: 0,
+                                                      percent: percentController
+                                                          .text,
+                                                      name:
+                                                          titleController.text,
+                                                    ),
+                                                  ),
+                                                );
+                                          } else {
+                                            context
+                                                .read<
+                                                    MoneyManageItemSheetBloc>()
+                                                .add(
+                                                  PostMoneyManageItem(
+                                                    entity:
+                                                        MoneyManageItemPostEntity(
+                                                      amount: 0,
+                                                      percent: percentController
+                                                          .text,
+                                                      name:
+                                                          titleController.text,
+                                                    ),
+                                                  ),
+                                                );
+                                          }
+                                        }
+                                      },
+                                      text: widget.data != null
+                                          ? 'Edit'
+                                          : 'Simpan',
+                                      isUpper: false,
+                                    ),
+                                  ),
+                                ],
                               );
                             },
                           );

@@ -37,6 +37,9 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
     if (widget.data != null) {
       titleController.text = widget.data!.name;
       amountController.text = widget.data!.amount.intToThousand();
+      setState(() {
+        isIncome = false;
+      });
     }
     super.initState();
   }
@@ -83,11 +86,12 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                           style: AppTheme.headline3,
                         ),
                         SizedBox(height: Helper.bigPadding),
-                        MoneyManageTab(
-                          isIncome: isIncome,
-                          payCallback: inComeCallback,
-                          receiveCallback: outComeCallback,
-                        ),
+                        if (widget.data == null)
+                          MoneyManageTab(
+                            isIncome: isIncome,
+                            payCallback: inComeCallback,
+                            receiveCallback: outComeCallback,
+                          ),
                         SizedBox(height: Helper.bigPadding),
                         Text('Judul', style: AppTheme.text3.bold),
                         SizedBox(height: 8),
@@ -193,70 +197,109 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                               }
                             },
                             builder: (context, state) {
-                              return CustomButton(
-                                onTap: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    if (widget.data != null) {
-                                      if (_selectedCardId != null) {
-                                        context
-                                            .read<MoneyManageSheetBloc>()
-                                            .add(
-                                              EditMoneyManage(
-                                                entity: MoneyManagePutEntity(
-                                                  idMoneyManage: widget.data!.id
-                                                      .toString(),
-                                                  amount: amountController.text
-                                                      .thousandToDouble()
-                                                      .toString(),
-                                                  name: titleController.text,
-                                                  idMoneyManageItem:
-                                                      _selectedCardId!,
-                                                  date: dateController.text,
-                                                ),
-                                              ),
-                                            );
-                                      }
-                                    } else {
-                                      if (isIncome) {
-                                        context
-                                            .read<MoneyManageSheetBloc>()
-                                            .add(
-                                              PostIncomeMoneyManage(
-                                                entity: MoneyManageInPostEntity(
-                                                  amount: amountController.text
-                                                      .thousandToDouble()
-                                                      .toString(),
-                                                  name: titleController.text,
-                                                  date: dateController.text,
-                                                ),
-                                              ),
-                                            );
-                                      } else {
-                                        if (_selectedCardId != null) {
+                              return Row(
+                                children: [
+                                  if (widget.data != null) ...[
+                                    Flexible(
+                                      child: CustomButton(
+                                        onTap: () {
                                           context
                                               .read<MoneyManageSheetBloc>()
                                               .add(
-                                                PostOutcomeMoneyManage(
-                                                  entity:
-                                                      MoneyManageOutPostEntity(
-                                                    amount: amountController
-                                                        .text
-                                                        .thousandToDouble()
-                                                        .toString(),
-                                                    name: titleController.text,
-                                                    idMoneyManageItem:
-                                                        _selectedCardId!,
-                                                    date: dateController.text,
-                                                  ),
+                                                DeleteMoneyManage(
+                                                  id: widget.data!.id,
                                                 ),
                                               );
+                                        },
+                                        text: 'Hapus',
+                                        isOutline: true,
+                                        isUpper: false,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                  ],
+                                  Flexible(
+                                    child: CustomButton(
+                                      onTap: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          if (widget.data != null) {
+                                            if (_selectedCardId != null) {
+                                              context
+                                                  .read<MoneyManageSheetBloc>()
+                                                  .add(
+                                                    EditMoneyManage(
+                                                      entity:
+                                                          MoneyManagePutEntity(
+                                                        idMoneyManage: widget
+                                                            .data!.id
+                                                            .toString(),
+                                                        amount: amountController
+                                                            .text
+                                                            .thousandToDouble()
+                                                            .toString(),
+                                                        name: titleController
+                                                            .text,
+                                                        idMoneyManageItem:
+                                                            _selectedCardId!,
+                                                        date:
+                                                            dateController.text,
+                                                      ),
+                                                    ),
+                                                  );
+                                            }
+                                          } else {
+                                            if (isIncome) {
+                                              context
+                                                  .read<MoneyManageSheetBloc>()
+                                                  .add(
+                                                    PostIncomeMoneyManage(
+                                                      entity:
+                                                          MoneyManageInPostEntity(
+                                                        amount: amountController
+                                                            .text
+                                                            .thousandToDouble()
+                                                            .toString(),
+                                                        name: titleController
+                                                            .text,
+                                                        date:
+                                                            dateController.text,
+                                                      ),
+                                                    ),
+                                                  );
+                                            } else {
+                                              if (_selectedCardId != null) {
+                                                context
+                                                    .read<
+                                                        MoneyManageSheetBloc>()
+                                                    .add(
+                                                      PostOutcomeMoneyManage(
+                                                        entity:
+                                                            MoneyManageOutPostEntity(
+                                                          amount: amountController
+                                                              .text
+                                                              .thousandToDouble()
+                                                              .toString(),
+                                                          name: titleController
+                                                              .text,
+                                                          idMoneyManageItem:
+                                                              _selectedCardId!,
+                                                          date: dateController
+                                                              .text,
+                                                        ),
+                                                      ),
+                                                    );
+                                              }
+                                            }
+                                          }
                                         }
-                                      }
-                                    }
-                                  }
-                                },
-                                text: 'Simpan',
-                                isUpper: false,
+                                      },
+                                      text: widget.data != null
+                                          ? 'Edit'
+                                          : 'Simpan',
+                                      isUpper: false,
+                                    ),
+                                  ),
+                                ],
                               );
                             },
                           );
@@ -289,6 +332,14 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
     return BlocBuilder<MoneyManageItemBloc, MoneyManageItemState>(
       builder: (context, state) {
         if (state is MoneyManageItemResponseSuccess) {
+          if (widget.data != null) {
+            _selectedCard = state.entity.data
+                .firstWhere((element) => widget.data!.id == element.id);
+            _selectedCardId = state.entity.data
+                .firstWhere((element) => widget.data!.id == element.id)
+                .id
+                .toString();
+          }
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(

@@ -427,81 +427,95 @@ class _FWalletPageState extends State<FWalletPage> {
   }
 
   Widget _activityItem(MoneyManageData data) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppTheme.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: Helper.getShadow(),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  data.name,
-                  style: AppTheme.headline3,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 16,
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                      1,
-                      (index) => Container(
-                            decoration: BoxDecoration(
-                              color: AppTheme.yellow,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: EdgeInsets.all(4),
-                            child: Text(data.item.name),
-                          )).toList(),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        showCupertinoModalBottomSheet(
+          expand: false,
+          context: context,
+          enableDrag: true,
+          isDismissible: true,
+          topRadius: Radius.circular(20),
+          backgroundColor: AppTheme.white,
+          barrierColor: AppTheme.black.withOpacity(0.2),
+          builder: (context) => MoneyManageSheet(data: data),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        decoration: BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: Helper.getShadow(),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AutoSizeText(
+                    data.name,
+                    style: AppTheme.headline3,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    minFontSize: 16,
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                        1,
+                        (index) => Container(
+                              decoration: BoxDecoration(
+                                color: AppTheme.yellow,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.all(4),
+                              child: Text(data.item.name),
+                            )).toList(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: Helper.normalPadding),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AutoSizeText(
-                  data.isIncome
-                      ? 'Rp${data.amount.toString().parseCurrency()}'
-                      : '-Rp${data.amount.toString().parseCurrency()}',
-                  style: data.isIncome
-                      ? AppTheme.headline2.green.bold
-                      : AppTheme.headline2.red.bold,
-                  maxLines: 1,
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset(Resources.icTime, height: 12),
-                    SizedBox(width: 4),
-                    AutoSizeText(
-                      '30 September 2021',
-                      style: AppTheme.subText1,
-                      maxLines: 1,
-                      maxFontSize: 8,
-                      minFontSize: 8,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ],
+            SizedBox(width: Helper.normalPadding),
+            Expanded(
+              flex: 3,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AutoSizeText(
+                    data.isIncome
+                        ? 'Rp${data.amount.toString().parseCurrency()}'
+                        : '-Rp${data.amount.toString().parseCurrency()}',
+                    style: data.isIncome
+                        ? AppTheme.headline2.green.bold
+                        : AppTheme.headline2.red.bold,
+                    maxLines: 1,
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(Resources.icTime, height: 12),
+                      SizedBox(width: 4),
+                      AutoSizeText(
+                        '30 September 2021',
+                        style: AppTheme.subText1,
+                        maxLines: 1,
+                        maxFontSize: 8,
+                        minFontSize: 8,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
