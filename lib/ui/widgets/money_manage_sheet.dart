@@ -296,7 +296,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: DropdownButton<MoneyManageItemData>(
-              hint: Text("Pilih Card"),
+              hint: Text("Pilih Card", style: AppTheme.text3.blackOpacity),
               style: AppTheme.text3,
               isExpanded: true,
               underline: Container(
