@@ -145,9 +145,9 @@ class _TopUpPageState extends State<TopUpPage> {
   Widget _slider() {
     return FlutterSlider(
       values: [sliderValue],
-      max: 99000,
+      max: 100000,
       min: 10000,
-      maximumDistance: 99000,
+      maximumDistance: 100000,
       minimumDistance: 10000,
       handlerAnimation: FlutterSliderHandlerAnimation(
           curve: Curves.elasticOut,
@@ -223,8 +223,8 @@ class _TopUpPageState extends State<TopUpPage> {
           final n = value!.thousandToDouble();
           if (n == null) {
             return '"$value" bukan bilangan!';
-          } else if (n < 500) {
-            return 'Input harus lebih dari 500';
+          } else if (n < 10000) {
+            return 'Input harus lebih dari 10.000';
           }
           return null;
         },
