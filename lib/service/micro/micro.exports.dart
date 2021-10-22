@@ -9,6 +9,7 @@ export 'history_service.dart';
 export 'money_manage.dart';
 export 'money_plan_service.dart';
 export 'school_service.dart';
+export 'top_up_service.dart';
 export 'transaction_service.dart';
 export 'user_service.dart';
 export 'wallet_service.dart';

@@ -14,4 +14,5 @@ export 'money_manage_item/money_manage_item.exports.dart';
 export 'money_plan/money_plan.exports.dart';
 export 'pay/pay.exports.dart';
 export 'settings/settings.exports.dart';
+export 'top_up/top_up.exports.dart';
 export 'wallet/wallet.exports.dart';
