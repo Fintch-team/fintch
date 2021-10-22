@@ -289,7 +289,7 @@ class _TopUpPageState extends State<TopUpPage> {
                     if (_formKey.currentState!.validate()) {
                       context.read<PayBloc>().add(PostTopUpPay(
                               entity: TransactionTopUpPostEntity(
-                            amount: value.doubleToThousand(),
+                            amount: value.toString(),
                             name: "test",
                           )));
 
