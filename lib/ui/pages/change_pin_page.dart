@@ -19,23 +19,26 @@ class ChangePinPage extends StatefulWidget {
 }
 
 class _ChangePinPageState extends State<ChangePinPage> {
-  TextEditingController setPinController = TextEditingController();
+  late TextEditingController _setPinController;
   StreamController<ErrorAnimationType>? errorController;
   final _formKey = GlobalKey<FormState>();
   bool isPasswordObscure = true;
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
+  late TextEditingController _passwordController;
+  late TextEditingController _usernameController;
   bool isPinPage = false;
 
   _onKeyboardTap(String value) {
-    if (setPinController.text.length < 6) {
-      setPinController.text += value;
+    if (_setPinController.text.length < 6) {
+      _setPinController.text += value;
     }
   }
 
   @override
   void initState() {
     errorController = StreamController<ErrorAnimationType>();
+    _setPinController = TextEditingController();
+    _passwordController = TextEditingController();
+    _usernameController = TextEditingController();
     super.initState();
   }
 
@@ -197,7 +200,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: CustomPinCode(
-                pinController: setPinController,
+                pinController: _setPinController,
                 errorController: errorController,
                 onChanged: (value) {},
                 onCompleted: (value) {},
@@ -214,9 +217,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
         onKeyboardTap: _onKeyboardTap,
         rightButtonFn: () {
           setState(() {
-            if (setPinController.text.isNotEmpty) {
-              setPinController.text = setPinController.text
-                  .substring(0, setPinController.text.length - 1);
+            if (_setPinController.text.isNotEmpty) {
+              _setPinController.text = _setPinController.text
+                  .substring(0, _setPinController.text.length - 1);
             }
           });
         },
@@ -225,7 +228,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
           color: Colors.white,
         ),
         leftButtonFn: () {
-          if (setPinController.text.length < 6) {
+          if (_setPinController.text.length < 6) {
             errorController!.add(ErrorAnimationType.shake);
             Helper.snackBar(
               context,
@@ -237,7 +240,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                 entity: PostChangePinEntity(
                   nickname: _usernameController.text,
                   password: _passwordController.text,
-                  pin: setPinController.text,
+                  pin: _setPinController.text,
                 ),
               ));
         },

@@ -17,21 +17,22 @@ class InputPinDialog extends StatefulWidget {
 }
 
 class _InputPinDialogState extends State<InputPinDialog> {
-  TextEditingController inputPinController = TextEditingController();
+  late TextEditingController inputPinController;
   StreamController<ErrorAnimationType>? errorController;
   FocusNode inputFocusNode = FocusNode();
 
   @override
   void initState() {
     errorController = StreamController<ErrorAnimationType>();
+    inputPinController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    // errorController?.close();
-    // inputPinController.dispose();
-    // inputFocusNode.dispose();
+    errorController?.close();
+    inputPinController.dispose();
+    inputFocusNode.dispose();
     super.dispose();
   }
 
@@ -43,6 +44,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
           if (state is AuthPinFetched) {
             context.loaderOverlay.hide();
             if (state.isCorrect) {
+              Navigator.pop(context);
               widget.whenSuccess.call();
             } else {
               inputPinController.clear();
@@ -67,8 +69,10 @@ class _InputPinDialogState extends State<InputPinDialog> {
                   context: context,
                   barrierDismissible: false,
                   builder: (context) => SuccessPaymentDialog(
-                      fintchPoint: state.entity.amount,
-                      fintchWallet: state.entity.pay.walletAmount.toString()),
+                      fintchPoint: state.entity.amount.parseCurrency(),
+                      fintchWallet: state.entity.pay.walletAmount
+                          .toString()
+                          .parseCurrency()),
                 );
               } else {
                 showDialog(

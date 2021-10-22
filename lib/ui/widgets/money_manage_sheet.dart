@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class MoneyManageSheet extends StatefulWidget {
   final MoneyManageData? data;
@@ -35,7 +36,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
 
     if (widget.data != null) {
       titleController.text = widget.data!.name;
-      amountController.text = widget.data!.amount.toString();
+      amountController.text = widget.data!.amount.intToThousand();
     }
     super.initState();
   }
@@ -112,12 +113,13 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
+                            ThousandsFormatter(),
                           ],
                           validator: (value) {
                             Validator.notEmpty(value);
                             Validator.number(value);
-                            final n = num.tryParse(value!);
+                            final n = value!.thousandToDouble();
                             if (n == 0) {
                               return "Harga tidak boleh nol";
                             }
@@ -203,7 +205,9 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                                 entity: MoneyManagePutEntity(
                                                   idMoneyManage: widget.data!.id
                                                       .toString(),
-                                                  amount: amountController.text,
+                                                  amount: amountController.text
+                                                      .thousandToDouble()
+                                                      .toString(),
                                                   name: titleController.text,
                                                   idMoneyManageItem:
                                                       _selectedCardId!,
@@ -219,7 +223,9 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                             .add(
                                               PostIncomeMoneyManage(
                                                 entity: MoneyManageInPostEntity(
-                                                  amount: amountController.text,
+                                                  amount: amountController.text
+                                                      .thousandToDouble()
+                                                      .toString(),
                                                   name: titleController.text,
                                                   date: dateController.text,
                                                 ),
@@ -233,8 +239,10 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                                 PostOutcomeMoneyManage(
                                                   entity:
                                                       MoneyManageOutPostEntity(
-                                                    amount:
-                                                        amountController.text,
+                                                    amount: amountController
+                                                        .text
+                                                        .thousandToDouble()
+                                                        .toString(),
                                                     name: titleController.text,
                                                     idMoneyManageItem:
                                                         _selectedCardId!,
@@ -282,37 +290,39 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
       builder: (context, state) {
         if (state is MoneyManageItemResponseSuccess) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(0.6)),
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.black),
+              color: AppTheme.white,
             ),
-            child: DropdownButton<MoneyManageItemData>(
-              hint: Text("Pilih Card"),
-              style: AppTheme.text3,
-              isExpanded: true,
-              underline: Container(
-                height: 0,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<MoneyManageItemData>(
+                hint: Text("Pilih Card", style: AppTheme.text3.blackOpacity),
+                style: AppTheme.text3,
+                borderRadius: BorderRadius.circular(12),
+                isExpanded: true,
+                itemHeight: 50.0,
+                value: _selectedCard,
+                onChanged: (MoneyManageItemData? value) {
+                  setState(() {
+                    _selectedCard = value;
+                    _selectedCardId = value!.id.toString();
+                  });
+                },
+                items: state.entity.data.map((MoneyManageItemData category) {
+                  return DropdownMenuItem<MoneyManageItemData>(
+                    value: category,
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          category.name,
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
-              value: _selectedCard,
-              onChanged: (MoneyManageItemData? value) {
-                setState(() {
-                  _selectedCard = value;
-                  _selectedCardId = value!.id.toString();
-                });
-              },
-              items: state.entity.data.map((MoneyManageItemData category) {
-                return DropdownMenuItem<MoneyManageItemData>(
-                  value: category,
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        category.name,
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
             ),
           );
         } else if (state is MoneyManageItemLoading) {
@@ -330,6 +340,48 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
         }
         return Container();
       },
+    );
+  }
+}
+
+class CustomDropdown<T> extends StatelessWidget {
+  final List<DropdownMenuItem<T>> dropdownMenuItemList;
+  final ValueChanged<T?>? onChanged;
+  final T value;
+  final bool isEnabled;
+  CustomDropdown({
+    Key? key,
+    required this.dropdownMenuItemList,
+    required this.onChanged,
+    required this.value,
+    this.isEnabled = true,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      ignoring: !isEnabled,
+      child: Container(
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            border: Border.all(
+              color: Colors.black,
+              width: 1,
+            ),
+            color: isEnabled ? Colors.white : Colors.grey.withAlpha(100)),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton(
+            isExpanded: true,
+            itemHeight: 50.0,
+            style: TextStyle(
+                fontSize: 15.0,
+                color: isEnabled ? Colors.black : Colors.grey[700]),
+            items: dropdownMenuItemList,
+            onChanged: onChanged,
+            value: value,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class FGoalsPage extends StatefulWidget {
@@ -384,12 +385,13 @@ class _FGoalSheetState extends State<FGoalSheet> {
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
+                            ThousandsFormatter(),
                           ],
                           validator: (value) {
                             Validator.notEmpty(value);
                             Validator.number(value);
-                            final n = num.tryParse(value!);
+                            final n = value!.thousandToDouble();
                             if (n == 0) {
                               return "Harga tidak boleh nol";
                             }
@@ -468,8 +470,10 @@ class _FGoalSheetState extends State<FGoalSheet> {
                                                 idMoneyPlan:
                                                     widget.data!.id.toString(),
                                                 deadline: dateController.text,
-                                                totalAmount:
-                                                    priceController.text,
+                                                totalAmount: priceController
+                                                    .text
+                                                    .thousandToDouble()
+                                                    .toString(),
                                                 name: titleController.text,
                                               ),
                                             ),
@@ -479,8 +483,10 @@ class _FGoalSheetState extends State<FGoalSheet> {
                                             PostMoneyPlan(
                                               entity: MoneyPlanPostEntity(
                                                 deadline: dateController.text,
-                                                totalAmount:
-                                                    priceController.text,
+                                                totalAmount: priceController
+                                                    .text
+                                                    .thousandToDouble()
+                                                    .toString(),
                                                 name: titleController.text,
                                               ),
                                             ),

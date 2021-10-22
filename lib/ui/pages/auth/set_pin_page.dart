@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fintch/gen_export.dart';
-
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -14,7 +13,7 @@ class SetPinPage extends StatefulWidget {
 }
 
 class _SetPinPageState extends State<SetPinPage> {
-  TextEditingController setPinController = TextEditingController();
+  late TextEditingController setPinController;
   StreamController<ErrorAnimationType>? errorController;
   String username = '';
   String password = '';
@@ -27,6 +26,7 @@ class _SetPinPageState extends State<SetPinPage> {
 
   @override
   void initState() {
+    setPinController = TextEditingController();
     if (widget.bundle != null) {
       username = widget.bundle!.extras['username'];
       password = widget.bundle!.extras['password'];

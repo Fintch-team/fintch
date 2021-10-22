@@ -1,9 +1,7 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -20,15 +18,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isPasswordObscure = true;
   bool isPasswordOldObscure = true;
   bool isPasswordConfirmationObscure = true;
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordOldController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController =
-      TextEditingController();
+  late TextEditingController _usernameController;
+  late TextEditingController _passwordOldController;
+  late TextEditingController _passwordController;
+  late TextEditingController _passwordConfirmationController;
 
   @override
   void initState() {
+    _usernameController = TextEditingController();
+    _passwordOldController = TextEditingController();
+    _passwordController = TextEditingController();
+    _passwordConfirmationController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _passwordOldController.dispose();
+    _passwordConfirmationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,11 +60,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     context.loaderOverlay.show();
                     Helper.snackBar(context, message: 'Mengganti Password...');
                   } else if (state is AuthFailure) {
-                    print("ok");
-
                     context.loaderOverlay.hide();
                     Helper.snackBar(context,
-                        message: 'Ganti Password gagal', isFailure: true);
+                        message: 'Ganti Password gagal: ${state.message}',
+                        isFailure: true);
                   }
                 },
                 child: SingleChildScrollView(
@@ -70,6 +79,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        CustomAppBar(title: ''),
                         _headerSetPassword(context),
                         _setPasswordTextField(context),
                         _nextButton(context),
@@ -90,22 +100,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text('Yuk atur Kata Sandimu!',
-                  style: AppTheme.headline1.white),
-            ),
-            SizedBox(width: Helper.normalPadding),
-            GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => _helpDialog(context),
-              ),
-              child: SvgPicture.asset(Resources.icHelp),
-            ),
-          ],
-        ),
+        Text('Yuk atur Kata Sandimu!', style: AppTheme.headline1.white),
         SizedBox(height: Helper.normalPadding),
         Text(
           'Usahain Kata sandi baru kamu harus beda dari Kata sandi sebelumnya ya!!',
@@ -248,19 +243,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         }
       },
       text: 'Simpan',
-    );
-  }
-
-  Widget _helpDialog(BuildContext context) {
-    return CustomDialog(
-      title: 'Kenapa harus ganti Sandi?',
-      content: Text(
-          'Karena sandi kalian yang sebelumya bukan sandi tetap, jadi kalian harus masukin sandi yang baru.\n\nBiar lebih aman!! >_<',
-          style: AppTheme.text3),
-      buttons: CustomButton(
-        onTap: () => Navigator.of(context).pop(),
-        text: 'Oke Mengerti',
-      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class BarcodePage extends StatefulWidget {
   const BarcodePage({Key? key}) : super(key: key);
@@ -377,12 +378,13 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
+                            ThousandsFormatter(),
                           ],
                           validator: (value) {
                             Validator.notEmpty(value);
                             Validator.number(value);
-                            final n = num.tryParse(value!);
+                            final n = value!.thousandToDouble();
                             if (n == 0) {
                               return "Harga tidak boleh nol";
                             }
@@ -424,7 +426,9 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                                               entity: BarcodePutEntity(
                                                   idBarcode: widget.data!.id
                                                       .toString(),
-                                                  amount: priceController.text,
+                                                  amount: priceController.text
+                                                      .thousandToDouble()
+                                                      .toString(),
                                                   name: titleController.text,
                                                   confirm: '123456'),
                                             ),
@@ -434,7 +438,9 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                                             PostBarcode(
                                               entity: BarcodePostEntity(
                                                 confirm: '123456',
-                                                amount: priceController.text,
+                                                amount: priceController.text
+                                                    .thousandToDouble()
+                                                    .toString(),
                                                 name: titleController.text,
                                               ),
                                             ),

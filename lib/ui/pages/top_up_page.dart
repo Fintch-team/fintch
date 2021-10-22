@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/src/provider.dart';
 
@@ -17,12 +18,14 @@ class _TopUpPageState extends State<TopUpPage> {
   double value = 10000;
   double sliderValue = 10000;
   final _formKey = GlobalKey<FormState>();
-  final textFieldController = TextEditingController();
+  late TextEditingController textFieldController;
 
   @override
   void initState() {
     super.initState();
-    textFieldController.text = value.toInt().toString();
+    
+    textFieldController = TextEditingController();
+    textFieldController.text = value.doubleToThousand();
 
     context.read<TopUpBloc>().add(GetTopUp());
   }
@@ -167,9 +170,9 @@ class _TopUpPageState extends State<TopUpPage> {
   Widget _slider() {
     return FlutterSlider(
       values: [sliderValue],
-      max: 99000,
+      max: 100000,
       min: 10000,
-      maximumDistance: 99000,
+      maximumDistance: 100000,
       minimumDistance: 10000,
       handlerAnimation: FlutterSliderHandlerAnimation(
           curve: Curves.elasticOut,
@@ -228,7 +231,7 @@ class _TopUpPageState extends State<TopUpPage> {
         setState(() {
           sliderValue = lowerValue;
           value = sliderValue;
-          textFieldController.text = value.toStringAsFixed(0);
+          textFieldController.text = value.doubleToThousand();
         });
       },
     );
@@ -242,15 +245,18 @@ class _TopUpPageState extends State<TopUpPage> {
         style: AppTheme.text3.purple,
         validator: (value) {
           Validator.number(value);
-          final n = num.tryParse(value!);
+          final n = value!.thousandToDouble();
           if (n == null) {
             return '"$value" bukan bilangan!';
-          } else if (double.parse(value) < 500) {
-            return 'Input harus lebih dari 500';
+          } else if (n < 10000) {
+            return 'Input harus lebih dari 10.000';
           }
           return null;
         },
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          ThousandsFormatter(),
+        ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
           hintText: 'Masukin jumlah Top Up lainnya',
@@ -265,7 +271,7 @@ class _TopUpPageState extends State<TopUpPage> {
         onChanged: (String text) {
           if (_formKey.currentState!.validate()) {
             setState(() {
-              value = double.parse(text);
+              value = text.thousandToDouble() ?? 0;
             });
           }
         },

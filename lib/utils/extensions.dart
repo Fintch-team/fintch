@@ -31,6 +31,10 @@ extension StringInsert on String {
     double? currDouble = double.tryParse(this);
     return currDouble != null ? currency.format(currDouble) : '-';
   }
+
+  double? thousandToDouble() {
+    return double.tryParse(this.replaceAll(',', ''));
+  }
 }
 
 extension DateParsing on DateTime {
@@ -64,5 +68,19 @@ extension AppBarTheme on Future {
 
   Future setDarkAppBar() async {
     this.then((value) => Helper.setLightAppBar());
+  }
+}
+
+extension DoubleExtension on double {
+  String doubleToThousand() {
+    var formatter = NumberFormat('#,##,000');
+    return formatter.format(this);
+  }
+}
+
+extension IntExtension on int {
+  String intToThousand() {
+    var formatter = NumberFormat('#,##,000');
+    return formatter.format(this);
   }
 }
