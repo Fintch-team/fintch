@@ -61,7 +61,7 @@ class Validator {
   }
 
   static String? notEmpty(String? value) {
-    if (value?.isEmpty ?? true) return "Pertanyaan ini harus diisi";
+    if (value?.isEmpty ?? true) return "Field ini harus diisi";
     return null;
   }
 }
