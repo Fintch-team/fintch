@@ -142,6 +142,14 @@ class _FGoalsPageState extends State<FGoalsPage> {
         );
       },
       child: Dismissible(
+        background: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.all(8),
+            child: Text(
+              "Hapus",
+              style: AppTheme.headline2.copyWith(color: AppTheme.white),
+            ),
+            color: AppTheme.red),
         key: Key(data.id.toString()),
         confirmDismiss: (direction) async {
           return await showDialog(

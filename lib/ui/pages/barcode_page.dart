@@ -100,7 +100,7 @@ class _BarcodePageState extends State<BarcodePage> {
                               physics: NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.symmetric(vertical: 0),
                               itemBuilder: (context, index) {
-                                return _fGoalItem(
+                                return _fBarcode(
                                     context, index, state.entity.data[index]);
                               },
                             );
@@ -126,27 +126,53 @@ class _BarcodePageState extends State<BarcodePage> {
     );
   }
 
-  Widget _fGoalItem(BuildContext context, int index, BarcodeData data) {
+  Widget _fBarcode(BuildContext context, int index, BarcodeData data) {
     return GestureDetector(
       onTap: () {
-        showCupertinoModalBottomSheet(
-          expand: false,
-          context: context,
-          enableDrag: true,
-          isDismissible: true,
-          topRadius: Radius.circular(20),
-          backgroundColor: AppTheme.white,
-          barrierColor: AppTheme.black.withOpacity(0.2),
-          builder: (context) => BarcodeSheet(data: data),
-        );
+        Navigator.pushNamed(context, PagePath.receive,
+            arguments: ArgumentBundle(extras: {
+              'barcode': data.id.toString(),
+              'name': data.name,
+            }));
       },
       child: Dismissible(
+        background: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.all(8),
+            child: Text(
+              "Hapus",
+              style: AppTheme.headline2.copyWith(color: AppTheme.white),
+            ),
+            color: AppTheme.red),
+        secondaryBackground: Container(
+            padding: EdgeInsets.all(8),
+            alignment: Alignment.centerRight,
+            child: Text(
+              "Edit",
+              style: AppTheme.headline2.copyWith(color: AppTheme.white),
+            ),
+            color: AppTheme.yellow),
         key: Key(data.id.toString()),
         confirmDismiss: (direction) async {
-          return await showDialog(
-            context: context,
-            builder: (context) => _confirmDeleteFGoals(context, data),
-          );
+          if (direction == DismissDirection.startToEnd) {
+            return await showDialog(
+              context: context,
+              builder: (context) => _confirmDeleteFGoals(context, data),
+            );
+          } else if (direction == DismissDirection.endToStart) {
+            showCupertinoModalBottomSheet(
+              expand: false,
+              context: context,
+              enableDrag: true,
+              isDismissible: true,
+              topRadius: Radius.circular(20),
+              backgroundColor: AppTheme.white,
+              barrierColor: AppTheme.black.withOpacity(0.2),
+              builder: (context) => BarcodeSheet(data: data),
+            );
+
+            return false;
+          }
         },
         child: Container(
           decoration: BoxDecoration(

@@ -31,7 +31,8 @@ class PageRouter {
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.receive:
-        return _buildRoute(settings, ReceivePage());
+        return _buildRoute(
+            settings, ReceivePage(bundle: args as ArgumentBundle?));
       case PagePath.setting:
         return _buildRoute(settings, SettingPage());
       case PagePath.pay:
