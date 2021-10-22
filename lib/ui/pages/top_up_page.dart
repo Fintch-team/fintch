@@ -1,8 +1,9 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/src/provider.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class TopUpPage extends StatefulWidget {
   const TopUpPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _TopUpPageState extends State<TopUpPage> {
   @override
   void initState() {
     super.initState();
-    textFieldController.text = value.toInt().toString();
+    textFieldController.text = value.doubleToThousand();
   }
 
   @override
@@ -205,7 +206,7 @@ class _TopUpPageState extends State<TopUpPage> {
         setState(() {
           sliderValue = lowerValue;
           value = sliderValue;
-          textFieldController.text = value.toStringAsFixed(0);
+          textFieldController.text = value.doubleToThousand();
         });
       },
     );
@@ -219,15 +220,18 @@ class _TopUpPageState extends State<TopUpPage> {
         style: AppTheme.text3.purple,
         validator: (value) {
           Validator.number(value);
-          final n = num.tryParse(value!);
+          final n = value!.thousandToDouble();
           if (n == null) {
             return '"$value" bukan bilangan!';
-          } else if (double.parse(value) < 500) {
+          } else if (n < 500) {
             return 'Input harus lebih dari 500';
           }
           return null;
         },
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          ThousandsFormatter(),
+        ],
         decoration: InputDecoration(
           hintStyle: AppTheme.text3.purpleOpacity,
           hintText: 'Masukin jumlah Top Up lainnya',
@@ -242,7 +246,7 @@ class _TopUpPageState extends State<TopUpPage> {
         onChanged: (String text) {
           if (_formKey.currentState!.validate()) {
             setState(() {
-              value = double.parse(text);
+              value = text.thousandToDouble() ?? 0;
             });
           }
         },
@@ -285,7 +289,7 @@ class _TopUpPageState extends State<TopUpPage> {
                     if (_formKey.currentState!.validate()) {
                       context.read<PayBloc>().add(PostTopUpPay(
                               entity: TransactionTopUpPostEntity(
-                            amount: value.toString(),
+                            amount: value.doubleToThousand(),
                             name: "test",
                           )));
 
