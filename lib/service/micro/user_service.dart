@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/foundation.dart';
@@ -45,6 +47,33 @@ class UserService extends ApiService {
       UserModel result = UserModel.fromJson(res.data);
 
       return result;
+    } on DioError catch (e) {
+      debugPrint("error $e");
+      throw e.error;
+    }
+  }
+
+  Future<bool> changeImgProfile({required File img}) async {
+    try {
+      final res = await dio.post(
+        '/users/change-profile',
+        data: FormData.fromMap(
+          {
+            'img': await MultipartFile.fromFile(
+              img.absolute.path,
+              filename: img.absolute.path.split('/').last,
+            ),
+          },
+        ),
+        options: Options(
+          contentType: 'multipart/form-data',
+        ),
+      );
+
+      print(res.statusCode);
+      print(res.statusMessage);
+
+      return res.statusCode == 200;
     } on DioError catch (e) {
       debugPrint("error $e");
       throw e.error;

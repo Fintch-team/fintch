@@ -36,12 +36,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState>
       }
     });
 
-    on<BiometricAuth>((event, emit) async {
+    on<ChangeImgProfile>((event, emit) async {
       emit(SettingsLoading());
       try {
-        bool entity = await userRepository.authBiometrics();
-        
-        emit(SettingsBoolSuccess(entity: entity));
+        bool entity = await userRepository.changeImgProfile(img: event.entity);
+        if (entity) {
+          UserEntity entity = await userRepository.currentUser();
+          emit(SettingsSuccess(entity: entity));
+        } else {
+          emit(SettingsBoolSuccess(entity: entity));
+        }
       } on FailedException catch (e) {
         emit(SettingsFailure(message: e.message));
       } catch (e, stacktrace) {

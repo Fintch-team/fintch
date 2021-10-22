@@ -30,3 +30,4 @@ export 'shimmers.dart';
 export 'state_widgets.dart';
 export 'top_up_item.dart';
 export 'transaction_item.dart';
+export 'images.dart';

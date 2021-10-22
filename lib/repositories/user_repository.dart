@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fintch/gen_export.dart';
 
 class UserRepository {
@@ -97,6 +99,10 @@ class UserRepository {
     } catch (e) {
       return DataMapper.localUserMapper(localAuthService.currentUser!);
     }
+  }
+
+  Future<bool> changeImgProfile({required File img}) async {
+    return await userService.changeImgProfile(img: img);
   }
 
   Future<bool> hasBiometrics() async {
