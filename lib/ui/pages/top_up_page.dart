@@ -1,7 +1,9 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/src/provider.dart';
 
 class TopUpPage extends StatefulWidget {
@@ -21,6 +23,17 @@ class _TopUpPageState extends State<TopUpPage> {
   void initState() {
     super.initState();
     textFieldController.text = value.toInt().toString();
+
+    context.read<TopUpBloc>().add(GetTopUp());
+  }
+
+  // TODO: implement refresh
+  Future<void> _onRefresh() async {
+    _init();
+  }
+
+  void _init() {
+    context.read<TopUpBloc>().add(GetTopUp());
   }
 
   @override
@@ -114,6 +127,16 @@ class _TopUpPageState extends State<TopUpPage> {
                 ),
                 SizedBox(height: 8),
                 _otherAmount(),
+                SizedBox(height: Helper.normalPadding),
+                // TODO: Refresh di untuk top up list
+                BlocBuilder<TopUpBloc, TopUpState>(
+                  builder: (context, state) {
+                    return _topUpList(state);
+                  },
+                ),
+                SizedBox(height: Helper.normalPadding),
+                SizedBox(height: Helper.normalPadding),
+                SizedBox(height: Helper.normalPadding),
               ],
             ),
           ),
@@ -299,5 +322,40 @@ class _TopUpPageState extends State<TopUpPage> {
         ),
       ),
     );
+  }
+
+  Widget _topUpList(TopUpState state) {
+    if (state is TopUpResponseSuccess) {
+      if (state.entity.data.isNotEmpty) {
+        // print(state.entity.data);
+        return ListView.builder(
+          itemCount: state.entity.data.length,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(vertical: 10),
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                if (state.entity.data[index].paymentStatus == "pending") {
+                  Navigator.pushNamed(context, PagePath.payment,
+                      arguments: ArgumentBundle(extras: {
+                        'redirectUrl': state.entity.data[index].redirectUrl,
+                      }));
+                }
+              },
+              child: TopUpItem(
+                item: state.entity.data[index],
+              ),
+            );
+          },
+        );
+      }
+      return EmptyStateWidget(message: 'Top up Kosong!');
+    } else if (state is TopUpLoading) {
+      return HistoryItemShimmer();
+    } else if (state is TopUpFailure) {
+      return FailureStateWidget(message: 'Top up Gagal di Load!');
+    }
+    return Container();
   }
 }

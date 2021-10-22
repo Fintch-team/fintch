@@ -28,11 +28,11 @@ class TransactionRepository {
 
   Future<TransactionTopUpEntity> postTransactionTopUp(
       {required TransactionTopUpPostEntity postEntity}) async {
-    TopUpModel res = await transactionService.postTransactionTopUp(
+    TransactionTopUpModel res = await transactionService.postTransactionTopUp(
       name: postEntity.name,
       amount: postEntity.amount,
     );
 
-    return DataMapper.topUpMapper(res);
+    return DataMapper.transactionTopUpMapper(res);
   }
 }

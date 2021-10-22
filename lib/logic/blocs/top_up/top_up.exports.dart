@@ -2,7 +2,8 @@
 // To update all exports inside project
 // run :
 // flutter pub run bin/gen_export
-library transaction;
+library top_up;
 
-export 'transaction_model.dart';
-export 'transaction_top_up_model.dart';
+export 'top_up_bloc.dart';
+export 'top_up_event.dart';
+export 'top_up_state.dart';

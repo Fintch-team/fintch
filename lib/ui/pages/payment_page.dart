@@ -7,6 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
+  final ArgumentBundle? bundle;
+
+  const PaymentPage({Key? key, this.bundle}) : super(key: key);
+
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
@@ -14,86 +18,97 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
+  String redirectUrl = '';
 
   @override
   void initState() {
     super.initState();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    if (widget.bundle != null) {
+      redirectUrl = widget.bundle!.extras['redirectUrl'];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Payment Top Up',
-          style: AppTheme.text1.white.bold,
-          textAlign: TextAlign.start,
+        appBar: AppBar(
+          title: Text(
+            'Payment Top Up',
+            style: AppTheme.text1.white.bold,
+            textAlign: TextAlign.start,
+          ),
+          centerTitle: false,
+          actions: <Widget>[
+            NavigationControls(_controller.future),
+          ],
+          backgroundColor: AppTheme.webViewPurple,
         ),
-        centerTitle: false,
-        actions: <Widget>[
-          NavigationControls(_controller.future),
-        ],
-        backgroundColor: AppTheme.webViewPurple,
-      ),
-      body: BlocConsumer<PayBloc, PayState>(
-        listener: (context, state) {
-          if (state is PayFailure) {
-            Helper.snackBar(context, message: state.message, isFailure: true);
-          }
-        },
-        builder: (context, state) {
-          if (state is PayTopUpSuccess) {
-            return WebView(
-              initialUrl: state.entity.webUrl,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              onProgress: (int progress) {
-                print("WebView is loading (progress : %)");
-              },
-              javascriptChannels: <JavascriptChannel>{
-                _toasterJavascriptChannel(context),
-              },
-              navigationDelegate: (NavigationRequest request) {
-                print(request.url);
-                if (request.url.startsWith('http://fintch.id/api/payment')) {
-                  print('blocking navigation to }');
-                  context.read<HomeBloc>().add(HomeInit());
-                  int count = 0;
-                  Navigator.popUntil(context, (route) {
-                    return count++ == 2;
-                  });
-                  return NavigationDecision.prevent;
-                }
-                print('allowing navigation to ');
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                print('Page started loading: ');
-              },
-              onPageFinished: (String url) {
-                print('Page finished loading: ');
-              },
-              gestureNavigationEnabled: true,
-            );
-          } else if (state is PayLoading) {
-            return Center(
-              child: CircularLoading(),
-            );
-          } else if (state is PayFailure) {
-            return Center(
-              child: Text(
-                state.message,
-                style: AppTheme.headline3.white,
-                textAlign: TextAlign.center,
-              ),
-            );
-          }
-          return Container();
-        },
-      ),
+        body: redirectUrl.isNotEmpty ? _buildWeb(redirectUrl) : _buildBody());
+  }
+
+  Widget _buildBody() {
+    return BlocConsumer<PayBloc, PayState>(
+      listener: (context, state) {
+        if (state is PayFailure) {
+          Helper.snackBar(context, message: state.message, isFailure: true);
+        }
+      },
+      builder: (context, state) {
+        if (state is PayTopUpSuccess) {
+          return _buildWeb(state.entity.webUrl);
+        } else if (state is PayLoading) {
+          return Center(
+            child: CircularLoading(),
+          );
+        } else if (state is PayFailure) {
+          return Center(
+            child: Text(
+              state.message,
+              style: AppTheme.headline3.white,
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  Widget _buildWeb(String url) {
+    return WebView(
+      initialUrl: url,
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (WebViewController webViewController) {
+        _controller.complete(webViewController);
+      },
+      onProgress: (int progress) {
+        print("WebView is loading (progress : %)");
+      },
+      javascriptChannels: <JavascriptChannel>{
+        _toasterJavascriptChannel(context),
+      },
+      navigationDelegate: (NavigationRequest request) {
+        print(request.url);
+        if (request.url.startsWith('http://fintch.id/api/payment')) {
+          print('blocking navigation to }');
+          context.read<HomeBloc>().add(HomeInit());
+          int count = 0;
+          Navigator.popUntil(context, (route) {
+            return count++ == 2;
+          });
+          return NavigationDecision.prevent;
+        }
+        print('allowing navigation to ');
+        return NavigationDecision.navigate;
+      },
+      onPageStarted: (String url) {
+        print('Page started loading: ');
+      },
+      onPageFinished: (String url) {
+        print('Page finished loading: ');
+      },
+      gestureNavigationEnabled: true,
     );
   }
 

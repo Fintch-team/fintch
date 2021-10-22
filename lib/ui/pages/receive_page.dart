@@ -4,17 +4,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class ReceivePage extends StatefulWidget {
-  const ReceivePage({Key? key}) : super(key: key);
+  final ArgumentBundle? bundle;
+
+  const ReceivePage({Key? key, this.bundle}) : super(key: key);
 
   @override
   State<ReceivePage> createState() => _ReceivePageState();
 }
 
 class _ReceivePageState extends State<ReceivePage> {
+  String barcode = '';
+  String name = '';
+
   @override
   void initState() {
     super.initState();
     context.read<ReceiveBloc>().add(HomeInit());
+
+    if (widget.bundle != null) {
+      barcode = widget.bundle!.extras['barcode'];
+      name = widget.bundle!.extras['name'];
+    }
   }
 
   @override
@@ -28,7 +38,9 @@ class _ReceivePageState extends State<ReceivePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CustomAppBar(
-                  title: 'QR Code Saya',
+                  title: barcode.isNotEmpty
+                      ? 'Transaksi Barcode $name'
+                      : 'QR Code Saya',
                 ),
                 SizedBox(height: 20),
                 _userCard(context),
@@ -49,81 +61,7 @@ class _ReceivePageState extends State<ReceivePage> {
           SizedBox(height: MediaQuery.of(context).size.height * 0.06),
           Expanded(
             child: Container(
-              child: BlocConsumer<ReceiveBloc, HomeState>(
-                listener: (context, state) {
-                  if (state is HomeFailure) {
-                    Helper.snackBar(context,
-                        message: state.message, isFailure: true);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is HomeSuccess) {
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow: Helper.getShadowBold(),
-                              borderRadius: BorderRadius.circular(32),
-                              color: AppTheme.scaffold,
-                            ),
-                            padding: EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                ),
-                                Text(state.entity.name,
-                                    style: AppTheme.headline3),
-                                SizedBox(height: 8),
-                                Text(state.entity.school.name,
-                                    style: AppTheme.text3),
-                                SizedBox(height: 8),
-                                Text(state.entity.nickname.toString(),
-                                    style: AppTheme.text3.purple),
-                                SizedBox(height: Helper.normalPadding),
-                                Expanded(
-                                  child: Center(
-                                    child: PrettyQr(
-                                      image: AssetImage(
-                                          Resources.icFintchPointPng),
-                                      size: MediaQuery.of(context).size.height *
-                                          0.3,
-                                      data: state.entity.nickname.toString(),
-                                      errorCorrectLevel: QrErrorCorrectLevel.M,
-                                      roundEdges: true,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: -MediaQuery.of(context).size.width * 0.12,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(64),
-                              boxShadow: Helper.getShadow(),
-                            ),
-                            child: CustomNetworkImage(
-                              imgUrl: state.entity.img,
-                              borderRadius: 64,
-                              width: MediaQuery.of(context).size.width * 0.24,
-                              height: MediaQuery.of(context).size.width * 0.24,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return Center(child: CircularLoading());
-                },
-              ),
+              child: barcode.isNotEmpty ? _buildBarcode(barcode) : _buildBloc(),
             ),
           ),
           SizedBox(height: 40),
@@ -141,6 +79,94 @@ class _ReceivePageState extends State<ReceivePage> {
             isUpper: false,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBloc() {
+    return BlocConsumer<ReceiveBloc, HomeState>(
+      listener: (context, state) {
+        if (state is HomeFailure) {
+          Helper.snackBar(context, message: state.message, isFailure: true);
+        }
+      },
+      builder: (context, state) {
+        if (state is HomeSuccess) {
+          return Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: Helper.getShadowBold(),
+                    borderRadius: BorderRadius.circular(32),
+                    color: AppTheme.scaffold,
+                  ),
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.12,
+                      ),
+                      Text(state.entity.name, style: AppTheme.headline3),
+                      SizedBox(height: 8),
+                      Text(state.entity.school.name, style: AppTheme.text3),
+                      SizedBox(height: 8),
+                      Text(state.entity.nickname.toString(),
+                          style: AppTheme.text3.purple),
+                      SizedBox(height: Helper.normalPadding),
+                      _buildBarcode(state.entity.nickname.toString()),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: -MediaQuery.of(context).size.width * 0.12,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(64),
+                    boxShadow: Helper.getShadow(),
+                  ),
+                  child: CustomNetworkImage(
+                    imgUrl: state.entity.img,
+                    borderRadius: 64,
+                    width: MediaQuery.of(context).size.width * 0.24,
+                    height: MediaQuery.of(context).size.width * 0.24,
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+        return Center(child: CircularLoading());
+      },
+    );
+  }
+
+  Widget _buildBarcode(String barcode) {
+    // Text(name, style: AppTheme.headline3),
+    // SizedBox(height: 8),
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: Helper.getShadowBold(),
+          borderRadius: BorderRadius.circular(32),
+          color: AppTheme.scaffold,
+        ),
+        padding: EdgeInsets.all(20),
+        child: Expanded(
+          child: Center(
+            child: PrettyQr(
+              image: AssetImage(Resources.icFintchPointPng),
+              size: MediaQuery.of(context).size.height * 0.3,
+              data: barcode,
+              errorCorrectLevel: QrErrorCorrectLevel.M,
+              roundEdges: true,
+            ),
+          ),
+        ),
       ),
     );
   }

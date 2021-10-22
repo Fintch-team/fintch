@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 if (state is HomeSuccess)
                   if (state.entity.level != 'User')
                     GestureDetector(
-                      onTap: () => Navigator.pushReplacementNamed(
+                      onTap: () => Navigator.pushNamed(
                         context,
                         PagePath.barcode,
                       ),
