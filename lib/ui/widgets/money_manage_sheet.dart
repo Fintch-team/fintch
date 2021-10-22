@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class MoneyManageSheet extends StatefulWidget {
   final MoneyManageData? data;
@@ -35,7 +36,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
 
     if (widget.data != null) {
       titleController.text = widget.data!.name;
-      amountController.text = widget.data!.amount.toString();
+      amountController.text = widget.data!.amount.intToThousand();
     }
     super.initState();
   }
@@ -112,12 +113,13 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
+                            ThousandsFormatter(),
                           ],
                           validator: (value) {
                             Validator.notEmpty(value);
                             Validator.number(value);
-                            final n = num.tryParse(value!);
+                            final n = value!.thousandToDouble();
                             if (n == 0) {
                               return "Harga tidak boleh nol";
                             }
@@ -203,7 +205,9 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                                 entity: MoneyManagePutEntity(
                                                   idMoneyManage: widget.data!.id
                                                       .toString(),
-                                                  amount: amountController.text,
+                                                  amount: amountController.text
+                                                      .thousandToDouble()
+                                                      .toString(),
                                                   name: titleController.text,
                                                   idMoneyManageItem:
                                                       _selectedCardId!,
@@ -219,7 +223,9 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                             .add(
                                               PostIncomeMoneyManage(
                                                 entity: MoneyManageInPostEntity(
-                                                  amount: amountController.text,
+                                                  amount: amountController.text
+                                                      .thousandToDouble()
+                                                      .toString(),
                                                   name: titleController.text,
                                                   date: dateController.text,
                                                 ),
@@ -233,8 +239,10 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                                 PostOutcomeMoneyManage(
                                                   entity:
                                                       MoneyManageOutPostEntity(
-                                                    amount:
-                                                        amountController.text,
+                                                    amount: amountController
+                                                        .text
+                                                        .thousandToDouble()
+                                                        .toString(),
                                                     name: titleController.text,
                                                     idMoneyManageItem:
                                                         _selectedCardId!,
