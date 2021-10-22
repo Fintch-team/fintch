@@ -85,14 +85,14 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
                           ],
                           validator: (value) {
                             Validator.notEmpty(value);
                             Validator.number(value);
                             final n = num.tryParse(value!);
                             if (n == 0) {
-                              return "Harga tidak boleh nol";
+                              return "Persen tidak boleh nol";
                             }
                             if (n == null) {
                               return '"$value" bukan bilangan!';
