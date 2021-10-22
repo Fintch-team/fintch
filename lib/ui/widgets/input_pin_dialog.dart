@@ -29,9 +29,9 @@ class _InputPinDialogState extends State<InputPinDialog> {
 
   @override
   void dispose() {
-    // errorController?.close();
-    // inputPinController.dispose();
-    // inputFocusNode.dispose();
+    errorController?.close();
+    inputPinController.dispose();
+    inputFocusNode.dispose();
     super.dispose();
   }
 
@@ -67,8 +67,10 @@ class _InputPinDialogState extends State<InputPinDialog> {
                   context: context,
                   barrierDismissible: false,
                   builder: (context) => SuccessPaymentDialog(
-                      fintchPoint: state.entity.amount,
-                      fintchWallet: state.entity.pay.walletAmount.toString()),
+                      fintchPoint: state.entity.amount.parseCurrency(),
+                      fintchWallet: state.entity.pay.walletAmount
+                          .toString()
+                          .parseCurrency()),
                 );
               } else {
                 showDialog(
