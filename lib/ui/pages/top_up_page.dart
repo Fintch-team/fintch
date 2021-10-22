@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/src/provider.dart';
 
 class TopUpPage extends StatefulWidget {
@@ -23,7 +22,7 @@ class _TopUpPageState extends State<TopUpPage> {
   @override
   void initState() {
     super.initState();
-    
+
     textFieldController = TextEditingController();
     textFieldController.text = value.doubleToThousand();
 
@@ -137,9 +136,10 @@ class _TopUpPageState extends State<TopUpPage> {
                     return _topUpList(state);
                   },
                 ),
-                SizedBox(height: Helper.normalPadding),
-                SizedBox(height: Helper.normalPadding),
-                SizedBox(height: Helper.normalPadding),
+                SizedBox(height: Helper.bigPadding),
+                SizedBox(height: Helper.bigPadding),
+                SizedBox(height: Helper.bigPadding),
+                SizedBox(height: Helper.bigPadding),
               ],
             ),
           ),
@@ -280,51 +280,54 @@ class _TopUpPageState extends State<TopUpPage> {
   }
 
   Widget _totalAmount() {
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: AppTheme.black,
-              width: 2,
-            ),
-          ),
-          color: AppTheme.white,
-        ),
-        padding: EdgeInsets.all(Helper.normalPadding),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 6,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Total Pembayaran', style: AppTheme.text2),
-                  SizedBox(height: 8),
-                  Text('Rp${value.toString().parseCurrency()}',
-                      style: AppTheme.headline3),
-                ],
+    return Container(
+      color: AppTheme.white,
+      child: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: AppTheme.black,
+                width: 2,
               ),
             ),
-            Expanded(
-              flex: 4,
-              child: CustomButton(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<PayBloc>().add(PostTopUpPay(
-                              entity: TransactionTopUpPostEntity(
-                            amount: value.toString(),
-                            name: "test",
-                          )));
+            color: AppTheme.white,
+          ),
+          padding: EdgeInsets.all(Helper.normalPadding),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 6,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text('Total Pembayaran', style: AppTheme.text2),
+                    SizedBox(height: 8),
+                    Text('Rp${value.toString().parseCurrency()}',
+                        style: AppTheme.headline3),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: CustomButton(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<PayBloc>().add(PostTopUpPay(
+                                entity: TransactionTopUpPostEntity(
+                              amount: value.toString(),
+                              name: "test",
+                            )));
 
-                      Navigator.pushNamed(context, PagePath.payment);
-                    }
-                  },
-                  text: 'Bayar',
-                  isUpper: false),
-            ),
-          ],
+                        Navigator.pushNamed(context, PagePath.payment);
+                      }
+                    },
+                    text: 'Bayar',
+                    isUpper: false),
+              ),
+            ],
+          ),
         ),
       ),
     );
