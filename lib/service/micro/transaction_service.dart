@@ -43,7 +43,7 @@ class TransactionService extends ApiService {
     }
   }
 
-  Future<TopUpModel> postTransactionTopUp({
+  Future<TransactionTopUpModel> postTransactionTopUp({
     required String name,
     required String amount,
   }) async {
@@ -56,7 +56,7 @@ class TransactionService extends ApiService {
         },
       );
 
-      return TopUpModel.fromJson(res.data);
+      return TransactionTopUpModel.fromJson(res.data);
     } on DioError catch (e) {
       debugPrint("error $e");
       throw e.error;

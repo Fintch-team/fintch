@@ -9,7 +9,8 @@ class DataMapper {
         isSetPin: tokenModel.data.user.isSetPin,
       );
 
-  static TransactionTopUpEntity topUpMapper(TopUpModel topUp) =>
+  static TransactionTopUpEntity transactionTopUpMapper(
+          TransactionTopUpModel topUp) =>
       TransactionTopUpEntity(
         token: topUp.data.token,
         webUrl: topUp.data.webUrl,
@@ -151,6 +152,21 @@ class DataMapper {
 
   static ListBarcodeEntity listBarcodeMapper(ListBarcodeModel moneyPlan) =>
       ListBarcodeEntity(
+        data: moneyPlan.data,
+      );
+
+  static TopUpEntity topUpMapper(TopUpModel topUp) => TopUpEntity(
+        id: topUp.data.id,
+        name: topUp.data.name,
+        number: topUp.data.number,
+        paymentStatus: topUp.data.paymentStatus,
+        redirectUrl: topUp.data.redirectUrl,
+        totalPrice: topUp.data.totalPrice,
+        user: topUp.data.user,
+      );
+
+  static ListTopUpEntity listTopUpMapper(ListTopUpModel moneyPlan) =>
+      ListTopUpEntity(
         data: moneyPlan.data,
       );
 }

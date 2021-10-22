@@ -79,11 +79,8 @@ class _SettingPageState extends State<SettingPage> {
                   borderRadius: BorderRadius.circular(64),
                   boxShadow: Helper.getShadow(),
                 ),
-                child: CustomNetworkImage(
-                  imgUrl: state.entity.img,
-                  borderRadius: 64,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.width * 0.3,
+                child: _ProfileImage(
+                  img: state.entity.img,
                 ),
               ),
               SizedBox(height: Helper.normalPadding),
@@ -316,6 +313,86 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProfileImage extends StatefulWidget {
+  final String img;
+
+  const _ProfileImage({
+    Key? key,
+    required this.img,
+  }) : super(key: key);
+
+  @override
+  __ProfileImageState createState() => __ProfileImageState();
+}
+
+class __ProfileImageState extends State<_ProfileImage> {
+  bool _isUploading = false;
+  double? progress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        CircleAvatar(
+            backgroundImage: NetworkImage(widget.img),
+            radius: 56,
+            child: _isUploading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      value: progress,
+                    ),
+                  )
+                : SizedBox()),
+        Positioned(
+          bottom: 0,
+          right: 8,
+          child: GestureDetector(
+            onTap: () async {
+              final file = await getImage(context: context);
+              if (file == null) return;
+              setState(() {
+                _isUploading = true;
+              });
+
+              context.read<SettingsBloc>().add(ChangeImgProfile(entity: file));
+
+              // try {
+              //   repository.updateUserImage(
+              //     file: file,
+              //     onSendProgress: (sent, total) {
+              //       if (mounted) {
+              //         setState(() {
+              //           progress = sent.toDouble() / total.toDouble();
+              //         });
+              //       }
+              //     },
+              //   );
+              // } finally {
+              //   if (mounted) {
+              //     setState(() {
+              //       _isUploading = false;
+              //     });
+              //   }
+              // }
+            },
+            child: ClipOval(
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  Icons.camera_alt,
+                  color: AppTheme.black,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

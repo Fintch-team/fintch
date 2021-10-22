@@ -31,7 +31,8 @@ class PageRouter {
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.receive:
-        return _buildRoute(settings, ReceivePage());
+        return _buildRoute(
+            settings, ReceivePage(bundle: args as ArgumentBundle?));
       case PagePath.setting:
         return _buildRoute(settings, SettingPage());
       case PagePath.pay:
@@ -41,7 +42,8 @@ class PageRouter {
       case PagePath.topUp:
         return _buildRoute(settings, TopUpPage());
       case PagePath.payment:
-        return _buildRoute(settings, PaymentPage());
+        return _buildRoute(
+            settings, PaymentPage(bundle: args as ArgumentBundle?));
       case PagePath.changePassword:
         return _buildRoute(settings, ChangePasswordPage());
       case PagePath.changePin:
