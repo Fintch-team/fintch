@@ -44,6 +44,7 @@ class _InputPinDialogState extends State<InputPinDialog> {
           if (state is AuthPinFetched) {
             context.loaderOverlay.hide();
             if (state.isCorrect) {
+              Navigator.pop(context);
               widget.whenSuccess.call();
             } else {
               inputPinController.clear();
