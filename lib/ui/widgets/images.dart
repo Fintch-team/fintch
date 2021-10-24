@@ -5,6 +5,7 @@ import 'package:fintch/ui/widgets/image_cropper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Future<File?> getImage(
@@ -17,8 +18,9 @@ Future<File?> getImage(
     topRadius: Radius.circular(20),
     backgroundColor: AppTheme.white,
     barrierColor: AppTheme.black.withOpacity(0.2),
-    builder: (context) => ImageSourceDialog(
+    builder: (builderContext) => ImageSourceDialog(
       crop: withCrop,
+      loadingContext: context,
     ),
   );
 
@@ -42,7 +44,6 @@ Future<File?> pickImage({
       imageQuality: 50,
     );
     if (picked == null) return null;
-
     if (crop) {
       return cropImage(path: picked.path, context: context);
     }
@@ -80,7 +81,11 @@ Future<File?> cropImage({
 
 class ImageSourceDialog extends StatelessWidget {
   final bool crop;
-  const ImageSourceDialog({Key? key, required this.crop}) : super(key: key);
+  final BuildContext loadingContext;
+
+  const ImageSourceDialog(
+      {Key? key, required this.crop, required this.loadingContext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +111,10 @@ class ImageSourceDialog extends StatelessWidget {
                 style: AppTheme.text1,
               ),
               onTap: () async {
+                context.loaderOverlay.show();
                 final res = await pickImage(
                     source: ImageSource.camera, crop: crop, context: context);
+                context.loaderOverlay.hide();
                 Navigator.pop(context, res);
               },
             ),
@@ -118,8 +125,10 @@ class ImageSourceDialog extends StatelessWidget {
                 style: AppTheme.text1,
               ),
               onTap: () async {
+                context.loaderOverlay.show();
                 final res = await pickImage(
                     source: ImageSource.gallery, crop: crop, context: context);
+                context.loaderOverlay.hide();
                 Navigator.pop(context, res);
               },
             ),

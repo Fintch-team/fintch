@@ -81,6 +81,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 child: _ProfileImage(
                   img: state.entity.img,
+                  loadingContext: context,
                 ),
               ),
               SizedBox(height: Helper.normalPadding),
@@ -319,11 +320,11 @@ class _SettingPageState extends State<SettingPage> {
 
 class _ProfileImage extends StatefulWidget {
   final String img;
+  final BuildContext loadingContext;
 
-  const _ProfileImage({
-    Key? key,
-    required this.img,
-  }) : super(key: key);
+  const _ProfileImage(
+      {Key? key, required this.img, required this.loadingContext})
+      : super(key: key);
 
   @override
   __ProfileImageState createState() => __ProfileImageState();
@@ -351,7 +352,7 @@ class __ProfileImageState extends State<_ProfileImage> {
           right: 8,
           child: GestureDetector(
             onTap: () async {
-              final file = await getImage(context: context);
+              final file = await getImage(context: widget.loadingContext);
               if (file == null) return;
               setState(() {
                 _isUploading = true;
