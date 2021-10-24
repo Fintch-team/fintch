@@ -23,7 +23,7 @@ platform :android do
   )
   lane :android_beta_app do
       firebase_app_distribution(
-          app: "<Enter the App ID from Firebase>",
+          app: "1:127226419613:android:3364a3da747deb997a7774",
           testers: "sniren2002@gmail.com, ",
           release_notes: "1.0.0",
           firebase_cli_path: "/usr/local/bin/firebase",
