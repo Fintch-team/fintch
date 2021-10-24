@@ -1,15 +1,22 @@
 import 'dart:io';
 
+import 'package:fintch/gen_export.dart';
 import 'package:fintch/ui/widgets/image_cropper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Future<File?> getImage(
     {bool withCrop = true, required BuildContext context}) async {
-  final res = await showModalBottomSheet(
+  final res = await showCupertinoModalBottomSheet(
     context: context,
-    backgroundColor: Colors.transparent,
+    expand: false,
+    enableDrag: true,
+    isDismissible: true,
+    topRadius: Radius.circular(20),
+    backgroundColor: AppTheme.white,
+    barrierColor: AppTheme.black.withOpacity(0.2),
     builder: (context) => ImageSourceDialog(
       crop: withCrop,
     ),
@@ -77,7 +84,7 @@ class ImageSourceDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Material(
       child: SafeArea(
         top: false,
         child: Column(
@@ -85,16 +92,19 @@ class ImageSourceDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(Helper.normalPadding),
               child: Text(
                 'Source',
-                style: Theme.of(context).textTheme.subtitle2,
+                style: AppTheme.headline3.bold,
               ),
             ),
             const Divider(height: 1),
             ListTile(
               leading: const Icon(CupertinoIcons.camera_fill),
-              title: const Text('Camera'),
+              title: const Text(
+                'Camera',
+                style: AppTheme.text1,
+              ),
               onTap: () async {
                 final res = await pickImage(
                     source: ImageSource.camera, crop: crop, context: context);
@@ -103,7 +113,10 @@ class ImageSourceDialog extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(CupertinoIcons.photo),
-              title: const Text('Gallery'),
+              title: const Text(
+                'Gallery',
+                style: AppTheme.text1,
+              ),
               onTap: () async {
                 final res = await pickImage(
                     source: ImageSource.gallery, crop: crop, context: context);

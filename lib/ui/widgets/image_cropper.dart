@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 
 class ImageCropper extends StatefulWidget {
   final String imagePath;
+
   const ImageCropper({
     Key? key,
     required this.imagePath,
@@ -23,6 +24,8 @@ class ImageCropper extends StatefulWidget {
 class _ImageCropperState extends State<ImageCropper> {
   Uint8List? image;
   final controller = CropController();
+  int index = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -50,47 +53,77 @@ class _ImageCropperState extends State<ImageCropper> {
             type: MaterialType.card,
             child: SafeArea(
               child: Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 8.0,
+                  vertical: Helper.smallPadding,
                 ),
-                height: kToolbarHeight,
+                height: 72,
                 child: Row(
                   children: [
                     TextButton(
-                      child: const Text('FREE'),
+                      child: Text(
+                        'FREE',
+                        style: index == 0
+                            ? AppTheme.text1.purple.bold
+                            : AppTheme.text1.purple,
+                      ),
                       onPressed: () {
                         controller.aspectRatio = null;
+                        setState(() => index = 0);
                       },
                     ),
                     TextButton(
-                      child: const Text('1:1'),
+                      child: Text(
+                        '1:1',
+                        style: index == 1
+                            ? AppTheme.text1.purple.bold
+                            : AppTheme.text1.purple,
+                      ),
                       onPressed: () {
                         controller.aspectRatio = 1;
+                        setState(() => index = 1);
                       },
                     ),
                     TextButton(
-                      child: const Text('16:9'),
+                      child: Text(
+                        '16:9',
+                        style: index == 2
+                            ? AppTheme.text1.purple.bold
+                            : AppTheme.text1.purple,
+                      ),
                       onPressed: () {
                         controller.aspectRatio = 16 / 9;
+                        setState(() => index = 2);
                       },
                     ),
                     TextButton(
-                      child: const Text('4:3'),
+                      child: Text(
+                        '4:3',
+                        style: index == 3
+                            ? AppTheme.text1.purple.bold
+                            : AppTheme.text1.purple,
+                      ),
                       onPressed: () {
                         controller.aspectRatio = 4 / 3;
+                        setState(() => index = 3);
                       },
                     ),
-                    const Spacer(),
-                    ElevatedButton(
-                      onPressed: () async {
-                        _completer = Completer();
+                    Flexible(
+                      child: CustomButton(
+                        isLoading: isLoading,
+                        onTap: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          _completer = Completer();
 
-                        controller.crop();
-                        final result = await _completer!.future;
-                        Navigator.pop(context, result);
-                      },
-                      child: const Text('CROP'),
-                    )
+                          controller.crop();
+                          final result = await _completer!.future;
+                          Navigator.pop(context, result);
+                        },
+                        text: 'CROP',
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -103,7 +136,7 @@ class _ImageCropperState extends State<ImageCropper> {
 
   Widget _buildBody() {
     if (image == null) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularLoading());
     }
 
     return Crop(
@@ -141,6 +174,9 @@ class _ImageCropperState extends State<ImageCropper> {
         final name = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
         final result = File(tmpDir.absolute.path + '/' + name);
         await result.writeAsBytes(bytes, flush: true);
+        setState(() {
+          isLoading = false;
+        });
         _completer?.complete(result);
       },
     );
