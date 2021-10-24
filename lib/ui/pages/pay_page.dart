@@ -31,7 +31,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    getCameraPermission();
+    // getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -168,13 +168,13 @@ class _PayPageState extends State<PayPage> {
         minHeight: MediaQuery.of(context).size.height * 0.44,
         maxHeight: MediaQuery.of(context).size.height * 0.88,
         onPanelOpened: () async {
-          await controller!.pauseCamera();
+          await controller?.pauseCamera();
         },
         onPanelSlide: (position) async {
-          await controller!.pauseCamera();
+          await controller?.pauseCamera();
         },
         onPanelClosed: () async {
-          await controller!.resumeCamera();
+          await controller?.resumeCamera();
         },
         panelBuilder: (scrollController) {
           return Container(

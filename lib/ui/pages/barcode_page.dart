@@ -133,7 +133,7 @@ class _BarcodePageState extends State<BarcodePage> {
         Navigator.pushNamed(context, PagePath.receive,
             arguments: ArgumentBundle(extras: {
               'barcode': data.id.toString(),
-              'name': data.name,
+              'amount': data.amount,
             }));
       },
       child: Dismissible(
