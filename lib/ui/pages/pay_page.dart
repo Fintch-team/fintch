@@ -487,17 +487,11 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(64),
-                              boxShadow: Helper.getShadow(),
-                            ),
-                            child: CustomNetworkImage(
-                              imgUrl: state.entity.img,
-                              borderRadius: 64,
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                            ),
+                          CustomNetworkImage(
+                            imgUrl: state.entity.img,
+                            borderRadius: 64,
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            height: MediaQuery.of(context).size.width * 0.3,
                           ),
                           SizedBox(height: Helper.normalPadding),
                           Text(state.entity.name, style: AppTheme.headline3),

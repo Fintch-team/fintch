@@ -135,17 +135,11 @@ class _ReceivePageState extends State<ReceivePage> {
         ),
         Positioned(
           top: -MediaQuery.of(context).size.width * 0.12,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(64),
-              boxShadow: Helper.getShadow(),
-            ),
-            child: CustomNetworkImage(
-              imgUrl: entity.img,
-              borderRadius: 64,
-              width: MediaQuery.of(context).size.width * 0.24,
-              height: MediaQuery.of(context).size.width * 0.24,
-            ),
+          child: CustomNetworkImage(
+            imgUrl: entity.img,
+            borderRadius: 64,
+            width: MediaQuery.of(context).size.width * 0.24,
+            height: MediaQuery.of(context).size.width * 0.24,
           ),
         ),
       ],
@@ -184,17 +178,11 @@ class _ReceivePageState extends State<ReceivePage> {
         ),
         Positioned(
           top: -MediaQuery.of(context).size.width * 0.12,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(64),
-              boxShadow: Helper.getShadow(),
-            ),
-            child: CustomNetworkImage(
-              imgUrl: entity.img,
-              borderRadius: 64,
-              width: MediaQuery.of(context).size.width * 0.24,
-              height: MediaQuery.of(context).size.width * 0.24,
-            ),
+          child: CustomNetworkImage(
+            imgUrl: entity.img,
+            borderRadius: 64,
+            width: MediaQuery.of(context).size.width * 0.24,
+            height: MediaQuery.of(context).size.width * 0.24,
           ),
         ),
       ],

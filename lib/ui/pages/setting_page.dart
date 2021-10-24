@@ -337,16 +337,15 @@ class __ProfileImageState extends State<_ProfileImage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CircleAvatar(
-            backgroundImage: NetworkImage(widget.img),
-            radius: 56,
-            child: _isUploading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      value: progress,
-                    ),
-                  )
-                : SizedBox()),
+        _isUploading
+            ? CircularLoading()
+            : CustomNetworkImage(
+                imgUrl: widget.img,
+                borderRadius: 64,
+                height: MediaQuery.of(context).size.width * 0.28,
+                width: MediaQuery.of(context).size.width * 0.28,
+                shadow: Helper.getShadow(),
+              ),
         Positioned(
           bottom: 0,
           right: 8,
