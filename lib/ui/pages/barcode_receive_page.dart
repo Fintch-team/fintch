@@ -1,6 +1,5 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class BarcodeReceivePage extends StatefulWidget {
@@ -76,6 +75,9 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
                             height: MediaQuery.of(context).size.width * 0.12,
                           ),
                           Text(barcode.name, style: AppTheme.headline3),
+                          SizedBox(height: 8),
+                          Text('Rp' + barcode.amount.toString().parseCurrency(),
+                              style: AppTheme.text1.purple),
                           SizedBox(height: 8),
                           Text(barcode.createdAt.parseHourDateAndMonth(),
                               style: AppTheme.text3),

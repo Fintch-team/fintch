@@ -368,7 +368,7 @@ class _FWalletPageState extends State<FWalletPage> {
                 Text(data.name, style: AppTheme.text3),
                 SizedBox(height: 4),
                 AutoSizeText(
-                  'Rp ${data.amount.toString().parseCurrency()}',
+                  'Rp${data.amount.toString().parseCurrency()}',
                   style: AppTheme.headline3.darkPurple,
                   maxLines: 1,
                 ),

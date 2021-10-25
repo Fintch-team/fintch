@@ -3,28 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-class ReceivePage extends StatefulWidget {
+class ReceivePage extends StatelessWidget {
   const ReceivePage({Key? key}) : super(key: key);
-
-  @override
-  State<ReceivePage> createState() => _ReceivePageState();
-}
-
-class _ReceivePageState extends State<ReceivePage> {
-  String barcode = '';
-  String name = '';
-  String amount = '';
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<ReceiveBloc>().add(HomeInit());
-    if (widget.bundle != null) {
-      barcode = widget.bundle!.extras['barcode'];
-      name = widget.bundle!.extras['name'];
-      amount = (widget.bundle!.extras['amount'] as int).intToThousand();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,16 +69,14 @@ class _ReceivePageState extends State<ReceivePage> {
       },
       builder: (context, state) {
         if (state is HomeSuccess) {
-          return barcode.isNotEmpty
-              ? _buildConstantBarcode(state.entity)
-              : _buildUserBarcode(state.entity);
+          return _buildUserBarcode(context, state.entity);
         }
         return Center(child: CircularLoading());
       },
     );
   }
 
-  Widget _buildUserBarcode(UserEntity entity) {
+  Widget _buildUserBarcode(BuildContext context, UserEntity entity) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -123,7 +101,7 @@ class _ReceivePageState extends State<ReceivePage> {
                 SizedBox(height: 8),
                 Text(entity.nickname.toString(), style: AppTheme.text3.purple),
                 SizedBox(height: Helper.normalPadding),
-                _buildBarcode(entity.nickname.toString()),
+                _buildBarcode(context, entity.nickname.toString()),
               ],
             ),
           ),
@@ -141,50 +119,7 @@ class _ReceivePageState extends State<ReceivePage> {
     );
   }
 
-  Widget _buildConstantBarcode(UserEntity entity) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: Helper.getShadowBold(),
-              borderRadius: BorderRadius.circular(32),
-              color: AppTheme.scaffold,
-            ),
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.12,
-                ),
-                Text(name, style: AppTheme.headline3),
-                SizedBox(height: 8),
-                Text(entity.nickname, style: AppTheme.text3),
-                SizedBox(height: 8),
-                Text(amount.toString(), style: AppTheme.text3.purple),
-                SizedBox(height: Helper.normalPadding),
-                _buildBarcode(barcode.toString()),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: -MediaQuery.of(context).size.width * 0.12,
-          child: CustomNetworkImage(
-            imgUrl: entity.img,
-            borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.24,
-            height: MediaQuery.of(context).size.width * 0.24,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBarcode(String barcode) {
+  Widget _buildBarcode(BuildContext context, String barcode) {
     // Text(name, style: AppTheme.headline3),
     // SizedBox(height: 8),
     return Container(

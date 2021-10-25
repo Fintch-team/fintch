@@ -206,7 +206,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                         ],
                       ),
                       AutoSizeText(
-                        'Rp ${data.totalAmount.toString().parseCurrency()}',
+                        'Rp${data.totalAmount.toString().parseCurrency()}',
                         style: AppTheme.text1.bold,
                         maxLines: 1,
                       ),
@@ -230,7 +230,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                     ),
                     SizedBox(height: Helper.smallPadding),
                     AutoSizeText(
-                      'Rp ${data.amount.toString().parseCurrency()}',
+                      'Rp${data.amount.toString().parseCurrency()}',
                       style: AppTheme.text3.green,
                       maxLines: 1,
                     ),

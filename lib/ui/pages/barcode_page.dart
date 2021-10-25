@@ -133,7 +133,6 @@ class _BarcodePageState extends State<BarcodePage> {
         Navigator.pushNamed(context, PagePath.barcodeReceive,
             arguments: ArgumentBundle(extras: {
               'barcode': data,
-              'amount': data.amount,
             }));
       },
       child: Dismissible(
@@ -185,7 +184,7 @@ class _BarcodePageState extends State<BarcodePage> {
           margin: EdgeInsets.symmetric(vertical: 10),
           width: MediaQuery.of(context).size.width,
           child: AspectRatio(
-            aspectRatio: 17 / 6,
+            aspectRatio: 16 / 4,
             child: Row(
               children: [
                 Expanded(
@@ -223,7 +222,7 @@ class _BarcodePageState extends State<BarcodePage> {
                         ],
                       ),
                       AutoSizeText(
-                        'Rp ${data.amount.toString().parseCurrency()}',
+                        'Rp${data.amount.toString().parseCurrency()}',
                         style: AppTheme.text1.bold,
                         maxLines: 1,
                       ),
@@ -264,7 +263,7 @@ class _BarcodePageState extends State<BarcodePage> {
                     buttonSetState(() => isLoading = true);
                   } else if (state is DeleteBarcodeRequestSuccess) {
                     Helper.snackBar(context, message: 'Berhasil Hapus Barcode');
-                    context.read<MoneyPlanBloc>().add(GetMoneyPlan());
+                    context.read<BarcodeBloc>().add(GetBarcode());
                     Navigator.of(context).pop(true);
                   } else if (state is BarcodeFailure) {
                     Helper.snackBar(context,
@@ -406,9 +405,9 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                               }
                               if (state is BarcodeLoading) {
                                 buttonSetState(() => isLoading = true);
-                              } else if (state is BarcodeResponseSuccess) {
+                              } else if (state is BarcodeRequestSuccess) {
                                 Helper.snackBar(context,
-                                    message: 'Berhasil Simpan Card');
+                                    message: 'Berhasil Simpan Barcode');
                                 context.read<BarcodeBloc>().add(GetBarcode());
                                 Navigator.pop(context);
                               } else if (state is BarcodeFailure) {
