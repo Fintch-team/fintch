@@ -169,17 +169,11 @@ class _HomePageState extends State<HomePage> {
   Widget _userInfo(BuildContext context, {UserEntity? user}) {
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(64),
-            boxShadow: Helper.getShadow(),
-          ),
-          child: CustomNetworkImage(
-            imgUrl: user != null ? user.img : Dummy.profileImg,
-            borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.16,
-            height: MediaQuery.of(context).size.width * 0.16,
-          ),
+        CustomNetworkImage(
+          imgUrl: user != null ? user.img : Dummy.profileImg,
+          borderRadius: 64,
+          width: MediaQuery.of(context).size.width * 0.16,
+          height: MediaQuery.of(context).size.width * 0.16,
         ),
         SizedBox(width: 16),
         Expanded(

@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library top_up;
 
-export 'list_top_up_model.dart';
 export 'top_up_model.dart';
+export 'list_top_up_model.dart';

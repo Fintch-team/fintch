@@ -4,6 +4,6 @@
 // flutter pub run bin/gen_export
 library top_up;
 
-export 'top_up_bloc.dart';
-export 'top_up_event.dart';
 export 'top_up_state.dart';
+export 'top_up_event.dart';
+export 'top_up_bloc.dart';

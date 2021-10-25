@@ -8,11 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:scan/scan.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -43,9 +46,9 @@ class _PayPageState extends State<PayPage> {
     super.reassemble();
     if (!isShowSheet) {
       if (Platform.isAndroid) {
-        await controller!.pauseCamera();
+        await controller?.pauseCamera();
       }
-      controller!.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
@@ -75,60 +78,89 @@ class _PayPageState extends State<PayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Background(
-        child: Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(context),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    padding: EdgeInsets.all(Helper.normalPadding),
-                    child: Row(
-                      children: [
-                        Expanded(child: CustomAppBar(title: 'Scan QR Code')),
-                        SizedBox(width: Helper.normalPadding),
-                        GestureDetector(
-                          onTap: () {},
-                          child: SvgPicture.asset(Resources.icAddImage),
-                        ),
-                        FutureBuilder<bool?>(
-                            future: controller?.getFlashStatus(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData || snapshot.data != null) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    await controller!.toggleFlash();
-                                    setState(() {});
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(width: Helper.normalPadding),
-                                      SvgPicture.asset(
-                                        snapshot.data!
-                                            ? Resources.icFlashOff
-                                            : Resources.icFlashOn,
-                                      ),
-                                    ],
-                                  ),
-                                );
+    return LoadingOverlay(
+      child: Scaffold(
+        body: Background(
+          child: Container(
+            color: Colors.transparent,
+            child: Stack(
+              children: [
+                _headerContent(context),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: EdgeInsets.all(Helper.normalPadding),
+                      child: Row(
+                        children: [
+                          Expanded(child: CustomAppBar(title: 'Scan QR Code')),
+                          SizedBox(width: Helper.normalPadding),
+                          GestureDetector(
+                            onTap: () async {
+                              context.loaderOverlay.show();
+                              final file = await Helper.pickImage(
+                                  source: ImageSource.gallery,
+                                  crop: true,
+                                  context: context);
+                              print('get file ');
+                              if (file != null) {
+                                print('file path: ${file.path}');
+                                final result = await Scan.parse(file.path);
+                                print('result: $result');
+                                if (!isShowSheet) {
+                                  isShowSheet = true;
+                                  this.controller?.pauseCamera();
+                                  context.loaderOverlay.hide();
+                                  _showPaymentBottomSheet(
+                                    onClose: () {
+                                      Navigator.pop(context);
+                                      isShowSheet = false;
+                                      controller?.resumeCamera();
+                                    },
+                                    nickname: result ?? '',
+                                  );
+                                }
                               }
-                              return Container();
-                            }),
-                      ],
+                              print('done');
+                              context.loaderOverlay.hide();
+                            },
+                            child: SvgPicture.asset(Resources.icAddImage),
+                          ),
+                          FutureBuilder<bool?>(
+                              future: controller?.getFlashStatus(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData || snapshot.data != null) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await controller?.toggleFlash();
+                                      setState(() {});
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(width: Helper.normalPadding),
+                                        SvgPicture.asset(
+                                          snapshot.data!
+                                              ? Resources.icFlashOff
+                                              : Resources.icFlashOn,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              _payScrollableSheet(),
-            ],
+                _payScrollableSheet(),
+              ],
+            ),
           ),
         ),
       ),
@@ -168,13 +200,13 @@ class _PayPageState extends State<PayPage> {
         minHeight: MediaQuery.of(context).size.height * 0.44,
         maxHeight: MediaQuery.of(context).size.height * 0.88,
         onPanelOpened: () async {
-          await controller!.pauseCamera();
+          await controller?.pauseCamera();
         },
         onPanelSlide: (position) async {
-          await controller!.pauseCamera();
+          await controller?.pauseCamera();
         },
         onPanelClosed: () async {
-          await controller!.resumeCamera();
+          await controller?.resumeCamera();
         },
         panelBuilder: (scrollController) {
           return Container(
@@ -213,7 +245,7 @@ class _PayPageState extends State<PayPage> {
                                 onClose: () {
                                   Navigator.pop(context);
                                   isShowSheet = false;
-                                  controller!.resumeCamera();
+                                  controller?.resumeCamera();
                                 },
                                 nickname: state.entity.data[index].nickname,
                               ),
@@ -402,7 +434,7 @@ class _PayPageState extends State<PayPage> {
     controller.scannedDataStream.listen((scanData) {
       if (!isShowSheet) {
         isShowSheet = true;
-        this.controller!.pauseCamera();
+        this.controller?.pauseCamera();
         _showPaymentBottomSheet(
           onClose: () {
             Navigator.pop(context);
@@ -487,17 +519,11 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(64),
-                              boxShadow: Helper.getShadow(),
-                            ),
-                            child: CustomNetworkImage(
-                              imgUrl: state.entity.img,
-                              borderRadius: 64,
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                            ),
+                          CustomNetworkImage(
+                            imgUrl: state.entity.img,
+                            borderRadius: 64,
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            height: MediaQuery.of(context).size.width * 0.3,
                           ),
                           SizedBox(height: Helper.normalPadding),
                           Text(state.entity.name, style: AppTheme.headline3),

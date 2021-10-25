@@ -73,6 +73,7 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.0
   sliding_up_panel: ^2.0.0+1
   pattern_formatter: ^2.0.0
+  scan: ^1.4.3
 
 dev_dependencies:
   json_serializable: ^5.0.2

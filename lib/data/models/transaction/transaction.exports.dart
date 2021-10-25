@@ -4,5 +4,5 @@
 // flutter pub run bin/gen_export
 library transaction;
 
-export 'transaction_model.dart';
 export 'transaction_top_up_model.dart';
+export 'transaction_model.dart';

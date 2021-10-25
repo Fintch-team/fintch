@@ -8,6 +8,7 @@ class CustomNetworkImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
+  final List<BoxShadow>? shadow;
 
   const CustomNetworkImage({
     Key? key,
@@ -16,36 +17,43 @@ class CustomNetworkImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit: BoxFit.cover,
+    this.shadow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: CachedNetworkImage(
-        imageUrl: imgUrl,
-        fit: fit,
-        width: width,
-        height: height,
-        fadeInCurve: Curves.easeInCubic,
-        fadeInDuration: Duration(milliseconds: 500),
-        fadeOutCurve: Curves.easeOutCubic,
-        fadeOutDuration: Duration(milliseconds: 500),
-        placeholder: (context, url) => Shimmers(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppTheme.yellow,
-              borderRadius: BorderRadius.circular(borderRadius),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: shadow ?? Helper.getShadowBold(),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: CachedNetworkImage(
+          imageUrl: imgUrl,
+          fit: fit,
+          width: width,
+          height: height,
+          fadeInCurve: Curves.easeInCubic,
+          fadeInDuration: Duration(milliseconds: 500),
+          fadeOutCurve: Curves.easeOutCubic,
+          fadeOutDuration: Duration(milliseconds: 500),
+          placeholder: (context, url) => Shimmers(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.yellow,
+                borderRadius: BorderRadius.circular(borderRadius),
+              ),
             ),
           ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: Colors.grey,
-          child: Icon(
-            Icons.error,
-            color: AppTheme.black,
+          errorWidget: (context, url, error) => Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.grey,
+            child: Icon(
+              Icons.error,
+              color: AppTheme.black,
+            ),
           ),
         ),
       ),

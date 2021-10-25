@@ -81,6 +81,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 child: _ProfileImage(
                   img: state.entity.img,
+                  loadingContext: context,
                 ),
               ),
               SizedBox(height: Helper.normalPadding),
@@ -317,11 +318,11 @@ class _SettingPageState extends State<SettingPage> {
 
 class _ProfileImage extends StatefulWidget {
   final String img;
+  final BuildContext loadingContext;
 
-  const _ProfileImage({
-    Key? key,
-    required this.img,
-  }) : super(key: key);
+  const _ProfileImage(
+      {Key? key, required this.img, required this.loadingContext})
+      : super(key: key);
 
   @override
   __ProfileImageState createState() => __ProfileImageState();
@@ -335,22 +336,22 @@ class __ProfileImageState extends State<_ProfileImage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CircleAvatar(
-            backgroundImage: NetworkImage(widget.img),
-            radius: 56,
-            child: _isUploading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      value: progress,
-                    ),
-                  )
-                : SizedBox()),
+        _isUploading
+            ? CircularLoading()
+            : CustomNetworkImage(
+                imgUrl: widget.img,
+                borderRadius: 64,
+                height: MediaQuery.of(context).size.width * 0.28,
+                width: MediaQuery.of(context).size.width * 0.28,
+                shadow: Helper.getShadow(),
+              ),
         Positioned(
           bottom: 0,
           right: 8,
           child: GestureDetector(
             onTap: () async {
-              final file = await getImage(context: context);
+              final file =
+                  await Helper.getImage(context: widget.loadingContext);
               if (file == null) return;
               setState(() {
                 _isUploading = true;
