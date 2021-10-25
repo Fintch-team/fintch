@@ -870,6 +870,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.2"
+  qr_code_tools:
+    dependency: "direct main"
+    description:
+      name: qr_code_tools
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   retry:
     dependency: "direct main"
     description:

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
@@ -75,60 +77,69 @@ class _PayPageState extends State<PayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Background(
-        child: Container(
-          color: Colors.transparent,
-          child: Stack(
-            children: [
-              _headerContent(context),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    padding: EdgeInsets.all(Helper.normalPadding),
-                    child: Row(
-                      children: [
-                        Expanded(child: CustomAppBar(title: 'Scan QR Code')),
-                        SizedBox(width: Helper.normalPadding),
-                        GestureDetector(
-                          onTap: () {},
-                          child: SvgPicture.asset(Resources.icAddImage),
-                        ),
-                        FutureBuilder<bool?>(
-                            future: controller?.getFlashStatus(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData || snapshot.data != null) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    await controller!.toggleFlash();
-                                    setState(() {});
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(width: Helper.normalPadding),
-                                      SvgPicture.asset(
-                                        snapshot.data!
-                                            ? Resources.icFlashOff
-                                            : Resources.icFlashOn,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                              return Container();
-                            }),
-                      ],
+    return LoadingOverlay(
+      child: Scaffold(
+        body: Background(
+          child: Container(
+            color: Colors.transparent,
+            child: Stack(
+              children: [
+                _headerContent(context),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: EdgeInsets.all(Helper.normalPadding),
+                      child: Row(
+                        children: [
+                          Expanded(child: CustomAppBar(title: 'Scan QR Code')),
+                          SizedBox(width: Helper.normalPadding),
+                          GestureDetector(
+                            onTap: () async {
+                              context.loaderOverlay.show();
+                              final res = await Helper.pickImage(
+                                  source: ImageSource.gallery,
+                                  crop: true,
+                                  context: context);
+                              context.loaderOverlay.hide();
+                            },
+                            child: SvgPicture.asset(Resources.icAddImage),
+                          ),
+                          FutureBuilder<bool?>(
+                              future: controller?.getFlashStatus(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData || snapshot.data != null) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await controller!.toggleFlash();
+                                      setState(() {});
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(width: Helper.normalPadding),
+                                        SvgPicture.asset(
+                                          snapshot.data!
+                                              ? Resources.icFlashOff
+                                              : Resources.icFlashOn,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              _payScrollableSheet(),
-            ],
+                _payScrollableSheet(),
+              ],
+            ),
           ),
         ),
       ),

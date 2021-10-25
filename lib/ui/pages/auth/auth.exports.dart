@@ -4,7 +4,7 @@
 // flutter pub run bin/gen_export
 library auth;
 
-export 'confirm_pin_page.dart';
-export 'login_page.dart';
-export 'set_password_page.dart';
 export 'set_pin_page.dart';
+export 'login_page.dart';
+export 'confirm_pin_page.dart';
+export 'set_password_page.dart';

@@ -352,7 +352,8 @@ class __ProfileImageState extends State<_ProfileImage> {
           right: 8,
           child: GestureDetector(
             onTap: () async {
-              final file = await getImage(context: widget.loadingContext);
+              final file =
+                  await Helper.getImage(context: widget.loadingContext);
               if (file == null) return;
               setState(() {
                 _isUploading = true;
