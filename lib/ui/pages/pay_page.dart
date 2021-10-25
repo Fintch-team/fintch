@@ -78,88 +78,124 @@ class _PayPageState extends State<PayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LoadingOverlay(
-      child: Scaffold(
-        body: Background(
-          child: Container(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                _headerContent(context),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: EdgeInsets.all(Helper.normalPadding),
-                      child: Row(
-                        children: [
-                          Expanded(child: CustomAppBar(title: 'Scan QR Code')),
-                          SizedBox(width: Helper.normalPadding),
-                          GestureDetector(
-                            onTap: () async {
-                              context.loaderOverlay.show();
-                              final file = await Helper.pickImage(
-                                  source: ImageSource.gallery,
-                                  crop: true,
-                                  context: context);
-                              print('get file ');
-                              if (file != null) {
-                                print('file path: ${file.path}');
-                                final result = await Scan.parse(file.path);
-                                print('result: $result');
-                                if (!isShowSheet) {
-                                  isShowSheet = true;
-                                  this.controller?.pauseCamera();
-                                  context.loaderOverlay.hide();
-                                  _showPaymentBottomSheet(
-                                    onClose: () {
-                                      Navigator.pop(context);
-                                      isShowSheet = false;
-                                      controller?.resumeCamera();
-                                    },
-                                    nickname: result ?? '',
-                                  );
+    return BlocListener<PayBloc, PayState>(
+      listener: (context, state) {
+        if (state is PayTransctionSuccess) {
+          context.loaderOverlay.hide();
+          if (state.entity.amount.isNotEmpty) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => SuccessPaymentDialog(
+                  fintchPoint: state.entity.amount.parseCurrency(),
+                  fintchWallet:
+                      state.entity.pay.walletAmount.toString().parseCurrency()),
+            );
+          } else {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) =>
+                  FailedPaymentDialog(message: 'Pembayaran belum berhasil!'),
+            );
+          }
+        } else if (state is PayLoading) {
+          context.loaderOverlay.show();
+        } else if (state is PayFailure) {
+          print("msg ${state.message}");
+          context.loaderOverlay.hide();
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => FailedPaymentDialog(message: state.message),
+          );
+        }
+      },
+      child: LoadingOverlay(
+        child: Scaffold(
+          body: Background(
+            child: Container(
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  _headerContent(context),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: EdgeInsets.all(Helper.normalPadding),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: CustomAppBar(title: 'Scan QR Code')),
+                            SizedBox(width: Helper.normalPadding),
+                            GestureDetector(
+                              onTap: () async {
+                                context.loaderOverlay.show();
+                                final file = await Helper.pickImage(
+                                    source: ImageSource.gallery,
+                                    crop: true,
+                                    context: context);
+                                print('get file ');
+                                if (file != null) {
+                                  print('file path: ${file.path}');
+                                  final result = await Scan.parse(file.path);
+                                  print('result: ');
+                                  if (!isShowSheet) {
+                                    isShowSheet = true;
+                                    this.controller?.pauseCamera();
+                                    context.loaderOverlay.hide();
+                                    _showPaymentBottomSheet(
+                                      onClose: () {
+                                        Navigator.pop(context);
+                                        isShowSheet = false;
+                                        controller?.resumeCamera();
+                                      },
+                                      nickname: result ?? '',
+                                    );
+                                  }
                                 }
-                              }
-                              print('done');
-                              context.loaderOverlay.hide();
-                            },
-                            child: SvgPicture.asset(Resources.icAddImage),
-                          ),
-                          FutureBuilder<bool?>(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData || snapshot.data != null) {
-                                  return GestureDetector(
-                                    onTap: () async {
-                                      await controller?.toggleFlash();
-                                      setState(() {});
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(width: Helper.normalPadding),
-                                        SvgPicture.asset(
-                                          snapshot.data!
-                                              ? Resources.icFlashOff
-                                              : Resources.icFlashOn,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                                return Container();
-                              }),
-                        ],
+                                print('done');
+                                context.loaderOverlay.hide();
+                              },
+                              child: SvgPicture.asset(Resources.icAddImage),
+                            ),
+                            FutureBuilder<bool?>(
+                                future: controller?.getFlashStatus(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData ||
+                                      snapshot.data != null) {
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        await controller?.toggleFlash();
+                                        setState(() {});
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(width: Helper.normalPadding),
+                                          SvgPicture.asset(
+                                            snapshot.data!
+                                                ? Resources.icFlashOff
+                                                : Resources.icFlashOn,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  return Container();
+                                }),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                _payScrollableSheet(),
-              ],
+                  _payScrollableSheet(),
+                ],
+              ),
             ),
           ),
         ),

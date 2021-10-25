@@ -3,8 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-class ReceivePage extends StatelessWidget {
+class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
+
+  @override
+  State<ReceivePage> createState() => _ReceivePageState();
+}
+
+class _ReceivePageState extends State<ReceivePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ReceiveBloc>().add(HomeInit());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +40,7 @@ class ReceivePage extends StatelessWidget {
     );
   }
 
-  Widget _userCard(BuildContext context) {
+  Expanded _userCard(BuildContext context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +49,81 @@ class ReceivePage extends StatelessWidget {
           SizedBox(height: MediaQuery.of(context).size.height * 0.06),
           Expanded(
             child: Container(
-              child: _buildBloc(),
+              child: BlocConsumer<ReceiveBloc, HomeState>(
+                listener: (context, state) {
+                  if (state is HomeFailure) {
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is HomeSuccess) {
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: Helper.getShadowBold(),
+                              borderRadius: BorderRadius.circular(32),
+                              color: AppTheme.scaffold,
+                            ),
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.12,
+                                ),
+                                Text(state.entity.name,
+                                    style: AppTheme.headline3),
+                                SizedBox(height: 8),
+                                Text(state.entity.school.name,
+                                    style: AppTheme.text3),
+                                SizedBox(height: 8),
+                                Text(state.entity.nickname.toString(),
+                                    style: AppTheme.text3.purple),
+                                SizedBox(height: Helper.normalPadding),
+                                Expanded(
+                                  child: Center(
+                                    child: PrettyQr(
+                                      image: AssetImage(
+                                          Resources.icFintchPointPng),
+                                      size: MediaQuery.of(context).size.height *
+                                          0.3,
+                                      data: state.entity.nickname.toString(),
+                                      errorCorrectLevel: QrErrorCorrectLevel.M,
+                                      roundEdges: true,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: -MediaQuery.of(context).size.width * 0.12,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(64),
+                              boxShadow: Helper.getShadow(),
+                            ),
+                            child: CustomNetworkImage(
+                              imgUrl: state.entity.img,
+                              borderRadius: 64,
+                              width: MediaQuery.of(context).size.width * 0.24,
+                              height: MediaQuery.of(context).size.width * 0.24,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return Center(child: CircularLoading());
+                },
+              ),
             ),
           ),
           SizedBox(height: 40),
@@ -56,82 +141,6 @@ class ReceivePage extends StatelessWidget {
             isUpper: false,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBloc() {
-    return BlocConsumer<ReceiveBloc, HomeState>(
-      listener: (context, state) {
-        if (state is HomeFailure) {
-          Helper.snackBar(context, message: state.message, isFailure: true);
-        }
-      },
-      builder: (context, state) {
-        if (state is HomeSuccess) {
-          return _buildUserBarcode(context, state.entity);
-        }
-        return Center(child: CircularLoading());
-      },
-    );
-  }
-
-  Widget _buildUserBarcode(BuildContext context, UserEntity entity) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: Helper.getShadowBold(),
-              borderRadius: BorderRadius.circular(32),
-              color: AppTheme.scaffold,
-            ),
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.12,
-                ),
-                Text(entity.name, style: AppTheme.headline3),
-                SizedBox(height: 8),
-                Text(entity.school.name, style: AppTheme.text3),
-                SizedBox(height: 8),
-                Text(entity.nickname.toString(), style: AppTheme.text3.purple),
-                SizedBox(height: Helper.normalPadding),
-                _buildBarcode(context, entity.nickname.toString()),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: -MediaQuery.of(context).size.width * 0.12,
-          child: CustomNetworkImage(
-            imgUrl: entity.img,
-            borderRadius: 64,
-            width: MediaQuery.of(context).size.width * 0.24,
-            height: MediaQuery.of(context).size.width * 0.24,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBarcode(BuildContext context, String barcode) {
-    // Text(name, style: AppTheme.headline3),
-    // SizedBox(height: 8),
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Center(
-        child: PrettyQr(
-          image: AssetImage(Resources.icFintchPointPng),
-          size: MediaQuery.of(context).size.height * 0.3,
-          data: barcode,
-          errorCorrectLevel: QrErrorCorrectLevel.M,
-          roundEdges: true,
-        ),
       ),
     );
   }

@@ -60,64 +60,29 @@ class _InputPinDialogState extends State<InputPinDialog> {
             context.loaderOverlay.show();
           }
         },
-        child: BlocListener<PayBloc, PayState>(
-          listener: (context, state) {
-            if (state is PayTransctionSuccess) {
-              context.loaderOverlay.hide();
-              if (state.entity.amount.isNotEmpty) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => SuccessPaymentDialog(
-                      fintchPoint: state.entity.amount.parseCurrency(),
-                      fintchWallet: state.entity.pay.walletAmount
-                          .toString()
-                          .parseCurrency()),
+        child: CustomDialog(
+          title: 'Masukin PIN Kamu',
+          content: CustomPinCode(
+            pinController: inputPinController,
+            errorController: errorController,
+            focusNode: inputFocusNode,
+            isDialog: true,
+            isObscure: true,
+            isAutoFocus: true,
+            onChanged: (value) {},
+            onCompleted: (value) {
+              if (inputPinController.text.length < 6) {
+                errorController!.add(ErrorAnimationType.shake);
+                inputFocusNode.requestFocus();
+                Helper.snackBar(
+                  context,
+                  message: 'PIN harus 6 Digit!',
                 );
-              } else {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => FailedPaymentDialog(
-                      message: 'Pembayaran belum berhasil!'),
-                );
+                return;
               }
-            } else if (state is PayLoading) {
-              context.loaderOverlay.show();
-            } else if (state is PayFailure) {
-              context.loaderOverlay.hide();
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) =>
-                    FailedPaymentDialog(message: state.message),
-              );
-            }
-          },
-          child: CustomDialog(
-            title: 'Masukin PIN Kamu',
-            content: CustomPinCode(
-              pinController: inputPinController,
-              errorController: errorController,
-              focusNode: inputFocusNode,
-              isDialog: true,
-              isObscure: true,
-              isAutoFocus: true,
-              onChanged: (value) {},
-              onCompleted: (value) {
-                if (inputPinController.text.length < 6) {
-                  errorController!.add(ErrorAnimationType.shake);
-                  inputFocusNode.requestFocus();
-                  Helper.snackBar(
-                    context,
-                    message: 'PIN harus 6 Digit!',
-                  );
-                  return;
-                }
-                context.read<AuthPinBloc>().add(AuthPin(
-                    entity: AuthPinPostEntity(pin: inputPinController.text)));
-              },
-            ),
+              context.read<AuthPinBloc>().add(AuthPin(
+                  entity: AuthPinPostEntity(pin: inputPinController.text)));
+            },
           ),
         ),
       ),
