@@ -29,6 +29,7 @@ class BiometricAuthService extends Service {
         localizedReason: 'Scan Fingerprint to Authenticate',
         useErrorDialogs: true,
         stickyAuth: true,
+        biometricOnly: true,
       );
       print(rs);
       return rs;
