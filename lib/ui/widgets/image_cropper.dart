@@ -111,15 +111,18 @@ class _ImageCropperState extends State<ImageCropper> {
                     Flexible(
                       child: CustomButton(
                         isLoading: isLoading,
+                        isEnable: image != null,
                         onTap: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          _completer = Completer();
+                          if (image != null) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            _completer = Completer();
 
-                          controller.crop();
-                          final result = await _completer!.future;
-                          Navigator.pop(context, result);
+                            controller.crop();
+                            final result = await _completer!.future;
+                            Navigator.pop(context, result);
+                          }
                         },
                         text: 'CROP',
                       ),

@@ -15,6 +15,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:scan/scan.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -33,7 +34,7 @@ class _PayPageState extends State<PayPage> {
 
   @override
   void initState() {
-    // getCameraPermission();
+    getCameraPermission();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());
@@ -45,9 +46,9 @@ class _PayPageState extends State<PayPage> {
     super.reassemble();
     if (!isShowSheet) {
       if (Platform.isAndroid) {
-        await controller!.pauseCamera();
+        await controller?.pauseCamera();
       }
-      controller!.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
@@ -100,10 +101,30 @@ class _PayPageState extends State<PayPage> {
                           GestureDetector(
                             onTap: () async {
                               context.loaderOverlay.show();
-                              final res = await Helper.pickImage(
+                              final file = await Helper.pickImage(
                                   source: ImageSource.gallery,
                                   crop: true,
                                   context: context);
+                              print('get file ');
+                              if (file != null) {
+                                print('file path: ${file.path}');
+                                final result = await Scan.parse(file.path);
+                                print('result: $result');
+                                if (!isShowSheet) {
+                                  isShowSheet = true;
+                                  this.controller?.pauseCamera();
+                                  context.loaderOverlay.hide();
+                                  _showPaymentBottomSheet(
+                                    onClose: () {
+                                      Navigator.pop(context);
+                                      isShowSheet = false;
+                                      controller?.resumeCamera();
+                                    },
+                                    nickname: result ?? '',
+                                  );
+                                }
+                              }
+                              print('done');
                               context.loaderOverlay.hide();
                             },
                             child: SvgPicture.asset(Resources.icAddImage),
@@ -114,7 +135,7 @@ class _PayPageState extends State<PayPage> {
                                 if (snapshot.hasData || snapshot.data != null) {
                                   return GestureDetector(
                                     onTap: () async {
-                                      await controller!.toggleFlash();
+                                      await controller?.toggleFlash();
                                       setState(() {});
                                     },
                                     child: Row(
@@ -224,7 +245,7 @@ class _PayPageState extends State<PayPage> {
                                 onClose: () {
                                   Navigator.pop(context);
                                   isShowSheet = false;
-                                  controller!.resumeCamera();
+                                  controller?.resumeCamera();
                                 },
                                 nickname: state.entity.data[index].nickname,
                               ),
@@ -413,7 +434,7 @@ class _PayPageState extends State<PayPage> {
     controller.scannedDataStream.listen((scanData) {
       if (!isShowSheet) {
         isShowSheet = true;
-        this.controller!.pauseCamera();
+        this.controller?.pauseCamera();
         _showPaymentBottomSheet(
           onClose: () {
             Navigator.pop(context);

@@ -47,6 +47,8 @@
 		<string>App needs access to photo lib for get QR Code Image</string>
 		<key>NSCameraUsageDescription</key>
 		<string>To scan QR Code please grant camera access</string>
+		<key>io.flutter.embedded_views_preview</key>
+        <string>YES</string>
 		<key>NSAppTransportSecurity</key>
 		<dict>
 			<key>NSAllowsLocalNetworking</key>

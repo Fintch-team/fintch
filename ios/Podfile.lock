@@ -157,6 +157,8 @@ PODS:
     - Flutter
     - MTBBarcodeScanner
   - Reachability (3.2)
+  - scan (0.0.1):
+    - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -177,6 +179,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - scan (from `.symlinks/plugins/scan/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
@@ -228,6 +231,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  scan:
+    :path: ".symlinks/plugins/scan/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   webview_flutter_wkwebview:
@@ -265,9 +270,10 @@ SPEC CHECKSUMS:
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  scan: aea35bb4aa59ccc8839c576a18cd57c7d492cc86
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   webview_flutter_wkwebview: 44aa025fbcf6730d808f1e0d86a5af5ac25fa8de
 
 PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
-COCOAPODS: 1.11.0
+COCOAPODS: 1.11.2
