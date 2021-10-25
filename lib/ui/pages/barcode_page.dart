@@ -130,10 +130,9 @@ class _BarcodePageState extends State<BarcodePage> {
   Widget _fBarcode(BuildContext context, int index, BarcodeData data) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, PagePath.receive,
+        Navigator.pushNamed(context, PagePath.barcodeReceive,
             arguments: ArgumentBundle(extras: {
-              'barcode': data.id.toString(),
-              'name': data.name,
+              'barcode': data,
             }));
       },
       child: Dismissible(

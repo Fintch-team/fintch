@@ -48,4 +48,13 @@ class AuthPinFetched extends AuthState {
   List<Object> get props => [isCorrect];
 }
 
+class AuthBioSuccess extends AuthState {
+  final BioUserEntity entity;
+
+  AuthBioSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class ChangeSuccess extends AuthState {}

@@ -31,8 +31,10 @@ class PageRouter {
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.receive:
+        return _buildRoute(settings, ReceivePage());
+      case PagePath.barcodeReceive:
         return _buildRoute(
-            settings, ReceivePage(bundle: args as ArgumentBundle?));
+            settings, BarcodeReceivePage(bundle: args as ArgumentBundle?));
       case PagePath.setting:
         return _buildRoute(settings, SettingPage());
       case PagePath.pay:
@@ -50,6 +52,8 @@ class PageRouter {
         return _buildRoute(settings, ChangePinPage());
       case PagePath.barcode:
         return _buildRoute(settings, BarcodePage());
+      case PagePath.biometric:
+        return _buildRoute(settings, BiometricPage());
       default:
         return _errorRoute();
     }

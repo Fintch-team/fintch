@@ -211,6 +211,7 @@ class _SettingPageState extends State<SettingPage> {
           },
           child: _optionItems('Ganti Kata Sandi'),
         ),
+
         GestureDetector(
           onTap: () {
             showDialog(
@@ -225,22 +226,19 @@ class _SettingPageState extends State<SettingPage> {
           },
           child: _optionItems('Ganti Kata Pin'),
         ),
-        BlocBuilder<BiometricBloc, SettingsState>(
-          builder: (context, state) {
-            if (state is SettingsBoolSuccess) {
-              if (state.entity) {
-                return GestureDetector(
-                    onTap: () {
-                      context.read<BiometricBloc>().add(BiometricAuth());
-                    },
-                    child: _optionItems('Biometric Auth'));
-              }
-              return SizedBox();
-            } else if (state is SettingsFailure) {
-              return SizedBox();
-            }
-            return SizedBox();
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => InputPinDialog(
+                whenSuccess: () => Navigator.pushNamed(
+                  context,
+                  PagePath.biometric,
+                ),
+              ),
+            );
           },
+          child: _optionItems('Biometric Auth'),
         ),
         // _optionItems('Bahasa'),
       ],

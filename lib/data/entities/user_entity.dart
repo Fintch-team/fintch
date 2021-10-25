@@ -52,6 +52,16 @@ class AuthPinPostEntity extends BaseEntity {
   });
 }
 
+class BioUserEntity extends BaseEntity {
+  final String user;
+  final String pass;
+
+  BioUserEntity({
+    required this.pass,
+    required this.user,
+  });
+}
+
 class UserEntity extends BaseEntity {
   final int id;
   final String name;

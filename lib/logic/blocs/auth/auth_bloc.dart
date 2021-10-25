@@ -8,8 +8,10 @@ mixin PasswordBloc on Bloc<AuthEvent, AuthState> {}
 
 mixin AuthPinBloc on Bloc<AuthEvent, AuthState> {}
 
+mixin AuthBiometricBloc on Bloc<AuthEvent, AuthState> {}
+
 class AuthBloc extends Bloc<AuthEvent, AuthState>
-    with PinBloc, PasswordBloc, AuthPinBloc {
+    with PinBloc, PasswordBloc, AuthPinBloc, AuthBiometricBloc {
   final UserRepository userRepository;
 
   AuthBloc({
@@ -91,6 +93,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
     on<Logout>((event, emit) async {
       try {
         await userRepository.logout();
+      } on FailedException catch (e) {
+        FailedException fail = e;
+        emit(AuthFailure(message: fail.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(AuthFailure(message: 'unable to change: $e'));
+      }
+    });
+
+    on<SaveBio>((event, emit) async {
+      try {
+        BioUserEntity res = await userRepository.bioUser();
+        if (res.user.isEmpty) {
+          await userRepository.saveBioUser(
+              user: event.entity.user, pass: event.entity.pass);
+        } else {
+          await userRepository.clearBioUser();
+        }
+      } on FailedException catch (e) {
+        FailedException fail = e;
+        emit(AuthFailure(message: fail.message));
+      } catch (e, stacktrace) {
+        debugPrint(stacktrace.toString());
+        emit(AuthFailure(message: 'unable to change: $e'));
+      }
+    });
+
+    on<GetBio>((event, emit) async {
+      try {
+        BioUserEntity res = await userRepository.bioUser();
+        print("ok ${res.user}");
+        emit(AuthBioSuccess(entity: res));
       } on FailedException catch (e) {
         FailedException fail = e;
         emit(AuthFailure(message: fail.message));
