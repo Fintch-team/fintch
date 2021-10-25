@@ -233,6 +233,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return CustomButton(
       onTap: () {
         if (_formKey.currentState!.validate()) {
+          context.read<AuthBloc>().add(
+                SaveBio(
+                  entity: BioUserEntity(
+                    user: _usernameController.text.trim(),
+                    pass: _passwordConfirmationController.text,
+                  ),
+                ),
+              );
+
           context.read<PasswordBloc>().add(ChangePassword(
                 entity: PostChangePasswordEntity(
                   nickname: _usernameController.text,

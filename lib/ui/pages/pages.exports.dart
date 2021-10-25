@@ -13,6 +13,8 @@ export 'f_goals_page.dart';
 export 'payment_page.dart';
 export 'pay_page.dart';
 export 'receive_page.dart';
+export 'barcode_receive_page.dart';
 export 'setting_page.dart';
 export 'splash_page.dart';
 export 'top_up_page.dart';
+export 'biometric_page.dart';

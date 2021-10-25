@@ -333,13 +333,14 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
       builder: (context, state) {
         if (state is MoneyManageItemResponseSuccess) {
           if (widget.data != null) {
-            _selectedCard = state.entity.data
-                .firstWhere((element) => widget.data!.id == element.id);
-            _selectedCardId = state.entity.data
-                .firstWhere((element) => widget.data!.id == element.id)
-                .id
-                .toString();
+            List<MoneyManageItemData> list = state.entity.data
+                .where((element) => widget.data!.id == element.id)
+                .toList();
+
+            _selectedCard = list.isNotEmpty ? list.first : null;
+            _selectedCardId = list.isNotEmpty ? list.first.id.toString() : null;
           }
+
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(

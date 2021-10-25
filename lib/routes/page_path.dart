@@ -3,6 +3,7 @@ class PagePath {
   static const String login = '/login';
   static const String base = '/base';
   static const String receive = '/receive';
+  static const String barcodeReceive = '/barcode-receive';
   static const String setting = '/setting';
   static const String pay = '/pay';
   static const String fGoals = '/f_goals';
@@ -14,4 +15,5 @@ class PagePath {
   static const String changePassword = '/change_password';
   static const String changePin = '/change_pin';
   static const String barcode = '/barcode';
+  static const String biometric = '/biometric';
 }

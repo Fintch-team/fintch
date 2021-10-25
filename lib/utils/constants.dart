@@ -7,6 +7,8 @@ class KeyStorage {
   static const String kSetPass = 'setPass';
   static const String kSetPin = 'setPin';
   static const String kID = 'id';
+  static const String kUser = 'nickname';
+  static const String kPass = 'password';
 }
 
 class Resources {
