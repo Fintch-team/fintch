@@ -34,9 +34,25 @@ class LocalAuthService extends Service {
     getStorage.write(KeyStorage.kUserInformation, json.encode(value.toJson()));
   }
 
+  Future<void> saveBioLogin(
+      {required String user, required String pass}) async {
+    getStorage.write(KeyStorage.kUser, user);
+    getStorage.write(KeyStorage.kPass, pass);
+  }
+
+  Future<void> clearBioLogin(
+     ) async {
+    getStorage.remove(KeyStorage.kUser);
+    getStorage.remove(KeyStorage.kPass);
+  }
+
   Future<void> clear() async {
     await getStorage.remove(KeyStorage.kToken);
     await getStorage.remove(KeyStorage.kExpired);
+    await getStorage.remove(KeyStorage.kSetPass);
+    await getStorage.remove(KeyStorage.kSetPin);
+    await getStorage.remove(KeyStorage.kID);
+    await getStorage.remove(KeyStorage.kUserInformation);
   }
 
   UserData? get currentUser {
@@ -49,6 +65,9 @@ class LocalAuthService extends Service {
     return null;
   }
 
+  String? get bioUser => getStorage.read(KeyStorage.kUser);
+  String? get bioPass => getStorage.read(KeyStorage.kPass);
+  
   bool? get isSetPass => getStorage.read(KeyStorage.kSetPass);
   bool? get isSetPin => getStorage.read(KeyStorage.kSetPin);
   int get userId => getStorage.read(KeyStorage.kID);

@@ -30,6 +30,15 @@ class SettingsBoolSuccess extends SettingsState {
   List<Object> get props => [entity];
 }
 
+class SettingsBioSuccess extends SettingsState {
+  final BioUserEntity entity;
+
+  SettingsBioSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class SettingsFailure extends SettingsState {
   final String message;
 

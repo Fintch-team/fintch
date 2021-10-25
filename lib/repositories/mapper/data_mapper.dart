@@ -44,6 +44,12 @@ class DataMapper {
         data: userModel.data,
       );
 
+  static BioUserEntity bioUser({required String user, required String pass}) =>
+      BioUserEntity(
+        pass: pass,
+        user: user,
+      );
+
   static UserEntity localUserMapper(UserData userModel) => UserEntity(
         id: userModel.id,
         name: userModel.name,

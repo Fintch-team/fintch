@@ -1,4 +1,5 @@
 import 'package:fintch/gen_export.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,6 +23,9 @@ class _LoginPageState extends State<LoginPage> {
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     super.initState();
+
+    context.read<AuthBiometricBloc>().add(GetBio());
+    context.read<SettingsBloc>().add(BiometricInit());
   }
 
   @override
@@ -47,40 +51,69 @@ class _LoginPageState extends State<LoginPage> {
                       (MediaQuery.of(context).padding.top +
                           MediaQuery.of(context).padding.bottom) -
                       40,
-                  child: BlocListener<AuthBloc, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthSuccess) {
-                        context.loaderOverlay.hide();
-                        Helper.snackBar(context, message: 'Masuk berhasil!');
-                        print(
-                            "${state.entity.isSetPin} ${state.entity.isSetPass}");
-                        if (!state.entity.isSetPass) {
-                          Navigator.pushReplacementNamed(
-                              context, PagePath.setPassword,
-                              arguments: ArgumentBundle(extras: {
-                                'username': usernameController.text,
-                                'password': passwordController.text
-                              }));
-                        } else if (!state.entity.isSetPin) {
-                          Navigator.pushReplacementNamed(
-                              context, PagePath.setPin,
-                              arguments: ArgumentBundle(extras: {
-                                'username': usernameController.text,
-                                'password': passwordController.text,
-                              }));
-                        } else {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, PagePath.base, (route) => false);
-                        }
-                      } else if (state is AuthLoading) {
-                        context.loaderOverlay.show();
-                        Helper.snackBar(context, message: 'Coba masuk...');
-                      } else if (state is AuthFailure) {
-                        context.loaderOverlay.hide();
-                        Helper.snackBar(context,
-                            message: state.message, isFailure: true);
-                      }
-                    },
+                  child: MultiBlocListener(
+                    listeners: [
+                      BlocListener<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthSuccess) {
+                            context.loaderOverlay.hide();
+                            Helper.snackBar(context,
+                                message: 'Masuk berhasil!');
+                            print(
+                                "${state.entity.isSetPin} ${state.entity.isSetPass}");
+                            if (!state.entity.isSetPass) {
+                              Navigator.pushReplacementNamed(
+                                  context, PagePath.setPassword,
+                                  arguments: ArgumentBundle(extras: {
+                                    'username': usernameController.text,
+                                    'password': passwordController.text
+                                  }));
+                            } else if (!state.entity.isSetPin) {
+                              Navigator.pushReplacementNamed(
+                                  context, PagePath.setPin,
+                                  arguments: ArgumentBundle(extras: {
+                                    'username': usernameController.text,
+                                    'password': passwordController.text,
+                                  }));
+                            } else {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, PagePath.base, (route) => false);
+                            }
+                          } else if (state is AuthLoading) {
+                            context.loaderOverlay.show();
+                            Helper.snackBar(context, message: 'Coba masuk...');
+                          } else if (state is AuthFailure) {
+                            context.loaderOverlay.hide();
+                            Helper.snackBar(context,
+                                message: state.message, isFailure: true);
+                          }
+                        },
+                      ),
+                      BlocListener<BiometricBloc, SettingsState>(
+                        listener: (context, state) {
+                          if (state is SettingsBioSuccess) {
+                            // context.loaderOverlay.hide();
+                            // Helper.snackBar(context,
+                            //     message: 'Masuk berhasil!');
+                            context.read<AuthBloc>().add(
+                                  PostAuth(
+                                    entity: AuthPostEntity(
+                                      nickname: state.entity.user,
+                                      password: state.entity.pass,
+                                    ),
+                                  ),
+                                );
+                          } else if (state is SettingsLoading) {
+                            context.loaderOverlay.show();
+                            Helper.snackBar(context, message: 'Coba masuk...');
+                          } else if (state is SettingsFailure) {
+                            context.loaderOverlay.hide();
+                            Helper.snackBar(context,
+                                message: state.message, isFailure: true);
+                          }
+                        },
+                      ),
+                    ],
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -202,21 +235,78 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 24),
-            CustomButton(
-              onTap: () {
-                Helper.unfocus();
-                if (_formKey.currentState!.validate()) {
-                  context.read<AuthBloc>().add(
-                        PostAuth(
-                          entity: AuthPostEntity(
-                            nickname: usernameController.text.trim(),
-                            password: passwordController.text,
+            BlocBuilder<AuthBiometricBloc, AuthState>(
+              builder: (context, state) {
+                // print(state);
+                if (state is AuthBioSuccess) {
+                  return Row(
+                    children: [
+                      if (state.entity.user.isNotEmpty) ...[
+                        Flexible(
+                          child: BlocBuilder<SettingsBloc, SettingsState>(
+                            builder: (context, state) {
+                              if (state is SettingsBoolSuccess) {
+                                if (state.entity) {
+                                  return CustomButton(
+                                    onTap: () {
+                                      Helper.unfocus();
+                                      context
+                                          .read<BiometricBloc>()
+                                          .add(BiometricAuth());
+                                    },
+                                    text: 'Biometric',
+                                  );
+                                }
+                                return SizedBox();
+                              } else if (state is SettingsFailure) {
+                                return SizedBox();
+                              }
+                              return SizedBox();
+                            },
                           ),
                         ),
-                      );
+                        SizedBox(width: 20),
+                      ],
+                      Flexible(
+                        child: CustomButton(
+                          onTap: () {
+                            Helper.unfocus();
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthBloc>().add(
+                                    PostAuth(
+                                      entity: AuthPostEntity(
+                                        nickname:
+                                            usernameController.text.trim(),
+                                        password: passwordController.text,
+                                      ),
+                                    ),
+                                  );
+                            }
+                          },
+                          text: 'Masuk',
+                        ),
+                      ),
+                    ],
+                  );
                 }
+
+                return CustomButton(
+                  onTap: () {
+                    Helper.unfocus();
+                    if (_formKey.currentState!.validate()) {
+                      context.read<AuthBloc>().add(
+                            PostAuth(
+                              entity: AuthPostEntity(
+                                nickname: usernameController.text.trim(),
+                                password: passwordController.text,
+                              ),
+                            ),
+                          );
+                    }
+                  },
+                  text: 'Masuk',
+                );
               },
-              text: 'Masuk',
             ),
           ],
         ),

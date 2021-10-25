@@ -93,6 +93,21 @@ class UserRepository {
     return DataMapper.listMerchantMapper(userModel);
   }
 
+  Future<BioUserEntity> bioUser() async {
+    String? user = localAuthService.bioUser;
+    String? pass = localAuthService.bioPass;
+
+    return DataMapper.bioUser(pass: pass ?? '', user: user ?? '');
+  }
+
+  Future<void> saveBioUser({required String user, required String pass}) async {
+    localAuthService.saveBioLogin(user: user, pass: pass);
+  }
+
+  Future<void> clearBioUser() async {
+    localAuthService.clearBioLogin();
+  }
+
   Future<UserEntity> currentUser() async {
     try {
       return await authGet();

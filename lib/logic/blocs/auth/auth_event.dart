@@ -46,4 +46,15 @@ class AuthPin extends AuthEvent {
   List<Object> get props => [entity];
 }
 
+class SaveBio extends AuthEvent {
+  final BioUserEntity entity;
+
+  SaveBio({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
+class GetBio extends AuthEvent {}
+
 class Logout extends AuthEvent {}

@@ -4,9 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class ReceivePage extends StatefulWidget {
-  final ArgumentBundle? bundle;
-
-  const ReceivePage({Key? key, this.bundle}) : super(key: key);
+  const ReceivePage({Key? key}) : super(key: key);
 
   @override
   State<ReceivePage> createState() => _ReceivePageState();
@@ -21,7 +19,6 @@ class _ReceivePageState extends State<ReceivePage> {
   void initState() {
     super.initState();
     context.read<ReceiveBloc>().add(HomeInit());
-
     if (widget.bundle != null) {
       barcode = widget.bundle!.extras['barcode'];
       name = widget.bundle!.extras['name'];
@@ -40,9 +37,7 @@ class _ReceivePageState extends State<ReceivePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CustomAppBar(
-                  title: barcode.isNotEmpty
-                      ? 'Transaksi Barcode $name'
-                      : 'QR Code Saya',
+                  title: 'QR Code Saya',
                 ),
                 SizedBox(height: 20),
                 _userCard(context),

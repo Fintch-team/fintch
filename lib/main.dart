@@ -244,6 +244,11 @@ class _MyAppState extends State<MyApp> {
               userRepository: context.read<UserRepository>(),
             ),
           ),
+          BlocProvider<AuthBiometricBloc>(
+            create: (context) => AuthBloc(
+              userRepository: context.read<UserRepository>(),
+            ),
+          ),
           BlocProvider<TopUpBloc>(
             create: (context) => TopUpBloc(
               topUpRepository: context.read<TopUpRepository>(),
