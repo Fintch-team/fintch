@@ -63,7 +63,7 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        boxShadow: Helper.getShadowBold(),
+                        boxShadow: Helper.getShadowPurpleBold(),
                         borderRadius: BorderRadius.circular(32),
                         color: AppTheme.scaffold,
                       ),

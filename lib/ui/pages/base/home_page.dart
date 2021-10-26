@@ -174,6 +174,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: 64,
           width: MediaQuery.of(context).size.width * 0.16,
           height: MediaQuery.of(context).size.width * 0.16,
+          shadow: Helper.getShadowPurpleBold(),
         ),
         SizedBox(width: 16),
         Expanded(

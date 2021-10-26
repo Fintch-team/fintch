@@ -65,7 +65,7 @@ class _ReceivePageState extends State<ReceivePage> {
                         Positioned.fill(
                           child: Container(
                             decoration: BoxDecoration(
-                              boxShadow: Helper.getShadowBold(),
+                              boxShadow: Helper.getShadowPurpleBold(),
                               borderRadius: BorderRadius.circular(32),
                               color: AppTheme.scaffold,
                             ),
@@ -115,6 +115,7 @@ class _ReceivePageState extends State<ReceivePage> {
                               borderRadius: 64,
                               width: MediaQuery.of(context).size.width * 0.24,
                               height: MediaQuery.of(context).size.width * 0.24,
+                              shadow: Helper.getShadowBold(),
                             ),
                           ),
                         ),
@@ -125,7 +126,7 @@ class _ReceivePageState extends State<ReceivePage> {
                   } else if (state is HomeFailure) {
                     return Container(
                       decoration: BoxDecoration(
-                        boxShadow: Helper.getShadowBold(),
+                        boxShadow: Helper.getShadowPurpleBold(),
                         borderRadius: BorderRadius.circular(32),
                         color: AppTheme.scaffold,
                       ),

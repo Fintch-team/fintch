@@ -25,7 +25,7 @@ class CustomNetworkImage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        boxShadow: shadow ?? Helper.getShadowBold(),
+        boxShadow: shadow ?? Helper.getShadow(),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),

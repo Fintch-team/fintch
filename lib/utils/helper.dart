@@ -40,6 +40,16 @@ class Helper {
   static List<BoxShadow> getShadowBold() {
     return [
       BoxShadow(
+        color: Colors.grey.withOpacity(0.8),
+        blurRadius: 8,
+        offset: Offset(0, 4),
+      ),
+    ];
+  }
+
+  static List<BoxShadow> getShadowPurpleBold() {
+    return [
+      BoxShadow(
         color: Colors.deepPurple.withOpacity(0.8),
         blurRadius: 8,
         offset: Offset(0, 4),
