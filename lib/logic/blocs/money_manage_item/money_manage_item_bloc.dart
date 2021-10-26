@@ -69,7 +69,7 @@ class MoneyManageItemBloc
         ListMoneyManageItemEntity entity =
             await moneyManageItemRepository.getMoneyManageItem();
 
-        emit(MoneyManageItemResponseSuccess(entity: entity));
+        emit(DeleteMoneyManageItemResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageItemFailure(message: e.message));
       } catch (e, stacktrace) {

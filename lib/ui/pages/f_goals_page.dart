@@ -457,7 +457,9 @@ class _FGoalSheetState extends State<FGoalSheet> {
                                 Navigator.pop(context);
                               } else if (state is MoneyPlanFailure) {
                                 Helper.snackBar(context,
-                                    message: state.message, isFailure: true);
+                                    message: state.message,
+                                    isFailure: true,
+                                    isUp: true);
                               }
                             },
                             builder: (context, state) {

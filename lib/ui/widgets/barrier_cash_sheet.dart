@@ -59,7 +59,7 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                   listener: (context, state) {
                     if (state is WalletFailure) {
                       Helper.snackBar(context,
-                          message: state.message, isFailure: true);
+                          message: state.message, isFailure: true, isUp: true);
                     } else if (state is WalletResponseSuccess) {
                       if (state.entity.barrierExpired != null) {
                         priceController.text =
@@ -212,7 +212,8 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
                                     } else if (state is WalletFailure) {
                                       Helper.snackBar(context,
                                           message: state.message,
-                                          isFailure: true);
+                                          isFailure: true,
+                                          isUp: true);
                                     }
                                   },
                                   builder: (context, barrierCashState) {

@@ -118,13 +118,19 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
                                   is MoneyManageItemResponseSuccess) {
                                 Helper.snackBar(context,
                                     message: 'Berhasil Simpan Card');
-                                context
-                                    .read<MoneyManageItemBloc>()
-                                    .add(GetMoneyManageItem());
+                                requestFWallet();
+                                Navigator.pop(context);
+                              } else if (state
+                                  is DeleteMoneyManageItemResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Hapus Card');
+                                requestFWallet();
                                 Navigator.pop(context);
                               } else if (state is MoneyManageItemFailure) {
                                 Helper.snackBar(context,
-                                    message: state.message, isFailure: true);
+                                    message: state.message,
+                                    isFailure: true,
+                                    isUp: true);
                               }
                             },
                             builder: (context, state) {
@@ -223,5 +229,12 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
         ),
       ),
     );
+  }
+
+  void requestFWallet() {
+    context.read<MoneyManageBloc>().add(GetMoneyManage());
+    context.read<InComeBloc>().add(GetIncomeMoneyManage());
+    context.read<TabelBloc>().add(GetTabelMoneyManage());
+    context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
   }
 }

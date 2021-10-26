@@ -412,7 +412,9 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                                 Navigator.pop(context);
                               } else if (state is BarcodeFailure) {
                                 Helper.snackBar(context,
-                                    message: state.message, isFailure: true);
+                                    message: state.message,
+                                    isFailure: true,
+                                    isUp: true);
                               }
                             },
                             builder: (context, state) {
