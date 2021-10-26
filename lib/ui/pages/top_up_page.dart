@@ -22,7 +22,6 @@ class _TopUpPageState extends State<TopUpPage> {
   @override
   void initState() {
     super.initState();
-
     textFieldController = TextEditingController();
     textFieldController.text = value.doubleToThousand();
 
@@ -320,7 +319,8 @@ class _TopUpPageState extends State<TopUpPage> {
                               name: "test",
                             )));
 
-                        Navigator.pushNamed(context, PagePath.payment);
+                        Navigator.pushNamed(context, PagePath.payment)
+                            .setDarkAppBar();
                       }
                     },
                     text: 'Bayar',
@@ -349,7 +349,7 @@ class _TopUpPageState extends State<TopUpPage> {
                   Navigator.pushNamed(context, PagePath.payment,
                       arguments: ArgumentBundle(extras: {
                         'redirectUrl': state.entity.data[index].redirectUrl,
-                      }));
+                      })).setDarkAppBar();
                 }
               },
               child: TopUpItem(
