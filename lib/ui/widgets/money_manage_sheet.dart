@@ -202,6 +202,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                   if (widget.data != null) ...[
                                     Flexible(
                                       child: CustomButton(
+                                        isLoading: isLoading,
                                         onTap: () {
                                           context
                                               .read<MoneyManageSheetBloc>()
@@ -220,6 +221,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                   ],
                                   Flexible(
                                     child: CustomButton(
+                                      isLoading: isLoading,
                                       onTap: () {
                                         if (_formKey.currentState!.validate()) {
                                           if (widget.data != null) {

@@ -290,6 +290,7 @@ class _FGoalsPageState extends State<FGoalsPage> {
                     text: 'Iya',
                     isOutline: true,
                     isUpper: false,
+                    isLoading: isLoading,
                   );
                 },
               );
@@ -461,6 +462,7 @@ class _FGoalSheetState extends State<FGoalSheet> {
                             },
                             builder: (context, state) {
                               return CustomButton(
+                                isLoading: isLoading,
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     if (widget.data != null) {
@@ -496,7 +498,6 @@ class _FGoalSheetState extends State<FGoalSheet> {
                                 },
                                 text: 'Simpan',
                                 isUpper: false,
-                                isLoading: isLoading,
                               );
                             },
                           );

@@ -15,7 +15,6 @@ class PayBloc extends Bloc<PayEvent, PayState> {
             postEntity: event.entity);
         emit(PayTransctionSuccess(entity: res));
       } on FailedException catch (e) {
-        print('e anjayani : $e');
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {
         debugPrint(stacktrace.toString());

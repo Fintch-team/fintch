@@ -145,12 +145,14 @@ class _MoneyManageItemSheetState extends State<MoneyManageItemSheet> {
                                         text: 'Hapus',
                                         isOutline: true,
                                         isUpper: false,
+                                        isLoading: isLoading,
                                       ),
                                     ),
                                     SizedBox(width: 20),
                                   ],
                                   Flexible(
                                     child: CustomButton(
+                                      isLoading: isLoading,
                                       onTap: () {
                                         if (_formKey.currentState!.validate()) {
                                           if (widget.data != null) {

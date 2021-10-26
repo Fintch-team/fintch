@@ -74,13 +74,20 @@ class Helper {
   }
 
   static void snackBar(BuildContext context,
-      {required String message, bool isFailure: false}) {
+      {required String message, bool isFailure: false, bool isUp: false}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: AppTheme.text1),
         backgroundColor: isFailure ? AppTheme.red : AppTheme.yellow,
         behavior: SnackBarBehavior.floating,
+        margin: isUp
+            ? EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height -
+                    (MediaQuery.of(context).size.height * 0.24),
+                right: Helper.smallPadding,
+                left: Helper.smallPadding)
+            : null,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
