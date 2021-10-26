@@ -23,6 +23,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
+    Helper.setLightAppBar();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     if (widget.bundle != null) {
       redirectUrl = widget.bundle!.extras['redirectUrl'];
