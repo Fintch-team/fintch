@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
@@ -73,10 +72,10 @@ class _ChangePinPageState extends State<ChangePinPage> {
               child: Container(
                 padding: EdgeInsets.all(Helper.normalPadding),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    CustomAppBar(title: 'Ganti Pin'),
                     _headerPinCode(),
                     _keypad(),
                   ],
@@ -159,14 +158,20 @@ class _ChangePinPageState extends State<ChangePinPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Masukan Kata Sandi ', style: AppTheme.text3.white.bold),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Masukan Kata Sandi ',
+                style: AppTheme.text3.white.bold,
+              ),
+            ),
             SizedBox(height: 8),
             TextFormField(
               controller: _passwordController,
               style: AppTheme.text3.white,
               obscureText: isPasswordObscure,
               decoration: InputDecoration(
-                hintText: 'Masukin kata sandi baru kamu',
+                hintText: 'Masukin kata sandi kamu',
                 errorStyle: AppTheme.text3.red,
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -180,8 +185,6 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           : CupertinoIcons.eye_slash,
                       color: AppTheme.white),
                 ),
-                helperText: 'Minimal harus 8 karakter',
-                helperStyle: AppTheme.subText1.white,
               ),
               // TODO: penggunaan validator
 
@@ -194,18 +197,6 @@ class _ChangePinPageState extends State<ChangePinPage> {
               },
               keyboardType: TextInputType.visiblePassword,
             ),
-            SizedBox(height: Helper.bigPadding),
-            Text('Atur PIN Kamu', style: AppTheme.headline1.white),
-            SizedBox(height: Helper.bigPadding),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: CustomPinCode(
-                pinController: _setPinController,
-                errorController: errorController,
-                onChanged: (value) {},
-                onCompleted: (value) {},
-              ),
-            ),
           ],
         ),
       ),
@@ -213,41 +204,59 @@ class _ChangePinPageState extends State<ChangePinPage> {
   }
 
   Widget _keypad() {
-    return NumericKeyboard(
-        onKeyboardTap: _onKeyboardTap,
-        rightButtonFn: () {
-          setState(() {
-            if (_setPinController.text.isNotEmpty) {
-              _setPinController.text = _setPinController.text
-                  .substring(0, _setPinController.text.length - 1);
-            }
-          });
-        },
-        rightIcon: Icon(
-          Icons.backspace,
-          color: Colors.white,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: Helper.bigPadding),
+        Text('Atur PIN Kamu', style: AppTheme.headline1.white),
+        SizedBox(height: Helper.bigPadding),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: CustomPinCode(
+            pinController: _setPinController,
+            errorController: errorController,
+            onChanged: (value) {},
+            onCompleted: (value) {},
+          ),
         ),
-        leftButtonFn: () {
-          if (_setPinController.text.length < 6) {
-            errorController!.add(ErrorAnimationType.shake);
-            Helper.snackBar(
-              context,
-              message: 'PIN harus 6 Digit!',
-            );
-            return;
-          }
-          context.read<PinBloc>().add(ChangePin(
-                entity: PostChangePinEntity(
-                  nickname: _usernameController.text,
-                  password: _passwordController.text,
-                  pin: _setPinController.text,
-                ),
-              ));
-        },
-        leftIcon: Icon(
-          Icons.check,
-          color: Colors.white,
-        ),
-        mainAxisAlignment: MainAxisAlignment.spaceBetween);
+        NumericKeyboard(
+            onKeyboardTap: _onKeyboardTap,
+            rightButtonFn: () {
+              setState(() {
+                if (_setPinController.text.isNotEmpty) {
+                  _setPinController.text = _setPinController.text
+                      .substring(0, _setPinController.text.length - 1);
+                }
+              });
+            },
+            rightIcon: Icon(
+              Icons.backspace,
+              color: Colors.white,
+            ),
+            leftButtonFn: () {
+              if (_setPinController.text.length < 6) {
+                errorController!.add(ErrorAnimationType.shake);
+                Helper.snackBar(
+                  context,
+                  message: 'PIN harus 6 Digit!',
+                );
+                return;
+              }
+              context.read<PinBloc>().add(ChangePin(
+                    entity: PostChangePinEntity(
+                      nickname: _usernameController.text,
+                      password: _passwordController.text,
+                      pin: _setPinController.text,
+                    ),
+                  ));
+            },
+            leftIcon: Icon(
+              Icons.check,
+              color: Colors.white,
+            ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween),
+      ],
+    );
   }
 }
