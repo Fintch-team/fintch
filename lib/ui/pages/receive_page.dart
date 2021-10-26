@@ -120,8 +120,21 @@ class _ReceivePageState extends State<ReceivePage> {
                         ),
                       ],
                     );
+                  } else if (state is HomeLoading) {
+                    return ReceiveShimmer();
+                  } else if (state is HomeFailure) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        boxShadow: Helper.getShadowBold(),
+                        borderRadius: BorderRadius.circular(32),
+                        color: AppTheme.scaffold,
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child:
+                          FailureStateWidget(message: 'QR-Code Gagal di Load'),
+                    );
                   }
-                  return Center(child: CircularLoading());
+                  return Container();
                 },
               ),
             ),

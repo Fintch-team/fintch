@@ -787,3 +787,92 @@ class ReceiveSheetShimmer extends StatelessWidget {
     );
   }
 }
+
+class ReceiveShimmer extends StatelessWidget {
+  const ReceiveShimmer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: Helper.getShadowBold(),
+              borderRadius: BorderRadius.circular(32),
+              color: AppTheme.scaffold,
+            ),
+            padding: EdgeInsets.all(20),
+            child: Shimmers(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.12,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppTheme.grey,
+                    ),
+                    height: 20,
+                    width: 60,
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppTheme.grey,
+                    ),
+                    height: 12,
+                    width: 40,
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppTheme.grey,
+                    ),
+                    height: 12,
+                    width: 40,
+                  ),
+                  SizedBox(height: Helper.normalPadding),
+                  Expanded(
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: AppTheme.grey,
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          width: 40,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: -MediaQuery.of(context).size.width * 0.12,
+          child: Shimmers(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(64),
+                color: AppTheme.grey,
+              ),
+              width: MediaQuery.of(context).size.width * 0.24,
+              height: MediaQuery.of(context).size.width * 0.24,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
