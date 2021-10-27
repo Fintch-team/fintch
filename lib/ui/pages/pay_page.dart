@@ -545,7 +545,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                 listener: (context, state) async {
                   if (state is ProfilePayFailure) {
                     Helper.snackBar(context,
-                        message: state.message, isFailure: true);
+                        message: state.message, isFailure: true, isUp: true);
                   }
                 },
                 builder: (context, state) {

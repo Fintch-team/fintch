@@ -4,18 +4,19 @@
 // flutter pub run bin/gen_export
 library pages;
 
-export 'f_goals_page.dart';
-export 'barcode_page.dart';
-export 'change_pin_page.dart';
-export 'setting_page.dart';
 export 'auth/auth.exports.dart';
-export 'splash_page.dart';
-export 'f_goals_page.dart';
-export 'payment_page.dart';
-export 'pay_page.dart';
-export 'receive_page.dart';
+export 'barcode_page.dart';
 export 'barcode_receive_page.dart';
-export 'change_password_page.dart';
 export 'base/base.exports.dart';
-export 'top_up_page.dart';
 export 'biometric_page.dart';
+export 'change_password_page.dart';
+export 'change_pin_page.dart';
+export 'f_goals_page.dart';
+export 'f_goals_page.dart';
+export 'pay_page.dart';
+export 'payment_page.dart';
+export 'qr_code_file.dart';
+export 'receive_page.dart';
+export 'setting_page.dart';
+export 'splash_page.dart';
+export 'top_up_page.dart';

@@ -187,13 +187,19 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                               } else if (state is MoneyManageResponseSuccess) {
                                 Helper.snackBar(context,
                                     message: 'Berhasil Simpan Activity');
-                                context
-                                    .read<MoneyManageBloc>()
-                                    .add(GetMoneyManage());
+                                requestFWallet();
+                                Navigator.pop(context);
+                              } else if (state
+                                  is DeleteMoneyManageResponseSuccess) {
+                                Helper.snackBar(context,
+                                    message: 'Berhasil Hapus Activity');
+                                requestFWallet();
                                 Navigator.pop(context);
                               } else if (state is MoneyManageFailure) {
                                 Helper.snackBar(context,
-                                    message: state.message, isFailure: true);
+                                    message: state.message,
+                                    isFailure: true,
+                                    isUp: true);
                               }
                             },
                             builder: (context, state) {
@@ -202,6 +208,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                   if (widget.data != null) ...[
                                     Flexible(
                                       child: CustomButton(
+                                        isLoading: isLoading,
                                         onTap: () {
                                           context
                                               .read<MoneyManageSheetBloc>()
@@ -220,6 +227,7 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                                   ],
                                   Flexible(
                                     child: CustomButton(
+                                      isLoading: isLoading,
                                       onTap: () {
                                         if (_formKey.currentState!.validate()) {
                                           if (widget.data != null) {
@@ -393,6 +401,13 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
         return Container();
       },
     );
+  }
+
+  void requestFWallet() {
+    context.read<MoneyManageBloc>().add(GetMoneyManage());
+    context.read<InComeBloc>().add(GetIncomeMoneyManage());
+    context.read<TabelBloc>().add(GetTabelMoneyManage());
+    context.read<MoneyManageItemBloc>().add(GetMoneyManageItem());
   }
 }
 

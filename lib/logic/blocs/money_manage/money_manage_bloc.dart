@@ -88,7 +88,7 @@ class MoneyManageBloc extends Bloc<MoneyManageEvent, MoneyManageState>
         ListMoneyManageEntity entity =
             await moneyManageRepository.getMoneyManage();
 
-        emit(MoneyManageResponseSuccess(entity: entity));
+        emit(DeleteMoneyManageResponseSuccess(entity: entity));
       } on FailedException catch (e) {
         emit(MoneyManageFailure(message: e.message));
       } catch (e, stacktrace) {

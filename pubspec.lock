@@ -534,6 +534,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.8"
+  image_gallery_saver:
+    dependency: "direct main"
+    description:
+      name: image_gallery_saver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.1"
   image_picker:
     dependency: "direct main"
     description:
@@ -870,6 +877,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.2"
+  qr_flutter:
+    dependency: "direct main"
+    description:
+      name: qr_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   retry:
     dependency: "direct main"
     description:
@@ -891,6 +905,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.3"
+  screenshot:
+    dependency: "direct main"
+    description:
+      name: screenshot
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
+  share:
+    dependency: "direct main"
+    description:
+      name: share
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
+  share_files_and_screenshot_widgets:
+    dependency: "direct main"
+    description:
+      name: share_files_and_screenshot_widgets
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   shelf:
     dependency: transitive
     description:

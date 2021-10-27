@@ -23,6 +23,15 @@ class MoneyManageItemResponseSuccess extends MoneyManageItemState {
   List<Object> get props => [entity];
 }
 
+class DeleteMoneyManageItemResponseSuccess extends MoneyManageItemState {
+  final ListMoneyManageItemEntity entity;
+
+  DeleteMoneyManageItemResponseSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class MoneyManageItemFailure extends MoneyManageItemState {
   final String message;
 

@@ -32,3 +32,4 @@ export 'circular_loading.dart';
 export 'background.dart';
 export 'money_manage_item_sheet.dart';
 export 'money_manage_sheet.dart';
+export 'qr_img.dart';

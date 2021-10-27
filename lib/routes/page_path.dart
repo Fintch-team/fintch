@@ -16,4 +16,5 @@ class PagePath {
   static const String changePin = '/change_pin';
   static const String barcode = '/barcode';
   static const String biometric = '/biometric';
+  // static const String qrCodeFile = '/qrCodeFile';
 }

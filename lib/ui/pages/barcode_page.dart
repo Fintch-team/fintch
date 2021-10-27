@@ -279,8 +279,8 @@ class _BarcodePageState extends State<BarcodePage> {
                               id: data.id,
                             ),
                           );
-                      Navigator.pop(context, true);
                     },
+                    isLoading: isLoading,
                     text: 'Iya',
                     isOutline: true,
                     isUpper: false,
@@ -412,11 +412,14 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                                 Navigator.pop(context);
                               } else if (state is BarcodeFailure) {
                                 Helper.snackBar(context,
-                                    message: state.message, isFailure: true);
+                                    message: state.message,
+                                    isFailure: true,
+                                    isUp: true);
                               }
                             },
                             builder: (context, state) {
                               return CustomButton(
+                                isLoading: isLoading,
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     if (widget.data != null) {
