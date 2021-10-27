@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -55,6 +56,7 @@ class _ReceivePageState extends State<ReceivePage> {
                                 GestureDetector(
                                   onTap: () async {
                                     context.loaderOverlay.show();
+
                                     final image = await _screenshotController
                                         .captureFromWidget(
                                       QrCodeFile(

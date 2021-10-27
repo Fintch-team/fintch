@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
+import 'dart:async';
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
+
 class QrCodeFile extends StatelessWidget {
   final BuildContext parentContext;
   final String title;
@@ -22,6 +30,38 @@ class QrCodeFile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey previewContainer = GlobalKey();
+
+    final qrFutureBuilder = FutureBuilder<ui.Image>(
+      future: _loadOverlayImage(),
+      builder: (ctx, snapshot) {
+        final size = 280.0;
+        if (!snapshot.hasData) {
+          return Container(width: size, height: size);
+        }
+        return CustomPaint(
+          size: Size.square(size),
+          painter: QrPainter(
+            data: data,
+            version: QrVersions.auto,
+            eyeStyle: const QrEyeStyle(
+              eyeShape: QrEyeShape.square,
+              color: Colors.black87,
+            ),
+            dataModuleStyle: const QrDataModuleStyle(
+              dataModuleShape: QrDataModuleShape.circle,
+              color: Colors.black,
+            ),
+            // size: 320.0,
+            embeddedImage: snapshot.data,
+            embeddedImageStyle: QrEmbeddedImageStyle(
+              size: Size.square(60),
+            ),
+          ),
+        );
+      },
+    );
+
     return Material(
       child: Container(
         width: MediaQuery.of(parentContext).size.width,
@@ -69,12 +109,21 @@ class QrCodeFile extends StatelessWidget {
                           color: AppTheme.white,
                         ),
                         padding: EdgeInsets.all(20),
-                        child: PrettyQr(
-                          image: AssetImage(Resources.icFintchPointPng),
-                          data: data,
-                          errorCorrectLevel: QrErrorCorrectLevel.M,
-                          roundEdges: true,
+                        child: RepaintBoundary(
+                          key: previewContainer,
+                          child: Center(
+                            child: Container(
+                              width: 280,
+                              child: qrFutureBuilder,
+                            ),
+                          ),
                         ),
+                        // child: PrettyQr(
+                        //   image: AssetImage(Resources.icFintchPointPng),
+                        //   data: data,
+                        //   errorCorrectLevel: QrErrorCorrectLevel.M,
+                        //   roundEdges: true,
+                        // ),
                       ),
                     ),
                   ),
@@ -99,5 +148,12 @@ class QrCodeFile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<ui.Image> _loadOverlayImage() async {
+    final completer = Completer<ui.Image>();
+    final byteData = await rootBundle.load(Resources.icFintchPointPng);
+    ui.decodeImageFromList(byteData.buffer.asUint8List(), completer.complete);
+    return completer.future;
   }
 }
