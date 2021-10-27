@@ -50,6 +50,7 @@ class Resources {
   static const String noInternet = '$_baseSvg/no_internet.svg';
   static const String historyIllustration =
       '$_baseSvg/history_illustration.svg';
+  static const String footerQrCode = '$_baseSvg/footer_qr_code.svg';
 
   // IMAGE ASSETS
   static const String bgPatternPng = '$_baseImg/bg_pattern.png';

@@ -54,6 +54,15 @@ class PageRouter {
         return _buildRoute(settings, BarcodePage());
       case PagePath.biometric:
         return _buildRoute(settings, BiometricPage());
+      // case PagePath.qrCodeFile:
+      //   return _buildRoute(
+      //       settings,
+      //       QrCodeFile(
+      //         subtitle1: 'SMK Negeri 1 Majalengka',
+      //         data: 'businesscenter',
+      //         title: 'Business Center',
+      //         subtitle2: 'businesscenter',
+      //       ));
       default:
         return _errorRoute();
     }

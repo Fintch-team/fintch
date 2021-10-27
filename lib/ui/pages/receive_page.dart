@@ -1,7 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 
 class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
@@ -11,28 +20,99 @@ class ReceivePage extends StatefulWidget {
 }
 
 class _ReceivePageState extends State<ReceivePage> {
+  late ScreenshotController _screenshotController;
+  UserEntity? userEntity;
+
   @override
   void initState() {
     super.initState();
+    _screenshotController = ScreenshotController();
     context.read<ReceiveBloc>().add(HomeInit());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Background(
-        child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomAppBar(
-                  title: 'QR Code Saya',
-                ),
-                SizedBox(height: 20),
-                _userCard(context),
-              ],
+    return LoadingOverlay(
+      child: Scaffold(
+        body: Background(
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomAppBar(
+                          title: 'QR Code Saya',
+                        ),
+                      ),
+                      userEntity != null
+                          ? Row(
+                              children: [
+                                SizedBox(width: Helper.smallPadding),
+                                GestureDetector(
+                                  onTap: () async {
+                                    context.loaderOverlay.show();
+                                    final image = await _screenshotController
+                                        .captureFromWidget(
+                                      QrCodeFile(
+                                        context,
+                                        title: userEntity!.name,
+                                        subtitle1: userEntity!.school.name,
+                                        subtitle2: userEntity!.nickname,
+                                        data: userEntity!.nickname,
+                                      ),
+                                      delay: Duration(milliseconds: 3000),
+                                    );
+                                    final directory =
+                                        await getApplicationDocumentsDirectory();
+                                    final imagePath = await File(
+                                            '${directory.path}/image.png')
+                                        .create();
+                                    await imagePath.writeAsBytes(image);
+                                    context.loaderOverlay.hide();
+                                    await Share.shareFiles([imagePath.path]);
+                                  },
+                                  child: Icon(
+                                    Icons.share_rounded,
+                                    color: AppTheme.white,
+                                  ),
+                                ),
+                                SizedBox(width: Helper.smallPadding),
+                                GestureDetector(
+                                  onTap: () async {
+                                    context.loaderOverlay.show();
+                                    final image = await _screenshotController
+                                        .captureFromWidget(
+                                      QrCodeFile(
+                                        context,
+                                        title: userEntity!.name,
+                                        subtitle1: userEntity!.school.name,
+                                        subtitle2: userEntity!.nickname,
+                                        data: userEntity!.nickname,
+                                      ),
+                                      delay: Duration(milliseconds: 3000),
+                                    );
+                                    await saveImage(
+                                        image, userEntity!.nickname);
+                                    context.loaderOverlay.hide();
+                                  },
+                                  child: Icon(
+                                    Icons.download_rounded,
+                                    color: AppTheme.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  _userCard(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -51,7 +131,13 @@ class _ReceivePageState extends State<ReceivePage> {
             child: Container(
               child: BlocConsumer<ReceiveBloc, HomeState>(
                 listener: (context, state) {
-                  if (state is HomeFailure) {
+                  if (state is HomeSuccess) {
+                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      setState(() {
+                        userEntity = state.entity;
+                      });
+                    });
+                  } else if (state is HomeFailure) {
                     Helper.snackBar(context,
                         message: state.message, isFailure: true);
                   }
@@ -157,5 +243,18 @@ class _ReceivePageState extends State<ReceivePage> {
         ],
       ),
     );
+  }
+
+  Future<String> saveImage(Uint8List bytes, String name) async {
+    await [Permission.storage].request();
+
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceAll('.', '-')
+        .replaceAll(':', '-');
+    final imageName = '${name}_$time';
+    print(bytes.toString());
+    final result = await ImageGallerySaver.saveImage(bytes, name: imageName);
+    return result.toString();
   }
 }
