@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
-import 'package:provider/src/provider.dart';
 
 class TopUpPage extends StatefulWidget {
   const TopUpPage({Key? key}) : super(key: key);
@@ -45,26 +45,50 @@ class _TopUpPageState extends State<TopUpPage> {
         isWhite: true,
         child: SafeArea(
           bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: Helper.normalPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomAppBar(
-                      title: 'Top Up',
-                      isBlack: true,
+          child: LiquidPullToRefresh(
+            color: AppTheme.scaffold,
+            backgroundColor: AppTheme.purple,
+            showChildOpacityTransition: false,
+            onRefresh: _onRefresh,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Stack(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Helper.normalPadding),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomAppBar(
+                                title: 'Top Up',
+                                isBlack: true,
+                              ),
+                              SizedBox(height: Helper.smallPadding),
+                              _headerTopUp(context),
+                            ],
+                          ),
+                        ),
+                        Expanded(child: _bodyTopUp(context)),
+                      ],
                     ),
-                    SizedBox(height: Helper.smallPadding),
-                    _headerTopUp(context),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: _totalAmount(),
+                  ),
+                ],
               ),
-              Expanded(child: _bodyTopUp(context)),
-            ],
+            ),
           ),
         ),
       ),
@@ -95,60 +119,57 @@ class _TopUpPageState extends State<TopUpPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         color: AppTheme.white,
       ),
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _bottomSheetLine(context),
-                SizedBox(height: Helper.bigPadding),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text('Mau Top Up Berapa?', style: AppTheme.headline3),
-                      SizedBox(height: 8),
-                      Text('Rp1 = 1 Fintch Point', style: AppTheme.text3),
-                    ],
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _bottomSheetLine(context),
+                  SizedBox(height: Helper.bigPadding),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text('Mau Top Up Berapa?', style: AppTheme.headline3),
+                        SizedBox(height: 8),
+                        Text('Rp1 = 1 Fintch Point', style: AppTheme.text3),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: Helper.normalPadding),
-                _slider(),
-                SizedBox(height: Helper.normalPadding),
-                SizedBox(height: Helper.normalPadding),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child:
-                      Text('Jumlah Lainnya', style: AppTheme.text3.purple.bold),
-                ),
-                SizedBox(height: 8),
-                _otherAmount(),
-                SizedBox(height: Helper.normalPadding),
-                // TODO: Refresh di untuk top up list
-                BlocBuilder<TopUpBloc, TopUpState>(
-                  builder: (context, state) {
-                    return _topUpList(state);
-                  },
-                ),
-                SizedBox(height: Helper.bigPadding),
-                SizedBox(height: Helper.bigPadding),
-                SizedBox(height: Helper.bigPadding),
-                SizedBox(height: Helper.bigPadding),
-              ],
+                  SizedBox(height: Helper.normalPadding),
+                  _slider(),
+                  SizedBox(height: Helper.normalPadding),
+                  SizedBox(height: Helper.normalPadding),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Jumlah Lainnya',
+                        style: AppTheme.text3.purple.bold),
+                  ),
+                  SizedBox(height: 8),
+                  _otherAmount(),
+                  SizedBox(height: Helper.normalPadding),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _totalAmount(),
-          ),
-        ],
+            BlocBuilder<TopUpBloc, TopUpState>(
+              builder: (context, state) {
+                return _topUpList(state);
+              },
+            ),
+            SizedBox(height: Helper.bigPadding),
+            SizedBox(height: Helper.bigPadding),
+            SizedBox(height: Helper.bigPadding),
+            SizedBox(height: Helper.bigPadding),
+          ],
+        ),
       ),
     );
   }
@@ -341,7 +362,7 @@ class _TopUpPageState extends State<TopUpPage> {
           itemCount: state.entity.data.length,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
