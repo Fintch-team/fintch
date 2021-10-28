@@ -230,6 +230,7 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<ProfilePayBloc>(
             create: (context) => ProfilePayBloc(
+              barcodeRepository: context.read<BarcodeRepository>(),
               userRepository: context.read<UserRepository>(),
               transactionRepository: context.read<TransactionRepository>(),
             ),

@@ -25,7 +25,7 @@ class TransactionService extends ApiService {
     }
   }
 
-  Future<bool> postTransactionBarcode({
+  Future<TransactionModel> postTransactionBarcode({
     required String idBarcode,
   }) async {
     try {
@@ -36,7 +36,7 @@ class TransactionService extends ApiService {
         },
       );
 
-      return res.statusCode == 200;
+      return TransactionModel.fromJson(res.data);
     } on DioError catch (e) {
       debugPrint("error $e");
       throw e.error;

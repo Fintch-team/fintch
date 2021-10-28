@@ -161,6 +161,14 @@ class DataMapper {
         data: moneyPlan.data,
       );
 
+  static BarcodeEntity barcodeMapper(BarcodeModel barcode) => BarcodeEntity(
+        id: barcode.data.id.toString(),
+        name: barcode.data.name,
+        amount: barcode.data.amount.toString(),
+        confirm: barcode.data.confirm.toString(),
+        createdAt: barcode.data.createdAt,
+      );
+
   static TopUpEntity topUpMapper(TopUpModel topUp) => TopUpEntity(
         id: topUp.data.id,
         name: topUp.data.name,

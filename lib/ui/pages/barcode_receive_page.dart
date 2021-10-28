@@ -59,7 +59,7 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
                                       barcode.createdAt.parseHourDateAndMonth(),
                                   subtitle2:
                                       'Rp${barcode.amount.toString().parseCurrency()}',
-                                  data: barcode.id.toString(),
+                                  data: "barcode:" + barcode.id.toString(),
                                 ),
                               );
                               await Helper.shareImage(image);
@@ -83,7 +83,7 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
                                       barcode.createdAt.parseHourDateAndMonth(),
                                   subtitle2:
                                       'Rp${barcode.amount.toString().parseCurrency()}',
-                                  data: barcode.id.toString(),
+                                  data: "barcode:" + barcode.id.toString(),
                                 ),
                               );
                               await Helper.saveImage(
@@ -150,7 +150,7 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
                               child: PrettyQr(
                                 image: AssetImage(Resources.icFintchPointPng),
                                 size: MediaQuery.of(context).size.height * 0.3,
-                                data: barcode.id.toString(),
+                                data: "barcode:" + barcode.id.toString(),
                                 errorCorrectLevel: QrErrorCorrectLevel.M,
                                 roundEdges: true,
                               ),
