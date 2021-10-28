@@ -1,6 +1,8 @@
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:screenshot/screenshot.dart';
 
 class BarcodeReceivePage extends StatefulWidget {
   final ArgumentBundle? bundle;
@@ -12,13 +14,13 @@ class BarcodeReceivePage extends StatefulWidget {
 }
 
 class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
+  late ScreenshotController _screenshotController;
   late BarcodeData barcode;
 
   @override
   void initState() {
     super.initState();
-    // context.read<ReceiveBloc>().add(HomeInit());
-
+    _screenshotController = ScreenshotController();
     if (widget.bundle != null) {
       barcode = widget.bundle!.extras['barcode'];
     }
@@ -26,20 +28,81 @@ class _BarcodeReceivePageState extends State<BarcodeReceivePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Background(
-        child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.all(Helper.normalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomAppBar(
-                  title: 'Transaksi Barcode ${barcode.name}',
-                ),
-                SizedBox(height: 20),
-                _userCard(context),
-              ],
+    return LoadingOverlay(
+      child: Scaffold(
+        body: Background(
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.all(Helper.normalPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomAppBar(
+                          title: 'Transaksi Barcode ${barcode.name}',
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(width: Helper.smallPadding),
+                          GestureDetector(
+                            onTap: () async {
+                              context.loaderOverlay.show();
+                              final image =
+                                  await _screenshotController.captureFromWidget(
+                                QrCodeFile(
+                                  context,
+                                  title: barcode.name,
+                                  subtitle1:
+                                      barcode.createdAt.parseHourDateAndMonth(),
+                                  subtitle2:
+                                      'Rp${barcode.amount.toString().parseCurrency()}',
+                                  data: barcode.id.toString(),
+                                ),
+                              );
+                              await Helper.shareImage(image);
+                              context.loaderOverlay.hide();
+                            },
+                            child: Icon(
+                              Icons.share_rounded,
+                              color: AppTheme.white,
+                            ),
+                          ),
+                          SizedBox(width: Helper.smallPadding),
+                          GestureDetector(
+                            onTap: () async {
+                              context.loaderOverlay.show();
+                              final image =
+                                  await _screenshotController.captureFromWidget(
+                                QrCodeFile(
+                                  context,
+                                  title: barcode.name,
+                                  subtitle1:
+                                      barcode.createdAt.parseHourDateAndMonth(),
+                                  subtitle2:
+                                      'Rp${barcode.amount.toString().parseCurrency()}',
+                                  data: barcode.id.toString(),
+                                ),
+                              );
+                              await Helper.saveImage(
+                                  image, barcode.id.toString());
+                              context.loaderOverlay.hide();
+                            },
+                            child: Icon(
+                              Icons.download_rounded,
+                              color: AppTheme.white,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  _userCard(context),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,16 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:fintch/gen_export.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
-
 import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_files_and_screenshot_widgets/share_files_and_screenshot_widgets.dart';
 
 class QrCodeFile extends StatelessWidget {
   final BuildContext parentContext;
@@ -118,12 +114,6 @@ class QrCodeFile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // child: PrettyQr(
-                        //   image: AssetImage(Resources.icFintchPointPng),
-                        //   data: data,
-                        //   errorCorrectLevel: QrErrorCorrectLevel.M,
-                        //   roundEdges: true,
-                        // ),
                       ),
                     ),
                   ),

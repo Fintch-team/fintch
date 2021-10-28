@@ -1,11 +1,16 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
 
 class Helper {
   static void unfocus() {
@@ -243,5 +248,25 @@ class Helper {
     }
 
     return null;
+  }
+
+  static Future<String> saveImage(Uint8List bytes, String name) async {
+    await [Permission.storage].request();
+
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceAll('.', '-')
+        .replaceAll(':', '-');
+    final imageName = '${name}_$time';
+    print(bytes.toString());
+    final result = await ImageGallerySaver.saveImage(bytes, name: imageName);
+    return result.toString();
+  }
+
+  static Future shareImage(Uint8List image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = await File('${directory.path}/image.png').create();
+    await imagePath.writeAsBytes(image);
+    await Share.shareFiles([imagePath.path]);
   }
 }

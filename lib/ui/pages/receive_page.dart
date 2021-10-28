@@ -1,17 +1,10 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:fintch/gen_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share/share.dart';
 
 class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
@@ -66,16 +59,9 @@ class _ReceivePageState extends State<ReceivePage> {
                                         subtitle2: userEntity!.nickname,
                                         data: userEntity!.nickname,
                                       ),
-                                      delay: Duration(milliseconds: 3000),
                                     );
-                                    final directory =
-                                        await getApplicationDocumentsDirectory();
-                                    final imagePath = await File(
-                                            '${directory.path}/image.png')
-                                        .create();
-                                    await imagePath.writeAsBytes(image);
+                                    await Helper.shareImage(image);
                                     context.loaderOverlay.hide();
-                                    await Share.shareFiles([imagePath.path]);
                                   },
                                   child: Icon(
                                     Icons.share_rounded,
@@ -95,9 +81,8 @@ class _ReceivePageState extends State<ReceivePage> {
                                         subtitle2: userEntity!.nickname,
                                         data: userEntity!.nickname,
                                       ),
-                                      delay: Duration(milliseconds: 3000),
                                     );
-                                    await saveImage(
+                                    await Helper.saveImage(
                                         image, userEntity!.nickname);
                                     context.loaderOverlay.hide();
                                   },
@@ -245,18 +230,5 @@ class _ReceivePageState extends State<ReceivePage> {
         ],
       ),
     );
-  }
-
-  Future<String> saveImage(Uint8List bytes, String name) async {
-    await [Permission.storage].request();
-
-    final time = DateTime.now()
-        .toIso8601String()
-        .replaceAll('.', '-')
-        .replaceAll(':', '-');
-    final imageName = '${name}_$time';
-    print(bytes.toString());
-    final result = await ImageGallerySaver.saveImage(bytes, name: imageName);
-    return result.toString();
   }
 }
