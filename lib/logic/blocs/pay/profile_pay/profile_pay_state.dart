@@ -20,6 +20,15 @@ class ProfilePaySuccess extends ProfilePayState {
   List<Object> get props => [entity];
 }
 
+class ProfilePayBarcodeSuccess extends ProfilePayState {
+  final BarcodeEntity entity;
+
+  ProfilePayBarcodeSuccess({required this.entity});
+
+  @override
+  List<Object> get props => [entity];
+}
+
 class ProfilePayNotFound extends ProfilePayState {}
 
 class ProfilePayFailure extends ProfilePayState {

@@ -25,6 +25,22 @@ class BarcodePutEntity extends BaseEntity {
       required this.amount});
 }
 
+class BarcodeEntity extends BaseEntity {
+  final String id;
+  final String name;
+  final String amount;
+  final String confirm;
+  final DateTime createdAt;
+
+  BarcodeEntity({
+    required this.id,
+    required this.name,
+    required this.amount,
+    required this.confirm,
+    required this.createdAt,
+  });
+}
+
 class ListBarcodeEntity extends BaseEntity {
   final List<BarcodeData> data;
 

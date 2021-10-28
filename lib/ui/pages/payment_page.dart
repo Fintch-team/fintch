@@ -34,15 +34,10 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Payment Top Up',
-            style: AppTheme.text1.white.bold,
-            textAlign: TextAlign.start,
-          ),
-          centerTitle: false,
           actions: <Widget>[
             NavigationControls(_controller.future),
           ],
+          toolbarHeight: 45,
           backgroundColor: AppTheme.webViewPurple,
         ),
         body: redirectUrl.isNotEmpty ? _buildWeb(redirectUrl) : _buildBody());
@@ -138,36 +133,36 @@ class NavigationControls extends StatelessWidget {
         final WebViewController? controller = snapshot.data;
         return Row(
           children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: !webViewReady
-                  ? null
-                  : () async {
-                      if (await controller!.canGoBack()) {
-                        await controller.goBack();
-                      } else {
-                        // ignore: deprecated_member_use
-                        Helper.snackBar(context,
-                            message: 'No Back History Item');
-                        return;
-                      }
-                    },
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_forward_ios),
-              onPressed: !webViewReady
-                  ? null
-                  : () async {
-                      if (await controller!.canGoForward()) {
-                        await controller.goForward();
-                      } else {
-                        // ignore: deprecated_member_use
-                        Helper.snackBar(context,
-                            message: 'No Forward History Item');
-                        return;
-                      }
-                    },
-            ),
+            // IconButton(
+            //   icon: const Icon(Icons.arrow_back_ios),
+            //   onPressed: !webViewReady
+            //       ? null
+            //       : () async {
+            //           if (await controller!.canGoBack()) {
+            //             await controller.goBack();
+            //           } else {
+            //             // ignore: deprecated_member_use
+            //             Helper.snackBar(context,
+            //                 message: 'No Back History Item');
+            //             return;
+            //           }
+            //         },
+            // ),
+            // IconButton(
+            //   icon: const Icon(Icons.arrow_forward_ios),
+            //   onPressed: !webViewReady
+            //       ? null
+            //       : () async {
+            //           if (await controller!.canGoForward()) {
+            //             await controller.goForward();
+            //           } else {
+            //             // ignore: deprecated_member_use
+            //             Helper.snackBar(context,
+            //                 message: 'No Forward History Item');
+            //             return;
+            //           }
+            //         },
+            // ),
             IconButton(
               icon: const Icon(Icons.replay),
               onPressed: !webViewReady

@@ -25,9 +25,9 @@ class PayBloc extends Bloc<PayEvent, PayState> {
     on<PostBarcodePay>((event, emit) async {
       emit(PayLoading());
       try {
-        bool res = await transactionRepository.postTransactionBarcode(
-            postEntity: event.entity);
-        emit(PaySuccess(entity: res));
+        TransactionEntity res = await transactionRepository
+            .postTransactionBarcode(postEntity: event.entity);
+        emit(PayTransctionSuccess(entity: res));
       } on FailedException catch (e) {
         emit(PayFailure(message: e.message));
       } catch (e, stacktrace) {

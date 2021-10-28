@@ -468,17 +468,29 @@ class _PayPageState extends State<PayPage> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
+      List<String> data = scanData.code.split(":");
       if (!isShowSheet) {
         isShowSheet = true;
         this.controller?.pauseCamera();
-        _showPaymentBottomSheet(
-          onClose: () {
-            Navigator.pop(context);
-            isShowSheet = false;
-            controller.resumeCamera();
-          },
-          nickname: scanData.code,
-        );
+        if (data[0] == 'nickname') {
+          _showPaymentBottomSheet(
+            onClose: () {
+              Navigator.pop(context);
+              isShowSheet = false;
+              controller.resumeCamera();
+            },
+            nickname: data[1],
+          );
+        } else {
+          _showPaymentBarcodeBottomSheet(
+            onClose: () {
+              Navigator.pop(context);
+              isShowSheet = false;
+              controller.resumeCamera();
+            },
+            barcode: data[1],
+          );
+        }
       }
     });
   }
@@ -496,6 +508,23 @@ class _PayPageState extends State<PayPage> {
       builder: (context) => PaymentSheet(
         onClose: onClose,
         nickname: nickname,
+      ),
+    );
+  }
+
+  _showPaymentBarcodeBottomSheet(
+      {required VoidCallback onClose, required String barcode}) {
+    showCupertinoModalBottomSheet(
+      expand: false,
+      context: context,
+      enableDrag: false,
+      isDismissible: false,
+      topRadius: Radius.circular(20),
+      backgroundColor: AppTheme.white,
+      barrierColor: AppTheme.black.withOpacity(0.2),
+      builder: (context) => BarcodePaymentSheet(
+        onClose: onClose,
+        barcode: barcode,
       ),
     );
   }
@@ -785,6 +814,143 @@ class _PaymentSheetState extends State<PaymentSheet> {
           textFieldController.text = value.doubleToThousand();
         });
       },
+    );
+  }
+}
+
+class BarcodePaymentSheet extends StatefulWidget {
+  final String barcode;
+  final VoidCallback onClose;
+
+  const BarcodePaymentSheet(
+      {Key? key, required this.onClose, required this.barcode})
+      : super(key: key);
+
+  @override
+  _BarcodePaymentSheetState createState() => _BarcodePaymentSheetState();
+}
+
+class _BarcodePaymentSheetState extends State<BarcodePaymentSheet> {
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<ProfilePayBloc>()
+        .add(GetReceiveByBarcode(barcode: widget.barcode));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            color: AppTheme.scaffold,
+          ),
+          padding: EdgeInsets.all(20),
+          child: Stack(
+            children: [
+              BlocConsumer<ProfilePayBloc, ProfilePayState>(
+                listener: (context, state) async {
+                  if (state is ProfilePayFailure) {
+                    Helper.snackBar(context,
+                        message: state.message, isFailure: true, isUp: true);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is ProfilePayBarcodeSuccess) {
+                    return SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: Helper.normalPadding),
+                          Text(state.entity.name, style: AppTheme.headline3),
+                          SizedBox(height: 8),
+                          Text(state.entity.createdAt.parseHourDateAndMonth(),
+                              style: AppTheme.text3),
+                          SizedBox(height: 8),
+                          Text("F-Barcode-" + state.entity.id,
+                              style: AppTheme.text3.purple),
+                          SizedBox(height: Helper.bigPadding),
+                          SizedBox(height: Helper.normalPadding),
+                          _totalAmount(state.entity.amount),
+                          SizedBox(height: Helper.normalPadding),
+                          ConfirmationSlider(
+                            text: 'Geser Untuk Bayar',
+                            textStyle: AppTheme.text1.bold,
+                            backgroundShape: BorderRadius.circular(12),
+                            backgroundColor: AppTheme.yellow,
+                            foregroundShape: BorderRadius.circular(12),
+                            foregroundColor: AppTheme.purple,
+                            width: MediaQuery.of(context).size.width - 40,
+                            height: 56,
+                            shadow: Helper.getShadow()[0],
+                            onConfirmation: () {
+                              context.read<PayBloc>().add(PostBarcodePay(
+                                      entity: TransactionBarcodePostEntity(
+                                    idBarcode: state.entity.id,
+                                  )));
+                            },
+                          ),
+                          SizedBox(height: Helper.normalPadding),
+                        ],
+                      ),
+                    );
+                  } else if (state is ProfilePayLoading) {
+                    return ReceiveSheetShimmer();
+                  } else if (state is ProfilePayFailure) {
+                    return FailureStateWidget(
+                        message: 'Profile Pay Receive  Gagal di Load');
+                  } else if (state is ProfilePayNotFound) {
+                    return EmptyStateWidget(
+                        message: 'User / Merchant tidak ditemukan :(');
+                  }
+                  return Container();
+                },
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: GestureDetector(
+                  onTap: widget.onClose,
+                  child: SvgPicture.asset(Resources.icClose),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _totalAmount(String amount) {
+    return Row(
+      children: [
+        Text('Total', style: AppTheme.text1),
+        SizedBox(width: Helper.normalPadding),
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SvgPicture.asset(
+                Resources.icFintchPoint,
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                child: AutoSizeText(
+                  amount.parseCurrency(),
+                  style: AppTheme.text1,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

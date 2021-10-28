@@ -57,7 +57,8 @@ class _ReceivePageState extends State<ReceivePage> {
                                         title: userEntity!.name,
                                         subtitle1: userEntity!.school.name,
                                         subtitle2: userEntity!.nickname,
-                                        data: userEntity!.nickname,
+                                        data:
+                                            "nickname:" + userEntity!.nickname,
                                       ),
                                     );
                                     await Helper.shareImage(image);
@@ -79,7 +80,8 @@ class _ReceivePageState extends State<ReceivePage> {
                                         title: userEntity!.name,
                                         subtitle1: userEntity!.school.name,
                                         subtitle2: userEntity!.nickname,
-                                        data: userEntity!.nickname,
+                                        data:
+                                            "nickname:" + userEntity!.nickname,
                                       ),
                                     );
                                     await Helper.saveImage(
@@ -166,7 +168,7 @@ class _ReceivePageState extends State<ReceivePage> {
                                           Resources.icFintchPointPng),
                                       size: MediaQuery.of(context).size.height *
                                           0.3,
-                                      data: state.entity.nickname.toString(),
+                                      data: "nickname:" + state.entity.nickname,
                                       errorCorrectLevel: QrErrorCorrectLevel.M,
                                       roundEdges: true,
                                     ),

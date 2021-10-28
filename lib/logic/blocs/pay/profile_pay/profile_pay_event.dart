@@ -15,3 +15,12 @@ class GetReceiveByNickname extends ProfilePayEvent {
   @override
   List<Object?> get props => [nickname];
 }
+
+class GetReceiveByBarcode extends ProfilePayEvent {
+  final String barcode;
+
+  GetReceiveByBarcode({required this.barcode});
+
+  @override
+  List<Object?> get props => [barcode];
+}

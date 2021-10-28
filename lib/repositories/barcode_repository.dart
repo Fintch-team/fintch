@@ -13,6 +13,12 @@ class BarcodeRepository {
     return DataMapper.listBarcodeMapper(barcodeModel);
   }
 
+  Future<BarcodeEntity> getBarcodeById({required String id}) async {
+    BarcodeModel barcodeModel = await barcodeService.getBarcodeId(id: id);
+
+    return DataMapper.barcodeMapper(barcodeModel);
+  }
+
   Future<bool> postBarcode({required BarcodePostEntity postEntity}) async {
     bool res = await barcodeService.postBarcode(
       name: postEntity.name,

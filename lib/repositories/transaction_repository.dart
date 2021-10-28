@@ -17,13 +17,13 @@ class TransactionRepository {
     return DataMapper.transactionMapper(res);
   }
 
-  Future<bool> postTransactionBarcode(
+  Future<TransactionEntity> postTransactionBarcode(
       {required TransactionBarcodePostEntity postEntity}) async {
-    bool res = await transactionService.postTransactionBarcode(
+    TransactionModel res = await transactionService.postTransactionBarcode(
       idBarcode: postEntity.idBarcode,
     );
 
-    return res;
+    return DataMapper.transactionMapper(res);
   }
 
   Future<TransactionTopUpEntity> postTransactionTopUp(
