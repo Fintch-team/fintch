@@ -253,10 +253,15 @@ class _SettingPageState extends State<SettingPage> {
       children: [
         Text('Dukungan', style: AppTheme.headline3),
         SizedBox(height: Helper.smallPadding),
-        _optionItems('Tentang App'),
+        GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, PagePath.payment,
+                  arguments: ArgumentBundle(extras: {
+                    'redirectUrl': 'https://fintch.id/mobile/about',
+                  })).setDarkAppBar();
+            },
+            child: _optionItems('Tentang App')),
         _optionItems('Bantuan'),
-        _optionItems('Kebijakan Privasi'),
-        _optionItems('Syarat & Ketentuan'),
         _optionItems('Masukan & Saran'),
       ],
     );
