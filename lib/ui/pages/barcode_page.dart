@@ -137,21 +137,31 @@ class _BarcodePageState extends State<BarcodePage> {
       },
       child: Dismissible(
         background: Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(8),
-            child: Text(
-              "Hapus",
-              style: AppTheme.headline2.copyWith(color: AppTheme.white),
-            ),
-            color: AppTheme.red),
+          decoration: BoxDecoration(
+            color: AppTheme.red,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Hapus",
+            style: AppTheme.headline2.white,
+          ),
+        ),
         secondaryBackground: Container(
-            padding: EdgeInsets.all(8),
-            alignment: Alignment.centerRight,
-            child: Text(
-              "Edit",
-              style: AppTheme.headline2.copyWith(color: AppTheme.white),
-            ),
-            color: AppTheme.yellow),
+          decoration: BoxDecoration(
+            color: AppTheme.yellow,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.centerRight,
+          child: Text(
+            "Edit",
+            style: AppTheme.headline2.white,
+          ),
+        ),
         key: Key(data.id.toString()),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) {

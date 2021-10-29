@@ -101,7 +101,7 @@ class _FWalletPageState extends State<FWalletPage> {
                         color: AppTheme.whiteOpacity,
                       ),
                       padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
-                      child: _LineChart(),
+                      child: _LineChart(total: amount),
                     ),
                   ),
                 ],
@@ -522,6 +522,9 @@ class _FWalletPageState extends State<FWalletPage> {
 }
 
 class _LineChart extends StatefulWidget {
+  final int total;
+
+  const _LineChart({Key? key, required this.total}) : super(key: key);
   @override
   State<_LineChart> createState() => _LineChartState();
 }
@@ -564,22 +567,22 @@ class _LineChartState extends State<_LineChart> {
         }
       },
       child: LineChart(
-        sampleData1,
+        sampleData1(widget.total),
         swapAnimationDuration: const Duration(milliseconds: 250),
         swapAnimationCurve: Curves.easeInOut,
       ),
     );
   }
 
-  LineChartData get sampleData1 => LineChartData(
+  LineChartData sampleData1(int total) => LineChartData(
         lineTouchData: lineTouchData1,
         gridData: gridData,
-        titlesData: titlesData1,
+        titlesData: titlesData1(total),
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
         maxX: 8,
-        maxY: 20,
+        maxY: total.toDouble() / 1000,
         minY: 0,
       );
 
@@ -591,26 +594,23 @@ class _LineChartState extends State<_LineChart> {
         ),
       );
 
-  FlTitlesData get titlesData1 => FlTitlesData(
-        bottomTitles: bottomTitles,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        leftTitles: leftTitles(
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 5:
-                return '5';
-              case 10:
-                return '10';
-              case 15:
-                return '15';
-              case 20:
-                return '20';
+  FlTitlesData titlesData1(int total) {
+    return FlTitlesData(
+      bottomTitles: bottomTitles,
+      rightTitles: SideTitles(showTitles: false),
+      topTitles: SideTitles(showTitles: false),
+      leftTitles: leftTitles(
+        getTitles: (value) {
+          for (double i = 0; i <= (total / 1000); i += 5) {
+            if (i == value) {
+              return i.toStringAsFixed(0);
             }
-            return '';
-          },
-        ),
-      );
+          }
+          return '';
+        },
+      ),
+    );
+  }
 
   List<LineChartBarData> get lineBarsData1 => [
         lineChartOutcomes,
@@ -620,8 +620,8 @@ class _LineChartState extends State<_LineChart> {
   SideTitles leftTitles({required GetTitleFunction getTitles}) => SideTitles(
         getTitles: getTitles,
         showTitles: true,
-        margin: 0,
-        getTextStyles: (context, value) => AppTheme.text1.darkPurple.bold,
+        margin: -12,
+        getTextStyles: (context, value) => AppTheme.subText2.darkPurple.bold,
       );
 
   SideTitles get bottomTitles => SideTitles(
@@ -669,33 +669,42 @@ class _LineChartState extends State<_LineChart> {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
         spots: [
-          FlSpot(1, tabel.outcome.mon.toDouble()),
-          FlSpot(2, tabel.outcome.tue.toDouble()),
-          FlSpot(3, tabel.outcome.wed.toDouble()),
-          FlSpot(4, tabel.outcome.thu.toDouble()),
-          FlSpot(5, tabel.outcome.fri.toDouble()),
-          FlSpot(6, tabel.outcome.sat.toDouble()),
-          FlSpot(7, tabel.outcome.sun.toDouble()),
+          FlSpot(1, tabel.outcome.mon / 1000),
+          FlSpot(2, tabel.outcome.tue / 1000),
+          FlSpot(3, tabel.outcome.wed / 1000),
+          FlSpot(4, tabel.outcome.thu / 1000),
+          FlSpot(5, tabel.outcome.fri / 1000),
+          FlSpot(6, tabel.outcome.sat / 1000),
+          FlSpot(7, tabel.outcome.sun / 1000),
         ],
       );
 
-  LineChartBarData get lineChartIncomes => LineChartBarData(
-        isCurved: true,
-        colors: [AppTheme.green],
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: [
-          FlSpot(1, tabel.income.mon.toDouble()),
-          FlSpot(2, tabel.income.tue.toDouble()),
-          FlSpot(3, tabel.income.wed.toDouble()),
-          FlSpot(4, tabel.income.thu.toDouble()),
-          FlSpot(5, tabel.income.fri.toDouble()),
-          FlSpot(6, tabel.income.sat.toDouble()),
-          FlSpot(7, tabel.income.sun.toDouble()),
-        ],
-      );
+  LineChartBarData get lineChartIncomes {
+    print(tabel.income.mon / 1000);
+    print(tabel.income.tue / 1000);
+    print(tabel.income.wed / 1000);
+    print(tabel.income.thu / 1000);
+    print(tabel.income.fri / 1000);
+    print(tabel.income.sat / 1000);
+    print(tabel.income.sun / 1000);
+    return LineChartBarData(
+      isCurved: true,
+      colors: [AppTheme.green],
+      barWidth: 8,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: false),
+      belowBarData: BarAreaData(show: false),
+      spots: [
+        FlSpot(1, tabel.income.mon / 1000),
+        FlSpot(2, tabel.income.tue / 1000),
+        FlSpot(3, tabel.income.wed / 1000),
+        FlSpot(4, tabel.income.thu / 1000),
+        FlSpot(5, tabel.income.fri / 1000),
+        FlSpot(6, tabel.income.sat / 1000),
+        FlSpot(7, tabel.income.sun / 1000),
+      ],
+    );
+  }
 }
 
 class CustomFab extends StatefulWidget {

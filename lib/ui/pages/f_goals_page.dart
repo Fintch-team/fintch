@@ -144,19 +144,50 @@ class _FGoalsPageState extends State<FGoalsPage> {
       },
       child: Dismissible(
         background: Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(8),
-            child: Text(
-              "Hapus",
-              style: AppTheme.headline2.copyWith(color: AppTheme.white),
-            ),
-            color: AppTheme.red),
+          decoration: BoxDecoration(
+            color: AppTheme.red,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Hapus",
+            style: AppTheme.headline2.white,
+          ),
+        ),
+        secondaryBackground: Container(
+          decoration: BoxDecoration(
+            color: AppTheme.yellow,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.centerRight,
+          child: Text(
+            "Edit",
+            style: AppTheme.headline2.white,
+          ),
+        ),
         key: Key(data.id.toString()),
         confirmDismiss: (direction) async {
-          return await showDialog(
-            context: context,
-            builder: (context) => _confirmDeleteFGoals(context, data),
-          );
+          if (direction == DismissDirection.startToEnd) {
+            return await showDialog(
+              context: context,
+              builder: (context) => _confirmDeleteFGoals(context, data),
+            );
+          } else if (direction == DismissDirection.endToStart) {
+            showCupertinoModalBottomSheet(
+              expand: false,
+              context: context,
+              enableDrag: true,
+              isDismissible: true,
+              topRadius: Radius.circular(20),
+              backgroundColor: AppTheme.white,
+              barrierColor: AppTheme.black.withOpacity(0.2),
+              builder: (context) => FGoalSheet(data: data),
+            );
+          }
         },
         child: Container(
           decoration: BoxDecoration(

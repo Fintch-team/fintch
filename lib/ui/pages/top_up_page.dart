@@ -146,8 +146,7 @@ class _TopUpPageState extends State<TopUpPage> {
                   ),
                   SizedBox(height: Helper.normalPadding),
                   _slider(),
-                  SizedBox(height: Helper.normalPadding),
-                  SizedBox(height: Helper.normalPadding),
+                  SizedBox(height: Helper.bigPadding),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text('Jumlah Lainnya',
@@ -156,6 +155,10 @@ class _TopUpPageState extends State<TopUpPage> {
                   SizedBox(height: 8),
                   _otherAmount(),
                   SizedBox(height: Helper.normalPadding),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('History Top Up', style: AppTheme.headline3),
+                  ),
                 ],
               ),
             ),
@@ -362,7 +365,7 @@ class _TopUpPageState extends State<TopUpPage> {
           itemCount: state.entity.data.length,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
