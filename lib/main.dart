@@ -258,6 +258,7 @@ class _MyAppState extends State<MyApp> {
         ],
         child: MaterialApp(
           title: 'Fintch',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.deepPurple,
             fontFamily: !Platform.isIOS ? 'Gotham' : null,
