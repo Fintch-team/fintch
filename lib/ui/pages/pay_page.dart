@@ -82,12 +82,12 @@ class _PayPageState extends State<PayPage> {
       listener: (context, state) {
         if (state is PayTransctionSuccess) {
           context.loaderOverlay.hide();
-          if (state.entity.amount.isNotEmpty) {
+          if (state.entity.amount.toString().isNotEmpty) {
             showDialog(
               context: context,
               barrierDismissible: false,
               builder: (context) => SuccessPaymentDialog(
-                  fintchPoint: state.entity.amount.parseCurrency(),
+                  fintchPoint: state.entity.amount.toString().parseCurrency(),
                   fintchWallet:
                       state.entity.pay.walletAmount.toString().parseCurrency()),
             );

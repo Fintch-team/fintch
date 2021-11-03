@@ -7,7 +7,7 @@ class TransactionData {
     required this.receive,
   });
 
-  String amount;
+  int amount;
   WalletData pay;
   WalletData receive;
 
