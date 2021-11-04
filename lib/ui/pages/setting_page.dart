@@ -196,7 +196,7 @@ class _SettingPageState extends State<SettingPage> {
         //           context,
         //           PagePath.barcode,
         //         ),
-        //   child: _optionItems('F-Barcode'),
+        //   child: _optionItems('QR-Code'),
         // ),
         GestureDetector(
           onTap: () {

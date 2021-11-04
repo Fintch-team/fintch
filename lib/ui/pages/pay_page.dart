@@ -872,7 +872,7 @@ class _BarcodePaymentSheetState extends State<BarcodePaymentSheet> {
                           Text(state.entity.createdAt.parseHourDateAndMonth(),
                               style: AppTheme.text3),
                           SizedBox(height: 8),
-                          Text("F-Barcode-" + state.entity.id,
+                          Text("QR-Code - " + state.entity.id,
                               style: AppTheme.text3.purple),
                           SizedBox(height: Helper.bigPadding),
                           SizedBox(height: Helper.normalPadding),

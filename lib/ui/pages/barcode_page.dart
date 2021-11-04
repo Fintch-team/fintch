@@ -78,10 +78,10 @@ class _BarcodePageState extends State<BarcodePage> {
                       isBlack: true,
                     ),
                     SizedBox(height: Helper.bigPadding),
-                    Text('F-Barcode', style: AppTheme.headline1),
+                    Text('QR-Code', style: AppTheme.headline1),
                     SizedBox(height: Helper.bigPadding),
                     Text(
-                      'Di F-Barcode untuk kamu yang ingin bertransaksi dengan cepat dan aman dengan F-Barcode!',
+                      'Untuk kamu yang ingin bertransaksi dengan cepat dan aman dengan QR-Code!',
                       style: AppTheme.text1,
                     ),
                     SizedBox(height: Helper.bigPadding),
@@ -107,12 +107,12 @@ class _BarcodePageState extends State<BarcodePage> {
                             );
                           }
                           return EmptyStateWidget(
-                              message: 'F-Barcodes Kosong!');
+                              message: 'QR-Code Kosong!');
                         } else if (state is BarcodeLoading) {
                           return FGoalPageItemShimmer();
                         } else if (state is BarcodeFailure) {
                           return FailureStateWidget(
-                              message: 'F-Barcodes Gagal di Load!');
+                              message: 'QR-Code Gagal di Load!');
                         }
                         return Container();
                       },
@@ -358,8 +358,8 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                       children: [
                         Text(
                           widget.data != null
-                              ? 'Update F-Barcode'
-                              : 'Add F-Barcode',
+                              ? 'Update QR-Code'
+                              : 'Add QR-Code',
                           style: AppTheme.headline3,
                         ),
                         SizedBox(height: Helper.bigPadding),
@@ -369,7 +369,7 @@ class _FGoalSheetState extends State<BarcodeSheet> {
                           controller: titleController,
                           style: AppTheme.text3,
                           decoration: InputDecoration(
-                            hintText: 'Masukan judul F-Barcode',
+                            hintText: 'Masukan judul QR-Code',
                             enabledBorder: AppTheme.enabledBlackBorder,
                             hintStyle: AppTheme.text3.blackOpacity,
                           ),
