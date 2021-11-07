@@ -7,13 +7,13 @@ class TransactionData {
     required this.receive,
   });
 
-  int amount;
+  String amount;
   WalletData pay;
   WalletData receive;
 
   factory TransactionData.fromJson(Map<String, dynamic> json) =>
       TransactionData(
-        amount: json["amount"],
+        amount: "${json["amount"]}",
         pay: WalletData.fromJson(json["pay"]),
         receive: WalletData.fromJson(json["receive"]),
       );

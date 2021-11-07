@@ -282,14 +282,15 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   );
 
-                                  context.read<AuthBloc>().add(
-                                    SaveBio(
-                                      entity: BioUserEntity(
-                                        user: usernameController.text.trim(),
-                                        pass: passwordController.text,
+                              if (state.entity.user.isNotEmpty)
+                                context.read<AuthBloc>().add(
+                                      SaveBio(
+                                        entity: BioUserEntity(
+                                          user: usernameController.text.trim(),
+                                          pass: passwordController.text,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
                             }
                           },
                           text: 'Masuk',
