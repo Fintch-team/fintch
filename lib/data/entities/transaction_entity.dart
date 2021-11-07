@@ -43,7 +43,7 @@ class TransactionTopUpEntity extends BaseEntity {
 }
 
 class TransactionEntity extends BaseEntity {
-  final int amount;
+  final String amount;
   final WalletData pay;
   final WalletData receive;
 
