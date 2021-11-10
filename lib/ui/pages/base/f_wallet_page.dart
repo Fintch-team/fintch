@@ -101,7 +101,7 @@ class _FWalletPageState extends State<FWalletPage> {
                         color: AppTheme.whiteOpacity,
                       ),
                       padding: EdgeInsets.fromLTRB(12, 32, 0, 12),
-                      child: _LineChart(total: amount),
+                      child: _LineChart(),
                     ),
                   ),
                 ],
@@ -522,14 +522,13 @@ class _FWalletPageState extends State<FWalletPage> {
 }
 
 class _LineChart extends StatefulWidget {
-  final int total;
-
-  const _LineChart({Key? key, required this.total}) : super(key: key);
+  const _LineChart({Key? key}) : super(key: key);
   @override
   State<_LineChart> createState() => _LineChartState();
 }
 
 class _LineChartState extends State<_LineChart> {
+  double topBarrier = 0;
   MoneyManageTabelEntity tabel = MoneyManageTabelEntity(
       income: Tabel(
         fri: 0,
@@ -561,20 +560,38 @@ class _LineChartState extends State<_LineChart> {
     return BlocListener<TabelBloc, MoneyManageState>(
       listener: (context, state) {
         if (state is MoneyManageTabelSuccess) {
+          List<double> listSumOfDays = [
+            state.entity.income.mon / 1000,
+            state.entity.income.tue / 1000,
+            state.entity.income.wed / 1000,
+            state.entity.income.thu / 1000,
+            state.entity.income.fri / 1000,
+            state.entity.income.sat / 1000,
+            state.entity.income.sun / 1000,
+            state.entity.outcome.mon / 1000,
+            state.entity.outcome.tue / 1000,
+            state.entity.outcome.wed / 1000,
+            state.entity.outcome.thu / 1000,
+            state.entity.outcome.fri / 1000,
+            state.entity.outcome.sat / 1000,
+            state.entity.outcome.sun / 1000,
+          ];
+          listSumOfDays.sort();
           setState(() {
             tabel = state.entity;
+            topBarrier = listSumOfDays.last;
           });
         }
       },
       child: LineChart(
-        sampleData1(widget.total),
+        sampleData1(topBarrier),
         swapAnimationDuration: const Duration(milliseconds: 250),
         swapAnimationCurve: Curves.easeInOut,
       ),
     );
   }
 
-  LineChartData sampleData1(int total) => LineChartData(
+  LineChartData sampleData1(double total) => LineChartData(
         lineTouchData: lineTouchData1,
         gridData: gridData,
         titlesData: titlesData1(total),
@@ -582,7 +599,7 @@ class _LineChartState extends State<_LineChart> {
         lineBarsData: lineBarsData1,
         minX: 0,
         maxX: 8,
-        maxY: total.toDouble() / 1000,
+        maxY: total,
         minY: 0,
       );
 
@@ -594,14 +611,14 @@ class _LineChartState extends State<_LineChart> {
         ),
       );
 
-  FlTitlesData titlesData1(int total) {
+  FlTitlesData titlesData1(double total) {
     return FlTitlesData(
       bottomTitles: bottomTitles,
       rightTitles: SideTitles(showTitles: false),
       topTitles: SideTitles(showTitles: false),
       leftTitles: leftTitles(
         getTitles: (value) {
-          for (double i = 0; i <= (total / 1000); i += 5) {
+          for (double i = 0; i <= (total); i += 5) {
             if (i == value) {
               return i.toStringAsFixed(0);
             }
@@ -680,13 +697,6 @@ class _LineChartState extends State<_LineChart> {
       );
 
   LineChartBarData get lineChartIncomes {
-    print(tabel.income.mon / 1000);
-    print(tabel.income.tue / 1000);
-    print(tabel.income.wed / 1000);
-    print(tabel.income.thu / 1000);
-    print(tabel.income.fri / 1000);
-    print(tabel.income.sat / 1000);
-    print(tabel.income.sun / 1000);
     return LineChartBarData(
       isCurved: true,
       colors: [AppTheme.green],

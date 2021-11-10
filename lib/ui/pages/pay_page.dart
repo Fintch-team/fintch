@@ -139,26 +139,7 @@ class _PayPageState extends State<PayPage> {
                                     source: ImageSource.gallery,
                                     crop: true,
                                     context: context);
-                                print('get file ');
-                                if (file != null) {
-                                  print('file path: ${file.path}');
-                                  final result = await Scan.parse(file.path);
-                                  print('result: ');
-                                  if (!isShowSheet) {
-                                    isShowSheet = true;
-                                    this.controller?.pauseCamera();
-                                    context.loaderOverlay.hide();
-                                    _showPaymentBottomSheet(
-                                      onClose: () {
-                                        Navigator.pop(context);
-                                        isShowSheet = false;
-                                        controller?.resumeCamera();
-                                      },
-                                      nickname: result ?? '',
-                                    );
-                                  }
-                                }
-                                print('done');
+                                await _scanByImage(file);
                                 context.loaderOverlay.hide();
                               },
                               child: SvgPicture.asset(Resources.icAddImage),
@@ -201,6 +182,42 @@ class _PayPageState extends State<PayPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _scanByImage(File? file) async {
+    print('get file ');
+    if (file != null) {
+      print('file path: ${file.path}');
+      final result = await Scan.parse(file.path);
+      print('result: ');
+      if (result != null) {
+        List<String> data = result.split(":");
+        if (!isShowSheet) {
+          isShowSheet = true;
+          this.controller?.pauseCamera();
+          if (data[0] == 'nickname') {
+            _showPaymentBottomSheet(
+              onClose: () {
+                Navigator.pop(context);
+                isShowSheet = false;
+                controller?.resumeCamera();
+              },
+              nickname: data[1],
+            );
+          } else {
+            _showPaymentBarcodeBottomSheet(
+              onClose: () {
+                Navigator.pop(context);
+                isShowSheet = false;
+                controller?.resumeCamera();
+              },
+              barcode: data[1],
+            );
+          }
+        }
+      }
+      print('done');
+    }
   }
 
   Widget _headerContent(BuildContext context) {

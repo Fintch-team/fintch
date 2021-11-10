@@ -26,6 +26,7 @@ class _BarrierCashSheetState extends State<BarrierCashSheet> {
   void initState() {
     priceController = TextEditingController();
     dateController = TextEditingController();
+    dateController.text = datePicked.parseYearMonthDay();
     super.initState();
 
     context.read<WalletBloc>().add(GetWallet());

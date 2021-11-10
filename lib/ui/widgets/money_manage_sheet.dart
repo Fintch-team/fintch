@@ -137,34 +137,35 @@ class _MoneyManageSheetState extends State<MoneyManageSheet> {
                         SizedBox(height: 16),
                         Text('Tanggal Waktu', style: AppTheme.text3.bold),
                         SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () async {
-                            final picked = await Helper.showDeadlineDatePicker(
-                              context,
-                              datePicked,
-                            );
-                            if (picked != null &&
-                                picked != datePicked &&
-                                picked.isAfter(now)) {
-                              setState(() {
-                                datePicked = picked;
-                                dateController.text =
-                                    datePicked.parseYearMonthDay();
-                              });
-                            }
-                          },
-                          child: TextFormField(
-                            controller: dateController,
-                            style: AppTheme.text3,
-                            enabled: false,
-                            decoration: InputDecoration(
-                              hintText: 'Masukan tanggal waktu',
-                              enabledBorder: AppTheme.enabledBlackBorder,
-                              hintStyle: AppTheme.text3.blackOpacity,
-                              disabledBorder: AppTheme.enabledBlackBorder,
+                        StatefulBuilder(builder: (context, dateSetState) {
+                          return GestureDetector(
+                            onTap: () async {
+                              final picked =
+                                  await Helper.showDeadlineDatePicker(
+                                context,
+                                datePicked,
+                              );
+                              if (picked != null && picked != datePicked) {
+                                dateSetState(() {
+                                  datePicked = picked;
+                                  dateController.text =
+                                      datePicked.parseYearMonthDay();
+                                });
+                              }
+                            },
+                            child: TextFormField(
+                              controller: dateController,
+                              style: AppTheme.text3,
+                              enabled: false,
+                              decoration: InputDecoration(
+                                hintText: 'Masukan tanggal waktu',
+                                enabledBorder: AppTheme.enabledBlackBorder,
+                                hintStyle: AppTheme.text3.blackOpacity,
+                                disabledBorder: AppTheme.enabledBlackBorder,
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
 
                         if (!isIncome) ...[
                           SizedBox(height: 16),
